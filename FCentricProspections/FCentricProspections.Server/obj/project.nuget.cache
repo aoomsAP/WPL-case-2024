@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "1U7Q9gkss3JDDJtS/ic/gTcCnPo/mT2hPRYch7bNiQ8GHVauq0giT5VAIaVIOI+FoohLqYCd4QkBr7HkmnYz1Q==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\32473\\Documents\\- GRADUAAT PROGRAMMEREN\\Jaar 3 (2024-2025)\\IT Case\\WPL-case-2024\\FCentricProspections\\FCentricProspections.Server\\FCentricProspections.Server.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\32473\\.nuget\\packages\\microsoft.aspnetcore.spaproxy\\7.0.20\\microsoft.aspnetcore.spaproxy.7.0.20.nupkg.sha512"
+  ],
+  "logs": []
+}
