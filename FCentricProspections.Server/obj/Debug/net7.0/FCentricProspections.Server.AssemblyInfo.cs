@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FCentricProspections.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f417238ddcb41635bee4fb40a964a6a10a6d3db3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7d79a390d824be75461001e77afe9c99501d5ebd")]
 [assembly: System.Reflection.AssemblyProductAttribute("FCentricProspections.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FCentricProspections.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
