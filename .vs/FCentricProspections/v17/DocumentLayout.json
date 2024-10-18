@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\wende\\OneDrive\\Bureaublad\\Fashion Club Project\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{061676B3-A2CB-4487-9570-676A4CBADA04}|fcentricprospections.client\\fcentricprospections.client.esproj|c:\\users\\wende\\onedrive\\bureaublad\\fashion club project\\fcentricprospections.client\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{061676B3-A2CB-4487-9570-676A4CBADA04}|fcentricprospections.client\\fcentricprospections.client.esproj|solutionrelative:fcentricprospections.client\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{061676B3-A2CB-4487-9570-676A4CBADA04}|fcentricprospections.client\\fcentricprospections.client.esproj|c:\\users\\wende\\onedrive\\bureaublad\\fashion club project\\fcentricprospections.client\\src\\components\\test3.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
       "RelativeMoniker": "D:0:0:{061676B3-A2CB-4487-9570-676A4CBADA04}|fcentricprospections.client\\fcentricprospections.client.esproj|solutionrelative:fcentricprospections.client\\src\\components\\test3.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
     },
@@ -38,8 +42,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 113,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": ".gitignore",
+              "DocumentMoniker": "C:\\Users\\wende\\OneDrive\\Bureaublad\\Fashion Club Project\\fcentricprospections.client\\.gitignore",
+              "RelativeDocumentMoniker": "fcentricprospections.client\\.gitignore",
+              "ToolTip": "C:\\Users\\wende\\OneDrive\\Bureaublad\\Fashion Club Project\\fcentricprospections.client\\.gitignore",
+              "RelativeToolTip": "fcentricprospections.client\\.gitignore",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-10-18T16:54:07.699Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
@@ -50,7 +67,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "test3.ts",
               "DocumentMoniker": "C:\\Users\\wende\\OneDrive\\Bureaublad\\Fashion Club Project\\fcentricprospections.client\\src\\components\\test3.ts",
               "RelativeDocumentMoniker": "fcentricprospections.client\\src\\components\\test3.ts",
@@ -63,7 +80,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "test2.ts",
               "DocumentMoniker": "C:\\Users\\wende\\OneDrive\\Bureaublad\\Fashion Club Project\\fcentricprospections.client\\src\\contexts\\test2.ts",
               "RelativeDocumentMoniker": "fcentricprospections.client\\src\\contexts\\test2.ts",
@@ -71,12 +88,11 @@
               "RelativeToolTip": "fcentricprospections.client\\src\\contexts\\test2.ts",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-10-18T16:51:08.478Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-18T16:51:08.478Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "test.ts",
               "DocumentMoniker": "C:\\Users\\wende\\OneDrive\\Bureaublad\\Fashion Club Project\\fcentricprospections.client\\src\\pages\\test.ts",
               "RelativeDocumentMoniker": "fcentricprospections.client\\src\\pages\\test.ts",
@@ -84,12 +100,11 @@
               "RelativeToolTip": "fcentricprospections.client\\src\\pages\\test.ts",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-10-18T16:50:57.512Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-18T16:50:57.512Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "App.css",
               "DocumentMoniker": "C:\\Users\\wende\\OneDrive\\Bureaublad\\Fashion Club Project\\fcentricprospections.client\\src\\App.css",
               "RelativeDocumentMoniker": "fcentricprospections.client\\src\\App.css",
@@ -97,12 +112,11 @@
               "RelativeToolTip": "fcentricprospections.client\\src\\App.css",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-10-18T16:50:12.735Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-18T16:50:12.735Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\wende\\OneDrive\\Bureaublad\\Fashion Club Project\\FCentricProspections.Server\\Program.cs",
               "RelativeDocumentMoniker": "FCentricProspections.Server\\Program.cs",
@@ -110,12 +124,11 @@
               "RelativeToolTip": "FCentricProspections.Server\\Program.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAGAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-18T16:36:09.728Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-18T16:36:09.728Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "Startup.cs",
               "DocumentMoniker": "C:\\Users\\wende\\OneDrive\\Bureaublad\\Fashion Club Project\\FCentricProspections.Server\\Startup.cs",
               "RelativeDocumentMoniker": "FCentricProspections.Server\\Startup.cs",
@@ -123,12 +136,11 @@
               "RelativeToolTip": "FCentricProspections.Server\\Startup.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAsAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-18T16:36:02.732Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-18T16:36:02.732Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "App.tsx",
               "DocumentMoniker": "C:\\Users\\wende\\OneDrive\\Bureaublad\\Fashion Club Project\\fcentricprospections.client\\src\\App.tsx",
               "RelativeDocumentMoniker": "fcentricprospections.client\\src\\App.tsx",
@@ -136,8 +148,7 @@
               "RelativeToolTip": "fcentricprospections.client\\src\\App.tsx",
               "ViewState": "AQIAAC4AAAAAAAAAAAAqwDIAAAArAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2024-10-18T16:19:08.04Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-18T16:19:08.04Z"
             }
           ]
         },
