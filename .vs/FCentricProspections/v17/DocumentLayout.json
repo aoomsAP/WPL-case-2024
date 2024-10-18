@@ -1,7 +1,24 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\32473\\Documents\\- GRADUAAT PROGRAMMEREN\\Jaar 3 (2024-2025)\\IT Case\\WPL-case-2024\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{7A219B31-F051-4282-B043-FCBF476ECD06}|FCentricProspections.Server\\FCentricProspections.Server.csproj|c:\\users\\32473\\documents\\- graduaat programmeren\\jaar 3 (2024-2025)\\it case\\wpl-case-2024\\fcentricprospections.server\\fcentricprospections.server.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{7A219B31-F051-4282-B043-FCBF476ECD06}|FCentricProspections.Server\\FCentricProspections.Server.csproj|solutionrelative:fcentricprospections.server\\fcentricprospections.server.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A219B31-F051-4282-B043-FCBF476ECD06}|FCentricProspections.Server\\FCentricProspections.Server.csproj|c:\\users\\32473\\documents\\- graduaat programmeren\\jaar 3 (2024-2025)\\it case\\wpl-case-2024\\fcentricprospections.server\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A219B31-F051-4282-B043-FCBF476ECD06}|FCentricProspections.Server\\FCentricProspections.Server.csproj|solutionrelative:fcentricprospections.server\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A219B31-F051-4282-B043-FCBF476ECD06}|FCentricProspections.Server\\FCentricProspections.Server.csproj|c:\\users\\32473\\documents\\- graduaat programmeren\\jaar 3 (2024-2025)\\it case\\wpl-case-2024\\fcentricprospections.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A219B31-F051-4282-B043-FCBF476ECD06}|FCentricProspections.Server\\FCentricProspections.Server.csproj|solutionrelative:fcentricprospections.server\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{061676B3-A2CB-4487-9570-676A4CBADA04}|fcentricprospections.client\\fcentricprospections.client.esproj|c:\\users\\32473\\documents\\- graduaat programmeren\\jaar 3 (2024-2025)\\it case\\wpl-case-2024\\fcentricprospections.client\\src\\app.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{061676B3-A2CB-4487-9570-676A4CBADA04}|fcentricprospections.client\\fcentricprospections.client.esproj|solutionrelative:fcentricprospections.client\\src\\app.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,8 +26,34 @@
       "DocumentGroups": [
         {
           "DockedWidth": 113,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "FCentricProspections.Server",
+              "DocumentMoniker": "C:\\Users\\32473\\Documents\\- GRADUAAT PROGRAMMEREN\\Jaar 3 (2024-2025)\\IT Case\\WPL-case-2024\\FCentricProspections.Server\\FCentricProspections.Server.csproj",
+              "RelativeDocumentMoniker": "FCentricProspections.Server\\FCentricProspections.Server.csproj",
+              "ToolTip": "C:\\Users\\32473\\Documents\\- GRADUAAT PROGRAMMEREN\\Jaar 3 (2024-2025)\\IT Case\\WPL-case-2024\\FCentricProspections.Server\\FCentricProspections.Server.csproj",
+              "RelativeToolTip": "FCentricProspections.Server\\FCentricProspections.Server.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-10-18T16:37:20.154Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\32473\\Documents\\- GRADUAAT PROGRAMMEREN\\Jaar 3 (2024-2025)\\IT Case\\WPL-case-2024\\FCentricProspections.Server\\Program.cs",
+              "RelativeDocumentMoniker": "FCentricProspections.Server\\Program.cs",
+              "ToolTip": "C:\\Users\\32473\\Documents\\- GRADUAAT PROGRAMMEREN\\Jaar 3 (2024-2025)\\IT Case\\WPL-case-2024\\FCentricProspections.Server\\Program.cs",
+              "RelativeToolTip": "FCentricProspections.Server\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAGAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-18T16:36:09.728Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
@@ -18,6 +61,32 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Startup.cs",
+              "DocumentMoniker": "C:\\Users\\32473\\Documents\\- GRADUAAT PROGRAMMEREN\\Jaar 3 (2024-2025)\\IT Case\\WPL-case-2024\\FCentricProspections.Server\\Startup.cs",
+              "RelativeDocumentMoniker": "FCentricProspections.Server\\Startup.cs",
+              "ToolTip": "C:\\Users\\32473\\Documents\\- GRADUAAT PROGRAMMEREN\\Jaar 3 (2024-2025)\\IT Case\\WPL-case-2024\\FCentricProspections.Server\\Startup.cs",
+              "RelativeToolTip": "FCentricProspections.Server\\Startup.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAsAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-18T16:36:02.732Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "App.tsx",
+              "DocumentMoniker": "C:\\Users\\32473\\Documents\\- GRADUAAT PROGRAMMEREN\\Jaar 3 (2024-2025)\\IT Case\\WPL-case-2024\\fcentricprospections.client\\src\\App.tsx",
+              "RelativeDocumentMoniker": "fcentricprospections.client\\src\\App.tsx",
+              "ToolTip": "C:\\Users\\32473\\Documents\\- GRADUAAT PROGRAMMEREN\\Jaar 3 (2024-2025)\\IT Case\\WPL-case-2024\\fcentricprospections.client\\src\\App.tsx",
+              "RelativeToolTip": "fcentricprospections.client\\src\\App.tsx",
+              "ViewState": "AQIAABYAAAAAAAAAAAAQwDIAAAArAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2024-10-18T16:19:08.04Z",
+              "EditorCaption": ""
             }
           ]
         },
