@@ -1,0 +1,47 @@
+﻿.body{
+    min-height: 100vh;
+    min-width: 100vw;
+    background-color: blue;
+    display: flex;
+    flex-direction: column;  
+}
+
+.header {
+    display: flex;
+    justify-content: flex-start;
+    justify-content: center;
+    background-color: red;
+    width: 100vw;
+    height: 15vh;
+    padding: 0.4rem;
+}
+
+.main{
+    width: 100vw;
+    height: 75vh;
+    display: flex;
+    justify-content: center;
+    
+}
+
+.footer{
+    width: 100vw;
+    height: 10vh;
+    background-color: blueviolet;
+
+}
+
+.inputField{
+    padding: 10px;
+    height: 0.5rem;
+
+}
+
+.inputField {
+    height: 2.5rem;                 
+    width: 12.5rem;                 
+    padding: 0.5rem;                 
+    font-size: 1rem;                
+    border: 0.0625rem solid #ccc;    
+    border-radius: 0.25rem;          
+}
