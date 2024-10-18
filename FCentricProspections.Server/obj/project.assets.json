@@ -42,19 +42,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\32473\\.nuget\\packages\\": {}
+    "C:\\Users\\wende\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\32473\\Documents\\- GRADUAAT PROGRAMMEREN\\Jaar 3 (2024-2025)\\IT Case\\WPL-case-2024\\FCentricProspections.Server\\FCentricProspections.Server.csproj",
+      "projectUniqueName": "C:\\Users\\wende\\OneDrive\\Bureaublad\\Fashion Club Project\\FCentricProspections.Server\\FCentricProspections.Server.csproj",
       "projectName": "FCentricProspections.Server",
-      "projectPath": "C:\\Users\\32473\\Documents\\- GRADUAAT PROGRAMMEREN\\Jaar 3 (2024-2025)\\IT Case\\WPL-case-2024\\FCentricProspections.Server\\FCentricProspections.Server.csproj",
-      "packagesPath": "C:\\Users\\32473\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\32473\\Documents\\- GRADUAAT PROGRAMMEREN\\Jaar 3 (2024-2025)\\IT Case\\WPL-case-2024\\FCentricProspections.Server\\obj\\",
+      "projectPath": "C:\\Users\\wende\\OneDrive\\Bureaublad\\Fashion Club Project\\FCentricProspections.Server\\FCentricProspections.Server.csproj",
+      "packagesPath": "C:\\Users\\wende\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\wende\\OneDrive\\Bureaublad\\Fashion Club Project\\FCentricProspections.Server\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\32473\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\wende\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
