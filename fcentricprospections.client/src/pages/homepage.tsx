@@ -16,35 +16,32 @@ export const Homepage = () => {
 
     return (
         <div className={styles.body}>
-            <header className={styles.header}>
-                <input 
+            
+            <main className={styles.main}>
+            <input 
                     className={styles.inputField} 
                     type="text" 
-                    placeholder="Search..." 
+                    placeholder="Zoek..." 
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)} // Update state on input change
                 />
-            </header>
-            <main className={styles.main}>
                 <ul>
                     {filteredShopNames.length > 0 ? (
                         filteredShopNames.map(shop => (
                             <li key={shop.id}>  {/* Ensure each `li` has a unique `key` */}
-                            <Link to={`/detail/${shop.id}`}>{shop.name}</Link>
+                            <Link to={`/shop/${shop.id}`}>{shop.name}</Link>
                         </li>
                         ))
                     ) : (
                         searchTerm.length < 3 ? (
-                            <li>Type at least 3 letters to see results.</li> // Instruction message if less than 3 characters
+                            <li>Typ minstens 3 letters.</li> // Instruction message if less than 3 characters
                         ) : (
-                            <li>No shops found</li> // Message if no shops match
+                            <li>Geen winkels gevonden</li> // Message if no shops match
                         )
                     )}
                 </ul>
             </main>
-            <footer className={styles.footer}>
-                {/* Footer content can go here */}
-            </footer>
+           
         </div>
     );
 };

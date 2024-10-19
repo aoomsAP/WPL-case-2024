@@ -2,10 +2,20 @@ import { createBrowserRouter, Outlet, RouterProvider, useParams } from 'react-ro
 import { Homepage} from './pages/homePage';
 import { ShopPage} from './pages/shopIdPage';
 import { DataProvider } from './contexts/dataContext';
+import styles from './App.module.css'
+
 const Root = () => {
     return (
         <>
+        <header className={styles.header}></header>
+
         <Outlet></Outlet>
+
+        <footer className={styles.footer}>
+
+        {/* Footer content can go here */}
+
+        </footer>
         </>
     );
 }
@@ -45,7 +55,7 @@ const App = () => {
                     element: <Home/>
                 },
                 {
-                    path: 'detail/:id',
+                    path: 'shop/:id',
                     element: <Detail />
                 },
                 {

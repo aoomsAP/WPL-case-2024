@@ -1,16 +1,18 @@
 ﻿.body{
     min-height: 100vh;
     min-width: 100vw;
-    background-color: blue;
+    background-color: rgb(235, 235, 235);
     display: flex;
-    flex-direction: column;  
+    flex-direction: column;
+    color: black;
 }
+
 
 .header {
     display: flex;
     justify-content: flex-start;
     justify-content: center;
-    background-color: red;
+    background-color: beige;
     width: 100vw;
     height: 15vh;
     padding: 0.4rem;
@@ -20,14 +22,16 @@
     width: 100vw;
     height: 75vh;
     display: flex;
-    justify-content: center;
-    
+    flex-direction: column;
+    align-items: center;
+    padding-top: 1rem;
+       
 }
 
 .footer{
     width: 100vw;
     height: 10vh;
-    background-color: blueviolet;
+    background-color: bisque;
 
 }
 

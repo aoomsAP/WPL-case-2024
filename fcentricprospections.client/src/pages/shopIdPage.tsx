@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import styles from './shopIdpage.module.css';
+import {Shop} from '../types'
 
 interface ShopPageProps {
   id: string | undefined;
@@ -6,10 +8,21 @@ interface ShopPageProps {
 
 export const ShopPage = ({ id }: ShopPageProps) => {
    
+  const [shopData , setShopData] = useState<Shop>();
+
+  useEffect(()=>{
+
+    setShopData(dummyData.find((data)=> data.id === id ))
+
+  },[id])
+
+
+
+
   return (
     <>
       <main className={styles.main}>
-        <h1>De naam van de shop:</h1>
+        <h1>{shopData?.shopName}</h1>
         <h2>Adres van de shop: </h2>
         <h2>Naam van de klant:</h2>
         <li>{id}</li>
@@ -20,12 +33,7 @@ export const ShopPage = ({ id }: ShopPageProps) => {
 
 
 /* Temporary Code */
-interface Shop {
-    id: string;
-    shopName: string; // Change 'name' to 'shopName' to match ShopData
-    address: string;
-    customerName: string;
-  }
+
   
   const dummyData: Shop[] = [
     { id: '1', shopName: 'Coffee Shop', address: '123 Coffee Lane', customerName: 'Alice Smith' },
