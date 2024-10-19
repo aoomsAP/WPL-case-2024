@@ -1,8 +1,0 @@
-{
-"SpaProxyServer": {
-"ServerUrl": "https://localhost:5173",
-"LaunchCommand": "npm run dev",
-"WorkingDirectory": "C:\\Users\\32473\\Documents\\- GRADUAAT PROGRAMMEREN\\Jaar 3 (2024-2025)\\IT Case\\WPL-case-2024\\FCentricProspections.Server\\..\\fcentricprospections.client",
-"MaxTimeoutInSeconds": "120"
-}
-}
