@@ -1,8 +1,7 @@
 import { createBrowserRouter, Outlet, RouterProvider, useParams } from 'react-router-dom';
-import { Homepage} from './pages/homepage';
-import { ShopPage} from './pages/shopidpage';
+import { Homepage} from './pages/homePage';
+import { ShopPage} from './pages/shopIdPage';
 import { DataProvider } from './contexts/dataContext';
-
 const Root = () => {
     return (
         <>
@@ -26,12 +25,14 @@ const Page2 = () => {
 }
 
 const Detail = () => {
-    
-    let { id } = useParams();
+    const { id } = useParams<{ id: string }>(); // Ensure correct types for TypeScript
+
+
     return (
-        <ShopPage id={id} />
+            <ShopPage id={id} />
     );
-}
+};
+
 
 const App = () => {
     const router = createBrowserRouter([
@@ -44,8 +45,8 @@ const App = () => {
                     element: <Home/>
                 },
                 {
-                    path: "detail/:id",
-                    element: <Detail/>
+                    path: 'detail/:id',
+                    element: <Detail />
                 },
                 {
                     path: "page2",
