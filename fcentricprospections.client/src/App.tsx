@@ -1,56 +1,76 @@
-import { useEffect, useState } from 'react';
-import './App.css';
+import { createBrowserRouter, Outlet, RouterProvider, useParams } from 'react-router-dom';
+import { Homepage} from './pages/homePage';
+import { ShopPage} from './pages/shopIdPage';
+import { DataProvider } from './contexts/dataContext';
+import styles from './App.module.css'
 
-interface Forecast {
-    date: string;
-    temperatureC: number;
-    temperatureF: number;
-    summary: string;
+const Root = () => {
+    return (
+        <>
+        <header className={styles.header}></header>
+
+        <Outlet></Outlet>
+
+        <footer className={styles.footer}>
+
+        {/* Footer content can go here */}
+
+        </footer>
+        </>
+    );
 }
 
-function App() {
-    const [forecasts, setForecasts] = useState<Forecast[]>();
+const Home =()=> {
+    return(
+        <>
+        <Homepage></Homepage>
+        </>
+    );
+} 
 
-    useEffect(() => {
-        populateWeatherData();
-    }, []);
+const Page2 = () => {
+    return (
+        <div>Page 2</div>
+    );
+}
 
-    const contents = forecasts === undefined
-        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-        : <table className="table table-striped" aria-labelledby="tabelLabel">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
-                </tr>
-            </thead>
-            <tbody>
-                {forecasts.map(forecast =>
-                    <tr key={forecast.date}>
-                        <td>{forecast.date}</td>
-                        <td>{forecast.temperatureC}</td>
-                        <td>{forecast.temperatureF}</td>
-                        <td>{forecast.summary}</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>;
+const Detail = () => {
+    const { id } = useParams<{ id: string }>(); // Ensure correct types for TypeScript
+
 
     return (
-        <div>
-            <h1 id="tabelLabel">Weather forecast</h1>
-            <p>This component demonstrates fetching data from the server.</p>
-            {contents}
-        </div>
+            <ShopPage id={id} />
     );
+};
 
-    async function populateWeatherData() {
-        const response = await fetch('weatherforecast');
-        const data = await response.json();
-        setForecasts(data);
-    }
+
+const App = () => {
+    const router = createBrowserRouter([
+        {
+            path: "/",
+            element: <Root/>,
+            children: [
+                {
+                    path: "",
+                    element: <Home/>
+                },
+                {
+                    path: 'shop/:id',
+                    element: <Detail />
+                },
+                {
+                    path: "page2",
+                    element: <Page2/>
+                }
+            ]
+        }
+    ]);
+
+    return (
+        <DataProvider>
+            <RouterProvider router={router} />
+        </DataProvider>
+    )
 }
 
 export default App;
