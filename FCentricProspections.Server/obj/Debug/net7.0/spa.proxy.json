@@ -1,8 +1,0 @@
-{
-"SpaProxyServer": {
-"ServerUrl": "https://localhost:5173",
-"LaunchCommand": "npm run dev",
-"WorkingDirectory": "C:\\Users\\wende\\OneDrive\\Bureaublad\\Fashion Club Project\\FCentricProspections.Server\\..\\fcentricprospections.client",
-"MaxTimeoutInSeconds": "120"
-}
-}
