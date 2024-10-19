@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react"
+import { ShopId, ShopIdContextType } from "../types";
 
-interface ShopIdContextType {
-    shopNames: ShopId[]; // This is now an array of ShopId objects
-  }
-
-interface ShopId {
-    id: string; // Example property, replace with real ones
-    name: string; // Example property
-  }
 
 export const ShopIdContext = React.createContext<ShopIdContextType>({shopNames : []});
 
