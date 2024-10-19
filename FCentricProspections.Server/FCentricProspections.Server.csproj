@@ -26,7 +26,6 @@
     <Folder Include="Entities\" />
     <Folder Include="Contexts\" />
     <Folder Include="Services\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
 
 </Project>
