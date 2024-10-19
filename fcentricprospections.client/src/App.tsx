@@ -1,5 +1,6 @@
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
-import { Homepage } from './pages/homepage';
+import { createBrowserRouter, Outlet, RouterProvider, useParams } from 'react-router-dom';
+import { Homepage} from './pages/homepage';
+import { ShopPage} from './pages/shopidpage';
 import { DataProvider } from './contexts/dataContext';
 
 const Root = () => {
@@ -17,17 +18,21 @@ const Home =()=> {
         </>
     );
 } 
-const Page1 = () => {
-    return (
-        <div>Page 1</div>
-    );
-}
 
 const Page2 = () => {
     return (
         <div>Page 2</div>
     );
 }
+
+const Detail = () => {
+    
+    let { id } = useParams();
+    return (
+        <ShopPage id={id} />
+    );
+}
+
 const App = () => {
     const router = createBrowserRouter([
         {
@@ -39,8 +44,8 @@ const App = () => {
                     element: <Home/>
                 },
                 {
-                    path: "page1",
-                    element: <Page1/>
+                    path: "detail/:id",
+                    element: <Detail/>
                 },
                 {
                     path: "page2",

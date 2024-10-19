@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { ShopIdContext } from "../contexts/dataContext"; // Make sure the path is correct
 import styles from '../App.module.css'; // Adjust your styles as necessary
+import { Link } from "react-router-dom";
 
 export const Homepage = () => {
     const { shopNames } = useContext(ShopIdContext); // Get shop names from context
@@ -28,7 +29,9 @@ export const Homepage = () => {
                 <ul>
                     {filteredShopNames.length > 0 ? (
                         filteredShopNames.map(shop => (
-                            <li key={shop.id}>{shop.name}</li> // Display the filtered shop names
+                            <li key={shop.id}>  {/* Ensure each `li` has a unique `key` */}
+                            <Link to={`/detail/${shop.id}`}>{shop.name}</Link>
+                        </li>
                         ))
                     ) : (
                         searchTerm.length < 3 ? (
