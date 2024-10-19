@@ -1,11 +1,11 @@
-﻿using Library.Contexts;
+﻿using FCentricProspections.Server.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Project.Services;
+using FCentricProspections.Server.Services;
 using System.Xml.Linq;
 
-namespace Project
+namespace FCentricProspections
 {
     public class Startup
     {
@@ -14,20 +14,21 @@ namespace Project
         {
             services.AddControllers();
             services.AddSwaggerGen();
-            //services.AddScoped<IData, InMemoryData>();
-            services.AddScoped<IData, EfData>();
+            services.AddScoped<IData, InMemoryData>();
+            //services.AddScoped<IData, EfData>();
 
             // Database connection
 
-            var connection = "server=localhost; database=orchestra-db; user=root; password=password";
+            //var connection = "server=localhost; database=orchestra-db; user=root; password=password";
 
             // mySqlOptions / MigrationsAssembly necessary because DbContext is in class library
             // and this apparently causes migrations confusion
-            // https://stackoverflow.com/questions/38705694/add-migration-with-different-assembly
-            services.AddDbContext<DataContext>(x => x.UseMySql(
-                connection,
-                ServerVersion.AutoDetect(connection),
-                mySqlOptions => mySqlOptions.MigrationsAssembly("MVC")));
+            //    // https://stackoverflow.com/questions/38705694/add-migration-with-different-assembly
+            //    services.AddDbContext<DataContext>(x => x.UseMySql(
+            //        connection,
+            //        ServerVersion.AutoDetect(connection),
+            //        mySqlOptions => mySqlOptions.MigrationsAssembly("MVC")));
+
         }
 
         // The below method gets called by runtime
@@ -50,7 +51,7 @@ namespace Project
             {
                 app.UseExceptionHandler(new ExceptionHandlerOptions
                 {
-                    ExceptionHandler = context => context.Response.WriteAsync("Something went wrong.")
+                    ExceptionHandler = context => context.Response.WriteAsync("Er ging iets mis.")
                 });
             }
 
