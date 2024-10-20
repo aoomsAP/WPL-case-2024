@@ -14,99 +14,24 @@ public partial class FCentricSmallContext : DbContext
     {
     }
 
+    // UNSURE: should all database tables be included?
+
     public virtual DbSet<Address> Addresses { get; set; }
-
-    public virtual DbSet<AgeCategory> AgeCategories { get; set; }
-
-    public virtual DbSet<BlockedType> BlockedTypes { get; set; }
-
-    public virtual DbSet<Brand> Brands { get; set; }
 
     public virtual DbSet<City> Cities { get; set; }
 
-    public virtual DbSet<CommercialLocation> CommercialLocations { get; set; }
-
-    public virtual DbSet<CompetitorBrand> CompetitorBrands { get; set; }
-
     public virtual DbSet<Contact> Contacts { get; set; }
-
-    public virtual DbSet<ContactType> ContactTypes { get; set; }
-
-    public virtual DbSet<Country> Countries { get; set; }
-
-    public virtual DbSet<Currency> Currencies { get; set; }
-
-    public virtual DbSet<Customer> Customers { get; set; }
-
-    public virtual DbSet<CustomerCode> CustomerCodes { get; set; }
-
-    public virtual DbSet<CustomerLegalHistory> CustomerLegalHistories { get; set; }
-
-    public virtual DbSet<CustomerShop> CustomerShops { get; set; }
-
-    public virtual DbSet<CustomerType> CustomerTypes { get; set; }
-
-    public virtual DbSet<Employee> Employees { get; set; }
-
-    public virtual DbSet<Gender> Genders { get; set; }
-
-    public virtual DbSet<Language> Languages { get; set; }
-
-    public virtual DbSet<LegalForm> LegalForms { get; set; }
-
-    public virtual DbSet<Line> Lines { get; set; }
-
-    public virtual DbSet<PaymentCondition> PaymentConditions { get; set; }
-
-    public virtual DbSet<ProductLine> ProductLines { get; set; }
-
-    public virtual DbSet<ProductLineDelivery> ProductLineDeliveries { get; set; }
 
     // NEW
     public virtual DbSet<Prospection> Prospections { get; set; }
 
-    public virtual DbSet<Province> Provinces { get; set; }
-
-    public virtual DbSet<Region> Regions { get; set; }
-
-    public virtual DbSet<SalesPeriod> SalesPeriods { get; set; }
-
-    public virtual DbSet<SalesPeriodType> SalesPeriodTypes { get; set; }
-
-    public virtual DbSet<SegmentType> SegmentTypes { get; set; }
-
     public virtual DbSet<Shop> Shops { get; set; }
-
-    public virtual DbSet<ShopCommercialLocation> ShopCommercialLocations { get; set; }
-
-    public virtual DbSet<ShopCompetitorBrand> ShopCompetitorBrands { get; set; }
-
-    public virtual DbSet<ShopCompetitorProductLine> ShopCompetitorProductLines { get; set; }
-
-    public virtual DbSet<ShopContact> ShopContacts { get; set; }
-
-    public virtual DbSet<ShopDelivery> ShopDeliveries { get; set; }
-
-    public virtual DbSet<ShopDeliveryOrigin> ShopDeliveryOrigins { get; set; }
-
-    public virtual DbSet<ShopDeliveryState> ShopDeliveryStates { get; set; }
-
-    public virtual DbSet<ShopDeliveryType> ShopDeliveryTypes { get; set; }
-
-    public virtual DbSet<ShopGender> ShopGenders { get; set; }
-
-    public virtual DbSet<ShopLine> ShopLines { get; set; }
-
-    public virtual DbSet<ShopType> ShopTypes { get; set; }
-
-    public virtual DbSet<Spanco> Spancos { get; set; }
-
-    public virtual DbSet<User> Users { get; set; }
-
-    public virtual DbSet<VatType> VatTypes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // UNSURE: is it correct to only use modelBuilder for the new Prospection entity?
+        // I had to manually adjust the Migration to make sure it only creates the Prospections table
+
         // NEW
         modelBuilder.Entity<Prospection>(entity =>
         {

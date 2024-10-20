@@ -19,17 +19,19 @@ namespace FCentricProspections.Server.Services
 
         public Shop GetShopDetail(long id)
         {
+            // TO IMPLEMENT
+            // include eager loading to include contact info => address => city
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Prospection> GetShopProspections(long shopId)
+        public IEnumerable<Prospection> GetProspections(long shopId)
         {
+            // TO IMPLEMENT
             throw new NotImplementedException();
         }
 
-        public Prospection GetShopProspectionDetail(long id)
+        public Prospection GetProspectionDetail(long id)
         {
-            // eager loading
             return this.context.Prospections
                 .FirstOrDefault(x => x.Id == id);
         }

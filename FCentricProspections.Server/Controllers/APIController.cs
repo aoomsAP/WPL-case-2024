@@ -25,18 +25,19 @@ namespace FCentricProspections.Server.Controllers
         [Route("shops")]
         public IActionResult GetShops()
         {
-            // for each shop in the database, collect copy that adheres to view model
+            // for each shop in the database, collect copy that adheres to viewmodel (excluding all details)
             var shops = new List<ShopGetAllViewModel>();
             foreach (var shop in this.data.GetShops())
             {
                 shops.Add(new ShopGetAllViewModel { Id = shop.Id, Name = shop.Name });
             }
 
-            // return list of view model countries
+            // return list of viewmodel shops
             return Ok(shops);
         }
 
-        // implement GetshopDetail
+        // GetshopDetail
+        // TO IMPLEMENT
 
 
         // PROSPECTIONS ----------------------------------------------
@@ -49,7 +50,7 @@ namespace FCentricProspections.Server.Controllers
         {
             var viewModel = new ProspectionGetDetailViewModel();
 
-            var prospection = this.data.GetShopProspectionDetail(id);
+            var prospection = this.data.GetProspectionDetail(id);
             if (prospection == null)
             {
                 return NotFound("Prospection not found.");
@@ -60,12 +61,13 @@ namespace FCentricProspections.Server.Controllers
             viewModel.Date = prospection.Date;
             viewModel.ShopId = prospection.ShopId;
 
-            // return viewmodel of a prospection
+            // return viewmodel of prospection
             return Ok(viewModel);
         }
 
 
-        // implement GetProspections
+        // GetProspections
+        // TO IMPLEMENT
 
         // POST
 
@@ -79,27 +81,30 @@ namespace FCentricProspections.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            // check if shop exists
+            // (IMPLEMENT GETSHOPDETAIL FIRST)
+
+            // check if shop exists 
             //var shop = this.data.GetShopDetail(viewModel.ShopId);
             //if (shop == null)
             //{
             //    return NotFound("Shop not found");
             //}
 
-            // create new prospection based on view model data
+            // create new prospection object based on view model data
             var newProspection = new Prospection
             {
                 Comment = viewModel.Comment,
                 Date = viewModel.Date,
                 ShopId = viewModel.ShopId,
+                //Shop = shop, // see above, implement GetShopDetail first
             };
 
             // add prospection to database
-            this.data.AddShopProspection(newProspection);
+            this.data.AddProspection(newProspection);
 
-            // return VIEWMODEL of object that was just created
+            // return viewmodel of object that was just created
             return CreatedAtAction(
-                nameof(GetProspectionDetail),
+                nameof(this.data.GetProspectionDetail),
                 new { id = newProspection.Id },
                 new ProspectionGetDetailViewModel 
                 { 
@@ -112,7 +117,8 @@ namespace FCentricProspections.Server.Controllers
 
         // PUT
 
-        // implement
+        // UpdateProspection
+        // TO IMPLEMENT
 
     }
 }

@@ -12,9 +12,9 @@ namespace FCentricProspections.Server.Services
 
         // Prospection Data
 
-        IEnumerable<Prospection> GetShopProspections(long shopId);
-        Prospection GetShopProspectionDetail(long id);
-        void AddShopProspection(Prospection prospection);
+        IEnumerable<Prospection> GetProspections(long shopId);
+        Prospection GetProspectionDetail(long id);
+        void AddProspection(Prospection prospection);
 
         //void UpdateProspection(Prospection prospection);
     }

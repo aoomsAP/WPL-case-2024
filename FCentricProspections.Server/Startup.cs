@@ -15,13 +15,10 @@ namespace FCentricProspections
         {
             services.AddControllers();
             services.AddSwaggerGen();
-            //services.AddScoped<IData, InMemoryData>();
             services.AddScoped<IData, EfData>();
 
             // Database connection
-
             var connection = "server=localhost; database=FCentricSmall; Trusted_Connection=true; Encrypt=Yes; TrustServerCertificate=Yes;";
-
             services.AddDbContext<FCentricSmallContext>(options => options.UseSqlServer(connection));
         }
 
@@ -45,7 +42,7 @@ namespace FCentricProspections
             {
                 app.UseExceptionHandler(new ExceptionHandlerOptions
                 {
-                    ExceptionHandler = context => context.Response.WriteAsync("Er ging iets mis.")
+                    ExceptionHandler = context => context.Response.WriteAsync("Something went wrong.")
                 });
             }
 

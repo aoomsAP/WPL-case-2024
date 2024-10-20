@@ -5,7 +5,7 @@ namespace FCentricProspections.Server.ViewModels
 {
     public class ProspectionGetAllViewModel
     {
-        // implement
+        // TO IMPLEMENT
     }
 
     public class ProspectionGetDetailViewModel
@@ -38,6 +38,6 @@ namespace FCentricProspections.Server.ViewModels
 
     public class ProspectionUpdateViewModel
     {
-        // implement
+        // TO IMPLEMENT
     }
 }
