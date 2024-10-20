@@ -33,5 +33,7 @@ namespace FCentricProspections.Server.Controllers
             // return list of view model countries
             return Ok(shops);
         }
+
+        // implement all the rest
     }
 }

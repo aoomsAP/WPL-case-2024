@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using FCentricProspections.Server.Services;
 using System.Xml.Linq;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace FCentricProspections
 {
@@ -14,21 +15,14 @@ namespace FCentricProspections
         {
             services.AddControllers();
             services.AddSwaggerGen();
-            services.AddScoped<IData, InMemoryData>();
-            //services.AddScoped<IData, EfData>();
+            //services.AddScoped<IData, InMemoryData>();
+            services.AddScoped<IData, EfData>();
 
             // Database connection
 
-            //var connection = "server=localhost; database=orchestra-db; user=root; password=password";
+            var connection = "server=localhost; database=FCentricSmall; Trusted_Connection=true; Encrypt=Yes; TrustServerCertificate=Yes;";
 
-            // mySqlOptions / MigrationsAssembly necessary because DbContext is in class library
-            // and this apparently causes migrations confusion
-            //    // https://stackoverflow.com/questions/38705694/add-migration-with-different-assembly
-            //    services.AddDbContext<DataContext>(x => x.UseMySql(
-            //        connection,
-            //        ServerVersion.AutoDetect(connection),
-            //        mySqlOptions => mySqlOptions.MigrationsAssembly("MVC")));
-
+            services.AddDbContext<FCentricSmallContext>(options => options.UseSqlServer(connection));
         }
 
         // The below method gets called by runtime

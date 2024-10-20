@@ -5,7 +5,7 @@ namespace FCentricProspections.Server.ViewModels
     public class ShopGetAllViewModel
     {
         [Key]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public string Name { get; set; }
     }
@@ -13,7 +13,7 @@ namespace FCentricProspections.Server.ViewModels
     public class ShopGetDetailViewModel
     {
         [Key]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public string Name { get; set; }
 
