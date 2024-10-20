@@ -29,12 +29,15 @@ namespace FCentricProspections.Server.Services
 
         public Prospection GetShopProspectionDetail(long id)
         {
-            throw new NotImplementedException();
+            // eager loading
+            return this.context.Prospections
+                .FirstOrDefault(x => x.Id == id);
         }
 
         public void AddShopProspection(Prospection prospection)
         {
-            throw new NotImplementedException();
+            this.context.Prospections.Add(prospection);
+            this.context.SaveChanges();
         }
     }
 }

@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FCentricProspections.Server.Models;
 
@@ -47,6 +48,7 @@ public partial class User
 
     public virtual ICollection<Employee> EmployeeUserCreateds { get; set; } = new List<Employee>();
 
+    [NotMapped]
     public virtual ICollection<Employee> EmployeeUsers { get; set; } = new List<Employee>();
 
     public virtual ICollection<Gender> Genders { get; set; } = new List<Gender>();
