@@ -1,8 +1,9 @@
-import { createBrowserRouter, Outlet, RouterProvider, useParams } from 'react-router-dom';
-import { Homepage} from './pages/homePage';
-import { ShopPage} from './pages/shopIdPage';
+import { createBrowserRouter, Outlet, RouterProvider} from 'react-router-dom';
+import { Homepage} from './pages/Home/homepage';
+import { ShopPage} from './pages/ShopId/shopIdPage';
 import { DataProvider } from './contexts/dataContext';
 import styles from './App.module.css'
+import { Prospectie } from './pages/ShopNewProspection/shopIdNewProspectionPage';
 
 const Root = () => {
     return (
@@ -20,28 +21,13 @@ const Root = () => {
     );
 }
 
-const Home =()=> {
-    return(
-        <>
-        <Homepage></Homepage>
-        </>
-    );
-} 
+
 
 const Page2 = () => {
     return (
-        <div>Page 2</div>
+        <Prospectie/>
     );
 }
-
-const Detail = () => {
-    const { id } = useParams<{ id: string }>(); // Ensure correct types for TypeScript
-
-
-    return (
-            <ShopPage id={id} />
-    );
-};
 
 
 const App = () => {
@@ -52,14 +38,19 @@ const App = () => {
             children: [
                 {
                     path: "",
-                    element: <Home/>
+                    element: <Homepage/>
                 },
                 {
                     path: 'shop/:id',
-                    element: <Detail />
+                    element: <ShopPage/>
                 },
                 {
-                    path: "page2",
+                    path: "shop/:id/new",
+                    element: <Prospectie/>
+                }
+                ,
+                {
+                    path: "shop/:id/overview",
                     element: <Page2/>
                 }
             ]

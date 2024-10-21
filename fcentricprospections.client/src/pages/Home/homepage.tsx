@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
-import { ShopIdContext } from "../contexts/dataContext"; // Make sure the path is correct
-import styles from '../App.module.css'; // Adjust your styles as necessary
+import { ShopIdContext } from "../../contexts/dataContext"; // Make sure the path is correct
+import styles from '../../App.module.css'; // Adjust your styles as necessary
 import { Link } from "react-router-dom";
 
 export const Homepage = () => {
@@ -15,8 +15,6 @@ export const Homepage = () => {
     });
 
     return (
-        <div className={styles.body}>
-            
             <main className={styles.main}>
             <input 
                     className={styles.inputField} 
@@ -40,8 +38,6 @@ export const Homepage = () => {
                         )
                     )}
                 </ul>
-            </main>
-           
-        </div>
+            </main>      
     );
 };

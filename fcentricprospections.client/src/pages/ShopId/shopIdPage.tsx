@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import styles from './shopIdpage.module.css';
-import {Shop} from '../types'
+import {Shop} from '../../types'
+import { Link, useParams } from 'react-router-dom';
 
-interface ShopPageProps {
-  id: string | undefined;
-}
-
-export const ShopPage = ({ id }: ShopPageProps) => {
+export const ShopPage = () => {
+  const { id } = useParams<{ id: string }>(); // Ensure correct types for TypeScript
    
   const [shopData , setShopData] = useState<Shop>();
 
@@ -23,13 +21,18 @@ export const ShopPage = ({ id }: ShopPageProps) => {
     <>
       <main className={styles.main}>
         <h1>{shopData?.shopName}</h1>
-        <h2>Adres van de shop: </h2>
-        <h2>Naam van de klant:</h2>
-        <li>{id}</li>
+        <h2>Adres: {shopData?.address} </h2>
+        <h2>Naam van de klant: {shopData?.customerName}</h2>
+        <button key={id}>
+          <Link to={`/shop/${id}/new`}>Nieuwe prospectie</Link>
+        </button>
+
       </main>
     </>
   );
 };
+
+
 
 
 /* Temporary Code */
