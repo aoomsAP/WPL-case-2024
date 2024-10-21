@@ -4,23 +4,23 @@ export const Prospectie = () => {
 
     const handleSubmit = (event : any) => {
         event.preventDefault(); 
-        console.log('Form submitted');
+        console.log('Form submitted'); {/* Nog te verwijderen later*/}
       };
 
     return (
       <main className={styles.main}>
-        <h1>Enter Details</h1>
+        <h1>Voer details in</h1>
         <form className={styles.prospectionform} onSubmit={handleSubmit}>
           {/* Date input */}
-          <label htmlFor="date">Select Date:</label>
-          <input type="date" id="date" name="date" />
+          <label htmlFor="date">Kies Datum:</label>
+          <input type="date" id="date" name="datum" />
   
           {/* Text area input */}
-          <label htmlFor="text">Enter Text:</label>
-          <textarea id="text" name="text" rows={4} cols={40} placeholder="Type your text here"></textarea>
+          <label htmlFor="text">Schrijf hier:</label>
+          <textarea id="text" name="text" rows={4} cols={40} placeholder="Type je text hier"></textarea>
 
           {/* Submit Button */}
-        <button type="submit">Submit</button>
+        <button type="submit">Verstuur</button>
 
         </form>
 

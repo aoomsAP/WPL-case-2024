@@ -23,10 +23,13 @@ export const ShopPage = () => {
         <h1>{shopData?.shopName}</h1>
         <h2>Adres: {shopData?.address} </h2>
         <h2>Naam van de klant: {shopData?.customerName}</h2>
-        <button key={id}>
+        <button>
           <Link to={`/shop/${id}/new`}>Nieuwe prospectie</Link>
         </button>
-
+        
+        <button>
+          <Link to={`/shop/${id}/overview`}>Voorgaande Prospecties</Link>
+        </button>
       </main>
     </>
   );

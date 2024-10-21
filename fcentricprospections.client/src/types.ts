@@ -15,3 +15,14 @@ export interface Shop {
     address: string;
     customerName: string;
   }
+
+  export interface Prospection {
+      id: string;
+      data: string;
+      text: string;
+  }
+   export interface Shop2{
+       id : string,
+       shopName : string,
+       prospections : Prospection[]
+   }
