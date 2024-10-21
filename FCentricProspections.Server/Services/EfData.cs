@@ -1,5 +1,6 @@
 ﻿using FCentricProspections.Server.Models;
 using FCentricProspections.Server.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace FCentricProspections.Server.Services
 {
@@ -19,15 +20,22 @@ namespace FCentricProspections.Server.Services
 
         public Shop GetShopDetail(long id)
         {
-            // TO IMPLEMENT
-            // include eager loading to include contact info => address => city
-            throw new NotImplementedException();
+            // this does not work, requires more complicated query
+            // eager loading / join on Shop - Contact - Address - City?
+            // join to include Customers table via CustomerShops? create another context query like GetCustomer?
+
+            return this.context.Shops
+                .Include(n => n.Prospections) // eager loading to make sure List of Prospections is loaded as well
+                .Include(n => n.Contact)
+                .FirstOrDefault(x => x.Id == id);
         }
 
         public IEnumerable<Prospection> GetProspections(long shopId)
         {
-            // TO IMPLEMENT
-            throw new NotImplementedException();
+            return this.context.Shops
+                .Include(n => n.Prospections) // eager loading to make sure List of Prospections is loaded as well
+                .FirstOrDefault(x => x.Id == shopId)
+                .Prospections;
         }
 
         public Prospection GetProspectionDetail(long id)
@@ -36,7 +44,7 @@ namespace FCentricProspections.Server.Services
                 .FirstOrDefault(x => x.Id == id);
         }
 
-        public void AddShopProspection(Prospection prospection)
+        public void AddProspection(Prospection prospection)
         {
             this.context.Prospections.Add(prospection);
             this.context.SaveChanges();
