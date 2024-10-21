@@ -4,6 +4,8 @@ import { ShopPage} from './pages/ShopId/shopIdPage';
 import { DataProvider } from './contexts/dataContext';
 import styles from './App.module.css'
 import { Prospectie } from './pages/ShopNewProspection/shopIdNewProspectionPage';
+import {ShopOverview} from './pages/ShopProspectionOverView/shopOverview'
+import { ProspectionDetail } from './pages/ProspectionDetail/ProspectionDetail';
 
 const Root = () => {
     return (
@@ -18,14 +20,6 @@ const Root = () => {
 
         </footer>
         </>
-    );
-}
-
-
-
-const Page2 = () => {
-    return (
-        <Prospectie/>
     );
 }
 
@@ -51,7 +45,12 @@ const App = () => {
                 ,
                 {
                     path: "shop/:id/overview",
-                    element: <Page2/>
+                    element: <ShopOverview/>
+                }
+                ,
+                {
+                    path:"shop/:id/overview/:prospectionId",
+                    element:<ProspectionDetail/>
                 }
             ]
         }
