@@ -5,7 +5,12 @@ namespace FCentricProspections.Server.ViewModels
 {
     public class ProspectionGetAllViewModel
     {
-        // TO IMPLEMENT
+        public long Id { get; set; }
+
+        [Required]
+        public DateTime Date { get; set; }
+
+        public long ShopId { get; set; }
     }
 
     public class ProspectionGetDetailViewModel
