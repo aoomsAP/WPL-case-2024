@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using FCentricProspections.Server.Models;
+using FCentricProspections.Server.DataModels;
 
 namespace FCentricProspections.Server.Contexts;
 
@@ -14,25 +14,37 @@ public partial class FCentricSmallContext : DbContext
     {
     }
 
-    // UNSURE: should all database tables be included?
+    // potentially more tables should be included
 
     public virtual DbSet<Address> Addresses { get; set; }
 
+    public virtual DbSet<Brand> Brands { get; set; }
+
     public virtual DbSet<City> Cities { get; set; }
+
+    public virtual DbSet<CompetitorBrand> CompetitorBrands { get; set; }
 
     public virtual DbSet<Contact> Contacts { get; set; }
 
-    // NEW
     public virtual DbSet<Prospection> Prospections { get; set; }
+
+    public virtual DbSet<ProspectionBrand> ProspectionBrands { get; set; }
+
+    public virtual DbSet<ProspectionBrandInterest> ProspectionBrandInterests { get; set; }
+
+    public virtual DbSet<ProspectionCompetitorBrand> ProspectionCompetitorBrands { get; set; }
+
+    public virtual DbSet<ProspectionContactType> ProspectionContactTypes { get; set; }
+
+    public virtual DbSet<ProspectionVisitType> ProspectionVisitTypes { get; set; }
 
     public virtual DbSet<Shop> Shops { get; set; }
 
+    public virtual DbSet<User> Users { get; set; }
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // UNSURE: is it correct to only use modelBuilder for the new Prospection entity?
-        // I had to manually adjust the Migration to make sure it only creates the Prospections table
-
-        // NEW
         modelBuilder.Entity<Prospection>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -41,6 +53,8 @@ public partial class FCentricSmallContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_dbo.Prospections_dbo.Shops_ShopId");
         });
+
+        // to implement ?
 
         OnModelCreatingPartial(modelBuilder);
     }
