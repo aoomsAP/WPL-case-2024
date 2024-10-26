@@ -23,7 +23,7 @@ namespace FCentricProspections.Server.DomainModels
 
         public string? VisitContext { get; set; }
 
-        public ICollection<ProspectionBrand> BrandReports { get; set; }
+        public ICollection<ProspectionBrand> ProspectionBrands { get; set; }
 
         public ICollection<ProspectionCompetitorBrandDto> CompetitorBrands { get; set; }
 
@@ -33,7 +33,7 @@ namespace FCentricProspections.Server.DomainModels
 
         public string? BrandsOut {  get; set; } // potentially in the future two lists of brands + competitor brands?
 
-        public ICollection<ProspectionBrandInterestDto> BrandInterests { get; set; }
+        public ICollection<ProspectionBrandInterestDto> ProspectionBrandInterests { get; set; }
 
         public string? Trends { get; set; }
 

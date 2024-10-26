@@ -9,4 +9,6 @@ public partial class ProspectionBrandInterestDto
     public BrandDto Brand { get; set; }
 
     public string? Sales { get; set; }
+
+    
 }
