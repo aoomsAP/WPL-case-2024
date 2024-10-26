@@ -7,7 +7,7 @@ public partial class BrandDto
 
     public string Name { get; set; }
 
-    public ICollection<ProspectionBrand> ProspectionBrands { get; set; }
+    public ICollection<ProspectionBrandDto> ProspectionBrands { get; set; }
 
-    public ICollection<ProspectionBrandInterest> ProspectionBrandInterests { get; set; }
+    public ICollection<ProspectionBrandInterestDto> ProspectionBrandInterests { get; set; }
 }

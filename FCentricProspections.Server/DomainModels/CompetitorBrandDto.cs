@@ -6,5 +6,5 @@ public partial class CompetitorBrandDto
 
     public string? Name { get; set; }
 
-    public ICollection<ProspectionCompetitorBrand> ProspectionCompetitorBrands { get; set; }
+    public ICollection<ProspectionCompetitorBrandDto> ProspectionCompetitorBrands { get; set; }
 }
