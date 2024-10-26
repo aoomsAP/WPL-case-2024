@@ -1,4 +1,4 @@
-﻿using FCentricProspections.Server.Models;
+﻿using FCentricProspections.Server.DataModels;
 using System.ComponentModel.DataAnnotations;
 
 namespace FCentricProspections.Server.ViewModels

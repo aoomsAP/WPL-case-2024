@@ -1,6 +1,7 @@
-﻿using FCentricProspections.Server.Models;
+﻿using FCentricProspections.Server.DataModels;
 using FCentricProspections.Server.Contexts;
 using Microsoft.EntityFrameworkCore;
+using FCentricProspections.Server.DomainModels;
 
 namespace FCentricProspections.Server.Services
 {
@@ -13,9 +14,17 @@ namespace FCentricProspections.Server.Services
             this.context = context;
         }
 
-        public IEnumerable<Shop> GetShops()
+        public IEnumerable<ShopListDto> GetShops()
         {
-            return this.context.Shops;
+            var ShopList = context.Shops
+                .FromSqlRaw(@"SELECT  Id, Name FROM dbo.Shops ")
+                .Select(s => new ShopListDto
+                {
+                    Id = s.Id,
+                    Name = s.Name,  
+                }).ToList();
+
+            return ShopList;
         }
 
         public Shop GetShopDetail(long id)

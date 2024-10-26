@@ -1,4 +1,4 @@
-﻿using FCentricProspections.Server.Models;
+﻿using FCentricProspections.Server.DataModels;
 using FCentricProspections.Server.Services;
 using FCentricProspections.Server.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -79,7 +79,7 @@ namespace FCentricProspections.Server.Controllers
             }
 
             viewModel.Id = prospection.Id;
-            viewModel.Comment = prospection.Comment;
+            //viewModel.Comment = prospection.Comment;
             viewModel.Date = prospection.Date;
             viewModel.ShopId = prospection.ShopId;
 
@@ -129,7 +129,7 @@ namespace FCentricProspections.Server.Controllers
             // create new prospection object based on view model data
             var newProspection = new Prospection
             {
-                Comment = viewModel.Comment,
+                //Comment = viewModel.Comment,
                 Date = viewModel.Date,
                 ShopId = viewModel.ShopId,
                 Shop = shop,
@@ -145,7 +145,7 @@ namespace FCentricProspections.Server.Controllers
                 new ProspectionGetDetailViewModel 
                 { 
                     Id = newProspection.Id,
-                    Comment = newProspection.Comment,
+                    //Comment = newProspection.Comment,
                     Date = newProspection.Date,
                     ShopId = newProspection.ShopId,
                 });

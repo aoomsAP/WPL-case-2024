@@ -1,4 +1,5 @@
-﻿using FCentricProspections.Server.Models;
+﻿using FCentricProspections.Server.DataModels;
+using FCentricProspections.Server.DomainModels;
 using System.Diagnostics.Metrics;
 
 namespace FCentricProspections.Server.Services
@@ -7,7 +8,7 @@ namespace FCentricProspections.Server.Services
     {
         // Shop Data
 
-        IEnumerable<Shop> GetShops();
+        IEnumerable<ShopListDto> GetShops();
         Shop GetShopDetail(long id);
 
         // Prospection Data

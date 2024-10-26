@@ -17,5 +17,5 @@ public partial class ShopDetailDto
     // and we'll just use a new CustomerDto object and hope for the best?
     public CustomerDto Customer { get; set; }
 
-    public virtual ICollection<ProspectionDetailDto> Prospections { get; set; } = new List<ProspectionDetailDto>();
+    public virtual ICollection<ProspectionListDto> Prospections { get; set; } = new List<ProspectionListDto>();
 }
