@@ -34,9 +34,9 @@ namespace FCentricProspections.Server.Services
         /// </summary>
         
         //Gives A list of All the Fc70 brands
-        IEnumerable<BrandDto>GetBrands();
+        IEnumerable<BrandDto> GetBrands();
 
-        IEnumerable<CompetitorBrandDto>GetCompetitorBrands();
+        IEnumerable<CompetitorBrandDto> GetCompetitorBrands();
         
     }
 

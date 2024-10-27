@@ -3,6 +3,7 @@ using FCentricProspections.Server.Services;
 using FCentricProspections.Server.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics.Metrics;
+using static FCentricProspections.Server.ViewModels.BrandViewModels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FCentricProspections.Server.Controllers
@@ -81,7 +82,7 @@ namespace FCentricProspections.Server.Controllers
             viewModel.Id = prospection.Id;
             //viewModel.Comment = prospection.Comment;
             viewModel.Date = prospection.Date;
-            viewModel.ShopId = prospection.ShopId;
+            viewModel.ShopId = prospection.Shop.Id;
 
             // return viewmodel of prospection
             return Ok(viewModel);
@@ -105,6 +106,24 @@ namespace FCentricProspections.Server.Controllers
             // return list of viewmodel prospections
             return Ok(prospections);
         }
+
+
+        /*Test Route */
+        [HttpGet()]
+        [Route("brands")]
+        public IActionResult GetBrands()
+        {
+            // for each brand in the database, collect copy that adheres to viewmodel (excluding all details)
+            var brands = new List<BrandGetAllViewModel>();
+            foreach (var brand in this.data.GetBrands())
+            {
+                brands.Add(new BrandGetAllViewModel { Id = brand.Id, Name = brand.Name });
+            }
+
+            // return list of viewmodel brand
+            return Ok(brands);
+        }
+        /**/
 
         // POST
 
@@ -132,7 +151,11 @@ namespace FCentricProspections.Server.Controllers
                 //Comment = viewModel.Comment,
                 Date = viewModel.Date,
                 ShopId = viewModel.ShopId,
-                Shop = shop,
+                Shop = new Shop
+                {
+                    Id = shop.Id,
+                    /*Hiet moet nog worden aangevult?*/
+                },
             };
 
             // add prospection to database
