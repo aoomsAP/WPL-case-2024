@@ -88,7 +88,7 @@ namespace FCentricProspections.Server.Controllers
         }
 
 
-        // GetProspections
+        // GetProspections With shop Id
         [HttpGet()]
         [Route("prospections")]
         public IActionResult GetProspections(long shopId)
