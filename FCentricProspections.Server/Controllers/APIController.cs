@@ -216,5 +216,50 @@ namespace FCentricProspections.Server.Controllers
 
         // UpdateProspectionInterests
 
+
+        // EXAMPLE FOR UPDATING RELATIONSHIPS ON EXISTING OBJECT
+        // THINK: ORCHESTRA = PROSPECTION
+
+        //// updates the list of musicians for an orchestra
+        //// expects a list of musician ids
+        //[HttpPut()]
+        //[Route("orchestras/{id}/musicians")]
+        //public IActionResult UpdateOrchestraMusicians(int id, [FromBody] OrchestraMusiciansUpdateViewModel viewModel)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    };
+
+        //    var oldOrchestra = this.data.GetOrchestra(id);
+        //    if (oldOrchestra == null)
+        //    {
+        //        return NotFound("Orchestra not found."); // 404
+        //    }
+
+        //    // check if musician ids refer to musicians that exist
+        //    var updatedMusicians = new List<Musician>();
+        //    foreach (var musicianId in viewModel.MusicianIds)
+        //    {
+        //        var newMusician = this.data.GetMusician(musicianId);
+        //        if (newMusician == null)
+        //        {
+        //            return NotFound($"Musician {musicianId} not found.");
+        //        }
+        //        updatedMusicians.Add(newMusician);
+        //    }
+
+        //    var newOrchestra = new Orchestra
+        //    {
+        //        Id = oldOrchestra.Id,
+        //        Name = oldOrchestra.Name,
+        //        Conductor = oldOrchestra.Conductor,
+        //        Country = oldOrchestra.Country,
+        //        Musicians = updatedMusicians,
+        //    };
+
+        //    this.data.UpdateOrchestraMusicians(newOrchestra);
+        //    return NoContent(); // 204
+        //}
     }
 }
