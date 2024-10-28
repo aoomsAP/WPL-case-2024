@@ -103,11 +103,15 @@ namespace FCentricProspections.Server.Services
                               select new ProspectionDetailDto
                               {
                                   Id = p.Id,
+                                  ShopId = p.ShopId,
                                   Shop = new ShopListDto { Id = p.ShopId, Name = shop.Name },
                                   UserId = p.UserId, 
                                   Date = p.Date,
                                   DateLastUpdated = p.DateLastUpdated,
+                                  ContactPersonTypeId = p.ContactPersonTypeId,
                                   ContactPersonType = new ProspectionContactType { Id = p.ContactPersonTypeId, Name = contact.Name },
+                                  ContactPersonName = p.ContactPersonName,
+                                  VisitTypeId = p.VisitTypeId,
                                   VisitType = new ProspectionVisitType { Id = p.VisitTypeId, Name = visit.Name },
                                   VisitContext = p.VisitContext,
                                   BestBrands = p.BestBrands,
