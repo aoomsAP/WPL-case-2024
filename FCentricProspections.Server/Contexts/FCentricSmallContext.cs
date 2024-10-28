@@ -26,6 +26,10 @@ public partial class FCentricSmallContext : DbContext
 
     public virtual DbSet<Contact> Contacts { get; set; }
 
+    public virtual DbSet<Customer> Customers { get; set; }
+
+    public virtual DbSet<CustomerShop> CustomerShops { get; set; }
+
     public virtual DbSet<Prospection> Prospections { get; set; }
 
     public virtual DbSet<ProspectionBrand> ProspectionBrands { get; set; }

@@ -7,23 +7,29 @@ namespace FCentricProspections.Server.DomainModels
     {
         public long Id { get; set; }
 
-        public ShopDetailDto Shop { get; set; }
+        public ShopListDto Shop { get; set; }
 
-        public UserDto User { get; set; }
+        public long ShopId { get; set; }
+
+        public long UserId { get; set; }
 
         public DateTime Date { get; set; }
 
         public DateTime DateLastUpdated { get; set; }
 
+        public long ContactPersonTypeId { get; set; }
+
         public ProspectionContactType? ContactPersonType { get; set; }
 
         public string? ContactPersonName { get; set; }
+
+        public long VisitTypeId { get; set; }
 
         public ProspectionVisitType? VisitType { get; set; }
 
         public string? VisitContext { get; set; }
 
-        public ICollection<ProspectionBrand> ProspectionBrands { get; set; }
+        public ICollection<ProspectionBrandDto> ProspectionBrands { get; set; }
 
         public ICollection<ProspectionCompetitorBrandDto> CompetitorBrands { get; set; }
 

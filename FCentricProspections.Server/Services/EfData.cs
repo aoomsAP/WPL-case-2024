@@ -2,6 +2,7 @@
 using FCentricProspections.Server.Contexts;
 using Microsoft.EntityFrameworkCore;
 using FCentricProspections.Server.DomainModels;
+using System.Net;
 
 namespace FCentricProspections.Server.Services
 {
@@ -14,6 +15,8 @@ namespace FCentricProspections.Server.Services
             this.context = context;
         }
 
+        // Shop ---------------------------------------------------------------------------------------------------------------------
+
         public IEnumerable<ShopListDto> GetShops()
         {
             var ShopList = context.Shops
@@ -21,7 +24,7 @@ namespace FCentricProspections.Server.Services
                 .Select(s => new ShopListDto
                 {
                     Id = s.Id,
-                    Name = s.Name,  
+                    Name = s.Name,
                 }).ToList();
 
             return ShopList;
@@ -29,21 +32,38 @@ namespace FCentricProspections.Server.Services
 
         public ShopDetailDto GetShopDetail(long id)
         {
-            // this does not work, requires more complicated query
-            // eager loading / join on Shop - Contact - Address - City?
-            // join to include Customers table via CustomerShops? create another context query like GetCustomer?
-            var shopDetail = context.Shops
-                .FromSqlRaw(@$"")
-                .Select(p => new ShopDetailDto 
-                {
-                    
-                }).SingleOrDefault();
+            // "projection queries in Entity Framework"
+            // https://www.tektutorialshub.com/entity-framework/join-query-entity-framework/
 
+            var shopDetail = (from s in this.context.Shops
+                              join contact in this.context.Contacts on s.ContactId equals contact.Id
+                              join address in this.context.Addresses on contact.AddressId equals address.Id
+                              join city in this.context.Cities on address.CityId equals city.Id
+                              join customerShop in this.context.CustomerShops on s.Id equals customerShop.ShopId
+                              join customer in this.context.Customers on customerShop.CustomerId equals customer.Id
+                              where s.Id == id && customerShop.IsActive == true
+                              select new ShopDetailDto
+                              {
+                                  Id = s.Id,
+                                  Name = s.Name,
+                                  Address = new AddressDto { Id = address.Id, Street1 = address.Street1, Street2 = address.Street2, PostalCode = address.PostalCode, City = city.Name },
+                                  Customer = new CustomerDto { Id = customer.Id, Name = customer.Name },
+                              }).SingleOrDefault();
 
             return shopDetail;
         }
 
-        public IEnumerable<ProspectionListDto> GetProspections(long shopId)
+        public Shop GetShop(long id)
+        {
+            var shop = this.context.Shops
+                                   .FirstOrDefault(x => x.Id == id);
+
+            return shop;
+        }
+
+        // Prospection ---------------------------------------------------------------------------------------------------------------------
+
+        public IEnumerable<ProspectionListDto> GetProspectionsByShopId(long shopId)
         {
             var prospectionsList = context.Prospections
                 .FromSqlRaw(@$"SELECT Id , Date  FROM dbo.Prospections WHERE ShopId = {shopId}")
@@ -57,42 +77,46 @@ namespace FCentricProspections.Server.Services
             return prospectionsList;
         }
 
+        public IEnumerable<ProspectionListDto> GetProspectionsByUserId(long userId)
+        {
+            var prospectionsList = context.Prospections
+                .FromSqlRaw(@$"SELECT Id , Date  FROM dbo.Prospections WHERE UserId = {userId}")
+                .Select(s => new ProspectionListDto
+                {
+                    Id = s.Id,
+                    Date = s.Date,
+                }).ToList();
+
+            return prospectionsList;
+        }
+
         public ProspectionDetailDto GetProspectionDetail(long id)
         {
-            var prospectionDetail = context.Prospections
-                .FromSqlRaw($@"SELECT 
-                p.ShopId, p.Date, p.DateLastUpdated, p.UserId, p.ContactPersonTypeId, 
-                p.ContactPersonName, p.VisitTypeId, p.VisitContext, p.BestBrands, p.WorstBrands, 
-                p.BrandsOut, p.Trends, p.Extra,
-                s.Id AS ShopId, s.Name AS ShopName, s.Address AS ShopAddress
-                 FROM dbo.Prospections AS p
-                 JOIN dbo.Shops AS s ON p.ShopId = s.Id
-                 WHERE p.Id = {id}")
-                .Select( p => new ProspectionDetailDto
-                {
-                    Id = p.Id,
-                    //ShopDetailDTO?
+            // "projection queries in Entity Framework"
+            // https://www.tektutorialshub.com/entity-framework/join-query-entity-framework/
 
-                    Shop = GetShopDetail(p.ShopId),
-                    //UserDTO?
-                    User = new UserDto { },
-
-                    Date = p.Date,
-                    DateLastUpdated = p.DateLastUpdated,
-                    ContactPersonType = new ProspectionContactType { Id = p.ContactPersonTypeId, Name = null/*wat moet hier?*/ },
-                    VisitType = new ProspectionVisitType { Id = p.VisitTypeId, Name = null },
-                    VisitContext = p.VisitContext,
-
-                    BestBrands = p.BestBrands,
-                    WorstBrands = p.WorstBrands,
-                    BrandsOut = p.BrandsOut,
-                    Trends = p.Trends,
-                    Extra = p.Extra,
-
-
-
-
-                }).SingleOrDefault();
+            var prospectionDetail = (from p in this.context.Prospections
+                              join shop in this.context.Shops on p.ShopId equals shop.Id
+                              join contact in this.context.ProspectionContactTypes on p.ContactPersonTypeId equals contact.Id
+                              join visit in this.context.ProspectionVisitTypes on p.VisitTypeId equals visit.Id
+                              where p.Id == id
+                              select new ProspectionDetailDto
+                              {
+                                  Id = p.Id,
+                                  Shop = new ShopListDto { Id = p.ShopId, Name = shop.Name },
+                                  UserId = p.UserId, 
+                                  Date = p.Date,
+                                  DateLastUpdated = p.DateLastUpdated,
+                                  ContactPersonType = new ProspectionContactType { Id = p.ContactPersonTypeId, Name = contact.Name },
+                                  VisitType = new ProspectionVisitType { Id = p.VisitTypeId, Name = visit.Name },
+                                  VisitContext = p.VisitContext,
+                                  BestBrands = p.BestBrands,
+                                  WorstBrands = p.WorstBrands,
+                                  BrandsOut = p.BrandsOut,
+                                  Trends = p.Trends,
+                                  Extra = p.Extra,
+                                  // LISTS? ProspectionBrand, ProspectionCompetitorBrand, ProspectionBrandInterest
+                              }).SingleOrDefault();
 
             return prospectionDetail;
         }
@@ -103,8 +127,7 @@ namespace FCentricProspections.Server.Services
             this.context.SaveChanges();
         }
 
-        ///Brands
-        ///
+        // Brand ---------------------------------------------------------------------------------------------------------------------
 
         public IEnumerable<BrandDto> GetBrands()
         {
@@ -132,5 +155,73 @@ namespace FCentricProspections.Server.Services
             return competitorBrandList;
         }
 
+        // User ---------------------------------------------------------------------------------------------------------------------
+
+        public UserDto GetUserDto(long id)
+        {
+            var user = context.Users
+                .FromSqlRaw(@$"")
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    Login = u.Login,
+                    Blocked = u.Blocked,
+                    Prospections = this.GetProspectionsByUserId(u.Id),
+                }).SingleOrDefault();
+
+            return user;
+        }
+
+        public User GetUser(long id)
+        {
+            var user = this.context.Users
+                                   .FirstOrDefault(x => x.Id == id);
+
+            return user;
+        }
+
+        // Types ---------------------------------------------------------------------------------------------------------------------
+
+        public IEnumerable<ProspectionContactType> GetContactPersonTypes()
+        {
+            var contactPersonTypesList = this.context.ProspectionContactTypes
+                .FromSqlRaw(@"SELECT  Id, Name FROM dbo.ProspectionContactTypes ")
+                .Select(s => new ProspectionContactType
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                }).ToList();
+
+            return contactPersonTypesList;
+        }
+
+        public ProspectionContactType GetContactPersonType(long id)
+        {
+            var type = this.context.ProspectionContactTypes
+                                   .FirstOrDefault(x => x.Id == id);
+
+            return type;
+        }
+
+        public IEnumerable<ProspectionVisitType> GetVisitTypes()
+        {
+            var visitTypesList = this.context.ProspectionVisitTypes
+                .FromSqlRaw(@"SELECT  Id, Name FROM dbo.ProspectionVisitTypes ")
+                .Select(s => new ProspectionVisitType
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                }).ToList();
+
+            return visitTypesList;
+        }
+
+        public ProspectionVisitType GetVisitType(long id)
+        {
+            var type = this.context.ProspectionVisitTypes
+                                   .FirstOrDefault(x => x.Id == id);
+
+            return type;
+        }
     }
 }
