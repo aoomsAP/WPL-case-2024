@@ -1,4 +1,5 @@
 ﻿using FCentricProspections.Server.DataModels;
+using FCentricProspections.Server.DomainModels;
 using System.ComponentModel.DataAnnotations;
 
 namespace FCentricProspections.Server.ViewModels
@@ -17,28 +18,62 @@ namespace FCentricProspections.Server.ViewModels
     {
         public long Id { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
-        [MaxLength(500, ErrorMessage = "Maximum 500 characters")]
-        public string Comment { get; set; }
+        public long ShopId { get; set; }
 
-        [Required]
+        public long UserId { get; set; }
+
         public DateTime Date { get; set; }
 
-        [Required]
-        public long ShopId { get; set; }
+        public DateTime DateLastUpdated { get; set; }
+
+        public long ContactPersonTypeId { get; set; }
+
+        public string? ContactPersonName { get; set; }
+
+        public long VisitTypeId { get; set; }
+
+        public string? VisitContext { get; set; }
+
+        public string? BestBrands { get; set; }
+
+        public string? WorstBrands { get; set; }
+
+        public string? BrandsOut { get; set; }
+
+        [MaxLength(500, ErrorMessage = "Maximum 500 characters")]
+        public string? Trends { get; set; }
+
+        public string? Extra { get; set; }
     }
 
     public class ProspectionCreateViewModel
     {
-        [Required(AllowEmptyStrings = false)]
-        [MaxLength(500, ErrorMessage = "Maximum 500 characters")]
-        public string Comment { get; set; }
+        public long ShopId { get; set; }
 
-        [Required]
+        public long UserId { get; set; }
+
         public DateTime Date { get; set; }
 
-        [Required]
-        public long ShopId { get; set; }
+        public DateTime DateLastUpdated { get; set; }
+
+        public long ContactPersonTypeId { get; set; }
+
+        public string? ContactPersonName { get; set; }
+
+        public long VisitTypeId { get; set; }
+
+        public string? VisitContext { get; set; }
+
+        public string? BestBrands { get; set; }
+
+        public string? WorstBrands { get; set; }
+
+        public string? BrandsOut { get; set; }
+
+        [MaxLength(500, ErrorMessage = "Maximum 500 characters")]
+        public string? Trends { get; set; }
+
+        public string? Extra { get; set; }
     }
 
     public class ProspectionUpdateViewModel

@@ -26,6 +26,10 @@ public partial class FCentricSmallContext : DbContext
 
     public virtual DbSet<Contact> Contacts { get; set; }
 
+    public virtual DbSet<Customer> Customers { get; set; }
+
+    public virtual DbSet<CustomerShop> CustomerShops { get; set; }
+
     public virtual DbSet<Prospection> Prospections { get; set; }
 
     public virtual DbSet<ProspectionBrand> ProspectionBrands { get; set; }
@@ -45,6 +49,20 @@ public partial class FCentricSmallContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<ProspectionContactType>().HasData(
+            new ProspectionContactType { Id = 1, Name = "Owner" },
+            new ProspectionContactType { Id = 2, Name = "Buyer" },
+            new ProspectionContactType { Id = 3, Name = "Salesperson" },
+            new ProspectionContactType { Id = 4, Name = "Other" }
+        );
+
+        modelBuilder.Entity<ProspectionVisitType>().HasData(
+            new ProspectionVisitType { Id = 1, Name = "Prospection" },
+            new ProspectionVisitType { Id = 2, Name = "Swap" },
+            new ProspectionVisitType { Id = 3, Name = "Key account meeting" },
+            new ProspectionVisitType { Id = 4, Name = "Other" }
+        );
+
         modelBuilder.Entity<Prospection>(entity =>
         {
             entity.HasKey(e => e.Id);

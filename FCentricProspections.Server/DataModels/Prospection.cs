@@ -22,9 +22,13 @@ namespace FCentricProspections.Server.DataModels
 
         public long ContactPersonTypeId { get; set; }
 
+        public ProspectionContactType ContactPersonType { get; set; }
+
         public string? ContactPersonName { get; set; }
 
         public long VisitTypeId { get; set; }
+
+        public ProspectionVisitType VisitType { get; set; }
 
         public string? VisitContext { get; set; }
 

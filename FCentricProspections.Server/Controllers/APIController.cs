@@ -2,7 +2,9 @@
 using FCentricProspections.Server.Services;
 using FCentricProspections.Server.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Metrics;
+using static FCentricProspections.Server.ViewModels.BrandViewModels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FCentricProspections.Server.Controllers
@@ -50,17 +52,15 @@ namespace FCentricProspections.Server.Controllers
 
             viewModel.Id = shop.Id;
 
-            viewModel.Name = shop.Name; // for now only getting name works
+            viewModel.Name = shop.Name;
 
-            viewModel.Address = "Address"; // requires more complicated join/query to create something like below
-            //viewModel.Address = $"{shop.Contact.Address.Street1} {shop.Contact.Address.Street2}, {shop.Contact.Address.PostalCode} {shop.Contact.Address.City}";
+            viewModel.Address = $"{shop.Address.Street1}, {shop.Address.PostalCode} {shop.Address.City}";
 
-            viewModel.Customer = "Customer"; // requires GetCustomer query by using CustomerShops Foreign Key table?
+            viewModel.Customer = shop.Customer.Name;
 
-            // return viewmodel of prospection
+            // return viewmodel of shop
             return Ok(viewModel);
         }
-
 
         // PROSPECTIONS ----------------------------------------------
 
@@ -79,16 +79,26 @@ namespace FCentricProspections.Server.Controllers
             }
 
             viewModel.Id = prospection.Id;
-            //viewModel.Comment = prospection.Comment;
-            viewModel.Date = prospection.Date;
             viewModel.ShopId = prospection.ShopId;
+            viewModel.UserId = prospection.UserId;
+            viewModel.Date = prospection.Date;
+            viewModel.DateLastUpdated = prospection.DateLastUpdated;
+            viewModel.ContactPersonTypeId = prospection.ContactPersonTypeId;
+            viewModel.ContactPersonName = prospection.ContactPersonName;
+            viewModel.VisitTypeId = prospection.VisitTypeId;
+            viewModel.VisitContext = prospection.VisitContext;
+            viewModel.BestBrands = prospection.BestBrands;
+            viewModel.WorstBrands = prospection.WorstBrands;
+            viewModel.BrandsOut = prospection.BrandsOut;
+            viewModel.Trends = prospection.Trends;
+            viewModel.Extra = prospection.Extra;
 
             // return viewmodel of prospection
             return Ok(viewModel);
         }
 
 
-        // GetProspections
+        // GetProspections With shop Id
         [HttpGet()]
         [Route("prospections")]
         public IActionResult GetProspections(long shopId)
@@ -96,7 +106,7 @@ namespace FCentricProspections.Server.Controllers
             var prospections = new List<ProspectionGetAllViewModel>();
 
             // get prospections from a shop
-            foreach (var prospection in this.data.GetProspections(shopId))
+            foreach (var prospection in this.data.GetProspectionsByShopId(shopId))
             {
                 // create prospection viewmodel
                 prospections.Add(new ProspectionGetAllViewModel { Id = prospection.Id, Date = prospection.Date, ShopId = shopId });
@@ -105,6 +115,24 @@ namespace FCentricProspections.Server.Controllers
             // return list of viewmodel prospections
             return Ok(prospections);
         }
+
+
+        /*Test Route */
+        [HttpGet()]
+        [Route("brands")]
+        public IActionResult GetBrands()
+        {
+            // for each brand in the database, collect copy that adheres to viewmodel (excluding all details)
+            var brands = new List<BrandGetAllViewModel>();
+            foreach (var brand in this.data.GetBrands())
+            {
+                brands.Add(new BrandGetAllViewModel { Id = brand.Id, Name = brand.Name });
+            }
+
+            // return list of viewmodel brand
+            return Ok(brands);
+        }
+        /**/
 
         // POST
 
@@ -118,7 +146,6 @@ namespace FCentricProspections.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-
             // check if shop exists
             var shop = this.data.GetShopDetail(viewModel.ShopId);
             if (shop == null)
@@ -129,10 +156,27 @@ namespace FCentricProspections.Server.Controllers
             // create new prospection object based on view model data
             var newProspection = new Prospection
             {
-                //Comment = viewModel.Comment,
-                Date = viewModel.Date,
+                // EF creates Id
                 ShopId = viewModel.ShopId,
-                Shop = shop,
+                Shop = this.data.GetShop(viewModel.ShopId),
+                UserId = viewModel.UserId,
+                User = this.data.GetUser(viewModel.UserId),
+                Date = viewModel.Date,
+                DateLastUpdated = viewModel.DateLastUpdated,
+                ContactPersonType = this.data.GetContactPersonType(viewModel.ContactPersonTypeId),
+                ContactPersonTypeId = viewModel.ContactPersonTypeId,
+                ContactPersonName = viewModel.ContactPersonName,
+                VisitType = this.data.GetVisitType(viewModel.VisitTypeId),
+                VisitTypeId = viewModel.VisitTypeId,
+                VisitContext = viewModel.VisitContext,
+                Brands = new List<ProspectionBrand>(),            
+                CompetitorBrands = new List<ProspectionCompetitorBrand>(),
+                BestBrands = viewModel.BestBrands,
+                WorstBrands = viewModel.WorstBrands,
+                BrandsOut = viewModel.BrandsOut,
+                BrandsInterest = new List<ProspectionBrandInterest>(),
+                Trends = viewModel.Trends,
+                Extra = viewModel.Extra,
             };
 
             // add prospection to database
@@ -142,12 +186,22 @@ namespace FCentricProspections.Server.Controllers
             return CreatedAtAction(
                 nameof(this.data.GetProspectionDetail),
                 new { id = newProspection.Id },
-                new ProspectionGetDetailViewModel 
-                { 
+                new ProspectionGetDetailViewModel
+                {
                     Id = newProspection.Id,
-                    //Comment = newProspection.Comment,
-                    Date = newProspection.Date,
                     ShopId = newProspection.ShopId,
+                    UserId = newProspection.UserId,
+                    Date = newProspection.Date,
+                    DateLastUpdated = newProspection.DateLastUpdated,
+                    ContactPersonTypeId = newProspection.ContactPersonTypeId,
+                    ContactPersonName = newProspection.ContactPersonName,
+                    VisitTypeId = newProspection.VisitTypeId,
+                    VisitContext = newProspection.VisitContext,
+                    BestBrands = newProspection.BestBrands,
+                    WorstBrands = newProspection.WorstBrands,
+                    BrandsOut = newProspection.BrandsOut,
+                    Trends = newProspection.Trends,
+                    Extra = newProspection.Extra,
                 });
         }
 
@@ -156,5 +210,56 @@ namespace FCentricProspections.Server.Controllers
         // UpdateProspection
         // TO IMPLEMENT
 
+        // UpdateProspectionBrands
+
+        // UpdateProspectionCompetitorBrands
+
+        // UpdateProspectionInterests
+
+
+        // EXAMPLE FOR UPDATING RELATIONSHIPS ON EXISTING OBJECT
+        // THINK: ORCHESTRA = PROSPECTION
+
+        //// updates the list of musicians for an orchestra
+        //// expects a list of musician ids
+        //[HttpPut()]
+        //[Route("orchestras/{id}/musicians")]
+        //public IActionResult UpdateOrchestraMusicians(int id, [FromBody] OrchestraMusiciansUpdateViewModel viewModel)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    };
+
+        //    var oldOrchestra = this.data.GetOrchestra(id);
+        //    if (oldOrchestra == null)
+        //    {
+        //        return NotFound("Orchestra not found."); // 404
+        //    }
+
+        //    // check if musician ids refer to musicians that exist
+        //    var updatedMusicians = new List<Musician>();
+        //    foreach (var musicianId in viewModel.MusicianIds)
+        //    {
+        //        var newMusician = this.data.GetMusician(musicianId);
+        //        if (newMusician == null)
+        //        {
+        //            return NotFound($"Musician {musicianId} not found.");
+        //        }
+        //        updatedMusicians.Add(newMusician);
+        //    }
+
+        //    var newOrchestra = new Orchestra
+        //    {
+        //        Id = oldOrchestra.Id,
+        //        Name = oldOrchestra.Name,
+        //        Conductor = oldOrchestra.Conductor,
+        //        Country = oldOrchestra.Country,
+        //        Musicians = updatedMusicians,
+        //    };
+
+        //    this.data.UpdateOrchestraMusicians(newOrchestra);
+        //    return NoContent(); // 204
+        //}
     }
 }

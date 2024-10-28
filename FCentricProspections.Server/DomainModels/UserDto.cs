@@ -8,6 +8,6 @@
 
         public bool Blocked { get; set; }
 
-        public ICollection<ProspectionDetailDto> Prospections { get; set; }
+        public IEnumerable<ProspectionListDto> Prospections { get; set; }
     }
 }
