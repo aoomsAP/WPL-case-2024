@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FCentricProspections.Server.Migrations
 {
     [DbContext(typeof(FCentricSmallContext))]
-    [Migration("20241028213205_PopulateTypes")]
-    partial class PopulateTypes
+    [Migration("20241102210607_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1162,8 +1162,11 @@ namespace FCentricProspections.Server.Migrations
 
             modelBuilder.Entity("FCentricProspections.Server.DataModels.ProspectionBrand", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<long>("BrandId")
                         .HasColumnType("bigint");
@@ -1191,8 +1194,11 @@ namespace FCentricProspections.Server.Migrations
 
             modelBuilder.Entity("FCentricProspections.Server.DataModels.ProspectionBrandInterest", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<long>("BrandId")
                         .HasColumnType("bigint");
@@ -1214,8 +1220,11 @@ namespace FCentricProspections.Server.Migrations
 
             modelBuilder.Entity("FCentricProspections.Server.DataModels.ProspectionCompetitorBrand", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<long>("CompetitorBrandId")
                         .HasColumnType("bigint");
