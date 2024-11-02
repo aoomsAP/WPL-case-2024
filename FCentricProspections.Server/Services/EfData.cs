@@ -90,7 +90,7 @@ namespace FCentricProspections.Server.Services
             return prospectionsList;
         }
 
-        public ProspectionDetailDto GetProspectionDetail(long id)
+        public ProspectionDetailDto GetProspectionDetail(long prospectionId)
         {
             // "projection queries in Entity Framework"
             // https://www.tektutorialshub.com/entity-framework/join-query-entity-framework/
@@ -99,7 +99,7 @@ namespace FCentricProspections.Server.Services
                               join shop in this.context.Shops on p.ShopId equals shop.Id
                               join contact in this.context.ProspectionContactTypes on p.ContactPersonTypeId equals contact.Id
                               join visit in this.context.ProspectionVisitTypes on p.VisitTypeId equals visit.Id
-                              where p.Id == id
+                              where p.Id == prospectionId
                               select new ProspectionDetailDto
                               {
                                   Id = p.Id,
@@ -119,16 +119,98 @@ namespace FCentricProspections.Server.Services
                                   BrandsOut = p.BrandsOut,
                                   Trends = p.Trends,
                                   Extra = p.Extra,
-                                  // LISTS? ProspectionBrand, ProspectionCompetitorBrand, ProspectionBrandInterest
+/*                                  ProspectionBrands = new List<ProspectionBrandDto>(),
+                                  ProspectionBrandInterests = new List<ProspectionBrandInterestDto>(),
+                                  CompetitorBrands = new List<ProspectionCompetitorBrandDto>()*/
                               }).SingleOrDefault();
 
+/*            prospectionDetail.ProspectionBrands = GetProspectionBrands(prospectionId);
+            prospectionDetail.ProspectionBrandInterests = GetProspectionBrandInterests(prospectionId);
+            prospectionDetail.CompetitorBrands = GetProspectionCompetitorBrands(prospectionId);*/
+
             return prospectionDetail;
+        }
+
+        public Prospection GetProspection(long id)
+        {
+            return this.context.Prospections
+                 .Include(p => p.Shop)
+                 .Include(p => p.User)
+                 .Include(p => p.ContactPersonType)
+                 .Include(p => p.VisitType)
+                 .Include(p => p.Brands)
+                 .Include(p => p.CompetitorBrands)
+                 .Include(p => p.BrandsInterest)
+                 .FirstOrDefault(x => x.Id == id);
+        }
+
+        public IEnumerable<ProspectionBrandDto> GetProspectionBrands(long prospectionId)
+        {
+            return this.context.ProspectionBrands
+                .Select(p => new ProspectionBrandDto
+                {
+                    ProspectionId = p.Id,
+                    BrandId = p.BrandId,
+                    Sellout = p.Sellout,
+                    SalesRepresentative = p.SalesRepresentative,
+                    CommercialSupport = p.CommercialSupport
+                }).ToList();
+        }
+
+        public IEnumerable<ProspectionBrandInterestDto> GetProspectionBrandInterests(long prospectionId)
+        {
+            return this.context.ProspectionBrandInterests
+                .Select(p => new ProspectionBrandInterestDto
+                {
+                    Id = p.Id,
+                    ProspectionId = p.ProspectionId,
+                    BrandId = p.BrandId,
+                    Sales = p.Sales
+                }).ToList();
+        }
+        public IEnumerable<ProspectionCompetitorBrandDto> GetProspectionCompetitorBrands(long prospectionId)
+        {
+            return this.context.ProspectionCompetitorBrands
+                .Select(p => new ProspectionCompetitorBrandDto
+                {
+                    Id = p.Id,
+                    ProspectionId = p.ProspectionId,
+                    CompetitorBrandId = p.CompetitorBrandId
+                }).ToList();
         }
 
         public void AddProspection(Prospection prospection)
         {
             this.context.Prospections.Add(prospection);
             this.context.SaveChanges();
+        }
+
+        public void UpdateProspection(Prospection prospection) 
+        {
+            var toUpdate = GetProspectionDetail(prospection.Id);
+            toUpdate.ShopId = prospection.ShopId;
+            toUpdate.UserId = prospection.UserId;
+            toUpdate.Date = prospection.Date;
+            toUpdate.DateLastUpdated = prospection.DateLastUpdated;
+            toUpdate.ContactPersonTypeId = prospection.ContactPersonTypeId;
+            toUpdate.ContactPersonName = prospection.ContactPersonName;
+            toUpdate.VisitTypeId = prospection.VisitTypeId;
+            toUpdate.VisitContext = prospection.VisitContext;
+            toUpdate.BestBrands = prospection.BestBrands;
+            toUpdate.WorstBrands = prospection.WorstBrands;
+            toUpdate.BrandsOut = prospection.BrandsOut;
+            toUpdate.Trends = prospection.Trends;
+            toUpdate.Extra = prospection.Extra;
+            this.context.SaveChanges();
+        }
+
+        public void UpdateProspectionBrand(Prospection prospection)
+        {
+            var updateProspection = GetProspection(prospection.Id);
+
+            updateProspection.Brands = prospection.Brands;
+            this.context.SaveChanges();
+
         }
 
         // Brand ---------------------------------------------------------------------------------------------------------------------
@@ -146,6 +228,16 @@ namespace FCentricProspections.Server.Services
             return brandList;
         }
 
+        public Brand GetBrand(long id)
+        {
+            var brand = this.context.Brands
+                                   .FirstOrDefault(x => x.Id == id);
+
+            return brand;
+        }
+
+
+
         public IEnumerable<CompetitorBrandDto> GetCompetitorBrands()
         {
             var competitorBrandList = context.CompetitorBrands
@@ -157,6 +249,14 @@ namespace FCentricProspections.Server.Services
                 }).ToList();
 
             return competitorBrandList;
+        }
+
+        public CompetitorBrand GetCompetitorBrand(long id)
+        {
+            var competitorBrand = this.context.CompetitorBrands
+                                   .FirstOrDefault(x => x.Id == id);
+
+            return competitorBrand;
         }
 
         // User ---------------------------------------------------------------------------------------------------------------------

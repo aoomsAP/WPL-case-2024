@@ -13,6 +13,7 @@ namespace FCentricProspections.Server.Controllers
     public class APIController : Controller
     {
         private IData data;
+        //testestetstste
 
         public APIController(IData data)
         {
@@ -169,7 +170,7 @@ namespace FCentricProspections.Server.Controllers
                 VisitType = this.data.GetVisitType(viewModel.VisitTypeId),
                 VisitTypeId = viewModel.VisitTypeId,
                 VisitContext = viewModel.VisitContext,
-                Brands = new List<ProspectionBrand>(),            
+                Brands = new List<ProspectionBrand>(),
                 CompetitorBrands = new List<ProspectionCompetitorBrand>(),
                 BestBrands = viewModel.BestBrands,
                 WorstBrands = viewModel.WorstBrands,
@@ -208,58 +209,93 @@ namespace FCentricProspections.Server.Controllers
         // PUT
 
         // UpdateProspection
+        [HttpPut]
+        [Route("updateprospection")]
+        public IActionResult UpdateProspection(long id, [FromBody] ProspectionUpdateViewModel viewModel)
+        {
+            //check if modelstate is valid
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            //Check if propection exists
+            var existingProspection = this.data.GetProspection(id);
+            if (existingProspection == null)
+            {
+                return NotFound("Prospection not found");
+            }
+            //Check if shop exists
+            var shop = this.data.GetShopDetail(viewModel.ShopId);
+            if (shop == null)
+            {
+                return NotFound("Shop not found");
+            }
+
+            //Update prospection fields 
+            existingProspection.ShopId = viewModel.ShopId;
+            existingProspection.Shop = this.data.GetShop(viewModel.ShopId);
+            existingProspection.UserId = viewModel.UserId;
+            existingProspection.User = this.data.GetUser(viewModel.UserId);
+            existingProspection.Date = viewModel.Date;
+            existingProspection.DateLastUpdated = viewModel.DateLastUpdated;
+            existingProspection.ContactPersonType = this.data.GetContactPersonType(viewModel.ContactPersonTypeId);
+            existingProspection.ContactPersonTypeId = viewModel.ContactPersonTypeId;
+            existingProspection.ContactPersonName = viewModel.ContactPersonName;
+            existingProspection.VisitType = this.data.GetVisitType(viewModel.VisitTypeId);
+            existingProspection.VisitTypeId = viewModel.VisitTypeId;
+            existingProspection.VisitContext = viewModel.VisitContext;
+            existingProspection.BestBrands = viewModel.BestBrands;
+            existingProspection.WorstBrands = viewModel.WorstBrands;
+            existingProspection.BrandsOut = viewModel.BrandsOut;
+            existingProspection.Trends = viewModel.Trends;
+            existingProspection.Extra = viewModel.Extra;
+
+            //Save 
+
+            this.data.UpdateProspection(existingProspection);
+            return NoContent();
+
+        }
+
         // TO IMPLEMENT
 
-        // UpdateProspectionBrands
+        [HttpPut()]
+        [Route("prospections/{id}/brands")]
+        public IActionResult UpdateProspectionBrands(long id, [FromBody] ProspectionBrandUpdateViewModel viewModel)
+        {
 
-        // UpdateProspectionCompetitorBrands
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            };
 
-        // UpdateProspectionInterests
+            var existingProspection = this.data.GetProspection(id);
+            if (existingProspection == null)
+            {
+                return NotFound("Prospection not found");
+            }
 
+            //update relions between Propsection and Brands
+            var updatedProspectionBrands = new List<ProspectionBrand>();
+            foreach (ProspectionBrandGetViewModel b in viewModel.ProspectionBrands)
+            {
+                var prospectionBrand = new ProspectionBrand
+                {
+                    BrandId = b.BrandId,
+                    ProspectionId = id,
+                    Brand = this.data.GetBrand(b.BrandId),
+                    Prospection = existingProspection,
+                    Sellout = b.Sellout,
+                    CommercialSupport = b.CommercialSupport,
+                    SalesRepresentative = b.SalesRepresentative,
+                };
+                updatedProspectionBrands.Add(prospectionBrand);
+            }
 
-        // EXAMPLE FOR UPDATING RELATIONSHIPS ON EXISTING OBJECT
-        // THINK: ORCHESTRA = PROSPECTION
+            existingProspection.Brands = updatedProspectionBrands;
 
-        //// updates the list of musicians for an orchestra
-        //// expects a list of musician ids
-        //[HttpPut()]
-        //[Route("orchestras/{id}/musicians")]
-        //public IActionResult UpdateOrchestraMusicians(int id, [FromBody] OrchestraMusiciansUpdateViewModel viewModel)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    };
-
-        //    var oldOrchestra = this.data.GetOrchestra(id);
-        //    if (oldOrchestra == null)
-        //    {
-        //        return NotFound("Orchestra not found."); // 404
-        //    }
-
-        //    // check if musician ids refer to musicians that exist
-        //    var updatedMusicians = new List<Musician>();
-        //    foreach (var musicianId in viewModel.MusicianIds)
-        //    {
-        //        var newMusician = this.data.GetMusician(musicianId);
-        //        if (newMusician == null)
-        //        {
-        //            return NotFound($"Musician {musicianId} not found.");
-        //        }
-        //        updatedMusicians.Add(newMusician);
-        //    }
-
-        //    var newOrchestra = new Orchestra
-        //    {
-        //        Id = oldOrchestra.Id,
-        //        Name = oldOrchestra.Name,
-        //        Conductor = oldOrchestra.Conductor,
-        //        Country = oldOrchestra.Country,
-        //        Musicians = updatedMusicians,
-        //    };
-
-        //    this.data.UpdateOrchestraMusicians(newOrchestra);
-        //    return NoContent(); // 204
-        //}
+            this.data.UpdateProspectionBrand(existingProspection);
+            return NoContent(); 
+        }   
     }
 }

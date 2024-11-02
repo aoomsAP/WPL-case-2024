@@ -6,6 +6,7 @@ namespace FCentricProspections.Server.DataModels
     public class Prospection
     {
         [Key]
+
         public long Id { get; set; }
 
         public long ShopId { get; set; }
@@ -32,7 +33,7 @@ namespace FCentricProspections.Server.DataModels
 
         public string? VisitContext { get; set; }
 
-        public ICollection<ProspectionBrand> Brands { get; set; }
+        public ICollection<ProspectionBrand> Brands { get; set; } //Perhaps ProspectionBrands as name?
 
         public ICollection<ProspectionCompetitorBrand> CompetitorBrands { get; set; }
 
