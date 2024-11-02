@@ -106,32 +106,4 @@ namespace FCentricProspections.Server.ViewModels
         public string? Extra { get; set; }
     }
 
-    public class ProspectionBrandUpdateViewModel
-    {
-        public IEnumerable<ProspectionBrandGetViewModel> ProspectionBrands {get ; set;}
-
-    }
-
-    public class ProspectionBrandGetViewModel
-    {
-
-        public long BrandId { get; set; }
-
-        public int? Sellout { get; set; } // int because it's a percentage? string because it should be free text?
-
-        public string? SalesRepresentative { get; set; }
-
-        public string? CommercialSupport { get; set; }
-    }
-
-
-    public class ProspectionBrandInterestUpdateViewModel
-    {
-        public IEnumerable<long> BrandIds { get; set; }
-    }
-
-    public class ProspectionCompetitorBrandUpdateViewModel
-    {
-        public IEnumerable<long> CompetitorBrandIds { get; set; }
-    }
 }

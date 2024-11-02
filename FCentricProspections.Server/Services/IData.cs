@@ -7,17 +7,20 @@ namespace FCentricProspections.Server.Services
     public interface IData
     {
         // Shop --------------------------------------------------------------------------------------------------------------------------------------------------
+        
         IEnumerable<ShopListDto> GetShops();
 
         ShopDetailDto GetShopDetail(long id);
 
         Shop GetShop(long id);
 
+
         // Prospection --------------------------------------------------------------------------------------------------------------------------------------------
 
         IEnumerable<ProspectionListDto> GetProspectionsByShopId(long shopId);
 
         IEnumerable<ProspectionListDto> GetProspectionsByUserId(long userId);
+
         Prospection GetProspection(long id);
 
         ProspectionDetailDto GetProspectionDetail(long prospectionId);
@@ -31,14 +34,22 @@ namespace FCentricProspections.Server.Services
         void AddProspection(Prospection prospection);
 
         void UpdateProspection(Prospection prospection);
+
         void UpdateProspectionBrand(Prospection prospection);
+
+        void UpdateProspectionCompetitorBrand(Prospection prospection);
+
+        void UpdateProspectionBrandInterest(Prospection prospection);
+
 
         // Brand --------------------------------------------------------------------------------------------------------------------------------------------
 
-        // Gives A list of All the Fc70 brands
         IEnumerable<BrandDto> GetBrands();
+
         Brand GetBrand(long id);
+
         IEnumerable<CompetitorBrandDto> GetCompetitorBrands();
+
         CompetitorBrand GetCompetitorBrand(long id);
 
 
@@ -47,6 +58,7 @@ namespace FCentricProspections.Server.Services
         UserDto GetUserDto(long id);
 
         User GetUser(long id);
+
 
         // Types ---------------------------------------------------------------------------------------------------------------------
 

@@ -15,12 +15,12 @@ namespace FCentricProspections.Server.Services
             this.context = context;
         }
 
-        // Shop ---------------------------------------------------------------------------------------------------------------------
+        // SHOPS ---------------------------------------------------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------------------------------------------------------
 
         public IEnumerable<ShopListDto> GetShops()
         {
             var ShopList = context.Shops
-                .FromSqlRaw(@"SELECT  Id, Name FROM dbo.Shops ")
                 .Select(s => new ShopListDto
                 {
                     Id = s.Id,
@@ -55,18 +55,17 @@ namespace FCentricProspections.Server.Services
 
         public Shop GetShop(long id)
         {
-            var shop = this.context.Shops
-                                   .FirstOrDefault(x => x.Id == id);
-
-            return shop;
+            return this.context.Shops.FirstOrDefault(x => x.Id == id);
         }
 
-        // Prospection ---------------------------------------------------------------------------------------------------------------------
+        // PROSPECTIONS ---------------------------------------------------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------------------------------------------------------
+
+        // SELECT -----------
 
         public IEnumerable<ProspectionListDto> GetProspectionsByShopId(long shopId)
         {
             var prospectionsList = context.Prospections
-                .FromSqlRaw(@$"SELECT Id , Date  FROM dbo.Prospections WHERE ShopId = {shopId}")
                 .Select(s => new ProspectionListDto
                 {
                     Id = s.Id,
@@ -80,7 +79,6 @@ namespace FCentricProspections.Server.Services
         public IEnumerable<ProspectionListDto> GetProspectionsByUserId(long userId)
         {
             var prospectionsList = context.Prospections
-                .FromSqlRaw(@$"SELECT Id , Date  FROM dbo.Prospections WHERE UserId = {userId}")
                 .Select(s => new ProspectionListDto
                 {
                     Id = s.Id,
@@ -96,37 +94,30 @@ namespace FCentricProspections.Server.Services
             // https://www.tektutorialshub.com/entity-framework/join-query-entity-framework/
 
             var prospectionDetail = (from p in this.context.Prospections
-                              join shop in this.context.Shops on p.ShopId equals shop.Id
-                              join contact in this.context.ProspectionContactTypes on p.ContactPersonTypeId equals contact.Id
-                              join visit in this.context.ProspectionVisitTypes on p.VisitTypeId equals visit.Id
-                              where p.Id == prospectionId
-                              select new ProspectionDetailDto
-                              {
-                                  Id = p.Id,
-                                  ShopId = p.ShopId,
-                                  Shop = new ShopListDto { Id = p.ShopId, Name = shop.Name },
-                                  UserId = p.UserId, 
-                                  Date = p.Date,
-                                  DateLastUpdated = p.DateLastUpdated,
-                                  ContactPersonTypeId = p.ContactPersonTypeId,
-                                  ContactPersonType = new ProspectionContactType { Id = p.ContactPersonTypeId, Name = contact.Name },
-                                  ContactPersonName = p.ContactPersonName,
-                                  VisitTypeId = p.VisitTypeId,
-                                  VisitType = new ProspectionVisitType { Id = p.VisitTypeId, Name = visit.Name },
-                                  VisitContext = p.VisitContext,
-                                  BestBrands = p.BestBrands,
-                                  WorstBrands = p.WorstBrands,
-                                  BrandsOut = p.BrandsOut,
-                                  Trends = p.Trends,
-                                  Extra = p.Extra,
-/*                                  ProspectionBrands = new List<ProspectionBrandDto>(),
-                                  ProspectionBrandInterests = new List<ProspectionBrandInterestDto>(),
-                                  CompetitorBrands = new List<ProspectionCompetitorBrandDto>()*/
-                              }).SingleOrDefault();
-
-/*            prospectionDetail.ProspectionBrands = GetProspectionBrands(prospectionId);
-            prospectionDetail.ProspectionBrandInterests = GetProspectionBrandInterests(prospectionId);
-            prospectionDetail.CompetitorBrands = GetProspectionCompetitorBrands(prospectionId);*/
+                                     join shop in this.context.Shops on p.ShopId equals shop.Id
+                                     join contact in this.context.ProspectionContactTypes on p.ContactPersonTypeId equals contact.Id
+                                     join visit in this.context.ProspectionVisitTypes on p.VisitTypeId equals visit.Id
+                                     where p.Id == prospectionId
+                                     select new ProspectionDetailDto
+                                     {
+                                         Id = p.Id,
+                                         ShopId = p.ShopId,
+                                         Shop = new ShopListDto { Id = p.ShopId, Name = shop.Name },
+                                         UserId = p.UserId,
+                                         Date = p.Date,
+                                         DateLastUpdated = p.DateLastUpdated,
+                                         ContactPersonTypeId = p.ContactPersonTypeId,
+                                         ContactPersonType = new ProspectionContactType { Id = p.ContactPersonTypeId, Name = contact.Name },
+                                         ContactPersonName = p.ContactPersonName,
+                                         VisitTypeId = p.VisitTypeId,
+                                         VisitType = new ProspectionVisitType { Id = p.VisitTypeId, Name = visit.Name },
+                                         VisitContext = p.VisitContext,
+                                         BestBrands = p.BestBrands,
+                                         WorstBrands = p.WorstBrands,
+                                         BrandsOut = p.BrandsOut,
+                                         Trends = p.Trends,
+                                         Extra = p.Extra,
+                                     }).SingleOrDefault();
 
             return prospectionDetail;
         }
@@ -143,6 +134,8 @@ namespace FCentricProspections.Server.Services
                  .Include(p => p.BrandsInterest)
                  .FirstOrDefault(x => x.Id == id);
         }
+
+        // Relationships
 
         public IEnumerable<ProspectionBrandDto> GetProspectionBrands(long prospectionId)
         {
@@ -179,13 +172,17 @@ namespace FCentricProspections.Server.Services
                 }).ToList();
         }
 
+        // ADD -----------
+
         public void AddProspection(Prospection prospection)
         {
             this.context.Prospections.Add(prospection);
             this.context.SaveChanges();
         }
 
-        public void UpdateProspection(Prospection prospection) 
+        // UPDATE -----------
+
+        public void UpdateProspection(Prospection prospection)
         {
             var toUpdate = GetProspectionDetail(prospection.Id);
             toUpdate.ShopId = prospection.ShopId;
@@ -204,21 +201,35 @@ namespace FCentricProspections.Server.Services
             this.context.SaveChanges();
         }
 
+        // Relationships
+
         public void UpdateProspectionBrand(Prospection prospection)
         {
             var updateProspection = GetProspection(prospection.Id);
-
             updateProspection.Brands = prospection.Brands;
             this.context.SaveChanges();
-
         }
 
-        // Brand ---------------------------------------------------------------------------------------------------------------------
+        public void UpdateProspectionCompetitorBrand(Prospection prospection)
+        {
+            var updateProspection = GetProspection(prospection.Id);
+            updateProspection.CompetitorBrands = prospection.CompetitorBrands;
+            this.context.SaveChanges();
+        }
+
+        public void UpdateProspectionBrandInterest(Prospection prospection)
+        {
+            var updateProspection = GetProspection(prospection.Id);
+            updateProspection.BrandsInterest = prospection.BrandsInterest;
+            this.context.SaveChanges();
+        }
+
+        // BRANDS ---------------------------------------------------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------------------------------------------------------
 
         public IEnumerable<BrandDto> GetBrands()
         {
             var brandList = context.Brands
-                .FromSqlRaw(@"SELECT  Id, Name FROM dbo.Brands ")
                 .Select(s => new BrandDto
                 {
                     Id = s.Id,
@@ -230,18 +241,12 @@ namespace FCentricProspections.Server.Services
 
         public Brand GetBrand(long id)
         {
-            var brand = this.context.Brands
-                                   .FirstOrDefault(x => x.Id == id);
-
-            return brand;
+            return this.context.Brands.FirstOrDefault(x => x.Id == id);
         }
-
-
 
         public IEnumerable<CompetitorBrandDto> GetCompetitorBrands()
         {
             var competitorBrandList = context.CompetitorBrands
-                .FromSqlRaw(@"SELECT  Id, Name FROM dbo.CompetitorBrands ")
                 .Select(s => new CompetitorBrandDto
                 {
                     Id = s.Id,
@@ -253,18 +258,15 @@ namespace FCentricProspections.Server.Services
 
         public CompetitorBrand GetCompetitorBrand(long id)
         {
-            var competitorBrand = this.context.CompetitorBrands
-                                   .FirstOrDefault(x => x.Id == id);
-
-            return competitorBrand;
+            return this.context.CompetitorBrands.FirstOrDefault(x => x.Id == id);
         }
 
-        // User ---------------------------------------------------------------------------------------------------------------------
+        // USERS ---------------------------------------------------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------------------------------------------------------
 
         public UserDto GetUserDto(long id)
         {
             var user = context.Users
-                .FromSqlRaw(@$"")
                 .Select(u => new UserDto
                 {
                     Id = u.Id,
@@ -278,18 +280,15 @@ namespace FCentricProspections.Server.Services
 
         public User GetUser(long id)
         {
-            var user = this.context.Users
-                                   .FirstOrDefault(x => x.Id == id);
-
-            return user;
+            return this.context.Users.FirstOrDefault(x => x.Id == id);
         }
 
-        // Types ---------------------------------------------------------------------------------------------------------------------
+        // TYPES ---------------------------------------------------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------------------------------------------------------
 
         public IEnumerable<ProspectionContactType> GetContactPersonTypes()
         {
             var contactPersonTypesList = this.context.ProspectionContactTypes
-                .FromSqlRaw(@"SELECT  Id, Name FROM dbo.ProspectionContactTypes ")
                 .Select(s => new ProspectionContactType
                 {
                     Id = s.Id,
@@ -301,16 +300,12 @@ namespace FCentricProspections.Server.Services
 
         public ProspectionContactType GetContactPersonType(long id)
         {
-            var type = this.context.ProspectionContactTypes
-                                   .FirstOrDefault(x => x.Id == id);
-
-            return type;
+            return this.context.ProspectionContactTypes.FirstOrDefault(x => x.Id == id);
         }
 
         public IEnumerable<ProspectionVisitType> GetVisitTypes()
         {
             var visitTypesList = this.context.ProspectionVisitTypes
-                .FromSqlRaw(@"SELECT  Id, Name FROM dbo.ProspectionVisitTypes ")
                 .Select(s => new ProspectionVisitType
                 {
                     Id = s.Id,
@@ -322,10 +317,7 @@ namespace FCentricProspections.Server.Services
 
         public ProspectionVisitType GetVisitType(long id)
         {
-            var type = this.context.ProspectionVisitTypes
-                                   .FirstOrDefault(x => x.Id == id);
-
-            return type;
+            return this.context.ProspectionVisitTypes.FirstOrDefault(x => x.Id == id);
         }
     }
 }

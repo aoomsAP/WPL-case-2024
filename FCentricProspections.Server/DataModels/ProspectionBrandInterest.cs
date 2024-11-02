@@ -10,7 +10,7 @@ namespace FCentricProspections.Server.DataModels
 
         public long ProspectionId { get; set; }
 
-        public Prospection Propsection { get; set; }
+        public Prospection Prospection { get; set; }
 
         public long BrandId { get; set; }
 
