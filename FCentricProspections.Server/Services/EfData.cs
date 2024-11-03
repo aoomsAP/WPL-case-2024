@@ -39,6 +39,7 @@ namespace FCentricProspections.Server.Services
                               join contact in this.context.Contacts on s.ContactId equals contact.Id
                               join address in this.context.Addresses on contact.AddressId equals address.Id
                               join city in this.context.Cities on address.CityId equals city.Id
+                              join country in this.context.Countries on city.CountryId equals country.Id
                               join customerShop in this.context.CustomerShops on s.Id equals customerShop.ShopId
                               join customer in this.context.Customers on customerShop.CustomerId equals customer.Id
                               where s.Id == id && customerShop.IsActive == true
@@ -46,7 +47,7 @@ namespace FCentricProspections.Server.Services
                               {
                                   Id = s.Id,
                                   Name = s.Name,
-                                  Address = new AddressDto { Id = address.Id, Street1 = address.Street1, Street2 = address.Street2, PostalCode = address.PostalCode, City = city.Name },
+                                  Address = new AddressDto { Id = address.Id, Street1 = address.Street1, Street2 = address.Street2, PostalCode = address.PostalCode, City = city.Name, Country = country.Name },
                                   Customer = new CustomerDto { Id = customer.Id, Name = customer.Name },
                               }).SingleOrDefault();
 
