@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FCentricProspections.Server.ViewModels
 {
-        public class BrandGetAllViewModel
+        public class CompetitorBrandGetAllViewModel
         {
             [Key]
             public long Id { get; set; }

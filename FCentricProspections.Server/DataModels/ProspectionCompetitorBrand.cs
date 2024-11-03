@@ -1,10 +1,13 @@
 ﻿using FCentricProspections.Server.DomainModels;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FCentricProspections.Server.DataModels
 {
     public class ProspectionCompetitorBrand
     {
-        public string Id { get; set; }
+        [Key]
+        public long Id { get; set; }
 
         public long ProspectionId { get; set; }
 

@@ -2,10 +2,10 @@
 {
     public class ProspectionCompetitorBrandDto
     {
-        public string Id { get; set; }
+        public long Id { get; set; }
 
-        public ProspectionDetailDto Prospection { get; set; }
+        public long ProspectionId { get; set; }
 
-        public BrandDto Brand { get; set; } 
+        public long CompetitorBrandId { get; set; } 
     }
 }

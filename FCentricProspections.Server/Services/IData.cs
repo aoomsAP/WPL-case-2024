@@ -7,11 +7,13 @@ namespace FCentricProspections.Server.Services
     public interface IData
     {
         // Shop --------------------------------------------------------------------------------------------------------------------------------------------------
+        
         IEnumerable<ShopListDto> GetShops();
 
         ShopDetailDto GetShopDetail(long id);
 
         Shop GetShop(long id);
+
 
         // Prospection --------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -19,24 +21,44 @@ namespace FCentricProspections.Server.Services
 
         IEnumerable<ProspectionListDto> GetProspectionsByUserId(long userId);
 
-        ProspectionDetailDto GetProspectionDetail(long id);
+        Prospection GetProspection(long id);
+
+        ProspectionDetailDto GetProspectionDetail(long prospectionId);
+
+        IEnumerable<ProspectionBrandDto> GetProspectionBrands(long prospectionId);
+
+        IEnumerable<ProspectionBrandInterestDto> GetProspectionBrandInterests(long prospectionId);
+
+        IEnumerable<ProspectionCompetitorBrandDto> GetProspectionCompetitorBrands(long prospectionId);
 
         void AddProspection(Prospection prospection);
 
-        // void UpdateProspection(Prospection prospection);
+        void UpdateProspection(Prospection prospection);
+
+        void UpdateProspectionBrand(Prospection prospection);
+
+        void UpdateProspectionCompetitorBrand(Prospection prospection);
+
+        void UpdateProspectionBrandInterest(Prospection prospection);
+
 
         // Brand --------------------------------------------------------------------------------------------------------------------------------------------
 
-        // Gives A list of All the Fc70 brands
         IEnumerable<BrandDto> GetBrands();
 
+        Brand GetBrand(long id);
+
         IEnumerable<CompetitorBrandDto> GetCompetitorBrands();
+
+        CompetitorBrand GetCompetitorBrand(long id);
+
 
         // User ---------------------------------------------------------------------------------------------------------------------
         
         UserDto GetUserDto(long id);
 
         User GetUser(long id);
+
 
         // Types ---------------------------------------------------------------------------------------------------------------------
 

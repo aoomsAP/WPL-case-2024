@@ -2,11 +2,11 @@
 
 public partial class ProspectionBrandInterestDto
 {
-    public string Id { get; set; }
+    public long Id { get; set; }
 
-    public ProspectionDetailDto Prospection { get; set; } 
+    public long ProspectionId { get; set; } 
 
-    public BrandDto Brand { get; set; }
+    public long BrandId { get; set; }
 
     public string? Sales { get; set; }
 

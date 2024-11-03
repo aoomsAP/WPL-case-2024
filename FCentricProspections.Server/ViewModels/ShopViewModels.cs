@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using FCentricProspections.Server.DomainModels;
 
 namespace FCentricProspections.Server.ViewModels
 {
@@ -17,7 +18,7 @@ namespace FCentricProspections.Server.ViewModels
 
         public string Name { get; set; }
 
-        public string Address { get; set; }
+        public AddressDto Address { get; set; }
 
         public string Customer { get; set; }
     }

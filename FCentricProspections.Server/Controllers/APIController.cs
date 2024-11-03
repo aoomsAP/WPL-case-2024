@@ -1,11 +1,10 @@
 ﻿using FCentricProspections.Server.DataModels;
 using FCentricProspections.Server.Services;
 using FCentricProspections.Server.ViewModels;
+using FCentricProspections.Server.DomainModels;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Metrics;
-using static FCentricProspections.Server.ViewModels.BrandViewModels;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FCentricProspections.Server.Controllers
 {
@@ -19,7 +18,8 @@ namespace FCentricProspections.Server.Controllers
             this.data = data;
         }
 
-        // SHOPS ----------------------------------------------
+        // SHOPS ------------------------------------------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------------------------------------------------
 
         // GET
 
@@ -51,20 +51,42 @@ namespace FCentricProspections.Server.Controllers
             }
 
             viewModel.Id = shop.Id;
-
             viewModel.Name = shop.Name;
-
-            viewModel.Address = $"{shop.Address.Street1}, {shop.Address.PostalCode} {shop.Address.City}";
-
+            viewModel.Address = shop.Address;
             viewModel.Customer = shop.Customer.Name;
 
             // return viewmodel of shop
             return Ok(viewModel);
         }
 
-        // PROSPECTIONS ----------------------------------------------
+        // PROSPECTIONS ------------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------------------------
 
-        // GET
+        // GET --------------------------------------------------------------
+
+        // all prospections for a given shop
+        [HttpGet()]
+        [Route("shops/{id}/prospections")]
+        public IActionResult GetProspections(long id)
+        {
+            var shop = this.data.GetShopDetail(id);
+            if (shop == null)
+            {
+                return NotFound("Shop not found.");
+            }
+
+            var prospections = new List<ProspectionGetAllViewModel>();
+
+            // get prospections from a shop
+            foreach (var prospection in this.data.GetProspectionsByShopId(id))
+            {
+                // create prospection viewmodel
+                prospections.Add(new ProspectionGetAllViewModel { Id = prospection.Id, Date = prospection.Date, ShopId = id });
+            }
+
+            // return list of viewmodel prospections
+            return Ok(prospections);
+        }
 
         [HttpGet()]
         [Route("prospections/{id}")]
@@ -97,44 +119,98 @@ namespace FCentricProspections.Server.Controllers
             return Ok(viewModel);
         }
 
+        // Relationships
 
-        // GetProspections With shop Id
         [HttpGet()]
-        [Route("prospections")]
-        public IActionResult GetProspections(long shopId)
+        [Route("prospections/{id}/brands")]
+        public IActionResult GetProspectionBrands(long id)
         {
-            var prospections = new List<ProspectionGetAllViewModel>();
-
-            // get prospections from a shop
-            foreach (var prospection in this.data.GetProspectionsByShopId(shopId))
+            // check if prospection exists
+            var prospection = this.data.GetProspection(id);
+            if (prospection == null)
             {
-                // create prospection viewmodel
-                prospections.Add(new ProspectionGetAllViewModel { Id = prospection.Id, Date = prospection.Date, ShopId = shopId });
+                return NotFound("Prospection not found.");
             }
 
-            // return list of viewmodel prospections
-            return Ok(prospections);
+            var prospectionBrands = new List<ProspectionBrandGetViewModel>();
+
+            // get brands from prospection
+            foreach (var prospectionBrand in prospection.Brands)
+            {
+                // create & add prospection-brand viewmodel
+                prospectionBrands.Add(new ProspectionBrandGetViewModel
+                {
+                    Id = prospectionBrand.Id,
+                    BrandId = prospectionBrand.BrandId,
+                    Sellout = prospectionBrand.Sellout,
+                    SalesRepresentative = prospectionBrand.SalesRepresentative,
+                    CommercialSupport = prospectionBrand.CommercialSupport,
+                });
+            }
+
+            // return viewmodel of prospection-brands list
+            return Ok(prospectionBrands);
+        }
+
+        [HttpGet()]
+        [Route("prospections/{id}/competitorbrands")]
+        public IActionResult GetProspectionCompetitorBrands(long id)
+        {
+            // check if prospection exists
+            var prospection = this.data.GetProspection(id);
+            if (prospection == null)
+            {
+                return NotFound("Prospection not found.");
+            }
+
+            var prospectionCompetitorBrands = new List<ProspectionCompetitorBrandGetViewModel>();
+
+            // get competitor brands from prospection
+            foreach (var prospectionCompetitorBrand in prospection.CompetitorBrands)
+            {
+                // create & add prospection-competitorbrand viewmodel
+                prospectionCompetitorBrands.Add(new ProspectionCompetitorBrandGetViewModel
+                {
+                    Id = prospectionCompetitorBrand.Id,
+                    CompetitorBrandId = prospectionCompetitorBrand.CompetitorBrandId,
+                });
+            }
+
+            // return viewmodel of prospection-competitorbrand list
+            return Ok(prospectionCompetitorBrands);
+        }
+
+        [HttpGet()]
+        [Route("prospections/{id}/brandinterests")]
+        public IActionResult GetProspectionBrandInterests(long id)
+        {
+            // check if prospection exists
+            var prospection = this.data.GetProspection(id);
+            if (prospection == null)
+            {
+                return NotFound("Prospection not found.");
+            }
+
+            var prospectionBrandInterests = new List<ProspectionBrandInterestGetViewModel>();
+
+            // get brands from prospection
+            foreach (var prospectionBrandInterest in prospection.BrandsInterest)
+            {
+                // create & add prospection-brandinterest viewmodel
+                prospectionBrandInterests.Add(new ProspectionBrandInterestGetViewModel
+                {
+                    Id = prospectionBrandInterest.Id,
+                    BrandId = prospectionBrandInterest.BrandId,
+                    Sales = prospectionBrandInterest.Sales
+                });
+            }
+
+            // return viewmodel of prospection-brandinterest list
+            return Ok(prospectionBrandInterests);
         }
 
 
-        /*Test Route */
-        [HttpGet()]
-        [Route("brands")]
-        public IActionResult GetBrands()
-        {
-            // for each brand in the database, collect copy that adheres to viewmodel (excluding all details)
-            var brands = new List<BrandGetAllViewModel>();
-            foreach (var brand in this.data.GetBrands())
-            {
-                brands.Add(new BrandGetAllViewModel { Id = brand.Id, Name = brand.Name });
-            }
-
-            // return list of viewmodel brand
-            return Ok(brands);
-        }
-        /**/
-
-        // POST
+        // POST ------------------------------------------------------------------------
 
         [HttpPost()]
         [Route("prospections")]
@@ -169,7 +245,7 @@ namespace FCentricProspections.Server.Controllers
                 VisitType = this.data.GetVisitType(viewModel.VisitTypeId),
                 VisitTypeId = viewModel.VisitTypeId,
                 VisitContext = viewModel.VisitContext,
-                Brands = new List<ProspectionBrand>(),            
+                Brands = new List<ProspectionBrand>(),
                 CompetitorBrands = new List<ProspectionCompetitorBrand>(),
                 BestBrands = viewModel.BestBrands,
                 WorstBrands = viewModel.WorstBrands,
@@ -205,61 +281,271 @@ namespace FCentricProspections.Server.Controllers
                 });
         }
 
-        // PUT
+        // PUT ----------------------------------------------------------------------------------
 
-        // UpdateProspection
-        // TO IMPLEMENT
+        [HttpPut]
+        [Route("prospections")]
+        public IActionResult UpdateProspection(long id, [FromBody] ProspectionUpdateViewModel viewModel)
+        {
+            // check if modelstate is valid
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-        // UpdateProspectionBrands
+            // check if propection exists
+            var existingProspection = this.data.GetProspection(id);
+            if (existingProspection == null)
+            {
+                return NotFound("Prospection not found");
+            }
 
-        // UpdateProspectionCompetitorBrands
+            // check if shop exists
+            var shop = this.data.GetShopDetail(viewModel.ShopId);
+            if (shop == null)
+            {
+                return NotFound("Shop not found");
+            }
 
-        // UpdateProspectionInterests
+            // update prospection fields 
+            existingProspection.ShopId = viewModel.ShopId;
+            existingProspection.Shop = this.data.GetShop(viewModel.ShopId);
+            existingProspection.UserId = viewModel.UserId;
+            existingProspection.User = this.data.GetUser(viewModel.UserId);
+            existingProspection.Date = viewModel.Date;
+            existingProspection.DateLastUpdated = viewModel.DateLastUpdated;
+            existingProspection.ContactPersonType = this.data.GetContactPersonType(viewModel.ContactPersonTypeId);
+            existingProspection.ContactPersonTypeId = viewModel.ContactPersonTypeId;
+            existingProspection.ContactPersonName = viewModel.ContactPersonName;
+            existingProspection.VisitType = this.data.GetVisitType(viewModel.VisitTypeId);
+            existingProspection.VisitTypeId = viewModel.VisitTypeId;
+            existingProspection.VisitContext = viewModel.VisitContext;
+            existingProspection.BestBrands = viewModel.BestBrands;
+            existingProspection.WorstBrands = viewModel.WorstBrands;
+            existingProspection.BrandsOut = viewModel.BrandsOut;
+            existingProspection.Trends = viewModel.Trends;
+            existingProspection.Extra = viewModel.Extra;
 
+            // update in database 
+            this.data.UpdateProspection(existingProspection);
+            return NoContent();
+        }
 
-        // EXAMPLE FOR UPDATING RELATIONSHIPS ON EXISTING OBJECT
-        // THINK: ORCHESTRA = PROSPECTION
+        // RELATIONSHIPS
 
-        //// updates the list of musicians for an orchestra
-        //// expects a list of musician ids
-        //[HttpPut()]
-        //[Route("orchestras/{id}/musicians")]
-        //public IActionResult UpdateOrchestraMusicians(int id, [FromBody] OrchestraMusiciansUpdateViewModel viewModel)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    };
+        [HttpPut()]
+        [Route("prospections/{id}/brands")]
+        public IActionResult UpdateProspectionBrands(long id, [FromBody] ProspectionBrandUpdateViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            };
 
-        //    var oldOrchestra = this.data.GetOrchestra(id);
-        //    if (oldOrchestra == null)
-        //    {
-        //        return NotFound("Orchestra not found."); // 404
-        //    }
+            // check if prospection exists
+            var existingProspection = this.data.GetProspection(id);
+            if (existingProspection == null)
+            {
+                return NotFound("Prospection not found");
+            }
 
-        //    // check if musician ids refer to musicians that exist
-        //    var updatedMusicians = new List<Musician>();
-        //    foreach (var musicianId in viewModel.MusicianIds)
-        //    {
-        //        var newMusician = this.data.GetMusician(musicianId);
-        //        if (newMusician == null)
-        //        {
-        //            return NotFound($"Musician {musicianId} not found.");
-        //        }
-        //        updatedMusicians.Add(newMusician);
-        //    }
+            // update relationship between Prospection and Brand
+            var updatedProspectionBrands = new List<ProspectionBrand>();
+            foreach (ProspectionBrandGetViewModel b in viewModel.ProspectionBrands)
+            {
+                // check if brand exists
+                var brand = this.data.GetBrand(b.BrandId);
+                if (brand == null)
+                {
+                    return NotFound("Brand not found");
+                }
 
-        //    var newOrchestra = new Orchestra
-        //    {
-        //        Id = oldOrchestra.Id,
-        //        Name = oldOrchestra.Name,
-        //        Conductor = oldOrchestra.Conductor,
-        //        Country = oldOrchestra.Country,
-        //        Musicians = updatedMusicians,
-        //    };
+                // create new prospection-brand relationship
+                var prospectionBrand = new ProspectionBrand
+                {
+                    // EF creates Id
+                    BrandId = b.BrandId,
+                    ProspectionId = id,
+                    Brand = brand,
+                    Prospection = existingProspection,
+                    Sellout = b.Sellout,
+                    CommercialSupport = b.CommercialSupport,
+                    SalesRepresentative = b.SalesRepresentative,
+                };
 
-        //    this.data.UpdateOrchestraMusicians(newOrchestra);
-        //    return NoContent(); // 204
-        //}
+                // add relationship to list of relationships
+                updatedProspectionBrands.Add(prospectionBrand);
+            }
+
+            // update Brands relationships list on the prospection
+            existingProspection.Brands = updatedProspectionBrands;
+
+            // update prospection in database
+            this.data.UpdateProspectionBrand(existingProspection);
+            return NoContent();
+        }
+
+        [HttpPut()]
+        [Route("prospections/{id}/competitorbrands")]
+        public IActionResult UpdateProspectionCompetitorBrands(long id, [FromBody] ProspectionCompetitorBrandUpdateViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            };
+
+            // check if prospection exists
+            var existingProspection = this.data.GetProspection(id);
+            if (existingProspection == null)
+            {
+                return NotFound("Prospection not found");
+            }
+
+            // update relationship between Prospection and CompetitorBrand
+            var updatedProspectionCompetitorBrands = new List<ProspectionCompetitorBrand>();
+            foreach (var competitorBrandId in viewModel.CompetitorBrandIds)
+            {
+                // check if competitor brand exists
+                var competitorBrand = this.data.GetCompetitorBrand(competitorBrandId);
+                if (competitorBrand == null)
+                {
+                    return NotFound("Competitor Brand not found");
+                }
+
+                // create new prospection-competitorbrand relationship
+                var prospectionCompetitorBrand = new ProspectionCompetitorBrand
+                {
+                    // EF creates Id
+                    CompetitorBrandId = competitorBrandId,
+                    CompetitorBrand = competitorBrand,
+                    ProspectionId = id,
+                    Prospection = existingProspection,
+                };
+
+                // add relationship to list of relationships
+                updatedProspectionCompetitorBrands.Add(prospectionCompetitorBrand);
+            }
+
+            // update CompetitorBrands relationships list on the prospection
+            existingProspection.CompetitorBrands = updatedProspectionCompetitorBrands;
+
+            // update prospection in database
+            this.data.UpdateProspectionCompetitorBrand(existingProspection);
+            return NoContent();
+        }
+
+        [HttpPut()]
+        [Route("prospections/{id}/brandinterests")]
+        public IActionResult UpdateProspectionBrandInterests(long id, [FromBody] ProspectionBrandInterestUpdateViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            };
+
+            // check if prospection exists
+            var existingProspection = this.data.GetProspection(id);
+            if (existingProspection == null)
+            {
+                return NotFound("Prospection not found");
+            }
+
+            // update relationship between Prospection and Brand (interest)
+            var updatedProspectionBrandInterests = new List<ProspectionBrandInterest>();
+            foreach (var brandInterest in viewModel.ProspectionBrandInterests)
+            {
+                // check if brand exists
+                var brand = this.data.GetBrand(brandInterest.BrandId);
+                if (brand == null)
+                {
+                    return NotFound("Brand not found");
+                }
+
+                // create new prospection-brand (interest) relationship
+                var prospectionBrandInterest = new ProspectionBrandInterest
+                {
+                    // EF creates Id
+                    BrandId = brandInterest.BrandId,
+                    Brand = brand,
+                    ProspectionId = id,
+                    Prospection = existingProspection,
+                    Sales = brandInterest.Sales,
+                };
+
+                // add relationship to list of relationships
+                updatedProspectionBrandInterests.Add(prospectionBrandInterest);
+            }
+
+            // update BrandsInterest relationships list on the prospection
+            existingProspection.BrandsInterest = updatedProspectionBrandInterests;
+
+            // update prospection in database
+            this.data.UpdateProspectionBrandInterest(existingProspection);
+            return NoContent();
+        }
+
+        // BRANDS ------------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------------------
+
+        // GET
+
+        [HttpGet()]
+        [Route("brands")]
+        public IActionResult GetBrands()
+        {
+            // for each brand in the database, collect copy that adheres to viewmodel (excluding all details)
+            var brands = new List<BrandGetAllViewModel>();
+            foreach (var brand in this.data.GetBrands())
+            {
+                brands.Add(new BrandGetAllViewModel { Id = brand.Id, Name = brand.Name });
+            }
+
+            // return list of viewmodel brand
+            return Ok(brands);
+        }
+
+        [HttpGet()]
+        [Route("competitorbrands")]
+        public IActionResult GetCompetitorBrands()
+        {
+            // for each competitor brand in the database, collect copy that adheres to viewmodel (excluding all details)
+            var competitorbrands = new List<CompetitorBrandGetAllViewModel>();
+            foreach (var competitorBrand in this.data.GetCompetitorBrands())
+            {
+                competitorbrands.Add(new CompetitorBrandGetAllViewModel { Id = competitorBrand.Id, Name = competitorBrand.Name });
+            }
+
+            // return list of viewmodel competitor brand
+            return Ok(competitorbrands);
+        }
+
+        // TYPES ------------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------------------
+
+        [HttpGet()]
+        [Route("contacttypes")]
+        public IActionResult GetContactTypes()
+        {
+            var types = new List<ContactTypesGetViewModel>();
+            foreach (var type in this.data.GetContactPersonTypes())
+            {
+                types.Add(new ContactTypesGetViewModel { Id = type.Id, Name = type.Name });
+            }
+
+            return Ok(types);
+        }
+
+        [HttpGet()]
+        [Route("visittypes")]
+        public IActionResult GetVisitTypes()
+        {
+            var types = new List<VisitTypesGetViewModel>();
+            foreach (var type in this.data.GetVisitTypes())
+            {
+                types.Add(new VisitTypesGetViewModel { Id = type.Id, Name = type.Name });
+            }
+
+            return Ok(types);
+        }
     }
 }

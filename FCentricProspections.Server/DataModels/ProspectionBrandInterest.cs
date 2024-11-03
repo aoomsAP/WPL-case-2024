@@ -1,12 +1,16 @@
-﻿namespace FCentricProspections.Server.DataModels
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace FCentricProspections.Server.DataModels
 {
     public class ProspectionBrandInterest
     {
-        public string Id { get; set; }
+        [Key]
+        public long Id { get; set; }
 
         public long ProspectionId { get; set; }
 
-        public Prospection Propsection { get; set; }
+        public Prospection Prospection { get; set; }
 
         public long BrandId { get; set; }
 
