@@ -2,6 +2,7 @@
 {
     public class ProspectionBrandInterestGetViewModel
     {
+        public long Id { get; set; }
 
         public long BrandId { get; set; }
 

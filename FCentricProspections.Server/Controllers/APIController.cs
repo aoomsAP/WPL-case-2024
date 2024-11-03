@@ -64,6 +64,30 @@ namespace FCentricProspections.Server.Controllers
 
         // GET --------------------------------------------------------------
 
+        // all prospections for a given shop
+        [HttpGet()]
+        [Route("shops/{id}/prospections")]
+        public IActionResult GetProspections(long id)
+        {
+            var shop = this.data.GetShopDetail(id);
+            if (shop == null)
+            {
+                return NotFound("Shop not found.");
+            }
+
+            var prospections = new List<ProspectionGetAllViewModel>();
+
+            // get prospections from a shop
+            foreach (var prospection in this.data.GetProspectionsByShopId(id))
+            {
+                // create prospection viewmodel
+                prospections.Add(new ProspectionGetAllViewModel { Id = prospection.Id, Date = prospection.Date, ShopId = id });
+            }
+
+            // return list of viewmodel prospections
+            return Ok(prospections);
+        }
+
         [HttpGet()]
         [Route("prospections/{id}")]
         public IActionResult GetProspectionDetail(long id)
@@ -95,23 +119,6 @@ namespace FCentricProspections.Server.Controllers
             return Ok(viewModel);
         }
 
-        [HttpGet()]
-        [Route("prospections")]
-        public IActionResult GetProspections(long shopId)
-        {
-            var prospections = new List<ProspectionGetAllViewModel>();
-
-            // get prospections from a shop
-            foreach (var prospection in this.data.GetProspectionsByShopId(shopId))
-            {
-                // create prospection viewmodel
-                prospections.Add(new ProspectionGetAllViewModel { Id = prospection.Id, Date = prospection.Date, ShopId = shopId });
-            }
-
-            // return list of viewmodel prospections
-            return Ok(prospections);
-        }
-
         // Relationships
 
         [HttpGet()]
@@ -128,15 +135,16 @@ namespace FCentricProspections.Server.Controllers
             var prospectionBrands = new List<ProspectionBrandGetViewModel>();
 
             // get brands from prospection
-            foreach (var brand in prospection.Brands)
+            foreach (var prospectionBrand in prospection.Brands)
             {
                 // create & add prospection-brand viewmodel
                 prospectionBrands.Add(new ProspectionBrandGetViewModel
                 {
-                    BrandId = brand.BrandId,
-                    Sellout = brand.Sellout,
-                    SalesRepresentative = brand.SalesRepresentative,
-                    CommercialSupport = brand.CommercialSupport,
+                    Id = prospectionBrand.Id,
+                    BrandId = prospectionBrand.BrandId,
+                    Sellout = prospectionBrand.Sellout,
+                    SalesRepresentative = prospectionBrand.SalesRepresentative,
+                    CommercialSupport = prospectionBrand.CommercialSupport,
                 });
             }
 
@@ -158,12 +166,13 @@ namespace FCentricProspections.Server.Controllers
             var prospectionCompetitorBrands = new List<ProspectionCompetitorBrandGetViewModel>();
 
             // get competitor brands from prospection
-            foreach (var competitorBrand in prospection.CompetitorBrands)
+            foreach (var prospectionCompetitorBrand in prospection.CompetitorBrands)
             {
                 // create & add prospection-competitorbrand viewmodel
                 prospectionCompetitorBrands.Add(new ProspectionCompetitorBrandGetViewModel
                 {
-                    CompetitorBrandId = competitorBrand.CompetitorBrandId,
+                    Id = prospectionCompetitorBrand.Id,
+                    CompetitorBrandId = prospectionCompetitorBrand.CompetitorBrandId,
                 });
             }
 
@@ -185,13 +194,14 @@ namespace FCentricProspections.Server.Controllers
             var prospectionBrandInterests = new List<ProspectionBrandInterestGetViewModel>();
 
             // get brands from prospection
-            foreach (var brandInterest in prospection.BrandsInterest)
+            foreach (var prospectionBrandInterest in prospection.BrandsInterest)
             {
                 // create & add prospection-brandinterest viewmodel
                 prospectionBrandInterests.Add(new ProspectionBrandInterestGetViewModel
                 {
-                    BrandId = brandInterest.BrandId,
-                    Sales = brandInterest.Sales
+                    Id = prospectionBrandInterest.Id,
+                    BrandId = prospectionBrandInterest.BrandId,
+                    Sales = prospectionBrandInterest.Sales
                 });
             }
 

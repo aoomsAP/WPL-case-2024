@@ -55,7 +55,9 @@ namespace FCentricProspections.Server.Services
 
         public Shop GetShop(long id)
         {
-            return this.context.Shops.FirstOrDefault(x => x.Id == id);
+            return this.context.Shops
+                .Include(s => s.Prospections)
+                .FirstOrDefault(x => x.Id == id);
         }
 
         // PROSPECTIONS ---------------------------------------------------------------------------------------------------------------------
@@ -65,13 +67,15 @@ namespace FCentricProspections.Server.Services
 
         public IEnumerable<ProspectionListDto> GetProspectionsByShopId(long shopId)
         {
-            var prospectionsList = context.Prospections
-                .Select(s => new ProspectionListDto
-                {
-                    Id = s.Id,
-                    Date = s.Date,
-                }).ToList();
-
+            var prospectionsList = context.Shops
+                .Include(s => s.Prospections)
+                .FirstOrDefault(x => x.Id == shopId)
+                .Prospections
+                    .Select(s => new ProspectionListDto
+                    {
+                        Id = s.Id,
+                        Date = s.Date,
+                    }).ToList();
 
             return prospectionsList;
         }
@@ -79,11 +83,13 @@ namespace FCentricProspections.Server.Services
         public IEnumerable<ProspectionListDto> GetProspectionsByUserId(long userId)
         {
             var prospectionsList = context.Prospections
-                .Select(s => new ProspectionListDto
-                {
-                    Id = s.Id,
-                    Date = s.Date,
-                }).ToList();
+                    .Where(p => p.UserId == userId)
+                    .Select(s => new ProspectionListDto
+                    {
+                        Id = s.Id,
+                        Date = s.Date,
+                    })
+                    .ToList();
 
             return prospectionsList;
         }
