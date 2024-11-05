@@ -17,9 +17,23 @@ namespace FCentricProspections
             services.AddSwaggerGen();
             services.AddScoped<IData, EfData>();
 
+            ///
+            // Add CORS policy
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder.WithOrigins("https://localhost:5173") // Your frontend URL
+                                      .AllowAnyMethod()
+                                      .AllowAnyHeader());
+            });
+            ///
+
             // Database connection
             var connection = "server=localhost; database=FCentricSmall; Trusted_Connection=true; Encrypt=Yes; TrustServerCertificate=Yes;";
             services.AddDbContext<FCentricSmallContext>(options => options.UseSqlServer(connection));
+
+          
+
         }
 
         // The below method gets called by runtime
@@ -47,6 +61,9 @@ namespace FCentricProspections
             }
 
             app.UseRouting();
+            ///
+            app.UseCors("AllowSpecificOrigin");
+            ///
 
             app.UseEndpoints(endpoints =>
             {

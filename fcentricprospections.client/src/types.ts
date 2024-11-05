@@ -1,9 +1,6 @@
 
-export interface ShopIdContextType {
-  shopNames: ShopId[]; // This is now an array of ShopId objects
-}
 
-export interface ShopId {
+export interface IShop {
   id: string; // Example property, replace with real ones
   name: string; // Example property
 }

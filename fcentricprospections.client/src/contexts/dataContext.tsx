@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react"
-import { ShopId, ShopIdContextType } from "../types";
+import { IShop } from "../types";
 
+interface DataContext{
+    
+}
 
-export const ShopIdContext = React.createContext<ShopIdContextType>({shopNames : []});
+export const ShopIdContext = React.createContext<DataContext>({shopNames : []});
 
 export const DataProvider =  ({children} : {children :  React.ReactNode}) =>{
 
-    const [shopNames , setShopNames] = useState<ShopId[]>([]);
+    const [shopNames , setShopNames] = useState<IShop[]>([]);
 
     /*
     const loadData = async () =>{
@@ -15,28 +18,21 @@ export const DataProvider =  ({children} : {children :  React.ReactNode}) =>{
         setShopNames(json);
     }*/
 
-         // Load dummy data instead of fetching from an API
-    const loadData = async () => {
-        // Replace this with actual fetch if needed in the future
-        const dummyData: ShopId[] = [
-            { id: "1", name: "Coffee Shop" },
-            { id: "2", name: "Bookstore" },
-            { id: "3", name: "Grocery Store" },
-            { id: "4", name: "Clothing Boutique" },
-            { id: "5", name: "Electronics Store" },
-            { id: "6", name: "Flower Shop" },
-            { id: "7", name: "Music Store" },
-            { id: "8", name: "Hardware Store" },
-            { id: "9", name: "Jewelry Store" },
-            { id: "10", name: "Art Gallery" },
-        ];
-        setShopNames(dummyData);
+         
+    const loadShops = async () => {
+       
+        const  response = await fetch('/api/shops')
+        const json : IShop[] = await response.json();
+         
+        
+        setShopNames(json);
     };
 
 
 
     useEffect(() => {
-        loadData();
+
+        loadShops();
     }, []);
 
     return (
