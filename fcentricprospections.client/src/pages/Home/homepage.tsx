@@ -1,11 +1,11 @@
-import { useContext, useState } from "react";
-import { ShopIdContext } from "../../contexts/dataContext"; // Make sure the path is correct
+import {useState, useEffect } from "react";
+import { IShop } from "../../types";
 import styles from '../../App.module.css'; // Adjust your styles as necessary
 import { Link } from "react-router-dom";
 
 export const Homepage = () => {
-    const { shopNames } = useContext(ShopIdContext); // Get shop names from context
     const [searchTerm, setSearchTerm] = useState(""); // State for search input
+    const [shopNames , setShopNames] = useState<IShop[]>([]); //Sate with list of shops
 
     // Filter shop names based on the search term, ensuring at least 3 characters are typed
     const filteredShopNames = shopNames.filter(shop => {
@@ -13,6 +13,22 @@ export const Homepage = () => {
         if (searchTerm.length < 3) return false; // If less than 3 characters, do not include
         return shop.name.toLowerCase().includes(searchTerm.toLowerCase()); // Otherwise, filter based on name
     });
+
+    const loadShops = async () => {
+       
+        const  response = await fetch('/api/shops')
+        const json : IShop[] = await response.json();
+         
+        
+        setShopNames(json);
+    };
+
+
+
+    useEffect(() => {
+
+        loadShops();
+    }, []);
 
     return (
             <main className={styles.main}>
