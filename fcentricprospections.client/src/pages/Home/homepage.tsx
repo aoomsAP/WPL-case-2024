@@ -16,27 +16,20 @@ export const Homepage = () => {
 
     const loadShops = async () => {
         try {
-            const response = await fetch('https://localhost:7274/api/shops', {
+            const response = await fetch('/api/shops', {
                 method: 'GET',  // Specify the method if it's not 'GET' by default
                 headers: {
-                    'Content-Type': 'application/json',  // Define the expected content type
-                    
+                    'Content-Type': 'application/json',  // Define the expected content type                   
                 },
             });
             console.log(response)
             const json: IShop[] = await response.json();
             setShopNames(json);
-
         }
         catch (error) {
             console.log(error)
-        }
-
-         
-        
-        
+        }       
     };
-
 
 
     useEffect(() => {
