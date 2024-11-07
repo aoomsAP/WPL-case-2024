@@ -1,16 +1,57 @@
 import { useEffect, useState } from 'react';
 import styles from './shopIdpage.module.css';
-import {Shop} from '../../types'
+import {Shop, Prospection} from '../../types'
 import { Link, useParams } from 'react-router-dom';
+import { FaAngleRight } from "react-icons/fa";
 
 export const ShopPage = () => {
   const { id } = useParams<{ id: string }>(); // Ensure correct types for TypeScript
    
-  const [shopData , setShopData] = useState<Shop>();
+  const [shopData , setShopData] = useState<Shop | undefined>(undefined);
+
+  const [shopProspections , setShopProspections] = useState<Prospection[] >([]);
+
+  const LoadShopDetail = async(id : string)=>{
+
+    try {
+      const response = await fetch(`/api/shops/${id}`, {
+          method: 'GET',  // Specify the method if it's not 'GET' by default
+          headers: {
+              'Content-Type': 'application/json',  // Define the expected content type                   
+          },
+      });
+
+      const responseProspection = await fetch(`/api/shops/${id}/prospections`,{
+          method: 'GET',  // Specify the method if it's not 'GET' by default
+          headers: {
+              'Content-Type': 'application/json',  // Define the expected content type                   
+          },
+      })
+
+      
+
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch shop data');
+      }
+
+      const json: Shop = await response.json();
+      setShopData(json);
+
+      if(!responseProspection.ok){
+        throw new Error('Failed to ftech prospection data')
+      }
+      const json2: Prospection[] = await responseProspection.json();
+      setShopProspections(json2)
+
+      
+  }catch (error) {
+    console.error('Error fetching shop data:', error);
+  }}
 
   useEffect(()=>{
-
-    setShopData(dummyData.find((data)=> data.id === id ))
+    if(id)
+    LoadShopDetail(id);
 
   },[id])
 
@@ -20,37 +61,31 @@ export const ShopPage = () => {
   return (
     <>
       <main className={styles.main}>
-        <h1>{shopData?.shopName}</h1>
-        <h2>Adres: {shopData?.address} </h2>
-        <h2>Naam van de klant: {shopData?.customerName}</h2>
-        <button>
-          <Link to={`/shop/${id}/new`}>Nieuwe prospectie</Link>
+       <section className={styles.infoSection}>
+
+        <h1 className={styles.h1}>{shopData?.name}</h1>
+
+        <h2>Adres: {shopData?.address.street1} </h2>
+
+        <h2>Klant: {shopData?.customer}</h2>
+
+       </section>
+
+        <section className={styles.prospectionSection}>
+        <button className={styles.button}>
+          <Link className={styles.a} to={`/shop/${id}/new`}>Nieuwe Prospectie</Link>
         </button>
-        
-        <button>
-          <Link to={`/shop/${id}/overview`}>Voorgaande Prospecties</Link>
+        <ul>
+          {shopProspections.map(prospection => (<li className={styles.li}  key={prospection.id}>  {/* Ensure each `li` has a unique `key` */}
+                            <Link className={styles.prospectionA} to={`/shop/${id}/overview/prospection${prospection.id}`}>Prospectie {prospection.date.slice(0,10)}<FaAngleRight className={styles.icon} /> </Link></li>))}
+        </ul>
+        <button className={styles.button}>
+          <Link className={styles.a} to={`/shop/${id}/overview`}>Overzicht van alle Prospecties</Link>
         </button>
+        </section>
+       
       </main>
     </>
   );
 };
 
-
-
-
-/* Temporary Code */
-
-  
-  const dummyData: Shop[] = [
-    { id: '1', shopName: 'Coffee Shop', address: '123 Coffee Lane', customerName: 'Alice Smith' },
-    { id: '2', shopName: 'Bookstore', address: '456 Book Ave', customerName: 'Bob Johnson' },
-    { id: '3', shopName: 'Grocery Store', address: '789 Grocery Blvd', customerName: 'Charlie Davis' },
-    { id: '4', shopName: 'Clothing Boutique', address: '101 Fashion St', customerName: 'Diana Moore' },
-    { id: '5', shopName: 'Electronics Store', address: '202 Tech Park', customerName: 'Eve Turner' },
-    { id: '6', shopName: 'Flower Shop', address: '303 Blooming Rd', customerName: 'Frank White' },
-    { id: '7', shopName: 'Music Store', address: '404 Melody Ave', customerName: 'Grace Hill' },
-    { id: '8', shopName: 'Hardware Store', address: '505 Builder St', customerName: 'Henry King' },
-    { id: '9', shopName: 'Jewelry Store', address: '606 Gemstone Blvd', customerName: 'Ivy Carter' },
-    { id: '10', shopName: 'Art Gallery', address: '707 Canvas Lane', customerName: 'Jack Lee' },
-  ];
-  

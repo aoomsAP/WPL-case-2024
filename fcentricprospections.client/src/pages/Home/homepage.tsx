@@ -47,11 +47,11 @@ export const Homepage = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)} // Update state on input change
                 />
-                <ul>
+                <ul className={homeStyles.ul}>
                     {filteredShopNames.length > 0 ? (
                         filteredShopNames.map(shop => (
                             <li className={homeStyles.li}  key={shop.id}>  {/* Ensure each `li` has a unique `key` */}
-                            <Link to={`/shop/${shop.id}`}>{shop.name}</Link>
+                            <Link className={homeStyles.a} to={`/shop/${shop.id}`}>{shop.name}</Link>
                         </li>
                         ))
                     ) : (
