@@ -1,6 +1,7 @@
 import {useState, useEffect } from "react";
 import { IShop } from "../../types";
 import styles from '../../App.module.css'; // Adjust your styles as necessary
+import homeStyles from './homepage.module.css'
 import { Link } from "react-router-dom";
 
 export const Homepage = () => {
@@ -49,13 +50,13 @@ export const Homepage = () => {
                 <ul>
                     {filteredShopNames.length > 0 ? (
                         filteredShopNames.map(shop => (
-                            <li key={shop.id}>  {/* Ensure each `li` has a unique `key` */}
+                            <li className={homeStyles.li}  key={shop.id}>  {/* Ensure each `li` has a unique `key` */}
                             <Link to={`/shop/${shop.id}`}>{shop.name}</Link>
                         </li>
                         ))
                     ) : (
                         searchTerm.length < 3 ? (
-                            <li>Typ minstens 3 letters.</li> // Instruction message if less than 3 characters
+                            <li className={homeStyles.li1}>Typ minstens 3 letters.</li> // Instruction message if less than 3 characters
                         ) : (
                             <li>Geen winkels gevonden</li> // Message if no shops match
                         )
