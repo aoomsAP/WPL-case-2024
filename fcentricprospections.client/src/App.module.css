@@ -1,11 +1,17 @@
-﻿body {
+﻿:root{
+    --primary-color :  #FFFFFF;
+    --secondary-color : #000000 ;
+}
+
+
+body {
     margin: 0; 
     padding: 0;
     width: 100vw;
-    background-color: rgb(235, 235, 235);
+    background-color: var(--primary-color);
     display: flex;
     flex-direction: column;
-    color: black;
+    color: var(--secondary-color);
     box-sizing: border-box; 
     
 }
@@ -13,13 +19,13 @@
 .header {
     display: flex;
     justify-content: center; 
-    background-color: beige;
+    background-color: var(--primary-color);
     width: 100vw; 
-    height: 15vh;
+    height: 10vh;
 }
 
 .main {
-    height: 75vh;
+    height: 80vh;
     width: 100vw;
     display: flex;
     flex-direction: column;
@@ -29,7 +35,7 @@
 .footer {
     height: 10vh;
     width: 100vw;
-    background-color: bisque;
+    background-color: var(--primary-color);
 }
 
 .inputField {
