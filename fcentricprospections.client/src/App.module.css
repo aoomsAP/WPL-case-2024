@@ -18,7 +18,9 @@ body {
 
 .header {
     display: flex;
-    justify-content: center; 
+    justify-content: flex-start;
+    padding-left: 0.5rem;
+    padding-top: 0.2rem;
     background-color: var(--primary-color);
     width: 100vw; 
     height: 10vh;
@@ -54,4 +56,21 @@ body {
     align-items: center;
     gap: 1rem;
     
+}
+.button{
+    background-color: var(--primary-color);
+    border: 1px solid black;
+    border-radius: 0.5rem;
+    width: 3rem;
+    height: 2.5rem;
+}
+.button:hover{
+    background-color: var(--secondary-color);
+}
+.home{
+    color: var(--secondary-color);
+    font-size: x-large;
+}
+.home:hover{
+    color: var(--primary-color);
 }

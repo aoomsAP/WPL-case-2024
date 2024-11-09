@@ -33,3 +33,64 @@ export interface Shop {
        prospections : Prospection[]
    }
 
+
+
+
+export interface IContactType {
+  id: number,
+  name: string,
+}
+
+export interface IVisitType {
+  id: number,
+  name: string,
+}
+
+export interface IBrand {
+  id: number,
+  name: string,
+}
+
+export interface ICompetitorBrand {
+  id: number,
+  name: string,
+}
+
+export interface IProspection {
+  id?: number,
+  shopId: number,
+  userId?: number,
+  date?: Date,
+  dateLastUpdated?: Date,
+  contactPersonTypeId?: number,
+  contactPersonName?: string,
+  visitTypeId?: number,
+  visitContext?: string,
+  bestBrands?: string,
+  worstBrands?: string,
+  brandsOut?: string,
+  trends?: string,
+  extra?: string
+}
+
+export interface IProspectionBrand {
+  id?: number,
+  brandId: number,
+  brandName: string,
+  sellout?: number,
+  salesRepresentative?: string,
+  commercialSupport?: string,
+}
+
+export interface IProspectionCompetitorBrand {
+  id: number,
+  brandId: number,
+  brandName: string,
+}
+
+export interface IProspectionBrandInterest {
+  id?: number,
+  brandId: number,
+  brandName: string,
+  sales?: string,
+}

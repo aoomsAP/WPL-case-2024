@@ -5,6 +5,8 @@
         public long Id { get; set; }
 
         public long CompetitorBrandId { get; set; }
+
+        public long CompetitorBrandName { get; set; }
     }
 
     public class ProspectionCompetitorBrandUpdateViewModel

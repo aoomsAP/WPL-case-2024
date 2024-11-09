@@ -4,7 +4,8 @@ import {Shop, Prospection} from '../../types'
 import { Link, useParams } from 'react-router-dom';
 import { FaAngleRight } from "react-icons/fa";
 
-export const ShopPage = () => {
+
+export const ShopPageContent = () => {
   const { id } = useParams<{ id: string }>(); // Ensure correct types for TypeScript
    
   const [shopData , setShopData] = useState<Shop | undefined>(undefined);

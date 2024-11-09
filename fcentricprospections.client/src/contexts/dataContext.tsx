@@ -11,13 +11,6 @@ export const DataProvider =  ({children} : {children :  React.ReactNode}) =>{
 
     const [shopNames , setShopNames] = useState<IShop[]>([]);
 
-    /*
-    const loadData = async () =>{
-        const response = await fetch("")
-        const json = await response.json();
-        setShopNames(json);
-    }*/
-
          
     const loadShops = async () => {
        
