@@ -77,7 +77,7 @@ export const ShopPage = () => {
         </button>
         <ul>
           {shopProspections.map(prospection => (<li className={styles.li}  key={prospection.id}>  {/* Ensure each `li` has a unique `key` */}
-                            <Link className={styles.prospectionA} to={`/shop/${id}/overview/prospection${prospection.id}`}>Prospectie {prospection.date.slice(0,10)}<FaAngleRight className={styles.icon} /> </Link></li>))}
+                            <Link className={styles.prospectionA} to={`/shop/${id}/prospection/${prospection.id}`}>Prospectie {prospection.date.slice(0,10)}<FaAngleRight className={styles.icon} /> </Link></li>))}
         </ul>
         <button className={styles.button}>
           <Link className={styles.a} to={`/shop/${id}/overview`}>Overzicht van alle Prospecties</Link>

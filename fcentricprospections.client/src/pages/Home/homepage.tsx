@@ -32,9 +32,7 @@ export const Homepage = () => {
         }       
     };
 
-
     useEffect(() => {
-
         loadShops();
     }, []);
 
