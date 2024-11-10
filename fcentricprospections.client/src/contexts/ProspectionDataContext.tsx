@@ -23,15 +23,15 @@ export interface ProspectionDataContext {
     setProspectionBrandInterests: (prospectionBrandInterests: IProspectionBrandInterest[]) => void;
 
     // functions
-    loadBrands: () => void;
-    loadCompetitorBrands: () => void;
-    loadContactTypes: () => void;
-    loadVisitTypes: () => void;
+    loadBrands: () => Promise<void>;
+    loadCompetitorBrands: () => Promise<void>;
+    loadContactTypes: () => Promise<void>;
+    loadVisitTypes: () => Promise<void>;
 
-    addProspection: (newProspection: IProspection) => void;
-    updateProspectionBrands: (prospectionId: number, prospectionBrands: IProspectionBrand[]) => void;
-    updateProspectionCompetitorBrands: (prospectionId: number, prospectionCompetitorBrands: IProspectionCompetitorBrand[]) => void;
-    updateProspectionBrandInterests: (prospectionId: number, prospectionBrandInterests: IProspectionBrandInterest[]) => void;
+    addProspection: (newProspection: IProspection) =>  Promise<IProspection | undefined>;
+    updateProspectionBrands: (prospectionId: number, prospectionBrands: IProspectionBrand[]) => Promise<void>;
+    updateProspectionCompetitorBrands: (prospectionId: number, prospectionCompetitorBrands: IProspectionCompetitorBrand[]) => Promise<void>;
+    updateProspectionBrandInterests: (prospectionId: number, prospectionBrandInterests: IProspectionBrandInterest[]) => Promise<void>;
 }
 
 export const ProspectionDataContext = createContext<ProspectionDataContext>({
@@ -56,15 +56,15 @@ export const ProspectionDataContext = createContext<ProspectionDataContext>({
     setProspectionBrandInterests: () => { },
 
     // functions
-    loadBrands: () => { },
-    loadCompetitorBrands: () => { },
-    loadContactTypes: () => { },
-    loadVisitTypes: () => { },
+    loadBrands: () => Promise.resolve(),
+    loadCompetitorBrands: () => Promise.resolve(),
+    loadContactTypes: () => Promise.resolve(),
+    loadVisitTypes: () => Promise.resolve(),
 
-    addProspection: () => { },
-    updateProspectionBrands: () => { },
-    updateProspectionCompetitorBrands: () => { },
-    updateProspectionBrandInterests: () => { },
+    addProspection: () => Promise.resolve(undefined),
+    updateProspectionBrands: () => Promise.resolve(),
+    updateProspectionCompetitorBrands: () => Promise.resolve(),
+    updateProspectionBrandInterests: () => Promise.resolve(),
 });
 
 export function ProspectionDataProvider({ children }: { children: React.ReactNode }) {
@@ -160,6 +160,7 @@ export function ProspectionDataProvider({ children }: { children: React.ReactNod
             const json: IProspection = await response.json();
 
             console.log("Succesful POST new prospection: ", json)
+            return (json);
 
             // if in context: load anew
             // loadProspections();

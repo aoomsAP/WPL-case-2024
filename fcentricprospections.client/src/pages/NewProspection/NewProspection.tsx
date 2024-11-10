@@ -6,12 +6,14 @@ import { useContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import BrandTag from '../../components/BrandTag';
 import { ProspectionDataContext } from '../../contexts/ProspectionDataContext';
+import { IProspection } from '../../types';
 
 export const NewProspection = () => {
 
   const { shopId } = useParams<{ shopId: string }>();
 
-  const { brands, competitorBrands, prospectionBrands, setProspectionBrands, prospectionCompetitorBrands, setProspectionCompetitorBrands } = useContext(ProspectionDataContext);
+  const { brands, competitorBrands, prospectionBrands, setProspectionBrands, prospectionCompetitorBrands, setProspectionCompetitorBrands, prospectionBrandInterests, setProspectionBrandInterests,
+    addProspection, updateProspectionBrands, updateProspectionCompetitorBrands, updateProspectionBrandInterests } = useContext(ProspectionDataContext);
 
   // Search fields
   const [brandSearch, setBrandSearch] = useState<string>("");
@@ -41,13 +43,47 @@ export const NewProspection = () => {
     return brand.name.toLowerCase().includes(competitorBrandSearch.toLowerCase());
   });
 
-  function handleComplete() {
+  // IF FORM WIARD SUPPORTS ASYNC FUNCTIONS
+  async function handleComplete() {
 
-    // POST
-    // PUT
-    // PUT
-    // PUT
+    const newProspection: IProspection = {
+      shopId: Number(shopId),
+      date: new Date(),
+      dateLastUpdated: new Date(),
+      contactPersonTypeId: 1,
+      contactPersonName: "Suzie",
+      visitTypeId: 1,
+      visitContext: "Really wanted to visit the store for fun",
+      bestBrands: "Oilily",
+      worstBrands: "Gucci",
+      brandsOut: "Calvin Klein",
+      trends: "Late stage capitalism and webshops have killed irl retail",
+      extra: "Zzzzzzzzzzzzzzzzzzzzzzz"
+    }
 
+    try {
+      // Add new prospection and await response
+      const createdProspection = await addProspection(newProspection);
+
+      // Only proceed if response was successful
+      if (createdProspection && createdProspection.id) {
+
+        // Get id from new prospection
+        const prospectionId = createdProspection.id;
+
+        // Update the relationships
+        await updateProspectionBrands(prospectionId, prospectionBrands);
+        await updateProspectionBrandInterests(prospectionId, prospectionBrandInterests);
+        await updateProspectionCompetitorBrands(prospectionId, prospectionCompetitorBrands);
+
+        console.log("All updates completed successfully.");
+      } else {
+        console.error("Failed to add new prospection. Updates aborted.");
+      }
+
+    } catch (error) {
+      console.error("Error in onComplete: ", error);
+    }
   };
 
   const tabChanged = ({
