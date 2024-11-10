@@ -1,7 +1,7 @@
 import styles from '../../App.module.css';
 import FormWizard from "react-form-wizard-component";
 import "react-form-wizard-component/dist/style.css";
-import ShopCart from '../../components/ShopCart';
+import ShopCart from '../../components/ShopCard';
 import { IBrand, ICompetitorBrand, IContactType, IVisitType, IProspection, IProspectionBrand, IProspectionCompetitorBrand, IProspectionBrandInterest, Shop } from "../../types"
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
