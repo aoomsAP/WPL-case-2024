@@ -27,19 +27,19 @@ export interface Prospection {
 }
 
 export interface IProspectionDetail {
-  id: string; 
+  id: string;
   shopId: number;
   userId: number;
   date: string;
-  dateLastUpdated: string;     
+  dateLastUpdated: string;
   contactPersonTypeId: string;
   contactPersonName: string;
   visitTypeId: string;
   visitContext: string;
-  bestBrands: string; 
-  brandsworstBrands: string;
-  brandsOut: string; 
-  trends: string; 
+  bestBrands: string;
+  worstBrands: string;
+  brandsOut: string;
+  trends: string;
   extra: string;
 }
 
@@ -51,10 +51,48 @@ export interface Shop2 {
 
 export interface IContactType {
   id: string;
-  name: string
+  name: string;
 }
 
 export interface IVisitType {
   id: string;
-  name: string
+  name: string;
+}
+
+export interface IProspectionBrand {
+  id: string;
+  prospectionId: string;
+  brandId: string;
+  sellout: number;
+  salesRepresentative: string;
+  commercialSupport: string;
+}
+
+export interface IProspectionCompetitorBrand {
+ id: string;
+ prospectionId: string;
+ competitorBrandId: string;
+}
+
+export interface IProspectionBrandInterest {
+  id: string;
+  prospectionId: string;
+  brandId: string;
+  sales: string
+}
+
+export interface IBrand {
+  id: string;
+  name: string;
+}
+
+export interface ICompetitorBrand {
+  id: string;
+  name: string;
+}
+
+export interface IProspectionBrandInterest {
+  id: string;
+  name: string;
+
 }
