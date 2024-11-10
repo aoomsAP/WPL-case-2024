@@ -37,6 +37,16 @@ const NewProspectionPage = () => {
     )
 }
 
+// Extra layer to wrap in prospection data context
+const ProspectionOverviewPage = () => {
+    return (
+        <ProspectionDataProvider>
+            <ProspectionOverview/>
+        </ProspectionDataProvider>
+    )
+}
+
+
 const App = () => {
     const router = createBrowserRouter([
         {
@@ -57,7 +67,7 @@ const App = () => {
                 },
                 {
                     path: "shop/:shopId/prospections",
-                    element: <ProspectionOverview />
+                    element: <ProspectionOverviewPage />
                 },
                 {
                     path: "shop/:shopId/prospections/:prospectionId",

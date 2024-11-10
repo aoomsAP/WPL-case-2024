@@ -59,7 +59,7 @@ export const ShopPage = () => {
       <main className={styles.main}>
         <section>
 
-          {shopData && !isNaN(Number(shopId)) && <ShopDetailCard shop={shopData} />}
+          {shopData && <ShopDetailCard shop={shopData} />}
 
         </section>
 
@@ -68,10 +68,10 @@ export const ShopPage = () => {
             <Link className={styles.a} to={`/shop/${shopId}/prospections/new`}>Nieuwe Prospectie</Link>
           </button>
           <ul>
-            {shopProspections.sort((a, b) => (Number(b.date))-(Number(a.date))).slice(0, 3)
+            {shopProspections.sort((a, b) => (Number(b.date))-(Number(a.date))).slice(0, 3) // TODO: FIX
               .map(prospection => (<li className={styles.li} key={prospection.id}>
                 <Link className={styles.prospectionA} to={`/shop/${shopId}/prospections/${prospection.id}`}>
-                  Prospectie {prospection.date?.toString().slice(0, 10)}<FaAngleRight className={styles.icon} />
+                  Prospectie {new Date(prospection.date).toLocaleDateString()}<FaAngleRight className={styles.icon} />
                 </Link></li>))}
           </ul>
           <button className={styles.button}>

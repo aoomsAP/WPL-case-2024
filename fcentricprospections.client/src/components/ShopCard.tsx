@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Shop } from "../types";
+import { IShopDetail } from "../types";
 
 interface ShopCardProps {
     shopId: number;
@@ -7,7 +7,7 @@ interface ShopCardProps {
 
 const ShopCard = ({ shopId }: ShopCardProps) => {
 
-    const [shop, setShop] = useState<Shop | undefined>();
+    const [shop, setShop] = useState<IShopDetail | undefined>();
 
     async function loadShop() {
         try {
@@ -16,7 +16,7 @@ const ShopCard = ({ shopId }: ShopCardProps) => {
                 headers: { 'Content-Type': 'application/json' },
             });
 
-            const json: Shop | undefined = await response.json();
+            const json: IShopDetail | undefined = await response.json();
             setShop(json);
 
         } catch (error) {
