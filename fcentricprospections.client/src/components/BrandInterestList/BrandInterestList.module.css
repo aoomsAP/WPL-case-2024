@@ -1,0 +1,31 @@
+.brandInterestList {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    margin-bottom: 20px;
+  }
+
+  
+  .brandInterestCard {
+    border: 1px solid black;
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .brandInterestCard h3 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 8px;
+  }
+  
+
+  .brandInterestCard p {
+    font-size: 14px;
+    color: #555;
+    margin: 4px 0;
+  } 

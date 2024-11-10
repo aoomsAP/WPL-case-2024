@@ -264,12 +264,16 @@ export const ProspectionDetail = () => {
 
       {shopDetail && <ShopDetailCard shop={shopDetail} />}
       
-      {contactType && prospectionDetail && (
-        <ContactTypeCard contactType={contactType} contactPersonName={prospectionDetail.contactPersonName} />
-      )}
-      
-      {visitType && prospectionDetail && <VisitTypeCard visitType={visitType} visitContext={prospectionDetail?.visitContext} />}
-      
+      <section className={styles.contactVisitCard}>
+        <div>
+          {contactType && prospectionDetail && (
+            <ContactTypeCard contactType={contactType} contactPersonName={prospectionDetail.contactPersonName} />
+          )}
+          
+          {visitType && prospectionDetail && <VisitTypeCard visitType={visitType} visitContext={prospectionDetail?.visitContext} />}
+        </div>
+      </section>
+
       <BrandList prospectionBrands={prospectionBrands} brands={brands}/>
       
       <CompetitorBrandList prospectionCompetitorBrands={prospectionCompetitorBrands} brands={competitorBrands} />

@@ -1,0 +1,19 @@
+.brandList {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+  }
+  
+  .brandList article {
+    margin-bottom: 12px; /* space between each BrandCard */
+  }
+  
+  .brandNotFound {
+    font-size: 14px;
+    color: #999;
+    font-style: italic;
+  }
+  

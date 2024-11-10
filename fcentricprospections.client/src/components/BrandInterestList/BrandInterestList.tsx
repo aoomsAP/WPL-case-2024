@@ -1,5 +1,6 @@
 import React from 'react';
 import { IProspectionBrandInterest, IBrand } from '../../types';
+import styles from "./BrandInterestList.module.css"
 
 interface BrandInterestListProps {
   prospectionBrandInterests: IProspectionBrandInterest[];
@@ -7,13 +8,13 @@ interface BrandInterestListProps {
 }
 
 export const BrandInterestList: React.FC<BrandInterestListProps> = ({ prospectionBrandInterests, brands }) => (
-  <section className="brand-interest-list">
-    <p>Interesse FC70 merken</p>
+  <section className={styles.brandInterestList}>
+    <h2>Interesse FC70 merken</h2>
     {prospectionBrandInterests.map((brand, index) => {
       const matchingBrandInterest = brands.find(b => b.id === brand.brandId);
       return (
-        <div key={index} className="brand-interest-card">
-          <p>Brand: {matchingBrandInterest ? matchingBrandInterest.name : "Unknown Brand"}</p>
+        <div key={index} className={styles.brandInterestCard}>
+          <h3>Brand: {matchingBrandInterest ? matchingBrandInterest.name : "Unknown Brand"}</h3>
           <p>Sales: {brand.sales}</p>
         </div>
       );

@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from "./TextSection.module.css"
 
 interface TextSectionProps {
   title: string;
@@ -6,8 +7,8 @@ interface TextSectionProps {
 }
 
 export const TextSection: React.FC<TextSectionProps> = ({ title, text }) => (
-  <section className="text-section">
-    <p>{title}</p>
+  <section className={styles.textSection}>
+    <h2>{title}</h2>
     <p>{text || "N/A"}</p>
   </section>
 );
