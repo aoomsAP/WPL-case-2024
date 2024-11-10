@@ -2,7 +2,7 @@
 {
     public class ProspectionCompetitorBrandGetViewModel
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
 
         public long CompetitorBrandId { get; set; }
 

@@ -28,7 +28,7 @@ export interface ProspectionDataContext {
     loadContactTypes: () => Promise<void>;
     loadVisitTypes: () => Promise<void>;
 
-    addProspection: (newProspection: IProspection) =>  Promise<IProspection | undefined>;
+    addProspection: (newProspection: IProspection) => Promise<IProspection | undefined>;
     updateProspectionBrands: (prospectionId: number, prospectionBrands: IProspectionBrand[]) => Promise<void>;
     updateProspectionCompetitorBrands: (prospectionId: number, prospectionCompetitorBrands: IProspectionCompetitorBrand[]) => Promise<void>;
     updateProspectionBrandInterests: (prospectionId: number, prospectionBrandInterests: IProspectionBrandInterest[]) => Promise<void>;
@@ -162,28 +162,25 @@ export function ProspectionDataProvider({ children }: { children: React.ReactNod
             console.log("Succesful POST new prospection: ", json)
             return (json);
 
-            // if in context: load anew
-            // loadProspections();
-
         } catch (error) {
             console.error('Error POST new prospection:', error);
         }
     }
 
     async function updateProspectionBrands(prospectionId: number, prospectionBrands: IProspectionBrand[]) {
+
         try {
-            const response = await fetch(`/api/prospections/${prospectionId}/brands`, {
+            const payload = { ProspectionBrands: prospectionBrands };
+
+            await fetch(`/api/prospections/${prospectionId}/brands`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(prospectionBrands),
+                body: JSON.stringify(payload),
             });
 
-            const json = await response.json();
+            //const json = await response.json();
 
-            console.log("Succesful PUT prospection brands: ", json)
-
-            // if in context: load anew
-            // loadProspections();
+            console.log("Succesful PUT prospection brands.")
 
         } catch (error) {
             console.error('Error PUT prospection brands:', error);
@@ -192,18 +189,17 @@ export function ProspectionDataProvider({ children }: { children: React.ReactNod
 
     async function updateProspectionBrandInterests(prospectionId: number, prospectionBrandInterests: IProspectionBrandInterest[]) {
         try {
-            const response = await fetch(`/api/prospections/${prospectionId}/brandinterests`, {
+            const payload = { ProspectionBrandInterests: prospectionBrandInterests };
+
+            await fetch(`/api/prospections/${prospectionId}/brandinterests`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(prospectionBrandInterests),
+                body: JSON.stringify(payload),
             });
 
-            const json = await response.json();
+            //const json = await response.json();
 
-            console.log("Succesful PUT prospection brand interests: ", json)
-
-            // if in context: load anew
-            // loadProspections();
+            console.log("Succesful PUT prospection brand interests.")
 
         } catch (error) {
             console.error('Error PUT prospection brand interests:', error);
@@ -212,18 +208,19 @@ export function ProspectionDataProvider({ children }: { children: React.ReactNod
 
     async function updateProspectionCompetitorBrands(prospectionId: number, prospectionCompetitorBrands: IProspectionCompetitorBrand[]) {
         try {
-            const response = await fetch(`/api/prospections/${prospectionId}/competitorbrands`, {
+            const ids: number[] = prospectionCompetitorBrands.map(x => x.brandId);
+
+            const payload = { CompetitorBrandIds: ids };
+
+            await fetch(`/api/prospections/${prospectionId}/competitorbrands`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(prospectionCompetitorBrands),
+                body: JSON.stringify(payload),
             });
 
-            const json = await response.json();
+            //const json = await response.json();
 
-            console.log("Succesful PUT prospection competitor brands: ", json)
-
-            // if in context: load anew
-            // loadProspections();
+            console.log("Succesful PUT prospection competitor brands.")
 
         } catch (error) {
             console.error('Error PUT prospection competitor brands:', error);
@@ -267,7 +264,7 @@ export function ProspectionDataProvider({ children }: { children: React.ReactNod
             loadContactTypes: loadContactTypes,
             loadVisitTypes: loadVisitTypes,
             addProspection: addProspection,
-            
+
             updateProspectionBrands: updateProspectionBrands,
             updateProspectionCompetitorBrands: updateProspectionCompetitorBrands,
             updateProspectionBrandInterests: updateProspectionBrandInterests,

@@ -11,6 +11,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.react-form-wizard.sm .wizard-icon-circle{
+  height: 1rem;
+  width: 1rem;
+  font-size: small;
+}
+
+.stepTitle{
+  font-size: small;
+}
+
 /*
 a {
   font-weight: 500;

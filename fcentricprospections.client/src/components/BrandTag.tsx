@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { ProspectionDataContext } from "../contexts/ProspectionDataContext";
 
 interface BrandTagProps {
-    brandId: number
+    brandId: number;
     brandName: string;
     type: "brand" | "competitorBrand";
 }
