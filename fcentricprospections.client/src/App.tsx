@@ -1,13 +1,13 @@
 import { createBrowserRouter, Link, Outlet, RouterProvider } from 'react-router-dom';
-import { Homepage } from './pages/Home/homepage';
-import { ShopPage, ShopPageContent } from './pages/ShopId/shopIdPage';
-import { DataProvider } from './contexts/dataContext';
-import styles from './App.module.css'
-import { Prospectie } from './pages/ShopNewProspection/shopIdNewProspectionPage';
-import { ShopOverview } from './pages/ShopProspectionOverView/shopOverview'
+import { Homepage } from './pages/Home/HomePage';
+import { ShopListProvider } from './contexts/ShopListContext';
+import { NewProspection } from './pages/NewProspection/NewProspection';
+import { ProspectionOverview } from './pages/ProspectionOverview/ProspectionOverview'
 import { ProspectionDetail } from './pages/ProspectionDetail/ProspectionDetail';
 import { AiFillHome } from "react-icons/ai";
 import { ProspectionDataProvider } from './contexts/ProspectionDataContext';
+import styles from './App.module.css'
+import { ShopPage } from './pages/ShopPage/ShopPage';
 
 const Root = () => {
     return (
@@ -27,25 +27,15 @@ const Root = () => {
     );
 }
 
-const ProspectionPage = () => {
+// Extra layer to wrap in prospection data context
+const NewProspectionPage = () => {
 
     return (
-        <ShopDataProvider>
-            <ProspectionDataProvider>
-                <Prospectie />
-            </ProspectionDataProvider>
-        </ShopDataProvider>
+        <ProspectionDataProvider>
+            <NewProspection />
+        </ProspectionDataProvider>
     )
 }
-
-const ShopPage = () =>{
-    return (
-        <ShopDataProvider>
-            <ShopPageContent/>
-        </ShopDataProvider>
-    )
-}
-
 
 const App = () => {
     const router = createBrowserRouter([
@@ -58,19 +48,17 @@ const App = () => {
                     element: <Homepage />
                 },
                 {
-                    path: 'shop/:id',
-                    element: <ShopPageContent />
+                    path: "shop/:id",
+                    element: <ShopPage />
                 },
                 {
                     path: "shop/:id/prospection/new",
-                    element: <ProspectionPage />
-                }
-                ,
+                    element: <NewProspectionPage />
+                },
                 {
                     path: "shop/:id/overview",
-                    element: <ShopOverview />
-                }
-                ,
+                    element: <ProspectionOverview />
+                },
                 {
                     path: "shop/:id/overview/:prospectionId",
                     element: <ProspectionDetail />
@@ -80,9 +68,9 @@ const App = () => {
     ]);
 
     return (
-        <DataProvider>
+        <ShopListProvider>
             <RouterProvider router={router} />
-        </DataProvider>
+        </ShopListProvider>
     )
 }
 

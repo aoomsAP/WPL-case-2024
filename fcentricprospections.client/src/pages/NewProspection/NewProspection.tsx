@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import BrandTag from '../../components/BrandTag';
 
-export const Prospectie = () => {
+export const NewProspection = () => {
 
   const { id } = useParams<{ id: string }>();
 

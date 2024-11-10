@@ -3,8 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import styles from './shopOverview.module.css'
 import { Shop2 } from "../../types";
 
-
-export const ShopOverview = () => {
+export const ProspectionOverview = () => {
 
     const { id} = useParams<{id : string}>();  
 
