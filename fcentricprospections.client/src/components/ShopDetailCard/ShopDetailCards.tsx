@@ -1,9 +1,9 @@
 import React from 'react';
-import { Shop } from '../../types';
+import { IShopDetail } from '../../types';
 import styles from './ShopDetailCard.module.css';
 
 interface ShopDetailCardProps {
-  shop: Shop;
+  shop: IShopDetail;
 }
 
 export const ShopDetailCard: React.FC<ShopDetailCardProps> = ({ shop }) => (

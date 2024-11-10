@@ -9,7 +9,7 @@ import {
   IProspectionCompetitorBrand,
   IProspectionDetail,
   IVisitType,
-  Shop,
+  IShopDetail,
 } from "../../types";
 import styles from "./ProspectionDetail.module.css";
 import { ShopDetailCard } from "../../components/ShopDetailCard/ShopDetailCards";
@@ -21,9 +21,11 @@ import { TextSection } from "../../components/TextSection/TextSection";
 import { CompetitorBrandList } from "../../components/CompetitorBrandList/CompetitorBrandList";
 import { BrandInterestList } from "../../components/BrandInterestList/BrandInterestList";
 
+import { Oval } from 'react-loader-spinner'
+
 export const ProspectionDetail = () => {
   const [prospectionDetail, setProspectionDetail] = useState<IProspectionDetail>();
-  const [shopDetail, setShopDetail] = useState<Shop>();
+  const [shopDetail, setShopDetail] = useState<IShopDetail>();
   const [contactType, setContactType] = useState<IContactType>();
   const [visitType, setVisitType] = useState<IVisitType>();
   const [prospectionBrands, setProspectionBrands] = useState<IProspectionBrand[]>([]);
@@ -51,8 +53,8 @@ export const ProspectionDetail = () => {
     return result;
   }
 
-  async function loadShopDetail(shopId: string): Promise<Shop> {
-    let result = {} as Shop;
+  async function loadShopDetail(shopId: string): Promise<IShopDetail> {
+    let result = {} as IShopDetail;
 
     try {
       const response = await fetch(`/api/shops/${shopId}`, {
@@ -62,7 +64,7 @@ export const ProspectionDetail = () => {
         },
       });
 
-      const json: Shop = await response.json();
+      const json: IShopDetail = await response.json();
       result = json;
     } catch (error) {
       console.error("Error fetching shop data:", error);
@@ -71,7 +73,7 @@ export const ProspectionDetail = () => {
     return result;
   }
 
-  async function loadContactType(contactTypeId: string): Promise<IContactType> {
+  async function loadContactType(contactTypeId: number): Promise<IContactType> {
     let result = {} as IContactType;
 
     try {
@@ -94,7 +96,7 @@ export const ProspectionDetail = () => {
     return result;
   }
 
-  async function loadVisitType(visitTypeId: string): Promise<IVisitType> {
+  async function loadVisitType(visitTypeId: number): Promise<IVisitType> {
     let result = {} as IVisitType;
 
     try {
@@ -230,7 +232,7 @@ export const ProspectionDetail = () => {
         ]);
 
         if (prospectionData) {
-          let [contactTypeData,visitTypeData,prospectionBrandsData,prospectionCompetitorBrandsData,brandsData,competitorBrandsData,prospectionBrandInterestData] = await Promise.all([
+          let [contactTypeData, visitTypeData, prospectionBrandsData, prospectionCompetitorBrandsData, brandsData, competitorBrandsData, prospectionBrandInterestData] = await Promise.all([
             loadContactType(prospectionData.contactPersonTypeId),
             loadVisitType(prospectionData.visitTypeId),
             loadProspectionBrands(prospectionId),
@@ -258,32 +260,37 @@ export const ProspectionDetail = () => {
 
   return (
     <main className={styles.main}>
-      <h1 className={styles.h1}>
-        Prospectie ({prospectionDetail?.date.slice(0, 10)})
-      </h1>
+      {
+        prospectionDetail &&
+        <>
+          <h1 className={styles.h1}>
+            Prospectie ({new Date(prospectionDetail!.date).toLocaleDateString()})
+          </h1>
+          {shopDetail && <ShopDetailCard shop={shopDetail} />}
 
-      {shopDetail && <ShopDetailCard shop={shopDetail} />}
-      
-      <section className={styles.contactVisitCard}>
-        <div>
-          {contactType && prospectionDetail && (
-            <ContactTypeCard contactType={contactType} contactPersonName={prospectionDetail.contactPersonName} />
-          )}
-          
-          {visitType && prospectionDetail && <VisitTypeCard visitType={visitType} visitContext={prospectionDetail?.visitContext} />}
-        </div>
-      </section>
+          <section className={styles.contactVisitCard}>
+            <div>
+              {contactType && prospectionDetail && (
+                <ContactTypeCard contactType={contactType} contactPersonName={prospectionDetail.contactPersonName ?? ""} />
+              )}
 
-      <BrandList prospectionBrands={prospectionBrands} brands={brands}/>
-      
-      <CompetitorBrandList prospectionCompetitorBrands={prospectionCompetitorBrands} brands={competitorBrands} />
+              {visitType && prospectionDetail && <VisitTypeCard visitType={visitType} visitContext={prospectionDetail?.visitContext ?? ""} />}
+            </div>
+          </section>
 
-      {prospectionDetail && <GeneralSituation detail={prospectionDetail} />}
+          <BrandList prospectionBrands={prospectionBrands} brands={brands} />
 
-      <BrandInterestList prospectionBrandInterests={prospectionBrandInterests} brands={brands} />
+          <CompetitorBrandList prospectionCompetitorBrands={prospectionCompetitorBrands} brands={competitorBrands} />
 
-      <TextSection title="Trends & Noden" text={prospectionDetail?.trends} />
-      <TextSection title="Extra Opmerkingen/Feedback" text={prospectionDetail?.extra} />
+          {prospectionDetail && <GeneralSituation detail={prospectionDetail} />}
+
+          <BrandInterestList prospectionBrandInterests={prospectionBrandInterests} brands={brands} />
+
+          <TextSection title="Trends & Noden" text={prospectionDetail?.trends} />
+          <TextSection title="Extra Opmerkingen/Feedback" text={prospectionDetail?.extra} />
+        </>
+      }
+      {!prospectionDetail && <Oval />}
     </main>
   );
 };

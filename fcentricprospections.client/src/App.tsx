@@ -1,26 +1,49 @@
-import { createBrowserRouter, Outlet, RouterProvider} from 'react-router-dom';
-import { Homepage} from './pages/Home/homepage';
-import { ShopPage} from './pages/ShopId/shopIdPage';
-import { DataProvider } from './contexts/dataContext';
-import styles from './App.module.css'
-import { Prospectie } from './pages/ShopNewProspection/shopIdNewProspectionPage';
-import {ShopOverview} from './pages/ShopProspectionOverView/shopOverview'
+import { createBrowserRouter, Link, Outlet, RouterProvider } from 'react-router-dom';
+import { Homepage } from './pages/Home/homepage';
+import { ShopListProvider } from './contexts/ShopListContext';
+import { NewProspection } from './pages/NewProspection/NewProspection';
+import { ProspectionOverview } from './pages/ProspectionOverview/ProspectionOverview'
 import { ProspectionDetail } from './pages/ProspectionDetail/ProspectionDetail';
+import { AiFillHome } from "react-icons/ai";
+import { ProspectionDataProvider } from './contexts/ProspectionDataContext';
+import styles from './App.module.css'
+import { ShopPage } from './pages/ShopPage/ShopPage';
 
 const Root = () => {
     return (
         <>
-        <header className={styles.header}></header>
+            <header className={styles.header}>
+                <Link to={"/"}><button className={styles.button}>{<AiFillHome className={styles.home} />}</button></Link>
+            </header>
 
-        <Outlet></Outlet>
+            <Outlet></Outlet>
 
-        <footer className={styles.footer}>
+            <footer className={styles.footer}>
 
-        {/* Footer content can go here */}
+                {/* Footer content can go here */}
 
-        </footer>
+            </footer>
         </>
     );
+}
+
+// Extra layer to wrap in prospection data context
+const NewProspectionPage = () => {
+
+    return (
+        <ProspectionDataProvider>
+            <NewProspection />
+        </ProspectionDataProvider>
+    )
+}
+
+// Extra layer to wrap in prospection data context
+const ProspectionOverviewPage = () => {
+    return (
+        <ProspectionDataProvider>
+            <ProspectionOverview/>
+        </ProspectionDataProvider>
+    )
 }
 
 
@@ -28,38 +51,36 @@ const App = () => {
     const router = createBrowserRouter([
         {
             path: "/",
-            element: <Root/>,
+            element: <Root />,
             children: [
                 {
                     path: "",
-                    element: <Homepage/>
+                    element: <Homepage />
                 },
                 {
-                    path: 'shop/:id',
-                    element: <ShopPage/>
+                    path: "shop/:shopId",
+                    element: <ShopPage />
                 },
                 {
-                    path: "shop/:id/new",
-                    element: <Prospectie/>
-                }
-                ,
+                    path: "shop/:shopId/prospections/new",
+                    element: <NewProspectionPage />
+                },
                 {
-                    path: "shop/:id/overview",
-                    element: <ShopOverview/>
-                }
-                ,
+                    path: "shop/:shopId/prospections",
+                    element: <ProspectionOverviewPage />
+                },
                 {
-                    path:"shop/:shopId/prospection/:prospectionId",
-                    element:<ProspectionDetail/>
+                    path: "shop/:shopId/prospections/:prospectionId",
+                    element: <ProspectionDetail />
                 }
             ]
         }
     ]);
 
     return (
-        <DataProvider>
+        <ShopListProvider>
             <RouterProvider router={router} />
-        </DataProvider>
+        </ShopListProvider>
     )
 }
 
