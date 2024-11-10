@@ -49,7 +49,7 @@ const App = () => {
                 }
                 ,
                 {
-                    path:"shop/:id/overview/:prospectionId",
+                    path:"shop/:shopId/prospection/:prospectionId",
                     element:<ProspectionDetail/>
                 }
             ]
