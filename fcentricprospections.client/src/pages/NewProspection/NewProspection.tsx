@@ -2,8 +2,7 @@ import styles from '../../App.module.css';
 import FormWizard from "react-form-wizard-component";
 import "react-form-wizard-component/dist/style.css";
 import ShopCart from '../../components/ShopCard';
-import { IBrand, ICompetitorBrand, IContactType, IVisitType, IProspection, IProspectionBrand, IProspectionCompetitorBrand, IProspectionBrandInterest, Shop } from "../../types"
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import BrandTag from '../../components/BrandTag';
 import { ProspectionDataContext } from '../../contexts/ProspectionDataContext';
@@ -12,9 +11,7 @@ export const NewProspection = () => {
 
   const { id } = useParams<{ id: string }>();
 
-  const { brands, competitorBrands, contactTypes, visitTypes,
-    setProspection, prospectionBrands, setProspectionBrands, prospectionCompetitorBrands, setProspectionCompetitorBrands, prospectionBrandInterests, setProspectionBrandInterests,
-    addProspection, updateProspectionBrands, updateProspectionCompetitorBrands, updateProspectionBrandInterests}
+  const { brands, competitorBrands, prospectionBrands, setProspectionBrands, prospectionCompetitorBrands, setProspectionCompetitorBrands, }
     = useContext(ProspectionDataContext);
 
   // Search fields
@@ -141,7 +138,8 @@ export const NewProspection = () => {
 
         </FormWizard.TabContent>
 
-        <FormWizard.TabContent title="Brands" icon="ti-settings">
+        <FormWizard.TabContent title="Brandmix" icon="ti-settings">
+          {/* FC70 BRANDS */}
           <h3>FC70 brandmix</h3>
           <input
             type="text"
@@ -155,7 +153,7 @@ export const NewProspection = () => {
               brandSearchFunc.map(brand => (
                 <li key={brand.id}
                   onClick={() => {
-                    setProspectionBrands(prev => [...prev, { brandId: brand.id, brandName: brand.name }]);
+                    setProspectionBrands([...prospectionBrands, { brandId: brand.id, brandName: brand.name }]);
                     setBrandSearch("");
                   }}>
                   {brand.name}
@@ -171,11 +169,11 @@ export const NewProspection = () => {
           </ul>
 
           <div>
-            {prospectionBrands.map(brand => <BrandTag key={brand.brandId} data={brand.brandName} />)}
+            {prospectionBrands.map(brand => <BrandTag brandId={brand.brandId} brandName={brand.brandName} type="brand" />)}
           </div>
 
 
-          {/*Voor de competitorbrands*/}
+          {/* COMPETITOR BRANDS */}
           <h3>Competitor brands</h3>
           <input
             type="text"
@@ -188,15 +186,7 @@ export const NewProspection = () => {
               competitorBrandSearchFunc.map(brand => (
                 <li key={brand.id}
                   onClick={() => {
-                    setProspectionCompetitorBrands(prev => [
-                      ...prev,
-                      {
-                        id: brand.id,
-                        brandId: brand.id,
-                        brandName: brand.name,
-                      }
-                    ]);
-
+                    setProspectionCompetitorBrands([...prospectionCompetitorBrands, { brandId: brand.id, brandName: brand.name }]);
                     setCompetitorBrandSearch("");
                   }}>
                   {brand.name}
@@ -211,7 +201,7 @@ export const NewProspection = () => {
             )}
           </ul>
           <div>
-            {prospectionCompetitorBrands.map(brand => <BrandTag key={brand.brandId} data={brand.brandName} />)}
+            {prospectionCompetitorBrands.map(brand => <BrandTag brandId={brand.brandId} brandName={brand.brandName} type="competitorBrand" />)}
           </div>
 
 
@@ -219,8 +209,8 @@ export const NewProspection = () => {
 
         </FormWizard.TabContent>
 
-        <FormWizard.TabContent title="Preformance" icon="ti-check">
-          <h3>Proformance</h3>
+        <FormWizard.TabContent title="Performance" icon="ti-check">
+          <h3>Performance</h3>
 
 
         </FormWizard.TabContent>
