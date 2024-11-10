@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import styles from './shopIdpage.module.css';
+import styles from './ShopPage.module.css';
 import { Shop, Prospection } from '../../types'
 import { Link, useParams } from 'react-router-dom';
 import { FaAngleRight } from "react-icons/fa";
+import ShopCard from '../../components/ShopCard';
 
 export const ShopPage = () => {
-  const { id } = useParams<{ id: string }>(); // Ensure correct types for TypeScript
+  const { shopId } = useParams<{ shopId: string }>(); // Ensure correct types for TypeScript
 
   const [shopData, setShopData] = useState<Shop | undefined>(undefined);
   const [shopProspections, setShopProspections] = useState<Prospection[]>([]);
@@ -49,33 +50,29 @@ export const ShopPage = () => {
   }
 
   useEffect(() => {
-    if (id)
-      loadShopDetail(id);
-  }, [id])
+    if (shopId)
+      loadShopDetail(shopId);
+  }, [shopId])
 
   return (
     <>
       <main className={styles.main}>
         <section className={styles.infoSection}>
 
-          <h1 className={styles.h1}>{shopData?.name}</h1>
-
-          <h2>Adres: {shopData?.address.street1} </h2>
-
-          <h2>Klant: {shopData?.customer}</h2>
+          {shopId && !isNaN(Number(shopId)) && <ShopCard shopId={Number(shopId)} />}
 
         </section>
 
         <section className={styles.prospectionSection}>
           <button className={styles.button}>
-            <Link className={styles.a} to={`/shop/${id}/new`}>Nieuwe Prospectie</Link>
+            <Link className={styles.a} to={`/shop/${shopId}/prospections/new`}>Nieuwe Prospectie</Link>
           </button>
           <ul>
             {shopProspections.map(prospection => (<li className={styles.li} key={prospection.id}>  {/* Ensure each `li` has a unique `key` */}
-              <Link className={styles.prospectionA} to={`/shop/${id}/overview/prospection${prospection.id}`}>Prospectie {prospection.date.slice(0, 10)}<FaAngleRight className={styles.icon} /> </Link></li>))}
+              <Link className={styles.prospectionA} to={`/shop/${shopId}/prospections/${prospection.id}`}>Prospectie {prospection.date.slice(0, 10)}<FaAngleRight className={styles.icon} /> </Link></li>))}
           </ul>
           <button className={styles.button}>
-            <Link className={styles.a} to={`/shop/${id}/overview`}>Overzicht van alle Prospecties</Link>
+            <Link className={styles.a} to={`/shop/${shopId}/prospections/overview`}>Overzicht van alle Prospecties</Link>
           </button>
         </section>
 

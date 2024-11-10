@@ -1,7 +1,7 @@
 import styles from '../../App.module.css';
 import FormWizard from "react-form-wizard-component";
 import "react-form-wizard-component/dist/style.css";
-import ShopCart from '../../components/ShopCard';
+import ShopCard from '../../components/ShopCard';
 import { useContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import BrandTag from '../../components/BrandTag';
@@ -9,10 +9,9 @@ import { ProspectionDataContext } from '../../contexts/ProspectionDataContext';
 
 export const NewProspection = () => {
 
-  const { id } = useParams<{ id: string }>();
+  const { shopId } = useParams<{ shopId: string }>();
 
-  const { brands, competitorBrands, prospectionBrands, setProspectionBrands, prospectionCompetitorBrands, setProspectionCompetitorBrands, }
-    = useContext(ProspectionDataContext);
+  const { brands, competitorBrands, prospectionBrands, setProspectionBrands, prospectionCompetitorBrands, setProspectionCompetitorBrands } = useContext(ProspectionDataContext);
 
   // Search fields
   const [brandSearch, setBrandSearch] = useState<string>("");
@@ -70,7 +69,7 @@ export const NewProspection = () => {
         onComplete={handleComplete}>
 
         <FormWizard.TabContent title="Info" icon="ti-user">
-          {id && !isNaN(Number(id)) && <ShopCart shopId={Number(id)} />}
+          {shopId && !isNaN(Number(shopId)) && <ShopCard shopId={Number(shopId)} />}
 
           <h3>Contact type</h3>
 

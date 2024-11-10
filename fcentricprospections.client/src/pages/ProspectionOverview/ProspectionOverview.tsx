@@ -1,29 +1,29 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import styles from './shopOverview.module.css'
+import styles from './ProspectionOverview.module.css'
 import { Shop2 } from "../../types";
 
 export const ProspectionOverview = () => {
 
-    const { id} = useParams<{id : string}>();  
+    const { shopId } = useParams<{ shopId: string }>();
 
-    const [prospectieList , setProspectieList] = useState<Shop2>();
+    const [prospectieList, setProspectieList] = useState<Shop2>();
 
     useEffect(() => {
-        
-    }, [id])
 
-    return(
+    }, [shopId])
+
+    return (
         <main className={styles.main}>
-        <h1>{prospectieList?.shopName}</h1>
+            <h1>{prospectieList?.shopName}</h1>
 
-        <h2>Voorgaande prospecties</h2>
+            <h2>Voorgaande prospecties</h2>
 
-        <section className={styles.section}>
+            <section className={styles.section}>
                 {prospectieList?.prospections.map((item) => (
                     <button key={`${prospectieList.id}-${item.id}`}>
-                        <Link 
-                            to={`/shop/${id}/overview/prospection${item.id}`} 
+                        <Link
+                            to={`/shop/${shopId}/prospections/${item.id}`}
                             state={{ prospection: item, shopName: prospectieList.shopName }}
                         >
                             {item.data}
@@ -31,8 +31,8 @@ export const ProspectionOverview = () => {
                     </button>
                 ))}
             </section>
-        
-    
+
+
         </main>
     );
 }

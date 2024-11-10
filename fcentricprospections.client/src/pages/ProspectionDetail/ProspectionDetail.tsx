@@ -14,7 +14,7 @@ export const ProspectionDetail = () => {
     useEffect(() => {
         if (!state) {
             // If state is missing (e.g., direct URL access), redirect to the shop overview page
-            navigate(`/shop/${shopId}/overview`);
+            navigate(`/shop/${shopId}/prospections/overview`);
         }
     }, [state, navigate, shopId]);
 

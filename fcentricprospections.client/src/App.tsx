@@ -48,19 +48,19 @@ const App = () => {
                     element: <Homepage />
                 },
                 {
-                    path: "shop/:id",
+                    path: "shop/:shopId",
                     element: <ShopPage />
                 },
                 {
-                    path: "shop/:id/prospection/new",
+                    path: "shop/:shopId/prospections/new",
                     element: <NewProspectionPage />
                 },
                 {
-                    path: "shop/:id/overview",
+                    path: "shop/:shopId/prospections",
                     element: <ProspectionOverview />
                 },
                 {
-                    path: "shop/:id/overview/:prospectionId",
+                    path: "shop/:shopId/prospections/:prospectionId",
                     element: <ProspectionDetail />
                 }
             ]
