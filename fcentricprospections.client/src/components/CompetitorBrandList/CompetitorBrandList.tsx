@@ -1,5 +1,6 @@
 import React from 'react';
 import { IProspectionCompetitorBrand, IBrand } from '../../types';
+import styles from "./CompetitorBrandList.module.css"
 
 interface CompetitorBrandListProps {
   prospectionCompetitorBrands: IProspectionCompetitorBrand[];
@@ -7,15 +8,15 @@ interface CompetitorBrandListProps {
 }
 
 export const CompetitorBrandList: React.FC<CompetitorBrandListProps> = ({ prospectionCompetitorBrands, brands }) => (
-  <section className="competitor-brand-list">
-    <p>Competitor Brands</p>
-    {prospectionCompetitorBrands.map((brand, index) => {
-      const matchingCompetitorBrand = brands.find(b => b.id === brand.competitorBrandId);
-      return (
-        <div key={index} className="competitor-brand-card">
-          <p>Brand: {matchingCompetitorBrand ? matchingCompetitorBrand.name : "Unknown Brand"}</p>
-        </div>
-      );
-    })}
+  <section className={styles.competitorBrandList}>
+    <h2>Competitor Brands</h2>
+    <ul>
+      {prospectionCompetitorBrands.map((brand, index) => {
+        const matchingCompetitorBrand = brands.find(b => b.id === brand.competitorBrandId);
+        return (
+            <li key={index}>{matchingCompetitorBrand ? matchingCompetitorBrand.name : "Unknown Brand"}</li>
+        );
+      })}
+    </ul>
   </section>
 );

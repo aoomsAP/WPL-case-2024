@@ -1,5 +1,6 @@
 import React from 'react';
 import { IContactType } from '../../types';
+import styles from "./ContactTypeCard.module.css"
 
 interface ContactTypeCardProps {
   contactType: IContactType;
@@ -7,8 +8,10 @@ interface ContactTypeCardProps {
 }
 
 export const ContactTypeCard: React.FC<ContactTypeCardProps> = ({ contactType, contactPersonName }) => (
-  <section className="card">
-    <p>Contact type: {contactType.name}</p>
-    <p>Contactnaam: {contactPersonName}</p>
-  </section>
+  <article className={styles.contactTypeCard}>
+    <h3>Contact type</h3>
+    <p>{contactType.name}</p>
+    <h3>Contactnaam</h3>
+    <p>{contactPersonName}</p>
+  </article>
 );
