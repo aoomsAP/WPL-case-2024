@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import styles from './ShopPage.module.css';
-import { Shop, Prospection } from '../../types'
+import { IShopDetail, IProspection } from '../../types'
 import { Link, useParams } from 'react-router-dom';
 import { FaAngleRight } from "react-icons/fa";
-import ShopCard from '../../components/ShopCard';
+import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCards';
 
 export const ShopPage = () => {
   const { shopId } = useParams<{ shopId: string }>(); // Ensure correct types for TypeScript
 
-  const [shopData, setShopData] = useState<Shop | undefined>(undefined);
-  const [shopProspections, setShopProspections] = useState<Prospection[]>([]);
+  const [shopData, setShopData] = useState<IShopDetail | undefined>(undefined);
+  const [shopProspections, setShopProspections] = useState<IProspection[]>([]);
 
   const loadShopDetail = async (id: string) => {
 
@@ -26,7 +26,7 @@ export const ShopPage = () => {
         throw new Error('Failed to fetch shop data');
       }
 
-      const json: Shop = await response.json();
+      const json: IShopDetail = await response.json();
       setShopData(json);
 
       // load list of Shop Prospections
@@ -38,14 +38,14 @@ export const ShopPage = () => {
       })
 
       if (!responseProspection.ok) {
-        throw new Error('Failed to fetch prospection data')
+        throw new Error('Failed to fetch prospections data')
       }
 
-      const json2: Prospection[] = await responseProspection.json();
+      const json2: IProspection[] = await responseProspection.json();
       setShopProspections(json2)
 
     } catch (error) {
-      console.error('Error fetching shop data:', error);
+      console.error('Error fetching prospections data:', error);
     }
   }
 
@@ -57,9 +57,9 @@ export const ShopPage = () => {
   return (
     <>
       <main className={styles.main}>
-        <section className={styles.infoSection}>
+        <section>
 
-          {shopId && !isNaN(Number(shopId)) && <ShopCard shopId={Number(shopId)} />}
+          {shopData && !isNaN(Number(shopId)) && <ShopDetailCard shop={shopData} />}
 
         </section>
 
@@ -68,11 +68,14 @@ export const ShopPage = () => {
             <Link className={styles.a} to={`/shop/${shopId}/prospections/new`}>Nieuwe Prospectie</Link>
           </button>
           <ul>
-            {shopProspections.map(prospection => (<li className={styles.li} key={prospection.id}>  {/* Ensure each `li` has a unique `key` */}
-              <Link className={styles.prospectionA} to={`/shop/${shopId}/prospections/${prospection.id}`}>Prospectie {prospection.date.slice(0, 10)}<FaAngleRight className={styles.icon} /> </Link></li>))}
+            {shopProspections.sort((a, b) => (Number(b.date))-(Number(a.date))).slice(0, 3)
+              .map(prospection => (<li className={styles.li} key={prospection.id}>
+                <Link className={styles.prospectionA} to={`/shop/${shopId}/prospections/${prospection.id}`}>
+                  Prospectie {prospection.date?.toString().slice(0, 10)}<FaAngleRight className={styles.icon} />
+                </Link></li>))}
           </ul>
           <button className={styles.button}>
-            <Link className={styles.a} to={`/shop/${shopId}/prospections/overview`}>Overzicht van alle Prospecties</Link>
+            <Link className={styles.a} to={`/shop/${shopId}/prospections`}>Overzicht van alle Prospecties</Link>
           </button>
         </section>
 

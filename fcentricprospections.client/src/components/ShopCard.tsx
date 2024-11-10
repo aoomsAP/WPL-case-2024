@@ -33,8 +33,8 @@ const ShopCard = ({ shopId }: ShopCardProps) => {
             {shop &&
                 <>
                     <p>{shop.name}</p>
-                    <p>{shop.customer}</p>
-                    <p>{shop.address.street1}</p>
+                    <p>Klant: {shop.customer}</p>
+                    <p>Address: {shop.address.street1}</p>
                 </>}
         </>
     )

@@ -1,0 +1,9 @@
+.brandCard {
+    border: 1px solid black;
+    /*border-radius: 8px;*/
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  

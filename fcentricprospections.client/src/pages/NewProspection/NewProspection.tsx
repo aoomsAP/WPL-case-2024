@@ -6,7 +6,7 @@ import { useContext, useState } from 'react';
 import { useParams , useNavigate } from 'react-router-dom';
 import BrandTag from '../../components/BrandTag';
 import { ProspectionDataContext } from '../../contexts/ProspectionDataContext';
-import { IProspection } from '../../types';
+import { IProspectionDetail } from '../../types';
 import BrandCardInput from '../../components/BrandCardInput';
 import BrandInterestCard from '../../components/BrandInterestCard';
 
@@ -73,7 +73,7 @@ export const NewProspection = () => {
   // IF FORM WIARD SUPPORTS ASYNC FUNCTIONS
   async function handleComplete() {
 
-    const newProspection: IProspection = {
+    const newProspection: IProspectionDetail = {
       shopId: Number(shopId),
       date: new Date(),
       dateLastUpdated: new Date(),

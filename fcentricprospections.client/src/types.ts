@@ -1,40 +1,23 @@
-
 export interface IShop {
   id: string; // Example property, replace with real ones
   name: string; // Example property
 }
 
-export interface Address {
-  id: number,
-  street1: string,
-  street2: string,
-  postalcode: string,
-  city: string,
-  country: string,
-}
-
-export interface Shop {
+export interface IShopDetail {
   id: number;
   name: string;
   address: Address;
   customer: string;
-
 }
 
-export interface Prospection {
-  id: string;
-  data: string;
-  text: string;
-  date: string
+export interface Address {
+  id: number;
+  street1: string;
+  street2: string;
+  postalcode: string;
+  city: string;
+  country: string;
 }
-export interface Shop2 {
-  id: string,
-  shopName: string,
-  prospections: Prospection[]
-}
-
-
-
 
 export interface IContactType {
   id: number,
@@ -57,14 +40,20 @@ export interface ICompetitorBrand {
 }
 
 export interface IProspection {
+  id: number,
+  date: Date,
+  shopId: number,
+}
+
+export interface IProspectionDetail {
   id?: number,
   shopId: number,
   userId?: number,
-  date?: Date,
+  date: Date,
   dateLastUpdated?: Date,
-  contactPersonTypeId?: number,
+  contactPersonTypeId: number,
   contactPersonName?: string,
-  visitTypeId?: number,
+  visitTypeId: number,
   visitContext?: string,
   bestBrands?: string,
   worstBrands?: string,

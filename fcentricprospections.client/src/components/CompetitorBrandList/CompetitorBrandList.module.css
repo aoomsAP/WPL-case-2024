@@ -1,0 +1,19 @@
+.competitorBrandList {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+  }
+
+  .competitorBrandList ul {
+    padding: 0; 
+    margin: 0; 
+  }
+  
+  .competitorBrandList ul li {
+    text-align: left;
+    list-style-position: inside;
+    list-style-type: disc;
+    margin-left: 5px;
+  }

@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-import { IBrand, ICompetitorBrand, IContactType, IProspection, IProspectionBrand, IProspectionBrandInterest, IProspectionCompetitorBrand, IVisitType } from '../types';
+import { IBrand, ICompetitorBrand, IContactType, IProspectionDetail, IProspectionBrand, IProspectionBrandInterest, IProspectionCompetitorBrand, IVisitType } from '../types';
 
 export interface ProspectionDataContext {
     // data states
@@ -13,8 +13,8 @@ export interface ProspectionDataContext {
     setVisitTypes: (visitTypes: IVisitType[]) => void;
 
     // new prospection states
-    prospection: IProspection | undefined;
-    setProspection: (prospection: IProspection | undefined) => void;
+    prospection: IProspectionDetail | undefined;
+    setProspection: (prospection: IProspectionDetail | undefined) => void;
     prospectionBrands: IProspectionBrand[];
     setProspectionBrands: (prospectionBrands: IProspectionBrand[]) => void;
     prospectionCompetitorBrands: IProspectionCompetitorBrand[];
@@ -28,7 +28,7 @@ export interface ProspectionDataContext {
     loadContactTypes: () => Promise<void>;
     loadVisitTypes: () => Promise<void>;
 
-    addProspection: (newProspection: IProspection) => Promise<IProspection | undefined>;
+    addProspection: (newProspection: IProspectionDetail) => Promise<IProspectionDetail | undefined>;
     updateProspectionBrands: (prospectionId: number, prospectionBrands: IProspectionBrand[]) => Promise<void>;
     updateProspectionCompetitorBrands: (prospectionId: number, prospectionCompetitorBrands: IProspectionCompetitorBrand[]) => Promise<void>;
     updateProspectionBrandInterests: (prospectionId: number, prospectionBrandInterests: IProspectionBrandInterest[]) => Promise<void>;
@@ -46,7 +46,7 @@ export const ProspectionDataContext = createContext<ProspectionDataContext>({
     setVisitTypes: () => { },
 
     // new prospection states
-    prospection: {} as IProspection | undefined,
+    prospection: {} as IProspectionDetail | undefined,
     setProspection: () => { },
     prospectionBrands: [],
     setProspectionBrands: () => { },
@@ -78,7 +78,7 @@ export function ProspectionDataProvider({ children }: { children: React.ReactNod
     const [visitTypes, setVisitTypes] = useState<IVisitType[]>([]);
 
     // new prospection states
-    const [prospection, setProspection] = useState<IProspection | undefined>();
+    const [prospection, setProspection] = useState<IProspectionDetail | undefined>();
     const [prospectionBrands, setProspectionBrands] = useState<IProspectionBrand[]>([]);
     const [prospectionCompetitorBrands, setProspectionCompetitorBrands] = useState<IProspectionCompetitorBrand[]>([]);
     const [prospectionBrandInterests, setProspectionBrandInterests] = useState<IProspectionBrandInterest[]>([]);
@@ -149,7 +149,7 @@ export function ProspectionDataProvider({ children }: { children: React.ReactNod
 
     // ADD PROSPECTION
 
-    async function addProspection(newProspection: IProspection) {
+    async function addProspection(newProspection: IProspectionDetail) {
         try {
             const response = await fetch(`/api/prospections`, {
                 method: 'POST',
@@ -157,7 +157,7 @@ export function ProspectionDataProvider({ children }: { children: React.ReactNod
                 body: JSON.stringify(newProspection),
             });
 
-            const json: IProspection = await response.json();
+            const json: IProspectionDetail = await response.json();
 
             console.log("Succesful POST new prospection: ", json)
             return (json);
