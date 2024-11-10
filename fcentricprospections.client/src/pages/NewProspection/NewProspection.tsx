@@ -3,216 +3,47 @@ import FormWizard from "react-form-wizard-component";
 import "react-form-wizard-component/dist/style.css";
 import ShopCart from '../../components/ShopCard';
 import { IBrand, ICompetitorBrand, IContactType, IVisitType, IProspection, IProspectionBrand, IProspectionCompetitorBrand, IProspectionBrandInterest, Shop } from "../../types"
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import BrandTag from '../../components/BrandTag';
+import { ProspectionDataContext } from '../../contexts/ProspectionDataContext';
 
 export const NewProspection = () => {
 
   const { id } = useParams<{ id: string }>();
 
-  // data states
-  const [brands, setBrands] = useState<IBrand[]>([]);
-  const [competitorBrands, setCompetitorBrands] = useState<ICompetitorBrand[]>([]);
-  const [contactTypes, setContactTypes] = useState<IContactType[]>([]);
-  const [visitTypes, setVisitTypes] = useState<IVisitType[]>([]);
-  const [shopData, setShopData] = useState<Shop>();
+  const { brands, competitorBrands, contactTypes, visitTypes,
+    setProspection, prospectionBrands, setProspectionBrands, prospectionCompetitorBrands, setProspectionCompetitorBrands, prospectionBrandInterests, setProspectionBrandInterests,
+    addProspection, updateProspectionBrands, updateProspectionCompetitorBrands, updateProspectionBrandInterests}
+    = useContext(ProspectionDataContext);
 
-  // new prospection states
-  const [prospection, setProspection] = useState<IProspection>();
-  const [prospectionBrands, setProspectionBrands] = useState<IProspectionBrand[]>([]);
-  const [prospectionCompetitorBrands, setProspectionCompetitorBrands] = useState<IProspectionCompetitorBrand[]>([]);
-  const [prospectionBrandInterests, setProspectionBrandInterests] = useState<IProspectionBrandInterest[]>([]);
-
-  // search fields
+  // Search fields
   const [brandSearch, setBrandSearch] = useState<string>("");
   const [competitorBrandSearch, setCompetitorBrandSearch] = useState<string>("");
 
-  // Filter brand names based on the search term, ensuring at least 3 characters are typed
+  // Filter for brands
   const brandSearchFunc = brands.filter(brand => {
+    // If brand is already in prospectionBrands, do not include
+    if (prospectionBrands.map(x => x.brandId).find(x => x === brand.id)) return false;
 
-    if(prospectionBrands.map(x => x.brandId).find(x => x === brand.id)) return false;
-    // Check if the search term is at least 3 characters long
-    if (brandSearch.length < 3) return false; // If less than 3 characters, do not include
-    return brand.name.toLowerCase().includes(brandSearch.toLowerCase()); // Otherwise, filter based on name
+    // If search value is less than 3 characters, do not include
+    if (brandSearch.length < 3) return false;
+
+    // If brand name contains search value, include
+    return brand.name.toLowerCase().includes(brandSearch.toLowerCase());
   });
 
-
-  //filer voor de competitor brands
+  // Filter for competitor brands
   const competitorBrandSearchFunc = competitorBrands.filter(brand => {
+    // If competitor brand is already in prospectionCompetitorBrands, do not include
+    if (prospectionCompetitorBrands.map(x => x.brandId).find(x => x === brand.id)) return false;
 
-    if(prospectionCompetitorBrands.map(x => x.brandId).find(x => x === brand.id)) return false;
-    
-    if (brandSearch.length < 3) return false; 
-    return brand.name.toLowerCase().includes(brandSearch.toLowerCase()); 
+    // If search value is less than 3 characters, do not include
+    if (competitorBrandSearch.length < 3) return false;
+
+    // If competitor brand name contains search value, include
+    return brand.name.toLowerCase().includes(competitorBrandSearch.toLowerCase());
   });
-
-
-
-  // LOAD DATA FUNCTIONS
-
-  async function loadBrands() {
-    try {
-      const response = await fetch(`/api/brands`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      const json: IBrand[] = await response.json();
-      setBrands(json);
-
-    } catch (error) {
-      console.error('Error fetching brands data:', error);
-    }
-  }
-
-  async function loadCompetitorBrands() {
-    try {
-      const response = await fetch(`/api/competitorbrands`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      const json: ICompetitorBrand[] = await response.json();
-      setCompetitorBrands(json);
-
-    } catch (error) {
-      console.error('Error fetching competitor brands data:', error);
-    }
-  }
-
-  async function loadContactTypes() {
-    try {
-      const response = await fetch(`/api/contacttypes`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      const json: IContactType[] = await response.json();
-      setContactTypes(json);
-
-    } catch (error) {
-      console.error('Error fetching contact types data:', error);
-    }
-  }
-
-  async function loadVisitTypes() {
-    try {
-      const response = await fetch(`/api/visittypes`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      const json: IVisitType[] = await response.json();
-      setVisitTypes(json);
-
-    } catch (error) {
-      console.error('Error fetching visit types:', error);
-    }
-  }
-
-  async function loadShopData() {
-    try {
-      const response = await fetch(`/api/shops/${id}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      const json: Shop = await response.json();
-      setShopData(json);
-
-    } catch (error) {
-      console.error('Error fetching shop data:', error);
-    }
-  }
-
-  // LOAD DATA USE EFFECT
-
-  useEffect(() => {
-    loadBrands();
-    loadCompetitorBrands();
-    loadContactTypes();
-    loadVisitTypes();
-    loadShopData();
-  }, [])
-
-  // ADD NEW PROSPECTION FUNCTIONS
-
-  async function addProspection(newProspection: IProspection) {
-    try {
-      const response = await fetch(`/api/prospections`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newProspection),
-      });
-
-      const json: IProspection = await response.json();
-
-      console.log("Succesful POST new prospection: ", json)
-
-      // if in context: load anew
-
-    } catch (error) {
-      console.error('Error POST new prospection:', error);
-    }
-  }
-
-  async function updateProspectionBrands(prospectionBrands: IProspectionBrand[]) {
-    try {
-      const response = await fetch(`/api/prospections/${id}/brands`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(prospectionBrands),
-      });
-
-      const json = await response.json();
-
-      console.log("Succesful PUT prospection brands: ", json)
-
-      // if in context: load anew
-
-    } catch (error) {
-      console.error('Error PUT prospection brands:', error);
-    }
-  }
-
-  async function updateProspectionBrandInterests(prospectionBrandInterests: IProspectionBrandInterest[]) {
-    try {
-      const response = await fetch(`/api/prospections/${id}/brandinterests`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(prospectionBrandInterests),
-      });
-
-      const json = await response.json();
-
-      console.log("Succesful PUT prospection brand interests: ", json)
-
-      // if in context: load anew
-
-    } catch (error) {
-      console.error('Error PUT prospection brand interests:', error);
-    }
-  }
-
-  async function updateProspectionCompetitorBrands(prospectionCompetitorBrands: IProspectionCompetitorBrand[]) {
-    try {
-      const response = await fetch(`/api/prospections/${id}/competitorbrands`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(prospectionCompetitorBrands),
-      });
-
-      const json = await response.json();
-
-      console.log("Succesful PUT prospection competitor brands: ", json)
-
-      // if in context: load anew
-
-    } catch (error) {
-      console.error('Error PUT prospection competitor brands:', error);
-    }
-  }
 
   function handleComplete() {
 
@@ -234,10 +65,6 @@ export const NewProspection = () => {
     console.log("nextIndex", nextIndex);
   };
 
-
-
-
-
   return (
     <main className={styles.main}>
 
@@ -246,7 +73,7 @@ export const NewProspection = () => {
         onComplete={handleComplete}>
 
         <FormWizard.TabContent title="Info" icon="ti-user">
-          {shopData && <ShopCart data={shopData} />}
+          {id && !isNaN(Number(id)) && <ShopCart shopId={Number(id)} />}
 
           <h3>Contact type</h3>
 
@@ -330,27 +157,27 @@ export const NewProspection = () => {
                   onClick={() => {
                     setProspectionBrands(prev => [...prev, { brandId: brand.id, brandName: brand.name }]);
                     setBrandSearch("");
-                }}>
-            {brand.name}
-          </li>
-          ))
-          ) : (
-          brandSearch.length < 3 ? (
-          <li>Typ minstens 3 letters.</li>
-          ) : (
-          <li>Geen merken gevonden</li>
-          )
+                  }}>
+                  {brand.name}
+                </li>
+              ))
+            ) : (
+              brandSearch.length < 3 ? (
+                <li>Typ minstens 3 letters.</li>
+              ) : (
+                <li>Geen merken gevonden</li>
+              )
             )}
-        </ul>
+          </ul>
 
-        <div>
-          {prospectionBrands.map(brand => <BrandTag key={brand.brandId} data={brand.brandName}/>)}  
-        </div>
+          <div>
+            {prospectionBrands.map(brand => <BrandTag key={brand.brandId} data={brand.brandName} />)}
+          </div>
 
 
-        {/*Voor de competitorbrands*/}
-        <h3>Competitor brands</h3>
-        <input
+          {/*Voor de competitorbrands*/}
+          <h3>Competitor brands</h3>
+          <input
             type="text"
             placeholder="Zoek..."
             value={competitorBrandSearch}
@@ -364,60 +191,60 @@ export const NewProspection = () => {
                     setProspectionCompetitorBrands(prev => [
                       ...prev,
                       {
-                        id: brand.id,           
+                        id: brand.id,
                         brandId: brand.id,
                         brandName: brand.name,
                       }
                     ]);
-                    
+
                     setCompetitorBrandSearch("");
-                }}>
-            {brand.name}
-          </li>
-          ))
-          ) : (
-          competitorBrandSearch.length < 3 ? (
-          <li>Typ minstens 3 letters.</li>
-          ) : (
-          <li>Geen merken gevonden</li>
-          )
+                  }}>
+                  {brand.name}
+                </li>
+              ))
+            ) : (
+              competitorBrandSearch.length < 3 ? (
+                <li>Typ minstens 3 letters.</li>
+              ) : (
+                <li>Geen merken gevonden</li>
+              )
             )}
-        </ul>
-        <div>
-          {prospectionCompetitorBrands.map(brand => <BrandTag key={brand.brandId} data={brand.brandName}/>)}  
-        </div>
+          </ul>
+          <div>
+            {prospectionCompetitorBrands.map(brand => <BrandTag key={brand.brandId} data={brand.brandName} />)}
+          </div>
 
 
 
 
-      </FormWizard.TabContent>
+        </FormWizard.TabContent>
 
-      <FormWizard.TabContent title="Preformance" icon="ti-check">
-        <h3>Proformance</h3>
-
-
-      </FormWizard.TabContent>
-
-      <FormWizard.TabContent title="FC 70 eval" icon="ti-check">
-        <h3>Fc 70 eval</h3>
+        <FormWizard.TabContent title="Preformance" icon="ti-check">
+          <h3>Proformance</h3>
 
 
-      </FormWizard.TabContent>
+        </FormWizard.TabContent>
 
-      <FormWizard.TabContent title="Interests" icon="ti-check">
-        <h3>Interests</h3>
-
-
-      </FormWizard.TabContent>
-
-      <FormWizard.TabContent title="Feedback" icon="ti-check">
-        <h3>Feedback</h3>
+        <FormWizard.TabContent title="FC 70 eval" icon="ti-check">
+          <h3>Fc 70 eval</h3>
 
 
-      </FormWizard.TabContent>
+        </FormWizard.TabContent>
+
+        <FormWizard.TabContent title="Interests" icon="ti-check">
+          <h3>Interests</h3>
 
 
-    </FormWizard>
+        </FormWizard.TabContent>
+
+        <FormWizard.TabContent title="Feedback" icon="ti-check">
+          <h3>Feedback</h3>
+
+
+        </FormWizard.TabContent>
+
+
+      </FormWizard>
 
 
     </main >

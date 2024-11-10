@@ -7,7 +7,6 @@ interface BrandTagProps {
 const BrandTag = ({ brandname, key }: BrandTagProps) => {
 
     
-
     return (
         <div key={key}>
             {brandname} <span onClick={ }>X</span>
