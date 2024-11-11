@@ -1,5 +1,4 @@
 .main {
-    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -21,13 +20,18 @@
 
 .button {
     border: 1px solid var(--secondary-color);
-    border-radius: 0.5rem;
     background-color: var(--secondary-color);
+    border-radius: 0.5rem;
     padding: 0.5rem;
+    cursor: pointer;
 }
 
 .button:hover {
     background-color: var(--primary-color);
+}
+
+.button:hover * {
+    color: var(--secondary-color);
 }
 
 .a {
@@ -43,10 +47,6 @@
     border-radius: 0.5rem;
     margin: 0.5rem;
 
-}
-
-#prospectionA {
-    background-color: rebeccapurple;
 }
 
 ul li .icon {

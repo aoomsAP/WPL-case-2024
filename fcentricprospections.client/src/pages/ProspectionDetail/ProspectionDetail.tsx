@@ -266,7 +266,7 @@ export const ProspectionDetail = () => {
           <h1 className={styles.h1}>
             Prospectie ({new Date(prospectionDetail!.date).toLocaleDateString()})
           </h1>
-          {shopDetail && <ShopDetailCard shop={shopDetail} />}
+          {shopId && !isNaN(+shopId) && <ShopDetailCard shopId={+shopId} />}
 
           <section className={styles.contactVisitCard}>
             <div>

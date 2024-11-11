@@ -1,34 +1,17 @@
 import { useEffect, useState } from 'react';
-import styles from './ShopPage.module.css';
-import { IShopDetail, IProspection } from '../../types'
+import { IProspection } from '../../types'
 import { Link, useParams } from 'react-router-dom';
 import { FaAngleRight } from "react-icons/fa";
 import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCards';
+import styles from './ShopPage.module.css';
 
 export const ShopPage = () => {
   const { shopId } = useParams<{ shopId: string }>(); // Ensure correct types for TypeScript
 
-  const [shopData, setShopData] = useState<IShopDetail | undefined>(undefined);
   const [shopProspections, setShopProspections] = useState<IProspection[]>([]);
 
-  const loadShopDetail = async (id: string) => {
-
+  const loadShopProspections = async (id: string) => {
     try {
-      // load list of Shops
-      const response = await fetch(`/api/shops/${id}`, {
-        method: 'GET',  // Specify the method if it's not 'GET' by default
-        headers: {
-          'Content-Type': 'application/json',  // Define the expected content type                   
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch shop data');
-      }
-
-      const json: IShopDetail = await response.json();
-      setShopData(json);
-
       // load list of Shop Prospections
       const responseProspection = await fetch(`/api/shops/${id}/prospections`, {
         method: 'GET',  // Specify the method if it's not 'GET' by default
@@ -51,31 +34,36 @@ export const ShopPage = () => {
 
   useEffect(() => {
     if (shopId)
-      loadShopDetail(shopId);
+      loadShopProspections(shopId);
   }, [shopId])
 
   return (
     <>
       <main className={styles.main}>
-        <section>
 
-          {shopData && <ShopDetailCard shop={shopData} />}
-
-        </section>
+        {shopId && !isNaN(+shopId) && <ShopDetailCard shopId={+shopId} />}
 
         <section className={styles.prospectionSection}>
           <button className={styles.button}>
-            <Link className={styles.a} to={`/shop/${shopId}/prospections/new`}>Nieuwe Prospectie</Link>
+            <Link className={styles.a} to={`/shop/${shopId}/prospections/new`}>
+              Nieuwe Prospectie
+            </Link>
           </button>
           <ul>
-            {shopProspections.sort((a, b) => (Number(b.date))-(Number(a.date))).slice(0, 3) // TODO: FIX
+            {shopProspections
+              // sort on date in descending order
+              .sort((a, b) => (new Date(b.date).getTime()) - (new Date(a.date).getTime()))
+              // get three latest prospections
+              .slice(0, 3)
               .map(prospection => (<li className={styles.li} key={prospection.id}>
                 <Link className={styles.prospectionA} to={`/shop/${shopId}/prospections/${prospection.id}`}>
                   Prospectie {new Date(prospection.date).toLocaleDateString()}<FaAngleRight className={styles.icon} />
                 </Link></li>))}
           </ul>
           <button className={styles.button}>
-            <Link className={styles.a} to={`/shop/${shopId}/prospections`}>Overzicht van alle Prospecties</Link>
+            <Link className={styles.a} to={`/shop/${shopId}/prospections`}>
+              Overzicht van alle Prospecties
+            </Link>
           </button>
         </section>
 

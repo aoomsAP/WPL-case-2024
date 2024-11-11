@@ -1,17 +1,42 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { IShopDetail } from '../../types';
 import styles from './ShopDetailCard.module.css';
 
 interface ShopDetailCardProps {
-  shop: IShopDetail;
+  shopId: number;
 }
 
-export const ShopDetailCard: React.FC<ShopDetailCardProps> = ({ shop }) => (
-  <section className={styles.shopDetailCard}>
-    <div>
-      <p>Winkel: {shop.name}</p>
-      <p>Klant: {shop.customer}</p>
-      <p>Adres: {shop.address.street1}</p>
-    </div>
-  </section>
-);
+export const ShopDetailCard = ({ shopId }: ShopDetailCardProps) => {
+
+  const [shop, setShop] = useState<IShopDetail | undefined>();
+
+  async function loadShop() {
+    try {
+      const response = await fetch(`/api/shops/${shopId}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      const json: IShopDetail | undefined = await response.json();
+      setShop(json);
+
+    } catch (error) {
+      console.error('Error fetching shops data:', error);
+    }
+  }
+
+  useEffect(() => {
+    loadShop();
+  }, []);
+
+  return (
+    <section className={styles.shopDetailCard}>
+      {shop &&
+        <div>
+          <p>Winkel: {shop.name}</p>
+          <p>Klant: {shop.customer}</p>
+          <p>Adres: {shop.address.street1}, {shop.address.city}</p>
+        </div>}
+    </section>
+  )
+}

@@ -1,34 +1,15 @@
-﻿:root{
-    --primary-color :  #FFFFFF;
-    --secondary-color : #000000 ;
-}
-
-
-body {
-    margin: 0; 
-    padding: 0;
-    width: 100vw;
-    background-color: var(--primary-color);
-    display: flex;
-    flex-direction: column;
-    color: var(--secondary-color);
-    box-sizing: border-box; 
-    justify-content: center;
-}
-
-.header {
+﻿.header {
     display: flex;
     justify-content: flex-start;
-    padding-left: 0.5rem;
-    padding-top: 0.2rem;
+    padding: 0.5rem;
     background-color: var(--primary-color);
-    width: 100vw; 
-    height: 10vh;
+    width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
 }
 
 .main {
-    height: 80vh;
-    width: 100vw;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -36,9 +17,9 @@ body {
 }
 
 .footer {
-    height: 10vh;
-    width: 100vw;
+    width: 100%;
     background-color: var(--primary-color);
+    height: auto;
 }
 
 .inputField {
@@ -48,7 +29,7 @@ body {
     font-size: 1rem;
     border: 0.0625rem solid #ccc;
     border-radius: 0.25rem;
-    margin-top:2rem; ;
+    margin-top: 2rem;
 }
 
 .prospectionform {
@@ -56,22 +37,30 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    
 }
-.button{
+
+.button {
     background-color: var(--primary-color);
     border: 1px solid black;
     border-radius: 0.5rem;
     width: 3rem;
     height: 2.5rem;
 }
-.button:hover{
+
+.button:hover {
     background-color: var(--secondary-color);
+    cursor: pointer;
 }
-.home{
+
+.button:hover * {
+    color: var(--primary-color);
+}
+
+.homeIcon {
     color: var(--secondary-color);
     font-size: x-large;
 }
-.home:hover{
+
+.homeIcon:hover {
     color: var(--primary-color);
 }

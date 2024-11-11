@@ -1,5 +1,6 @@
 import { useContext } from "react";
-import { ProspectionDataContext } from "../contexts/ProspectionDataContext";
+import { ProspectionDataContext } from "../../contexts/ProspectionDataContext";
+import styles from "./BrandTag.module.css";
 
 interface BrandTagProps {
     brandId: number;
@@ -32,7 +33,7 @@ const BrandTag = ({ brandId, brandName, type }: BrandTagProps) => {
 
     return (
         <div key={brandId}>
-            {brandName} <span onClick={handleClick}>X</span>
+            {brandName} <span className={styles.close} onClick={handleClick}>X</span>
         </div>
     );
 }
