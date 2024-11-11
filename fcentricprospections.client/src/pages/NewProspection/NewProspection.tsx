@@ -308,7 +308,7 @@ export const NewProspection = () => {
 
         <FormWizard.TabContent title="Interesses" icon={<AiOutlineCheck />}>
 
-          <h3>Interesse FX70 merken</h3>
+          <h3>Interesse FC70 merken</h3>
 
           <input
             type="text"
