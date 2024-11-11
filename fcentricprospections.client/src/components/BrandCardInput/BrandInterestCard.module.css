@@ -1,0 +1,17 @@
+.brand_fieldset {
+    position: relative;
+    background-color: #f9f9f9;
+}
+
+.brand_legend {
+    font-weight: bold;
+    padding: 0 .5rem;
+}
+
+.close {
+    position: absolute;
+    top: 0;
+    right: 1rem;
+    padding: .2rem .6rem;
+    cursor: pointer;
+}

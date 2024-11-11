@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { IProspectionBrand } from "../types";
-import { ProspectionDataContext } from "../contexts/ProspectionDataContext";
+import { IProspectionBrand } from "../../types";
+import { ProspectionDataContext } from "../../contexts/ProspectionDataContext";
+import styles from "./BrandInterestCard.module.css"
 
 interface BrandInterestCardProps {
     brand: IProspectionBrand
@@ -11,6 +12,14 @@ const BrandInterestCard = ({ brand }: BrandInterestCardProps) => {
     const { prospectionBrandInterests, setProspectionBrandInterests } = useContext(ProspectionDataContext);
 
     const [sales, setSales] = useState<string>("");
+
+    // "X" deletes the current brand from the state array
+    function handleClick() {
+        // Filter out the current brand
+        const filteredProspectionBrandInterests = prospectionBrandInterests.filter(b => b.brandId !== brand.brandId);
+        // Set new filtered array
+        setProspectionBrandInterests(filteredProspectionBrandInterests);
+    }
 
     useEffect(() => {
         const newProspectionBrandInterest = {
@@ -30,11 +39,12 @@ const BrandInterestCard = ({ brand }: BrandInterestCardProps) => {
     }, [sales])
 
     return (
-        <div key={brand.brandId}>
-            <h4>{brand.brandName}</h4>
-            <legend>Sales:</legend>
+        <fieldset className={styles.brand_fieldset} key={brand.brandId}>
+            <button className={styles.close} onClick={handleClick}>X</button>
+            <legend className={styles.brand_legend}>{brand.brandName}</legend>
+            <label>Sales:</label>
             <input type="text" value={sales} onChange={(e) => setSales(e.target.value)} />
-        </div>
+        </fieldset>
     )
 }
 

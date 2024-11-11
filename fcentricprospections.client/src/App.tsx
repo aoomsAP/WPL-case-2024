@@ -1,19 +1,34 @@
-import { createBrowserRouter, Link, Outlet, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Link, Outlet, RouterProvider, useLocation, useNavigate } from 'react-router-dom';
 import { Homepage } from './pages/Home/homepage';
 import { ShopListProvider } from './contexts/ShopListContext';
 import { NewProspection } from './pages/NewProspection/NewProspection';
 import { ProspectionOverview } from './pages/ProspectionOverview/ProspectionOverview'
 import { ProspectionDetail } from './pages/ProspectionDetail/ProspectionDetail';
-import { AiFillHome } from "react-icons/ai";
+import { AiFillHome, AiOutlineArrowLeft } from "react-icons/ai";
 import { ProspectionDataProvider } from './contexts/ProspectionDataContext';
 import styles from './App.module.css'
 import { ShopPage } from './pages/ShopPage/ShopPage';
 
 const Root = () => {
+
+    const location = useLocation();
+    const navigate = useNavigate();
+
     return (
         <>
             <header className={styles.header}>
-                <Link to={"/"}><button className={styles.button}>{<AiFillHome className={styles.home} />}</button></Link>
+                <Link to={"/"}>
+                    <button className={styles.button}>
+                        {<AiFillHome className={styles.homeIcon} />}
+                    </button>
+                </Link>
+
+                {/* If location isn't "Home", show "Back" button */}
+                {location.pathname !== "/" &&
+                    <button title="Back" className={styles.button} onClick={() => navigate(-1)}>
+                        {<AiOutlineArrowLeft className={styles.homeIcon} />}
+                    </button>
+                }
             </header>
 
             <Outlet></Outlet>

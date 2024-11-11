@@ -1,75 +1,108 @@
+/* ROOT/BODY ----------------------------------------------- */
+
+/* color variables */
+:root {
+  --primary-color: #FFFFFF;
+  --secondary-color: #000000;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.react-form-wizard.sm .wizard-icon-circle{
+body {
+  margin: 0;
+  padding: 0;
+  color: var(--secondary-color);
+  background-color: var(--primary-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#root {
+  max-width: 750px;
+  width: 100%;
+}
+
+/* STANDARD STYLING */
+
+main {
+  padding: 1rem;
+}
+
+button a {
+  display: block;
+}
+
+input[type="text"], input[type="number"] {
+  height: 2.5rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 0.0625rem solid #ccc;
+  border-radius: 0.25rem;
+}
+
+input[type="text"], textarea {
+  width: 100%;
+}
+
+fieldset {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+
+/* FORM WIZARD ----------------------------------------------- */
+
+.react-form-wizard {
+  width: 100%;
+}
+
+/* remove upon styling differently */
+.react-form-wizard .wizard-header {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.react-form-wizard .wizard-title {
+  font-weight: bold;
+}
+
+.react-form-wizard .wizard-tab-content {
+  text-align: left;
+}
+
+.form-wizard-steps {
+  overflow: hidden;
+}
+
+.react-form-wizard.sm .wizard-icon-circle {
+  padding: .7rem;
   height: 1rem;
   width: 1rem;
   font-size: small;
+  margin-top: .7rem;
 }
 
-.stepTitle{
+.react-form-wizard .stepTitle {
   font-size: small;
 }
-
-/*
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}*/

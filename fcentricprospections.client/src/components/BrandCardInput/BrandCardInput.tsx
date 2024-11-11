@@ -1,7 +1,7 @@
-import { ProspectionDataContext } from "../contexts/ProspectionDataContext";
-import { IProspectionBrand } from "../types";
+import { ProspectionDataContext } from "../../contexts/ProspectionDataContext";
+import { IProspectionBrand } from "../../types";
 import { useContext, useEffect, useState } from "react";
-
+import styles from "./BrandCardInput.module.css"
 
 interface BrandCardInputProps {
     brand: IProspectionBrand
@@ -35,15 +35,18 @@ const BrandCardInput = ({ brand }: BrandCardInputProps) => {
     }, [sellout, sales, commercial])
 
     return (
-        <div key={brand.brandId}>
-            <h4>{brand.brandName}</h4>
-            <legend>Sellout (%)</legend>
-            <input type="number" max={100} value={sellout} onChange={(e) => setSellout(+e.target.value)} />
-            <legend>Verantwoordelijke sales</legend>
+        <fieldset className={styles.brand_fieldset} key={brand.brandId}>
+            <legend className={styles.brand_legend}>{brand.brandName}</legend>
+
+            <label>Sellout (%)</label><br />
+            <input type="number" max={100} value={sellout} onChange={(e) => setSellout(+e.target.value)} /><br />
+
+            <label>Verantwoordelijke sales</label><br />
             <input type="text" value={sales} onChange={(e) => setSales(e.target.value)} />
-            <legend>Commercial support</legend>
+
+            <label>Commercial support</label><br />
             <input type="text" value={commercial} onChange={(e) => setCommercial(e.target.value)} />
-        </div>
+        </fieldset>
     )
 }
 

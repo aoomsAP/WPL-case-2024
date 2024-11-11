@@ -1,8 +1,8 @@
 import {useState, useEffect } from "react";
 import { IShop } from "../../types";
-import styles from '../../App.module.css'; // Adjust your styles as necessary
-import homeStyles from './homepage.module.css'
 import { Link } from "react-router-dom";
+import styles from '../../App.module.css'
+import homeStyles from './homepage.module.css'
 
 export const Homepage = () => {
     const [searchTerm, setSearchTerm] = useState(""); // State for search input
@@ -38,6 +38,7 @@ export const Homepage = () => {
 
     return (
             <main className={styles.main}>
+                <h1>Selecteer een winkel</h1>
             <input 
                     className={styles.inputField} 
                     type="text" 
