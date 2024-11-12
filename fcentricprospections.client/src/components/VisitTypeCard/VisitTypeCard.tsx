@@ -8,9 +8,9 @@ interface VisitTypeCardProps {
 
 export const VisitTypeCard: React.FC<VisitTypeCardProps> = ({ visitType, visitContext }) => (
   <article className="visittype-card">
-    <h3>Visit type</h3>
+    <h3>Bezoek type</h3>
     <p>{visitType.name}</p>
-    <h3>Visit Context</h3>
+    <h3>Reden van bezoek</h3>
     <p>{visitContext}</p>
   </article >
 );
