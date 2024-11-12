@@ -9,7 +9,7 @@ interface CompetitorBrandListProps {
 
 export const CompetitorBrandList: React.FC<CompetitorBrandListProps> = ({ prospectionCompetitorBrands, brands }) => (
   <section className={styles.competitorBrandList}>
-    <h2>Competitor Brands</h2>
+    <h2>Andere merken</h2>
     <ul>
       {prospectionCompetitorBrands.map((brand, index) => {
         const matchingCompetitorBrand = brands.find(b => b.id === brand.competitorBrandId);

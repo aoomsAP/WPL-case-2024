@@ -84,7 +84,7 @@ export const NewProspection = () => {
       visitContext: visitContext,
       bestBrands: bestBrands,
       worstBrands: worstBrands,
-      brandsOut: bestBrands,
+      brandsOut: brandsOut,
       trends: trends,
       extra: feedback
     }
@@ -152,15 +152,15 @@ export const NewProspection = () => {
             <legend>Contact type</legend>
             <label>
               <input type="radio" name="role" value="1" onChange={(e) => setContactType(+e.target.value)} checked={contactType === 1} />
-              Owner
+              Eigenaar
             </label>
             <label>
               <input type="radio" name="role" value="2" onChange={(e) => setContactType(+e.target.value)} checked={contactType === 2} />
-              Buyer
+              Koper
             </label>
             <label>
               <input type="radio" name="role" value="3" onChange={(e) => setContactType(+e.target.value)} checked={contactType === 3} />
-              Salesperson
+              Verkoper
             </label>
             <label>
               <input type="radio" name="role" value="4" onChange={(e) => setContactType(+e.target.value)} checked={contactType === 4} />
@@ -177,7 +177,7 @@ export const NewProspection = () => {
             <legend>Bezoek type</legend>
             <label>
               <input type="radio" name="visit" value="1" onChange={(e) => setVisitType(+e.target.value)} checked={visitType === 1} />
-              Prospection
+              Prospectie
             </label>
             <label>
               <input type="radio" name="visit" value="2" onChange={(e) => setVisitType(+e.target.value)} checked={visitType === 2} />

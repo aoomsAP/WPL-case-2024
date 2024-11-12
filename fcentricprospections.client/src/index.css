@@ -52,8 +52,8 @@ button a {
   display: block;
 }
 
-input[type="text"], input[type="number"] {
-  height: 2.5rem;
+input[type="text"], input[type="number"], textarea {
+  font-family: inherit;
   padding: 0.5rem;
   font-size: 1rem;
   border: 0.0625rem solid #ccc;

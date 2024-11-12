@@ -286,8 +286,8 @@ export const ProspectionDetail = () => {
 
           <BrandInterestList prospectionBrandInterests={prospectionBrandInterests} brands={brands} />
 
-          <TextSection title="Trends & Noden" text={prospectionDetail?.trends} />
-          <TextSection title="Extra Opmerkingen/Feedback" text={prospectionDetail?.extra} />
+          <TextSection title="Trends en noden in de markt" text={prospectionDetail?.trends} />
+          <TextSection title="Extra Opmerkingen/feedback" text={prospectionDetail?.extra} />
         </>
       }
       {!prospectionDetail && <Oval />}
