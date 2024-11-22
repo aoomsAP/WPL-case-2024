@@ -35,9 +35,13 @@ public partial class CustomerLegalHistory
 
     public string VatNrSearch { get; set; }
 
+    public virtual ICollection<AdvancedPayment> AdvancedPayments { get; set; } = new List<AdvancedPayment>();
+
     public virtual Customer Customer { get; set; }
 
     public virtual CustomerCode CustomerCode { get; set; }
+
+    public virtual ICollection<FashionDocument> FashionDocuments { get; set; } = new List<FashionDocument>();
 
     public virtual Contact LegalContact { get; set; }
 

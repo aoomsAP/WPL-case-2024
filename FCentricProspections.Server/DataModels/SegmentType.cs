@@ -21,5 +21,7 @@ public partial class SegmentType
 
     public virtual ICollection<ProductLine> ProductLines { get; set; } = new List<ProductLine>();
 
+    public virtual ICollection<ShopSegmentType> ShopSegmentTypes { get; set; } = new List<ShopSegmentType>();
+
     public virtual User UserCreated { get; set; }
 }

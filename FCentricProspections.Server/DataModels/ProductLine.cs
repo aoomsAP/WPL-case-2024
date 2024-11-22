@@ -41,11 +41,15 @@ public partial class ProductLine
 
     public virtual Brand Brand { get; set; }
 
+    public virtual ICollection<DedicatedSalesRule> DedicatedSalesRules { get; set; } = new List<DedicatedSalesRule>();
+
     public virtual Gender Gender { get; set; }
 
     public virtual Line Line { get; set; }
 
     public virtual ICollection<ProductLineDelivery> ProductLineDeliveries { get; set; } = new List<ProductLineDelivery>();
+
+    public virtual ICollection<RoadAppointmentProductLine> RoadAppointmentProductLines { get; set; } = new List<RoadAppointmentProductLine>();
 
     public virtual SegmentType SegmentType { get; set; }
 

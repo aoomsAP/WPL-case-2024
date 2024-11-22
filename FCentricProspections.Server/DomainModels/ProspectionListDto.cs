@@ -5,6 +5,6 @@ namespace FCentricProspections.Server.DomainModels
     {
         public long Id { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime VisitDate { get; set; }
     }
 }

@@ -81,7 +81,7 @@ namespace FCentricProspections.Server.Controllers
             foreach (var prospection in this.data.GetProspectionsByShopId(id))
             {
                 // create prospection viewmodel
-                prospections.Add(new ProspectionGetAllViewModel { Id = prospection.Id, Date = prospection.Date, ShopId = id });
+                prospections.Add(new ProspectionGetAllViewModel { Id = prospection.Id, VisitDate = prospection.VisitDate, ShopId = id });
             }
 
             // return list of viewmodel prospections
@@ -103,15 +103,19 @@ namespace FCentricProspections.Server.Controllers
             viewModel.Id = prospection.Id;
             viewModel.ShopId = prospection.ShopId;
             viewModel.UserId = prospection.UserId;
-            viewModel.Date = prospection.Date;
+            viewModel.EmployeeId = prospection.EmployeeId;
+            viewModel.VisitDate = prospection.VisitDate;
             viewModel.DateLastUpdated = prospection.DateLastUpdated;
-            viewModel.ContactPersonTypeId = prospection.ContactPersonTypeId;
-            viewModel.ContactPersonName = prospection.ContactPersonName;
+            viewModel.ContactTypeId = prospection.ContactTypeId;
+            viewModel.ContactName = prospection.ContactName;
+            viewModel.ContactEmail = prospection.ContactEmail;
+            viewModel.ContactPhone = prospection.ContactPhone;
             viewModel.VisitTypeId = prospection.VisitTypeId;
             viewModel.VisitContext = prospection.VisitContext;
+            viewModel.NewBrands = prospection.NewBrands;
             viewModel.BestBrands = prospection.BestBrands;
             viewModel.WorstBrands = prospection.WorstBrands;
-            viewModel.BrandsOut = prospection.BrandsOut;
+            viewModel.TerminatedBrands = prospection.TerminatedBrands;
             viewModel.Trends = prospection.Trends;
             viewModel.Extra = prospection.Extra;
 
@@ -143,8 +147,7 @@ namespace FCentricProspections.Server.Controllers
                     Id = prospectionBrand.Id,
                     BrandId = prospectionBrand.BrandId,
                     Sellout = prospectionBrand.Sellout,
-                    SalesRepresentative = prospectionBrand.SalesRepresentative,
-                    CommercialSupport = prospectionBrand.CommercialSupport,
+                    SelloutRemark = prospectionBrand.SelloutRemark,
                 });
             }
 
@@ -194,14 +197,14 @@ namespace FCentricProspections.Server.Controllers
             var prospectionBrandInterests = new List<ProspectionBrandInterestGetViewModel>();
 
             // get brands from prospection
-            foreach (var prospectionBrandInterest in prospection.BrandsInterest)
+            foreach (var prospectionBrandInterest in prospection.BrandInterests)
             {
                 // create & add prospection-brandinterest viewmodel
                 prospectionBrandInterests.Add(new ProspectionBrandInterestGetViewModel
                 {
                     Id = prospectionBrandInterest.Id,
                     BrandId = prospectionBrandInterest.BrandId,
-                    Sales = prospectionBrandInterest.Sales
+                    Remark = prospectionBrandInterest.Remark
                 });
             }
 
@@ -237,22 +240,27 @@ namespace FCentricProspections.Server.Controllers
                 Shop = this.data.GetShop(viewModel.ShopId),
                 UserId = viewModel.UserId,
                 User = this.data.GetUser(viewModel.UserId),
-                Date = viewModel.Date,
+                // EMPLOYEE
+                VisitDate = viewModel.VisitDate,
                 DateLastUpdated = viewModel.DateLastUpdated,
-                ContactPersonType = this.data.GetContactPersonType(viewModel.ContactPersonTypeId),
-                ContactPersonTypeId = viewModel.ContactPersonTypeId,
-                ContactPersonName = viewModel.ContactPersonName,
+                ContactType = this.data.GetContactPersonType(viewModel.ContactTypeId),
+                ContactTypeId = viewModel.ContactTypeId,
+                ContactName = viewModel.ContactName,
+                ContactEmail = viewModel.ContactEmail,
+                ContactPhone = viewModel.ContactPhone,
                 VisitType = this.data.GetVisitType(viewModel.VisitTypeId),
                 VisitTypeId = viewModel.VisitTypeId,
                 VisitContext = viewModel.VisitContext,
                 Brands = new List<ProspectionBrand>(),
                 CompetitorBrands = new List<ProspectionCompetitorBrand>(),
+                NewBrands = viewModel.NewBrands,
                 BestBrands = viewModel.BestBrands,
                 WorstBrands = viewModel.WorstBrands,
-                BrandsOut = viewModel.BrandsOut,
-                BrandsInterest = new List<ProspectionBrandInterest>(),
+                TerminatedBrands = viewModel.TerminatedBrands,
+                BrandInterests = new List<ProspectionBrandInterest>(),
                 Trends = viewModel.Trends,
                 Extra = viewModel.Extra,
+                // TODOES
             };
 
             // add prospection to database
@@ -267,15 +275,19 @@ namespace FCentricProspections.Server.Controllers
                     Id = newProspection.Id,
                     ShopId = newProspection.ShopId,
                     UserId = newProspection.UserId,
-                    Date = newProspection.Date,
+                    EmployeeId = newProspection.EmployeeId,
+                    VisitDate = newProspection.VisitDate,
                     DateLastUpdated = newProspection.DateLastUpdated,
-                    ContactPersonTypeId = newProspection.ContactPersonTypeId,
-                    ContactPersonName = newProspection.ContactPersonName,
+                    ContactTypeId = newProspection.ContactTypeId,
+                    ContactName = newProspection.ContactName,
+                    ContactEmail = newProspection.ContactEmail,
+                    ContactPhone = newProspection.ContactPhone,
                     VisitTypeId = newProspection.VisitTypeId,
                     VisitContext = newProspection.VisitContext,
+                    NewBrands = newProspection.NewBrands,
                     BestBrands = newProspection.BestBrands,
                     WorstBrands = newProspection.WorstBrands,
-                    BrandsOut = newProspection.BrandsOut,
+                    TerminatedBrands = newProspection.TerminatedBrands,
                     Trends = newProspection.Trends,
                     Extra = newProspection.Extra,
                 });
@@ -312,17 +324,21 @@ namespace FCentricProspections.Server.Controllers
             existingProspection.Shop = this.data.GetShop(viewModel.ShopId);
             existingProspection.UserId = viewModel.UserId;
             existingProspection.User = this.data.GetUser(viewModel.UserId);
-            existingProspection.Date = viewModel.Date;
+            // EMPLOYEE
+            existingProspection.VisitDate = viewModel.VisitDate;
             existingProspection.DateLastUpdated = viewModel.DateLastUpdated;
-            existingProspection.ContactPersonType = this.data.GetContactPersonType(viewModel.ContactPersonTypeId);
-            existingProspection.ContactPersonTypeId = viewModel.ContactPersonTypeId;
-            existingProspection.ContactPersonName = viewModel.ContactPersonName;
+            existingProspection.ContactType = this.data.GetContactPersonType(viewModel.ContactTypeId);
+            existingProspection.ContactTypeId = viewModel.ContactTypeId;
+            existingProspection.ContactName = viewModel.ContactName;
+            existingProspection.ContactEmail = viewModel.ContactEmail;
+            existingProspection.ContactPhone = viewModel.ContactPhone;
             existingProspection.VisitType = this.data.GetVisitType(viewModel.VisitTypeId);
             existingProspection.VisitTypeId = viewModel.VisitTypeId;
             existingProspection.VisitContext = viewModel.VisitContext;
+            existingProspection.NewBrands = viewModel.NewBrands;
             existingProspection.BestBrands = viewModel.BestBrands;
             existingProspection.WorstBrands = viewModel.WorstBrands;
-            existingProspection.BrandsOut = viewModel.BrandsOut;
+            existingProspection.TerminatedBrands = viewModel.TerminatedBrands;
             existingProspection.Trends = viewModel.Trends;
             existingProspection.Extra = viewModel.Extra;
 
@@ -369,8 +385,7 @@ namespace FCentricProspections.Server.Controllers
                     Brand = brand,
                     Prospection = existingProspection,
                     Sellout = b.Sellout,
-                    CommercialSupport = b.CommercialSupport,
-                    SalesRepresentative = b.SalesRepresentative,
+                    SelloutRemark = b.SelloutRemark,
                 };
 
                 // add relationship to list of relationships
@@ -469,7 +484,7 @@ namespace FCentricProspections.Server.Controllers
                     Brand = brand,
                     ProspectionId = id,
                     Prospection = existingProspection,
-                    Sales = brandInterest.Sales,
+                    Remark = brandInterest.Remark,
                 };
 
                 // add relationship to list of relationships
@@ -477,7 +492,7 @@ namespace FCentricProspections.Server.Controllers
             }
 
             // update BrandsInterest relationships list on the prospection
-            existingProspection.BrandsInterest = updatedProspectionBrandInterests;
+            existingProspection.BrandInterests = updatedProspectionBrandInterests;
 
             // update prospection in database
             this.data.UpdateProspectionBrandInterest(existingProspection);

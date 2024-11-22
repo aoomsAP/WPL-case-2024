@@ -31,15 +31,51 @@ public partial class ProductLineDelivery
 
     public long? ProductLineDeliveryRelatedId { get; set; }
 
+    public virtual ICollection<AgentProductLineDelivery> AgentProductLineDeliveries { get; set; } = new List<AgentProductLineDelivery>();
+
+    public virtual ICollection<AppointmentSalesResponsible> AppointmentSalesResponsibles { get; set; } = new List<AppointmentSalesResponsible>();
+
+    public virtual ICollection<CollectionDelivery> CollectionDeliveries { get; set; } = new List<CollectionDelivery>();
+
+    public virtual ICollection<DedicatedSalesRule> DedicatedSalesRules { get; set; } = new List<DedicatedSalesRule>();
+
+    public virtual ICollection<DelayedDeliveryProposedRule> DelayedDeliveryProposedRules { get; set; } = new List<DelayedDeliveryProposedRule>();
+
+    public virtual ICollection<DelayedDeliveryRuleProductLineDelivery> DelayedDeliveryRuleProductLineDeliveries { get; set; } = new List<DelayedDeliveryRuleProductLineDelivery>();
+
+    public virtual ICollection<DelayedDeliveryRule> DelayedDeliveryRules { get; set; } = new List<DelayedDeliveryRule>();
+
+    public virtual ICollection<DeliveryRemarksRuleProductLineDelivery> DeliveryRemarksRuleProductLineDeliveries { get; set; } = new List<DeliveryRemarksRuleProductLineDelivery>();
+
+    public virtual ICollection<DiscountCampaignLine> DiscountCampaignLines { get; set; } = new List<DiscountCampaignLine>();
+
+    public virtual ICollection<DiscountRuleRule> DiscountRuleRules { get; set; } = new List<DiscountRuleRule>();
+
+    public virtual ICollection<FashionProduct> FashionProducts { get; set; } = new List<FashionProduct>();
+
+    public virtual ICollection<FinancialSupervisionByFcRuleProductLineDelivery> FinancialSupervisionByFcRuleProductLineDeliveries { get; set; } = new List<FinancialSupervisionByFcRuleProductLineDelivery>();
+
+    public virtual ICollection<FreeTextOnInvoiceRuleProductLineDelivery> FreeTextOnInvoiceRuleProductLineDeliveries { get; set; } = new List<FreeTextOnInvoiceRuleProductLineDelivery>();
+
+    public virtual ICollection<IntraMirrorProductLineDelivery> IntraMirrorProductLineDeliveries { get; set; } = new List<IntraMirrorProductLineDelivery>();
+
     public virtual ICollection<ProductLineDelivery> InverseProductLineDeliveryRelated { get; set; } = new List<ProductLineDelivery>();
+
+    public virtual ICollection<NoDeliveryRule> NoDeliveryRules { get; set; } = new List<NoDeliveryRule>();
 
     public virtual ProductLine ProductLine { get; set; }
 
     public virtual ProductLineDelivery ProductLineDeliveryRelated { get; set; }
 
+    public virtual ICollection<SalesCondition> SalesConditions { get; set; } = new List<SalesCondition>();
+
     public virtual SalesPeriodType SalesPeriodType { get; set; }
 
     public virtual ICollection<ShopDelivery> ShopDeliveries { get; set; } = new List<ShopDelivery>();
+
+    public virtual ICollection<SupplierMarkup> SupplierMarkups { get; set; } = new List<SupplierMarkup>();
+
+    public virtual ICollection<TimeframeDifferenceRule> TimeframeDifferenceRules { get; set; } = new List<TimeframeDifferenceRule>();
 
     public virtual User UserCreated { get; set; }
 }

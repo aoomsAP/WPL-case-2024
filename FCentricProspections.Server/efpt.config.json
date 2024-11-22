@@ -1,0 +1,1435 @@
+﻿{
+   "CodeGenerationMode": 3,
+   "ContextClassName": "FCentricContext",
+   "ContextNamespace": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "FCentricProspections.Server",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[__MigrationHistory]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AccountingCodes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AccountingSessionDocuments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AccountingSessions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AccountingSessionTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ActionLists]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Actions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Addresses]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AdvancedPayments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AdvancedPaymentStates]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AgeCategories]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AgentContacts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AgentProductLineDeliveries]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AgentRegions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Agents]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AppointmentCAResponsibles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AppointmentContacts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AppointmentDepartmentResponsibles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Appointments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AppointmentSalesResponsibles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AppointmentStates]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Apps]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AppVersions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AvailabilityDays]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[AvailabilityTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Barcodes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BI_EmployeeDailyBarcodeResult]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BI_EmployeeDailyGeneralResult]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BI_EmployeeDailyGroupResult]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BI_EmployeeDailyGroupSeasonResult]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BI_ShopDailySeasonalBrandResult]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BleckmannImportedFiles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BleckmannSkuSyncs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BleckmannTransportStates]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BlockedByFdiReasons]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[BlockedTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Brands]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Cities]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CityPriceRegions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CollectionDeliveries]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CollectionDeliveryCategories]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CollectionDeliveryLocations]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CollectionDeliveryTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CollectionDeliveryWarehouses]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CollectionSaleInvitationSendRanges]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CollectionSaleSignUps]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CollectionSalesInvitations]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CollectionSalesInvitationTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Colors]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CommercialLocations]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Companies]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CompetitorBrands]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ConfigurationSettings]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ContactChannelDescriptions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ContactChannelInterests]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ContactChannelInterestTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ContactChannelOptIns]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ContactChannels]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ContactChannelTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Contacts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ContactTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ContractStates]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Countries]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Currencies]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerBlockedRules]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerCodes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerContacts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerGuarantees]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerInvitations]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerLegalHistories]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerLoyalties]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerOptIns]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerReportConfigurations]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerRules]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Customers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerShops]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerTypeFeatures]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerWifiCodes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerWpsStatus]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DataQueryLogs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DedicatedSalesRules]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DelayedDeliveryProposedRules]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DelayedDeliveryProposedRuleShops]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DelayedDeliveryRuleProductLineDeliveries]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DelayedDeliveryRules]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DelayedDeliveryRuleShops]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DelayedDeliveryRuleSuppliers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DeliveryLocationTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DeliveryMethods]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DeliveryRemarksRule]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DeliveryRemarksRuleProductLineDeliveries]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DeliveryRemarksRuleShops]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DeliveryWindows]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Departments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DiscountCampaignLineDetails]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DiscountCampaignLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DiscountCampaigns]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DiscountRuleRules]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DiscountRuleSuppliers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentBleckmannTransportStates]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentDeliveryStates]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentFlows]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentImportConfigurationMappings]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentImportConfigurations]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentImportMetaDetails]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentImportMetaErrors]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentImportMetas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentImportMetaStatus]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentImportMetaWarnings]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentLineDetails]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentPayments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentPaymentTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentRelations]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentRules]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Documents]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentSnapshots]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentStates]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentTransfers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[DocumentTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EdiMessages]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EliBudgets]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EliOrderDates]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EmailTemplatePlaceholders]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EmailTemplates]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EmployeeDepartments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Employees]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EmployeeSeasonalCosts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[EnemyRules]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExpenseOpiPrintRequests]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Expenses]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExpenseTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalDataImportBatches]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalDataImportBatchLogs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalDataImportBatchSchedules]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalDataImportBatchStatus]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalDataImportTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalPos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalPosAccountingCodeMaps]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalPosJournalEntries]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalPosJournalEntryTypeMaps]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalPosJournalEntryTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalPosJournalExpenses]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalPosJournalInvoices]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalPosJournals]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalPosJournalVouchers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalPosUsers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalSalesPlatformFashionProductColors]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalSalesPlatforms]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalSalesPlatformStockSyncLogs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ExternalSalesPlatformUsers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FashionBarcodes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FashionDocumentPictures]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FashionDocuments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FashionDocumentShops]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FashionProductColors]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FashionProductPictures]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FashionProducts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FashionProductSizePacks]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FashionProductSizeRegions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FashionProductSizes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FashionReturnDocuments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FdiExportSessionDocuments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FdiExportSessions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Features]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FileImportLogErrors]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FileImportLogErrorTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FileImportLogs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FileImportLogTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FinancialSupervisionByFcRule]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FinancialSupervisionByFcRuleProductLineDeliveries]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FinancialSupervisionByFcRuleShops]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FreeTextOnInvoiceRule]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FreeTextOnInvoiceRuleProductLineDeliveries]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[FreeTextOnInvoiceRuleShops]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Genders]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[GridConfigurationGroups]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[GridConfigurations]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Histories]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[IntraMirrorConfigs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[IntraMirrorProductLineDeliveries]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Invitations]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[InvitationTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[InvoiceCompares]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[KlaviyoCollectionSaleCustomerSyncs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[KlaviyoDocumentSyncs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[KlaviyoRetailDocumentSyncs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[KlaviyoShopSyncs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LabelPrinters]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LabelPrintJobItems]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LabelPrintJobs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Languages]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LegalForms]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Lines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LiuJoBudgets]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LiuJoConfirmationDetails]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LiuJoProducts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LiuJoShoes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LiuJoShopCodes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[LoyaltyTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MailLogs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ManualDocumentTransfers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MiscDocumentLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MobileDeviceLogins]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ModificationTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[NoDeliveryRules]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[NoDeliveryRuleSuppliers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[NosCoTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OptInSources]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OptInTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PaymentConditions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Permissions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Pictures]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Pos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PosAccountingCodeMaps]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PosAccountingCodes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PosAccountingCodeTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PosAccountingSessionEntries]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PosAccountingSessions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PosAccounts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PosDiscountReasons]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PosDocumentLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PosEJournals]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PosOptIns]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PosPinPadLogs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PosPinPadMessages]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PosSessions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PosTicketCancellationReasons]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PrivacyGdprLogs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductAlias]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductCategories]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductCategoryAlias]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductDeliveryWindows]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductGroups]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductLineDeliveries]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductMatrices]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Products]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProposedRules]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Provinces]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PublicationCountries]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Publications]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PublicHolidays]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[RatingTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[RecomaticsInvoiceCollectionDeliveries]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[RecomaticsInvoiceFileImportLogs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[RecomaticsInvoices]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[RecurringAppointments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Regions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ReportContexts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ReportDefinitions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ReportShares]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ReturnApprovedStates]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ReturnDestinations]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ReturnReasons]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ReturnRules]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ReturnStateActions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ReturnStates]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ReturnSupplierActions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ReturnTrackings]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[RoadAppointmentProductLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[RoadAppointments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Roles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Rules]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SalesConditionDiscountExcludedProducts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SalesConditionDiscounts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SalesConditionEmployees]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SalesConditionGroups]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SalesConditionPeriods]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SalesConditionPlannings]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SalesConditions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SalesConditionShowrooms]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SalesConditionTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SalesPeriodCurrencyCourses]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SalesPeriods]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SalesPeriodTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SampleDestinations]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SegmentTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopAgeCategories]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopAvailabilities]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopCommercialLocations]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopCompetitorBrands]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopCompetitorProductLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopContacts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopDeliveries]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopDeliveryOrigins]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopDeliveryStates]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopDeliveryTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopGenders]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopifyFashionProductColors]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopifyProcessedOrders]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopLines]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopPictures]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Shops]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopSegmentTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopSupplierCodes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShopVisits]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShowroomAppointments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShowroomAppointmentSalesConditionReasons]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShowroomAppointmentSalesConditionResponses]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShowroomAppointmentSalesConditions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShowroomAppointmentSalesConditionSellOuts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShowroomAppointmentSalesConditionShopActions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShowroomAppointmentSalesConditionShops]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShowroomAppointmentSalesConditionSignings]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ShowroomAppointmentSalesConditionUnsignedReasons]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Showrooms]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SizePackQuantities]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SizePacks]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Sizes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SizeScales]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SizeTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Spancos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[StockLocations]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[subselect]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[subselect2]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SupplierContacts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SupplierMarkups]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Suppliers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SupplierSalesConditions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SupplierVats]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SuspendedDeliveryRule]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Targets]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TimeframeDifferenceRules]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ToDoes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ToDoStatus]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TrackLists]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TransportTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[UpfrontPayments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[UserRoles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Users]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Vats]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VatTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VoucherBarcodes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VoucherOverruleReasons]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Vouchers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[VoucherTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Weathers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[WebPlatformClientContacts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[WebPlatformClients]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[WebPlatformContacts]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[WebPlatformDomains]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[WebUsers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[WifiCodes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[WpsPrePayments]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[WpsTokens]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false,
+   "UseT4Split": false
+}

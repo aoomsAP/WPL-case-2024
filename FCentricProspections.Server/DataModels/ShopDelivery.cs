@@ -73,5 +73,9 @@ public partial class ShopDelivery
 
     public virtual ShopDeliveryType ShopDeliveryType { get; set; }
 
+    public virtual Showroom Showroom { get; set; }
+
+    public virtual StockLocation StockLocation { get; set; }
+
     public virtual User UserCreated { get; set; }
 }

@@ -21,6 +21,8 @@ public partial class CustomerType
 
     public bool HasToOptIn { get; set; }
 
+    public virtual ICollection<CustomerTypeFeature> CustomerTypeFeatures { get; set; } = new List<CustomerTypeFeature>();
+
     public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
 
     public virtual User UserCreated { get; set; }

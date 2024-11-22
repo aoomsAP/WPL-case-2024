@@ -103,21 +103,57 @@ public partial class Customer
 
     public bool IgnoreInReporting { get; set; }
 
+    public virtual AccountingCode AccountingCode { get; set; }
+
+    public virtual Agent Agent { get; set; }
+
+    public virtual ICollection<AppointmentDepartmentResponsible> AppointmentDepartmentResponsibles { get; set; } = new List<AppointmentDepartmentResponsible>();
+
     public virtual City BankCity { get; set; }
 
     public virtual BlockedType BlockedType { get; set; }
 
     public virtual Currency Currency { get; set; }
 
+    public virtual ICollection<CustomerContact> CustomerContacts { get; set; } = new List<CustomerContact>();
+
+    public virtual ICollection<CustomerGuarantee> CustomerGuarantees { get; set; } = new List<CustomerGuarantee>();
+
+    public virtual ICollection<CustomerInvitation> CustomerInvitations { get; set; } = new List<CustomerInvitation>();
+
     public virtual ICollection<CustomerLegalHistory> CustomerLegalHistories { get; set; } = new List<CustomerLegalHistory>();
+
+    public virtual CustomerLoyalty CustomerLoyalty { get; set; }
+
+    public virtual ICollection<CustomerRule> CustomerRules { get; set; } = new List<CustomerRule>();
 
     public virtual ICollection<CustomerShop> CustomerShops { get; set; } = new List<CustomerShop>();
 
     public virtual CustomerType CustomerType { get; set; }
 
+    public virtual ICollection<CustomerWifiCode> CustomerWifiCodes { get; set; } = new List<CustomerWifiCode>();
+
+    public virtual ICollection<CustomerWpsStatus> CustomerWpsStatuses { get; set; } = new List<CustomerWpsStatus>();
+
+    public virtual DeliveryLocationType DeliveryLocationType { get; set; }
+
+    public virtual DeliveryMethod DeliveryMethod { get; set; }
+
+    public virtual ICollection<EdiMessage> EdiMessages { get; set; } = new List<EdiMessage>();
+
+    public virtual ICollection<EnemyRule> EnemyRules { get; set; } = new List<EnemyRule>();
+
     public virtual Gender Gender { get; set; }
 
     public virtual Employee KeyAccountManager { get; set; }
 
+    public virtual ICollection<KlaviyoCollectionSaleCustomerSync> KlaviyoCollectionSaleCustomerSyncs { get; set; } = new List<KlaviyoCollectionSaleCustomerSync>();
+
+    public virtual PaymentCondition PaymentCondition { get; set; }
+
+    public virtual UpfrontPayment UpfrontPayment { get; set; }
+
     public virtual User UserCreated { get; set; }
+
+    public virtual VatType VatType { get; set; }
 }

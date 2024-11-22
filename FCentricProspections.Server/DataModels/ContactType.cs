@@ -21,7 +21,13 @@ public partial class ContactType
 
     public byte[] Timestamp { get; set; }
 
+    public virtual ICollection<AgentContact> AgentContacts { get; set; } = new List<AgentContact>();
+
+    public virtual ICollection<CustomerContact> CustomerContacts { get; set; } = new List<CustomerContact>();
+
     public virtual ICollection<ShopContact> ShopContacts { get; set; } = new List<ShopContact>();
+
+    public virtual ICollection<SupplierContact> SupplierContacts { get; set; } = new List<SupplierContact>();
 
     public virtual User UserCreated { get; set; }
 }

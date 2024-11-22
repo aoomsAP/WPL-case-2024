@@ -17,6 +17,8 @@ public partial class BlockedType
 
     public byte[] Timestamp { get; set; }
 
+    public virtual ICollection<CustomerBlockedRule> CustomerBlockedRules { get; set; } = new List<CustomerBlockedRule>();
+
     public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
 
     public virtual User UserCreated { get; set; }

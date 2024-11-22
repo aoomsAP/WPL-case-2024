@@ -47,9 +47,77 @@ public partial class SalesPeriod
 
     public bool ShopifySales { get; set; }
 
+    public virtual ICollection<AgentProductLineDelivery> AgentProductLineDeliveries { get; set; } = new List<AgentProductLineDelivery>();
+
+    public virtual ICollection<AppointmentCaresponsible> AppointmentCaresponsibles { get; set; } = new List<AppointmentCaresponsible>();
+
+    public virtual ICollection<AppointmentDepartmentResponsible> AppointmentDepartmentResponsibles { get; set; } = new List<AppointmentDepartmentResponsible>();
+
+    public virtual ICollection<AppointmentSalesResponsible> AppointmentSalesResponsibles { get; set; } = new List<AppointmentSalesResponsible>();
+
+    public virtual ICollection<BiEmployeeDailyGroupSeasonResult> BiEmployeeDailyGroupSeasonResults { get; set; } = new List<BiEmployeeDailyGroupSeasonResult>();
+
+    public virtual ICollection<BiShopDailySeasonalBrandResult> BiShopDailySeasonalBrandResults { get; set; } = new List<BiShopDailySeasonalBrandResult>();
+
+    public virtual ICollection<CollectionDelivery> CollectionDeliveries { get; set; } = new List<CollectionDelivery>();
+
+    public virtual ICollection<CustomerGuarantee> CustomerGuarantees { get; set; } = new List<CustomerGuarantee>();
+
+    public virtual ICollection<DedicatedSalesRule> DedicatedSalesRules { get; set; } = new List<DedicatedSalesRule>();
+
+    public virtual ICollection<DelayedDeliveryProposedRule> DelayedDeliveryProposedRules { get; set; } = new List<DelayedDeliveryProposedRule>();
+
+    public virtual ICollection<DelayedDeliveryRule> DelayedDeliveryRules { get; set; } = new List<DelayedDeliveryRule>();
+
+    public virtual ICollection<DeliveryRemarksRule> DeliveryRemarksRules { get; set; } = new List<DeliveryRemarksRule>();
+
+    public virtual ICollection<DiscountCampaignLine> DiscountCampaignLines { get; set; } = new List<DiscountCampaignLine>();
+
+    public virtual ICollection<DiscountRuleRule> DiscountRuleRules { get; set; } = new List<DiscountRuleRule>();
+
+    public virtual ICollection<DocumentImportMeta> DocumentImportMeta { get; set; } = new List<DocumentImportMeta>();
+
+    public virtual ICollection<EmployeeSeasonalCost> EmployeeSeasonalCosts { get; set; } = new List<EmployeeSeasonalCost>();
+
+    public virtual ICollection<FashionDocument> FashionDocuments { get; set; } = new List<FashionDocument>();
+
+    public virtual ICollection<FashionProduct> FashionProductOriginalSalesPeriods { get; set; } = new List<FashionProduct>();
+
+    public virtual ICollection<FashionProduct> FashionProductSalesPeriods { get; set; } = new List<FashionProduct>();
+
+    public virtual ICollection<FashionProductSizeRegion> FashionProductSizeRegions { get; set; } = new List<FashionProductSizeRegion>();
+
+    public virtual ICollection<FinancialSupervisionByFcRule> FinancialSupervisionByFcRules { get; set; } = new List<FinancialSupervisionByFcRule>();
+
+    public virtual ICollection<FreeTextOnInvoiceRule> FreeTextOnInvoiceRules { get; set; } = new List<FreeTextOnInvoiceRule>();
+
+    public virtual ICollection<IntraMirrorProductLineDelivery> IntraMirrorProductLineDeliveries { get; set; } = new List<IntraMirrorProductLineDelivery>();
+
+    public virtual ICollection<InvoiceCompare> InvoiceCompares { get; set; } = new List<InvoiceCompare>();
+
+    public virtual ICollection<NoDeliveryRule> NoDeliveryRules { get; set; } = new List<NoDeliveryRule>();
+
+    public virtual ICollection<RecomaticsInvoice> RecomaticsInvoices { get; set; } = new List<RecomaticsInvoice>();
+
+    public virtual ICollection<ReturnRule> ReturnRules { get; set; } = new List<ReturnRule>();
+
+    public virtual ICollection<RoadAppointmentProductLine> RoadAppointmentProductLines { get; set; } = new List<RoadAppointmentProductLine>();
+
+    public virtual ICollection<SalesCondition> SalesConditionProductSalesPeriods { get; set; } = new List<SalesCondition>();
+
+    public virtual ICollection<SalesCondition> SalesConditionSampleSalesPeriods { get; set; } = new List<SalesCondition>();
+
+    public virtual ICollection<SalesCondition> SalesConditionShowroomSalesPeriods { get; set; } = new List<SalesCondition>();
+
+    public virtual ICollection<SalesPeriodCurrencyCourse> SalesPeriodCurrencyCourses { get; set; } = new List<SalesPeriodCurrencyCourse>();
+
     public virtual SalesPeriodType SalesPeriodType { get; set; }
 
     public virtual ICollection<ShopDelivery> ShopDeliveries { get; set; } = new List<ShopDelivery>();
+
+    public virtual ICollection<SizePack> SizePacks { get; set; } = new List<SizePack>();
+
+    public virtual ICollection<SupplierMarkup> SupplierMarkups { get; set; } = new List<SupplierMarkup>();
 
     public virtual User UserCreated { get; set; }
 }

@@ -21,7 +21,15 @@ public partial class Region
 
     public bool IsSalesPeriodPriceRegion { get; set; }
 
+    public virtual ICollection<AgentRegion> AgentRegions { get; set; } = new List<AgentRegion>();
+
     public virtual ICollection<City> Cities { get; set; } = new List<City>();
+
+    public virtual ICollection<CityPriceRegion> CityPriceRegions { get; set; } = new List<CityPriceRegion>();
+
+    public virtual ICollection<FashionProductSizeRegion> FashionProductSizeRegions { get; set; } = new List<FashionProductSizeRegion>();
+
+    public virtual ICollection<SupplierMarkup> SupplierMarkups { get; set; } = new List<SupplierMarkup>();
 
     public virtual User UserCreated { get; set; }
 }

@@ -27,8 +27,8 @@ namespace FCentricProspections
             });
 
             // Database connection
-            var connection = "server=localhost; database=FCentricSmall; Trusted_Connection=true; Encrypt=Yes; TrustServerCertificate=Yes;";
-            services.AddDbContext<FCentricSmallContext>(options => options.UseSqlServer(connection));
+            var connection = "server=localhost; database=FCentric; Trusted_Connection=true; Encrypt=Yes; TrustServerCertificate=Yes;";
+            services.AddDbContext<FCentricContext>(options => options.UseSqlServer(connection));
         }
 
         // The below method gets called by runtime

@@ -8,7 +8,5 @@ public partial class ProspectionBrandInterestDto
 
     public long BrandId { get; set; }
 
-    public string? Sales { get; set; }
-
-    
+    public string? Remark { get; set; }
 }

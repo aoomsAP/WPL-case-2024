@@ -2,7 +2,6 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FCentricProspections.Server.DataModels;
 
@@ -36,10 +35,55 @@ public partial class Employee
 
     public string MobileNumber { get; set; }
 
+    public virtual Agent Agent { get; set; }
+
+    public virtual ICollection<AppointmentCaresponsible> AppointmentCaresponsibles { get; set; } = new List<AppointmentCaresponsible>();
+
+    public virtual ICollection<AppointmentSalesResponsible> AppointmentSalesResponsibles { get; set; } = new List<AppointmentSalesResponsible>();
+
+    public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+
+    public virtual ICollection<BiEmployeeDailyBarcodeResult> BiEmployeeDailyBarcodeResults { get; set; } = new List<BiEmployeeDailyBarcodeResult>();
+
+    public virtual ICollection<BiEmployeeDailyGeneralResult> BiEmployeeDailyGeneralResults { get; set; } = new List<BiEmployeeDailyGeneralResult>();
+
+    public virtual ICollection<BiEmployeeDailyGroupResult> BiEmployeeDailyGroupResults { get; set; } = new List<BiEmployeeDailyGroupResult>();
+
+    public virtual ICollection<BiEmployeeDailyGroupSeasonResult> BiEmployeeDailyGroupSeasonResults { get; set; } = new List<BiEmployeeDailyGroupSeasonResult>();
+
+    public virtual ICollection<CollectionDelivery> CollectionDeliveryEmployees { get; set; } = new List<CollectionDelivery>();
+
+    public virtual ICollection<CollectionDelivery> CollectionDeliverySalesEmployees { get; set; } = new List<CollectionDelivery>();
+
     public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
 
-    [NotMapped]
+    public virtual ICollection<DedicatedSalesRule> DedicatedSalesRules { get; set; } = new List<DedicatedSalesRule>();
+
+    public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
+
+    public virtual ICollection<EmployeeSeasonalCost> EmployeeSeasonalCosts { get; set; } = new List<EmployeeSeasonalCost>();
+
+    public virtual ICollection<PosDocumentLine> PosDocumentLines { get; set; } = new List<PosDocumentLine>();
+
+    public virtual ICollection<PosSession> PosSessionEmployeeCloseds { get; set; } = new List<PosSession>();
+
+    public virtual ICollection<PosSession> PosSessionEmployees { get; set; } = new List<PosSession>();
+
+    public virtual RecurringAppointment RecurringAppointment { get; set; }
+
+    public virtual ICollection<SalesCondition> SalesConditionCaresponsibles { get; set; } = new List<SalesCondition>();
+
+    public virtual ICollection<SalesCondition> SalesConditionCustomerServiceResponsibles { get; set; } = new List<SalesCondition>();
+
+    public virtual ICollection<SalesConditionEmployee> SalesConditionEmployees { get; set; } = new List<SalesConditionEmployee>();
+
+    public virtual ICollection<Supplier> Suppliers { get; set; } = new List<Supplier>();
+
+    public virtual ICollection<ToDo> ToDos { get; set; } = new List<ToDo>();
+
     public virtual User User { get; set; }
 
     public virtual User UserCreated { get; set; }
+
+    public virtual ICollection<Department> Departments { get; set; } = new List<Department>();
 }

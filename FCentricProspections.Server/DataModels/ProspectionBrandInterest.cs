@@ -16,6 +16,6 @@ namespace FCentricProspections.Server.DataModels
 
         public Brand Brand { get; set; }
 
-        public string? Sales { get; set; }
+        public string? Remark { get; set; }
     }
 }

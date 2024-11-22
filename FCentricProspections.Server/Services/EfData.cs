@@ -8,9 +8,9 @@ namespace FCentricProspections.Server.Services
 {
     public class EfData : IData
     {
-        private FCentricSmallContext context;
+        private Contexts.FCentricContext context;
 
-        public EfData(FCentricSmallContext context)
+        public EfData(Contexts.FCentricContext context)
         {
             this.context = context;
         }
@@ -75,7 +75,7 @@ namespace FCentricProspections.Server.Services
                     .Select(s => new ProspectionListDto
                     {
                         Id = s.Id,
-                        Date = s.Date,
+                        VisitDate = s.VisitDate,
                     }).ToList();
 
             return prospectionsList;
@@ -88,7 +88,7 @@ namespace FCentricProspections.Server.Services
                     .Select(s => new ProspectionListDto
                     {
                         Id = s.Id,
-                        Date = s.Date,
+                        VisitDate = s.VisitDate,
                     })
                     .ToList();
 
@@ -102,7 +102,9 @@ namespace FCentricProspections.Server.Services
 
             var prospectionDetail = (from p in this.context.Prospections
                                      join shop in this.context.Shops on p.ShopId equals shop.Id
-                                     join contact in this.context.ProspectionContactTypes on p.ContactPersonTypeId equals contact.Id
+                                     join user in this.context.Users on p.UserId equals user.Id
+                                     join employee in this.context.Employees on p.EmployeeId equals employee.Id
+                                     join contact in this.context.ProspectionContactTypes on p.ContactTypeId equals contact.Id
                                      join visit in this.context.ProspectionVisitTypes on p.VisitTypeId equals visit.Id
                                      where p.Id == prospectionId
                                      select new ProspectionDetailDto
@@ -111,17 +113,24 @@ namespace FCentricProspections.Server.Services
                                          ShopId = p.ShopId,
                                          Shop = new ShopListDto { Id = p.ShopId, Name = shop.Name },
                                          UserId = p.UserId,
-                                         Date = p.Date,
+                                         User = new User { Id = p.ShopId, Login = user.Login, Blocked = user.Blocked },
+                                         EmployeeId = p.EmployeeId,
+                                         Employee = new Employee { Id = p.EmployeeId, Name = employee.Name, FirstName = employee.FirstName, UserId = employee.UserId },
+                                         VisitDate = p.VisitDate,
+                                         DateCreated = p.DateCreated,
                                          DateLastUpdated = p.DateLastUpdated,
-                                         ContactPersonTypeId = p.ContactPersonTypeId,
-                                         ContactPersonType = new ProspectionContactType { Id = p.ContactPersonTypeId, Name = contact.Name },
-                                         ContactPersonName = p.ContactPersonName,
+                                         ContactTypeId = p.ContactTypeId,
+                                         ContactType = new ProspectionContactType { Id = p.ContactTypeId, Name = contact.Name },
+                                         ContactName = p.ContactName,
+                                         ContactEmail = p.ContactEmail,
+                                         ContactPhone = p.ContactPhone,
                                          VisitTypeId = p.VisitTypeId,
                                          VisitType = new ProspectionVisitType { Id = p.VisitTypeId, Name = visit.Name },
                                          VisitContext = p.VisitContext,
+                                         NewBrands = p.NewBrands,
                                          BestBrands = p.BestBrands,
                                          WorstBrands = p.WorstBrands,
-                                         BrandsOut = p.BrandsOut,
+                                         TerminatedBrands = p.TerminatedBrands,
                                          Trends = p.Trends,
                                          Extra = p.Extra,
                                      }).SingleOrDefault();
@@ -134,11 +143,13 @@ namespace FCentricProspections.Server.Services
             return this.context.Prospections
                  .Include(p => p.Shop)
                  .Include(p => p.User)
-                 .Include(p => p.ContactPersonType)
+                 .Include(p => p.Employee)
+                 .Include(p => p.ContactType)
                  .Include(p => p.VisitType)
                  .Include(p => p.Brands)
                  .Include(p => p.CompetitorBrands)
-                 .Include(p => p.BrandsInterest)
+                 .Include(p => p.BrandInterests)
+                 .Include(p => p.ToDoes)
                  .FirstOrDefault(x => x.Id == id);
         }
 
@@ -152,8 +163,7 @@ namespace FCentricProspections.Server.Services
                     ProspectionId = p.Id,
                     BrandId = p.BrandId,
                     Sellout = p.Sellout,
-                    SalesRepresentative = p.SalesRepresentative,
-                    CommercialSupport = p.CommercialSupport
+                    SelloutRemark = p.SelloutRemark,
                 }).ToList();
         }
 
@@ -165,7 +175,7 @@ namespace FCentricProspections.Server.Services
                     Id = p.Id,
                     ProspectionId = p.ProspectionId,
                     BrandId = p.BrandId,
-                    Sales = p.Sales
+                    Remark = p.Remark
                 }).ToList();
         }
         public IEnumerable<ProspectionCompetitorBrandDto> GetProspectionCompetitorBrands(long prospectionId)
@@ -194,15 +204,20 @@ namespace FCentricProspections.Server.Services
             var toUpdate = GetProspectionDetail(prospection.Id);
             toUpdate.ShopId = prospection.ShopId;
             toUpdate.UserId = prospection.UserId;
-            toUpdate.Date = prospection.Date;
+            toUpdate.EmployeeId = prospection.EmployeeId;
+            toUpdate.VisitDate = prospection.VisitDate;
+            toUpdate.DateCreated = prospection.DateCreated;
             toUpdate.DateLastUpdated = prospection.DateLastUpdated;
-            toUpdate.ContactPersonTypeId = prospection.ContactPersonTypeId;
-            toUpdate.ContactPersonName = prospection.ContactPersonName;
+            toUpdate.ContactTypeId = prospection.ContactTypeId;
+            toUpdate.ContactName = prospection.ContactName;
+            toUpdate.ContactEmail = prospection.ContactEmail;
+            toUpdate.ContactPhone = prospection.ContactPhone;
             toUpdate.VisitTypeId = prospection.VisitTypeId;
             toUpdate.VisitContext = prospection.VisitContext;
+            toUpdate.NewBrands = prospection.NewBrands;
             toUpdate.BestBrands = prospection.BestBrands;
             toUpdate.WorstBrands = prospection.WorstBrands;
-            toUpdate.BrandsOut = prospection.BrandsOut;
+            toUpdate.TerminatedBrands = prospection.TerminatedBrands;
             toUpdate.Trends = prospection.Trends;
             toUpdate.Extra = prospection.Extra;
             this.context.SaveChanges();
@@ -227,7 +242,7 @@ namespace FCentricProspections.Server.Services
         public void UpdateProspectionBrandInterest(Prospection prospection)
         {
             var updateProspection = GetProspection(prospection.Id);
-            updateProspection.BrandsInterest = prospection.BrandsInterest;
+            updateProspection.BrandInterests = prospection.BrandInterests;
             this.context.SaveChanges();
         }
 

@@ -25,5 +25,9 @@ public partial class Language
 
     public virtual ICollection<Contact> Contacts { get; set; } = new List<Contact>();
 
+    public virtual ICollection<SupplierSalesCondition> SupplierSalesConditions { get; set; } = new List<SupplierSalesCondition>();
+
+    public virtual ICollection<Supplier> Suppliers { get; set; } = new List<Supplier>();
+
     public virtual User UserCreated { get; set; }
 }

@@ -19,5 +19,7 @@ public partial class AgeCategory
 
     public virtual ICollection<ProductLine> ProductLines { get; set; } = new List<ProductLine>();
 
+    public virtual ICollection<ShopAgeCategory> ShopAgeCategories { get; set; } = new List<ShopAgeCategory>();
+
     public virtual User UserCreated { get; set; }
 }

@@ -31,5 +31,11 @@ public partial class PaymentCondition
 
     public virtual ICollection<Country> Countries { get; set; } = new List<Country>();
 
+    public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
+
+    public virtual ICollection<FashionDocument> FashionDocuments { get; set; } = new List<FashionDocument>();
+
+    public virtual ICollection<FinancialSupervisionByFcRule> FinancialSupervisionByFcRules { get; set; } = new List<FinancialSupervisionByFcRule>();
+
     public virtual User UserCreated { get; set; }
 }

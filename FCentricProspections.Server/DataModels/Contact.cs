@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FCentricProspections.Server.DataModels;
 
@@ -37,7 +38,25 @@ public partial class Contact
 
     public virtual Address Address { get; set; }
 
+    public virtual ICollection<AgentContact> AgentContacts { get; set; } = new List<AgentContact>();
+
+    public virtual ICollection<Agent> Agents { get; set; } = new List<Agent>();
+
+    public virtual ICollection<AppointmentContact> AppointmentContacts { get; set; } = new List<AppointmentContact>();
+
+    public virtual ICollection<ContactChannel> ContactChannels { get; set; } = new List<ContactChannel>();
+
+    public virtual ICollection<CustomerContact> CustomerContacts { get; set; } = new List<CustomerContact>();
+
     public virtual ICollection<CustomerLegalHistory> CustomerLegalHistories { get; set; } = new List<CustomerLegalHistory>();
+
+    [NotMapped]
+    public virtual ICollection<Document> DocumentContacts { get; set; } = new List<Document>();
+
+    [NotMapped]
+    public virtual ICollection<Document> DocumentWebUserCreateds { get; set; } = new List<Document>();
+
+    public virtual ICollection<FashionDocument> FashionDocuments { get; set; } = new List<FashionDocument>();
 
     public virtual Language Language { get; set; }
 
@@ -45,5 +64,13 @@ public partial class Contact
 
     public virtual ICollection<Shop> Shops { get; set; } = new List<Shop>();
 
+    public virtual ICollection<Showroom> Showrooms { get; set; } = new List<Showroom>();
+
+    public virtual ICollection<StockLocation> StockLocations { get; set; } = new List<StockLocation>();
+
+    public virtual ICollection<SupplierContact> SupplierContacts { get; set; } = new List<SupplierContact>();
+
     public virtual User UserCreated { get; set; }
+
+    public virtual WebUser WebUser { get; set; }
 }

@@ -27,5 +27,9 @@ public partial class Currency
 
     public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
 
+    public virtual ICollection<SalesPeriodCurrencyCourse> SalesPeriodCurrencyCourses { get; set; } = new List<SalesPeriodCurrencyCourse>();
+
+    public virtual ICollection<Supplier> Suppliers { get; set; } = new List<Supplier>();
+
     public virtual User UserCreated { get; set; }
 }

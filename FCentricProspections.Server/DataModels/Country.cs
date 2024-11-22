@@ -33,7 +33,13 @@ public partial class Country
 
     public virtual ICollection<Province> Provinces { get; set; } = new List<Province>();
 
+    public virtual ICollection<PublicHoliday> PublicHolidays { get; set; } = new List<PublicHoliday>();
+
+    public virtual ICollection<PublicationCountry> PublicationCountries { get; set; } = new List<PublicationCountry>();
+
     public virtual ICollection<ShopDelivery> ShopDeliveries { get; set; } = new List<ShopDelivery>();
+
+    public virtual ICollection<SupplierVat> SupplierVats { get; set; } = new List<SupplierVat>();
 
     public virtual User UserCreated { get; set; }
 

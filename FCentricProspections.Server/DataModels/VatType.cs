@@ -23,5 +23,11 @@ public partial class VatType
 
     public virtual ICollection<Country> Countries { get; set; } = new List<Country>();
 
+    public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
+
+    public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
+
     public virtual User UserCreated { get; set; }
+
+    public virtual ICollection<Vat> Vats { get; set; } = new List<Vat>();
 }

@@ -25,11 +25,17 @@ public partial class Brand
 
     public double? DeliveryFeePercentage { get; set; }
 
+    public virtual ICollection<BiShopDailySeasonalBrandResult> BiShopDailySeasonalBrandResults { get; set; } = new List<BiShopDailySeasonalBrandResult>();
+
+    public virtual ICollection<CollectionDelivery> CollectionDeliveries { get; set; } = new List<CollectionDelivery>();
+
+    public virtual ICollection<DiscountCampaignLine> DiscountCampaignLines { get; set; } = new List<DiscountCampaignLine>();
+
+    public virtual ICollection<IntraMirrorProductLineDelivery> IntraMirrorProductLineDeliveries { get; set; } = new List<IntraMirrorProductLineDelivery>();
+
     public virtual ICollection<ProductLine> ProductLines { get; set; } = new List<ProductLine>();
 
+    public virtual ICollection<ReturnRule> ReturnRules { get; set; } = new List<ReturnRule>();
+
     public virtual User UserCreated { get; set; }
-
-    public virtual ICollection<ProspectionBrand> ProspectionBrands { get; set; }
-
-    public virtual ICollection<ProspectionBrandInterest> ProspectionBrandInterests { get; set; }
 }

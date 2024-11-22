@@ -16,10 +16,8 @@ namespace FCentricProspections.Server.DataModels
 
         public Brand Brand { get; set; }
 
-        public int? Sellout { get; set; } // int because it's a percentage? string because it should be free text?
+        public int? Sellout { get; set; }
 
-        public string? SalesRepresentative { get; set; }
-
-        public string? CommercialSupport { get; set; }
+        public string? SelloutRemark { get; set; }
     }
 }
