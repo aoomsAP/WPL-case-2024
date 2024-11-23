@@ -61,6 +61,6 @@ namespace FCentricProspections.Server.DataModels
 
         public string? Extra { get; set; }
 
-        public ICollection<ToDo> ToDoes { get; set; }
+        public ICollection<ProspectionToDo> ProspectionToDos { get; set; }
     }
 }

@@ -17,7 +17,5 @@ public partial class CompetitorBrand // Referentiemerken
 
     public byte[] Timestamp { get; set; }
 
-    public virtual ICollection<ShopCompetitorBrand> ShopCompetitorBrands { get; set; } = new List<ShopCompetitorBrand>();
-
     public virtual User UserCreated { get; set; }
 }

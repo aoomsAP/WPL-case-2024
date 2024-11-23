@@ -29,11 +29,7 @@ public partial class Address
 
     public virtual City City { get; set; }
 
-    public virtual ICollection<Company> Companies { get; set; } = new List<Company>();
-
     public virtual ICollection<Contact> Contacts { get; set; } = new List<Contact>();
-
-    public virtual ICollection<Supplier> Suppliers { get; set; } = new List<Supplier>();
 
     public virtual User UserCreated { get; set; }
 }
