@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from 'react';
 import { IBrand, ICompetitorBrand, IContactType, IProspectionDetail, IProspectionBrand, IProspectionBrandInterest, IProspectionCompetitorBrand, IVisitType } from '../types';
 
-export interface ProspectionDataContext {
+export interface NewProspectionContext {
     // data states
     brands: IBrand[];
     setBrands: (brands: IBrand[]) => void;
@@ -34,7 +34,7 @@ export interface ProspectionDataContext {
     updateProspectionBrandInterests: (prospectionId: number, prospectionBrandInterests: IProspectionBrandInterest[]) => Promise<void>;
 }
 
-export const ProspectionDataContext = createContext<ProspectionDataContext>({
+export const NewProspectionContext = createContext<NewProspectionContext>({
     // data states
     brands: [],
     setBrands: () => { },
@@ -67,7 +67,7 @@ export const ProspectionDataContext = createContext<ProspectionDataContext>({
     updateProspectionBrandInterests: () => Promise.resolve(),
 });
 
-export function ProspectionDataProvider({ children }: { children: React.ReactNode }) {
+export function NewProspectionProvider({ children }: { children: React.ReactNode }) {
 
     // states  ---------------------------------------------------------------------------------------------
 
@@ -237,7 +237,7 @@ export function ProspectionDataProvider({ children }: { children: React.ReactNod
     }, []);
 
     return (
-        <ProspectionDataContext.Provider value={{
+        <NewProspectionContext.Provider value={{
             // data states
             brands: brands,
             setBrands: setBrands,
@@ -270,6 +270,6 @@ export function ProspectionDataProvider({ children }: { children: React.ReactNod
             updateProspectionBrandInterests: updateProspectionBrandInterests,
         }}>
             {children}
-        </ProspectionDataContext.Provider>
+        </NewProspectionContext.Provider>
     );
 }

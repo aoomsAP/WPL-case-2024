@@ -15,8 +15,6 @@ public partial class FCentricContext : DbContext
     {
     }
 
-    // potentially more tables should be included
-
     public virtual DbSet<Address> Addresses { get; set; }
 
     public virtual DbSet<Appointment> Appointments { get; set; }
