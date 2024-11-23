@@ -1,43 +1,30 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import styles from './ProspectionOverview.module.css'
-import { IProspection } from "../../types";
 import { ShopDetailCard } from "../../components/ShopDetailCard/ShopDetailCards";
 import { FaAngleRight } from "react-icons/fa";
+import { ShopDetailContext } from "../../contexts/ShopDetailContext";
 
 export const ProspectionOverview = () => {
 
     const { shopId } = useParams<{ shopId: string }>();
 
-    const [prospections, setProspections] = useState<IProspection[]>([]);
-
-    async function loadProspections() {
-        try {
-            const response = await fetch(`/api/shops/${shopId}/prospections`, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-            });
-
-            const json: IProspection[] = await response.json();
-            setProspections(json);
-
-        } catch (error) {
-            console.error('Error fetching shops data:', error);
-        }
-    }
+    const { setShopId, shopProspections } = useContext(ShopDetailContext);
 
     useEffect(() => {
-        loadProspections();
-    }, []);
+        if (shopId) {
+          setShopId(shopId);
+        }
+      }, [])
 
     return (
         <main className={styles.main}>
-          {shopId && !isNaN(+shopId) && <ShopDetailCard shopId={+shopId} />}
+            {shopId && !isNaN(+shopId) && <ShopDetailCard shopId={+shopId} />}
 
             <h2>Voorgaande prospecties</h2>
 
             <section className={styles.section}>
-                {prospections
+                {shopProspections
                     // sort on date in descending order
                     .sort((a, b) => (new Date(b.date).getTime()) - (new Date(a.date).getTime()))
                     // get three latest prospections

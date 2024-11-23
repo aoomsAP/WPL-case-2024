@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { IProspectionBrand } from "../../types";
-import { ProspectionDataContext } from "../../contexts/ProspectionDataContext";
+import { NewProspectionContext } from "../../contexts/NewProspectionContext";
 import styles from "./BrandInterestCard.module.css"
 
 interface BrandInterestCardProps {
@@ -9,7 +9,7 @@ interface BrandInterestCardProps {
 
 const BrandInterestCard = ({ brand }: BrandInterestCardProps) => {
 
-    const { prospectionBrandInterests, setProspectionBrandInterests } = useContext(ProspectionDataContext);
+    const { prospectionBrandInterests, setProspectionBrandInterests } = useContext(NewProspectionContext);
 
     const [sales, setSales] = useState<string>("");
 

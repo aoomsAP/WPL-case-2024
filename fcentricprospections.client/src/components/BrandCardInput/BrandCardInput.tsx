@@ -1,4 +1,4 @@
-import { ProspectionDataContext } from "../../contexts/ProspectionDataContext";
+import { NewProspectionContext } from "../../contexts/NewProspectionContext";
 import { IProspectionBrand } from "../../types";
 import { useContext, useEffect, useState } from "react";
 import styles from "./BrandCardInput.module.css"
@@ -9,7 +9,7 @@ interface BrandCardInputProps {
 
 const BrandCardInput = ({ brand }: BrandCardInputProps) => {
 
-    const { prospectionBrands, setProspectionBrands } = useContext(ProspectionDataContext);
+    const { prospectionBrands, setProspectionBrands } = useContext(NewProspectionContext);
 
     const [sellout, setSellout] = useState<number | undefined>(undefined);
     const [sales, setSales] = useState<string>("");

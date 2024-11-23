@@ -4,7 +4,7 @@ import "react-form-wizard-component/dist/style.css";
 import { useContext, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import BrandTag from '../../components/BrandTag/BrandTag';
-import { ProspectionDataContext } from '../../contexts/ProspectionDataContext';
+import { NewProspectionContext } from '../../contexts/NewProspectionContext';
 import { IProspectionDetail } from '../../types';
 import BrandCardInput from '../../components/BrandCardInput/BrandCardInput';
 import BrandInterestCard from '../../components/BrandCardInput/BrandInterestCard';
@@ -15,8 +15,20 @@ export const NewProspection = () => {
 
   const { shopId } = useParams<{ shopId: string }>();
 
-  const { brands, competitorBrands, prospectionBrands, setProspectionBrands, prospectionCompetitorBrands, setProspectionCompetitorBrands, prospectionBrandInterests, setProspectionBrandInterests,
-    addProspection, updateProspectionBrands, updateProspectionCompetitorBrands, updateProspectionBrandInterests } = useContext(ProspectionDataContext);
+  const { 
+    brands, 
+    competitorBrands, 
+    prospectionBrands, 
+    setProspectionBrands, 
+    prospectionCompetitorBrands, 
+    setProspectionCompetitorBrands, 
+    prospectionBrandInterests, 
+    setProspectionBrandInterests,
+    addProspection, 
+    updateProspectionBrands, 
+    updateProspectionCompetitorBrands, 
+    updateProspectionBrandInterests
+   } = useContext(NewProspectionContext);
 
   const navigate = useNavigate();
 
@@ -70,8 +82,7 @@ export const NewProspection = () => {
     return brand.name.toLowerCase().includes(brandInterestSearch.toLowerCase());
   });
 
-
-  // IF FORM WIARD SUPPORTS ASYNC FUNCTIONS
+  // Submit function
   async function handleComplete() {
 
     const newProspection: IProspectionDetail = {
@@ -117,6 +128,7 @@ export const NewProspection = () => {
     }
   };
 
+  // TO DO: this function currently does nothing except log things. Delete?
   const tabChanged = ({
     prevIndex,
     nextIndex,
@@ -140,7 +152,6 @@ export const NewProspection = () => {
         stepSize="sm"
         onTabChange={tabChanged}
         onComplete={handleComplete}>
-
 
         <FormWizard.TabContent title="Info" icon={<AiOutlineCheck />} >
 

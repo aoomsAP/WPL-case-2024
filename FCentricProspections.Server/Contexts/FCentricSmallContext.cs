@@ -14,8 +14,6 @@ public partial class FCentricSmallContext : DbContext
     {
     }
 
-    // potentially more tables should be included
-
     public virtual DbSet<Address> Addresses { get; set; }
 
     public virtual DbSet<Brand> Brands { get; set; }
@@ -73,6 +71,7 @@ public partial class FCentricSmallContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_dbo.Prospections_dbo.Shops_ShopId");
         });
+
 
         // to implement ?
 

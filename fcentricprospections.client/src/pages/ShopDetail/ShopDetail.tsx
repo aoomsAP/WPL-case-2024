@@ -1,41 +1,20 @@
-import { useEffect, useState } from 'react';
-import { IProspection } from '../../types'
+import { useContext, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { FaAngleRight } from "react-icons/fa";
 import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCards';
-import styles from './ShopPage.module.css';
+import styles from './ShopDetail.module.css';
+import { ShopDetailContext } from '../../contexts/ShopDetailContext';
 
-export const ShopPage = () => {
-  const { shopId } = useParams<{ shopId: string }>(); // Ensure correct types for TypeScript
+export const ShopDetail = () => {
+  const { shopId } = useParams<{ shopId: string }>();
 
-  const [shopProspections, setShopProspections] = useState<IProspection[]>([]);
-
-  const loadShopProspections = async (id: string) => {
-    try {
-      // load list of Shop Prospections
-      const responseProspection = await fetch(`/api/shops/${id}/prospections`, {
-        method: 'GET',  // Specify the method if it's not 'GET' by default
-        headers: {
-          'Content-Type': 'application/json',  // Define the expected content type                   
-        },
-      })
-
-      if (!responseProspection.ok) {
-        throw new Error('Failed to fetch prospections data')
-      }
-
-      const json2: IProspection[] = await responseProspection.json();
-      setShopProspections(json2)
-
-    } catch (error) {
-      console.error('Error fetching prospections data:', error);
-    }
-  }
+  const { setShopId, shopProspections, shopDetail } = useContext(ShopDetailContext);
 
   useEffect(() => {
-    if (shopId)
-      loadShopProspections(shopId);
-  }, [shopId])
+    if (shopId) {
+      setShopId(shopId);
+    }
+  }, [])
 
   return (
     <>
@@ -44,11 +23,13 @@ export const ShopPage = () => {
         {shopId && !isNaN(+shopId) && <ShopDetailCard shopId={+shopId} />}
 
         <section className={styles.prospectionSection}>
+
           <button className={styles.button}>
             <Link className={styles.a} to={`/shop/${shopId}/prospections/new`}>
               Nieuwe Prospectie
             </Link>
           </button>
+
           <ul>
             {shopProspections
               // sort on date in descending order
@@ -60,11 +41,13 @@ export const ShopPage = () => {
                   Prospectie {new Date(prospection.date).toLocaleDateString()}<FaAngleRight className={styles.icon} />
                 </Link></li>))}
           </ul>
+
           <button className={styles.button}>
             <Link className={styles.a} to={`/shop/${shopId}/prospections`}>
               Overzicht van alle Prospecties
             </Link>
           </button>
+          
         </section>
 
       </main>

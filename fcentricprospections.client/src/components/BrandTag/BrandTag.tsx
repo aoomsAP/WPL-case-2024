@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ProspectionDataContext } from "../../contexts/ProspectionDataContext";
+import { NewProspectionContext } from "../../contexts/NewProspectionContext";
 import styles from "./BrandTag.module.css";
 
 interface BrandTagProps {
@@ -10,7 +10,7 @@ interface BrandTagProps {
 
 const BrandTag = ({ brandId, brandName, type }: BrandTagProps) => {
 
-    const { prospectionBrands, setProspectionBrands, prospectionCompetitorBrands, setProspectionCompetitorBrands } = useContext(ProspectionDataContext);
+    const { prospectionBrands, setProspectionBrands, prospectionCompetitorBrands, setProspectionCompetitorBrands } = useContext(NewProspectionContext);
 
     // "X" deletes the current brand from the state array
     function handleClick() {
