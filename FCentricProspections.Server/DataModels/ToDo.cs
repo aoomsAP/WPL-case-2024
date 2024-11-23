@@ -28,4 +28,6 @@ public partial class ToDo
     public virtual ToDoStatus ToDoStatus { get; set; }
 
     public virtual User UserCreated { get; set; }
+
+    public ICollection<ProspectionToDo> ProspectionToDos { get; set; }
 }

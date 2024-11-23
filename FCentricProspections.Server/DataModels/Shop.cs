@@ -37,69 +37,13 @@ public partial class Shop
 
     public bool IsParallelSales { get; set; }
 
-    public virtual ICollection<AppointmentSalesResponsible> AppointmentSalesResponsibles { get; set; } = new List<AppointmentSalesResponsible>();
-
     public virtual Contact Contact { get; set; }
 
     public virtual ICollection<CustomerShop> CustomerShops { get; set; } = new List<CustomerShop>();
 
-    public virtual ICollection<DelayedDeliveryProposedRuleShop> DelayedDeliveryProposedRuleShops { get; set; } = new List<DelayedDeliveryProposedRuleShop>();
-
-    public virtual ICollection<DelayedDeliveryRuleShop> DelayedDeliveryRuleShops { get; set; } = new List<DelayedDeliveryRuleShop>();
-
-    public virtual ICollection<DeliveryRemarksRuleShop> DeliveryRemarksRuleShops { get; set; } = new List<DeliveryRemarksRuleShop>();
-
-    public virtual ICollection<DiscountCampaignLine> DiscountCampaignLines { get; set; } = new List<DiscountCampaignLine>();
-
-    public virtual ICollection<FashionDocument> FashionDocumentDestinationShops { get; set; } = new List<FashionDocument>();
-
-    public virtual ICollection<FashionDocumentShop> FashionDocumentShops { get; set; } = new List<FashionDocumentShop>();
-
-    public virtual ICollection<FashionDocument> FashionDocumentSourceShops { get; set; } = new List<FashionDocument>();
-
-    public virtual ICollection<FinancialSupervisionByFcRuleShop> FinancialSupervisionByFcRuleShops { get; set; } = new List<FinancialSupervisionByFcRuleShop>();
-
-    public virtual ICollection<FreeTextOnInvoiceRuleShop> FreeTextOnInvoiceRuleShops { get; set; } = new List<FreeTextOnInvoiceRuleShop>();
-
-    public virtual ICollection<KlaviyoShopSync> KlaviyoShopSyncs { get; set; } = new List<KlaviyoShopSync>();
-
-    public virtual ICollection<Po> Pos { get; set; } = new List<Po>();
-
     public virtual ICollection<Prospection> Prospections { get; set; } = new List<Prospection>();
 
-    public virtual ICollection<RoadAppointment> RoadAppointments { get; set; } = new List<RoadAppointment>();
-
-    public virtual ICollection<ShopAgeCategory> ShopAgeCategories { get; set; } = new List<ShopAgeCategory>();
-
-    public virtual ICollection<ShopAvailability> ShopAvailabilities { get; set; } = new List<ShopAvailability>();
-
-    public virtual ICollection<ShopCommercialLocation> ShopCommercialLocations { get; set; } = new List<ShopCommercialLocation>();
-
-    public virtual ICollection<ShopCompetitorBrand> ShopCompetitorBrands { get; set; } = new List<ShopCompetitorBrand>();
-
-    public virtual ICollection<ShopCompetitorProductLine> ShopCompetitorProductLines { get; set; } = new List<ShopCompetitorProductLine>();
-
-    public virtual ICollection<ShopContact> ShopContacts { get; set; } = new List<ShopContact>();
-
     public virtual ICollection<ShopDelivery> ShopDeliveries { get; set; } = new List<ShopDelivery>();
-
-    public virtual ICollection<ShopGender> ShopGenders { get; set; } = new List<ShopGender>();
-
-    public virtual ICollection<ShopLine> ShopLines { get; set; } = new List<ShopLine>();
-
-    public virtual ICollection<ShopPicture> ShopPictures { get; set; } = new List<ShopPicture>();
-
-    public virtual ICollection<ShopSegmentType> ShopSegmentTypes { get; set; } = new List<ShopSegmentType>();
-
-    public virtual ICollection<ShopSupplierCode> ShopSupplierCodes { get; set; } = new List<ShopSupplierCode>();
-
-    public virtual ShopType ShopType { get; set; }
-
-    public virtual ICollection<ShopVisit> ShopVisits { get; set; } = new List<ShopVisit>();
-
-    public virtual ICollection<ShowroomAppointmentSalesConditionShop> ShowroomAppointmentSalesConditionShops { get; set; } = new List<ShowroomAppointmentSalesConditionShop>();
-
-    public virtual Spanco Spanco { get; set; }
 
     public virtual User UserCreated { get; set; }
 }

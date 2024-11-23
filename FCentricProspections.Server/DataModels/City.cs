@@ -29,17 +29,9 @@ public partial class City
 
     public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
 
-    public virtual ICollection<CityPriceRegion> CityPriceRegions { get; set; } = new List<CityPriceRegion>();
-
     public virtual Country Country { get; set; }
 
     public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
-
-    public virtual Province Province { get; set; }
-
-    public virtual Region Region { get; set; }
-
-    public virtual ICollection<Supplier> Suppliers { get; set; } = new List<Supplier>();
 
     public virtual User UserCreated { get; set; }
 }

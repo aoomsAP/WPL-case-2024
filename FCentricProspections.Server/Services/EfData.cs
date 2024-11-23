@@ -149,7 +149,7 @@ namespace FCentricProspections.Server.Services
                  .Include(p => p.Brands)
                  .Include(p => p.CompetitorBrands)
                  .Include(p => p.BrandInterests)
-                 .Include(p => p.ToDoes)
+                 .Include(p => p.ProspectionToDos)
                  .FirstOrDefault(x => x.Id == id);
         }
 

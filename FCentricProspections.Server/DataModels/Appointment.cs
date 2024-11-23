@@ -33,17 +33,9 @@ public partial class Appointment
 
     public string RecurringKey { get; set; }
 
-    public virtual ICollection<AdvancedPayment> AdvancedPayments { get; set; } = new List<AdvancedPayment>();
-
-    public virtual ICollection<AppointmentContact> AppointmentContacts { get; set; } = new List<AppointmentContact>();
-
     public virtual AppointmentState AppointmentState { get; set; }
 
     public virtual Employee Employee { get; set; }
-
-    public virtual RoadAppointment RoadAppointment { get; set; }
-
-    public virtual ShowroomAppointment ShowroomAppointment { get; set; }
 
     public virtual User UserCreated { get; set; }
 }

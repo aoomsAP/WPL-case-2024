@@ -53,6 +53,8 @@ public partial class FCentricContext : DbContext
 
     public virtual DbSet<ProspectionContactType> ProspectionContactTypes { get; set; }
 
+    public virtual DbSet<ProspectionToDo> ProspectionToDos { get; set; }
+
     public virtual DbSet<ProspectionVisitType> ProspectionVisitTypes { get; set; }
 
     public virtual DbSet<SalesPeriod> SalesPeriods { get; set; }
@@ -63,7 +65,7 @@ public partial class FCentricContext : DbContext
 
     public virtual DbSet<ToDo> ToDoes { get; set; }
 
-    public virtual DbSet<ToDoStatus> ToDoStatuses { get; set; }
+    public virtual DbSet<ToDoStatus> ToDoStatus { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -84,10 +86,6 @@ public partial class FCentricContext : DbContext
             new ProspectionVisitType { Id = 4, Name = "Other" }
         );
 
-        modelBuilder.Entity<ToDoStatus>().HasData(
-            new ToDoStatus { Id = 1, Name = "Ongoing", UserCreatedId = 103, DateCreated = new DateTime(), Timestamp = BitConverter.GetBytes(0x00000000005BD5E5)}
-        );
-
         modelBuilder.Entity<Prospection>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -96,6 +94,20 @@ public partial class FCentricContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_dbo.Prospections_dbo.Shops_ShopId");
         });
+
+        modelBuilder.Entity<ProspectionToDo>()
+        .HasKey(pt => new { pt.ProspectionId, pt.ToDoId });
+
+        modelBuilder.Entity<ProspectionToDo>()
+            .HasOne(pt => pt.Prospection)
+            .WithMany(p => p.ProspectionToDos)
+            .HasForeignKey(pt => pt.ProspectionId);
+
+        modelBuilder.Entity<ProspectionToDo>()
+            .HasOne(pt => pt.ToDo)
+            .WithMany(t => t.ProspectionToDos)
+            .HasForeignKey(pt => pt.ToDoId);
+
 
         // to implement ?
 
