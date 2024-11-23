@@ -1,33 +1,11 @@
-import { useEffect, useState } from 'react';
-import { IShopDetail } from '../../types';
 import styles from './ShopDetailCard.module.css';
+import { IShopDetail } from '../../types';
 
-interface ShopDetailCardProps {
-  shopId: number;
+interface ShopDetailProps {
+  shop: IShopDetail;
 }
 
-export const ShopDetailCard = ({ shopId }: ShopDetailCardProps) => {
-
-  const [shop, setShop] = useState<IShopDetail | undefined>();
-
-  async function loadShop() {
-    try {
-      const response = await fetch(`/api/shops/${shopId}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      const json: IShopDetail | undefined = await response.json();
-      setShop(json);
-
-    } catch (error) {
-      console.error('Error fetching shops data:', error);
-    }
-  }
-
-  useEffect(() => {
-    loadShop();
-  }, []);
+export const ShopDetailCard = ({shop}: ShopDetailProps) => {
 
   return (
     <section className={styles.shopDetailCard}>

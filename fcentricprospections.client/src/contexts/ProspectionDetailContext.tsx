@@ -224,19 +224,21 @@ export const ProspectionDetailProvider = ({ children }: { children: React.ReactN
         let prospectionData = await loadProspection(prospectionId);
 
         if (prospectionData) {
-          loadContactType(prospectionData.contactPersonTypeId),
+          await Promise.all([
+            loadContactType(prospectionData.contactPersonTypeId),
             loadVisitType(prospectionData.visitTypeId),
-            loadProspectionBrands(prospectionId),
-            loadProspectionCompetitorBrands(prospectionId),
             loadBrands(),
             loadCompetitorBrands(),
-            loadProspectionBrandInterests(prospectionId)
+            loadProspectionBrands(prospectionId),
+            loadProspectionCompetitorBrands(prospectionId),
+            loadProspectionBrandInterests(prospectionId),
+          ])
         }
       }
     };
 
     getAllData();
-  }, []);
+  }, [prospectionId]);
 
   return (
     <ProspectionDetailContext.Provider value={{

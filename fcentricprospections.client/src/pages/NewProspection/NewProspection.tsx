@@ -1,7 +1,7 @@
 import styles from '../../App.module.css';
 import FormWizard from "react-form-wizard-component";
 import "react-form-wizard-component/dist/style.css";
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import BrandTag from '../../components/BrandTag/BrandTag';
 import { NewProspectionContext } from '../../contexts/NewProspectionContext';
@@ -10,25 +10,39 @@ import BrandCardInput from '../../components/BrandCardInput/BrandCardInput';
 import BrandInterestCard from '../../components/BrandCardInput/BrandInterestCard';
 import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCards';
 import { AiOutlineCheck } from "react-icons/ai";
+import { ShopDetailContext } from '../../contexts/ShopDetailContext';
 
 export const NewProspection = () => {
 
   const { shopId } = useParams<{ shopId: string }>();
 
-  const { 
-    brands, 
-    competitorBrands, 
-    prospectionBrands, 
-    setProspectionBrands, 
-    prospectionCompetitorBrands, 
-    setProspectionCompetitorBrands, 
-    prospectionBrandInterests, 
+  // Contexts
+
+  const {
+    setShopId,
+    shopDetail
+  } = useContext(ShopDetailContext);
+
+  useEffect(() => {
+    if (shopId) {
+      setShopId(shopId);
+    }
+  }, [])
+
+  const {
+    brands,
+    competitorBrands,
+    prospectionBrands,
+    setProspectionBrands,
+    prospectionCompetitorBrands,
+    setProspectionCompetitorBrands,
+    prospectionBrandInterests,
     setProspectionBrandInterests,
-    addProspection, 
-    updateProspectionBrands, 
-    updateProspectionCompetitorBrands, 
+    addProspection,
+    updateProspectionBrands,
+    updateProspectionCompetitorBrands,
     updateProspectionBrandInterests
-   } = useContext(NewProspectionContext);
+  } = useContext(NewProspectionContext);
 
   const navigate = useNavigate();
 
@@ -155,7 +169,7 @@ export const NewProspection = () => {
 
         <FormWizard.TabContent title="Info" icon={<AiOutlineCheck />} >
 
-          {shopId && !isNaN(+shopId) && <ShopDetailCard shopId={+shopId} />}
+          {shopDetail && <ShopDetailCard shop={shopDetail} />}
 
           <h3>Informatie</h3>
 
@@ -291,18 +305,18 @@ export const NewProspection = () => {
           <h3>Algemene situatie</h3>
 
           <fieldset>
-          <legend>Beste merken</legend>
+            <legend>Beste merken</legend>
             <textarea value={bestBrands} onChange={(e) => setBestBrands(e.target.value)} />
           </fieldset>
 
           <fieldset>
-          <legend>Slechtste merken</legend>
-          <textarea value={worstBrands} onChange={(e) => setWorstBrands(e.target.value)} />
+            <legend>Slechtste merken</legend>
+            <textarea value={worstBrands} onChange={(e) => setWorstBrands(e.target.value)} />
           </fieldset>
 
           <fieldset>
-          <legend>Merken die niet meer ingekocht worden</legend>
-          <textarea value={brandsOut} onChange={(e) => setBrandsOut(e.target.value)} />
+            <legend>Merken die niet meer ingekocht worden</legend>
+            <textarea value={brandsOut} onChange={(e) => setBrandsOut(e.target.value)} />
           </fieldset>
 
         </FormWizard.TabContent>
@@ -313,7 +327,7 @@ export const NewProspection = () => {
 
           {prospectionBrands.map(brand => <BrandCardInput brand={brand} />)}
           {prospectionBrands.length === 0 && <p>Geen FC70 merken geselecteerd.</p>}
-    
+
 
         </FormWizard.TabContent>
 

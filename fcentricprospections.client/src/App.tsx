@@ -44,6 +44,8 @@ const Root = () => {
     );
 }
 
+// Page/Provider wrappers
+
 const ShopDetailPage = () => {
     return (
         <ShopDetailProvider>
@@ -55,24 +57,28 @@ const ShopDetailPage = () => {
 const ProspectionOverviewPage = () => {
     return (
         <ShopDetailProvider>
-            <ProspectionOverview/>
+            <ProspectionOverview />
         </ShopDetailProvider>
     )
 }
 
 const NewProspectionPage = () => {
     return (
-        <NewProspectionProvider>
-            <NewProspection />
-        </NewProspectionProvider>
+        <ShopDetailProvider>
+            <NewProspectionProvider>
+                <NewProspection />
+            </NewProspectionProvider>
+        </ShopDetailProvider>
     )
 }
 
 const ProspectionDetailPage = () => {
     return (
-        <ProspectionDetailProvider>
-            <ProspectionDetail />
-        </ProspectionDetailProvider>
+        <ShopDetailProvider>
+            <ProspectionDetailProvider>
+                <ProspectionDetail />
+            </ProspectionDetailProvider>
+        </ShopDetailProvider>
     )
 }
 

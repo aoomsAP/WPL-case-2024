@@ -9,7 +9,7 @@ export const ProspectionOverview = () => {
 
     const { shopId } = useParams<{ shopId: string }>();
 
-    const { setShopId, shopProspections } = useContext(ShopDetailContext);
+    const { setShopId, shopProspections, shopDetail } = useContext(ShopDetailContext);
 
     useEffect(() => {
         if (shopId) {
@@ -19,7 +19,7 @@ export const ProspectionOverview = () => {
 
     return (
         <main className={styles.main}>
-            {shopId && !isNaN(+shopId) && <ShopDetailCard shopId={+shopId} />}
+          {shopDetail && <ShopDetailCard shop={shopDetail} />}
 
             <h2>Voorgaande prospecties</h2>
 

@@ -20,7 +20,7 @@ export const ShopDetail = () => {
     <>
       <main className={styles.main}>
 
-        {shopId && !isNaN(+shopId) && <ShopDetailCard shopId={+shopId} />}
+        {shopDetail && <ShopDetailCard shop={shopDetail} />}
 
         <section className={styles.prospectionSection}>
 
@@ -47,7 +47,7 @@ export const ShopDetail = () => {
               Overzicht van alle Prospecties
             </Link>
           </button>
-          
+
         </section>
 
       </main>

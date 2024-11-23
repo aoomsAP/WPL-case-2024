@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { ShopDetailCard } from "../../components/ShopDetailCard/ShopDetailCards";
 import { ContactTypeCard } from "../../components/ContactTypeCard/ContactTypeCard";
 import { VisitTypeCard } from "../../components/VisitTypeCard/VisitTypeCard";
@@ -17,8 +17,13 @@ export const ProspectionDetail = () => {
 
   const { shopId, prospectionId } = useParams();
 
-  // contexts
-  const { setShopId } = useContext(ShopDetailContext);
+  // Contexts
+
+  const {
+    setShopId,
+    shopDetail
+  } = useContext(ShopDetailContext);
+
   const {
     setProspectionId,
     prospectionDetail,
@@ -48,7 +53,8 @@ export const ProspectionDetail = () => {
           <h1 className={styles.h1}>
             Prospectie ({new Date(prospectionDetail!.date).toLocaleDateString()})
           </h1>
-          {shopId && !isNaN(+shopId) && <ShopDetailCard shopId={+shopId} />}
+
+          {shopDetail && <ShopDetailCard shop={shopDetail} />}
 
           <section className={styles.contactVisitCard}>
             <div>
