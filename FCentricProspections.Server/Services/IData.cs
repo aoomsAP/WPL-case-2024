@@ -59,6 +59,26 @@ namespace FCentricProspections.Server.Services
 
         User GetUser(long id);
 
+        IEnumerable<UserDto> GetUsers();
+
+        Employee GetEmployee(long id);
+
+        IEnumerable<EmployeeDto> GetEmployees();
+
+        Employee GetEmployeeWithAppointments(long id);
+
+        Employee GetEmployeeByUserId(long userId);
+
+        //  Appointments -------------------------------------------------------------------------------------------------------------
+
+        Appointment GetAppointment(long id);
+
+        IEnumerable<Appointment> GetAppointments();
+
+        AppointmentState GetAppointmentState(long id);
+
+
+
 
         // Types ---------------------------------------------------------------------------------------------------------------------
 

@@ -57,12 +57,15 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
         useEffect(()=>{
             loadUsersTemp();
+            //temp
+            console.log("Lijst user ingeladen")
+            
         },[])
     
 
 
 
-   async function loadUserData (userId : string){
+   async function loadUser (userId : string){
     try {
         const response = await fetch(`/api/users/${userId}`, {
             method: 'GET',
@@ -72,19 +75,28 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         const json: IUser | undefined = await response.json();
         setUser(json);
 
+        //temp
+        console.log(json, 'functie userData wat zit erin');
+
     } catch (error) {
         console.error('Error fetching userdata data:', error);
     }}
 
-    async function loadEmployeeData (employeeId : string){
+    async function loadEmployeeData (userId : string){
         try {
-            const response = await fetch(`/api/employees/${employeeId}`, {
+
+            //Temp
+            console.log(  "start loading employee")
+
+            const response = await fetch(`/api/employees/${userId}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
             });
     
             const json: IEmployee | undefined = await response.json();
             setEmployee(json);
+            //Temp
+            console.log(employee);
     
         } catch (error) {
             console.error('Error fetching employee data:', error);
@@ -92,27 +104,39 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     
     async function loadAppointments (employeeId : string | undefined ){
         try {
+                //Temp
+                console.log(employeeId , "cheking id is there")
+
                 const response = await fetch(`/api/employees/${employeeId}/appointments`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                 });
         
                 const json: IAppointment[] = await response.json();
-                setAppointments(json);
+                setAppointments(json);            
         
             } catch (error) {
                 console.error('Error fetching appointments data:', error);
             }}
-    
+
+    async function loadUserData(userId : string) {
+             await loadUser(userId);
+             await loadEmployeeData(userId);
+             if(employee){
+             await loadAppointments(employee?.id)
+             }
+    }
 
     
 
     useEffect(() => {
         if (userId) {
-            loadUserData(userId);
-            loadEmployeeData(userId);
-            loadAppointments(employee?.id)
+
+            loadUserData(userId)
             
+            //Temp
+
+            console.log( userId,'is ingeladen')  
         }
     }, [userId]);
 

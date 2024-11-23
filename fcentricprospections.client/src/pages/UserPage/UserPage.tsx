@@ -37,7 +37,7 @@ const UserPage = () =>{
             {filteredUSerNames.length > 0 ? (
                 filteredUSerNames.map(user => (
                     <li className={homeStyles.li}  key={user.id}>  {/* Ensure each `li` has a unique `key` */}
-                    <Link className={homeStyles.a} to={`/home`}>{user.login}</Link>
+                    <Link className={homeStyles.a} to={`/home`} onClick={()=>setUserId(user.id)}>{user.login}</Link>
                 </li>
                 ))
             ) : (

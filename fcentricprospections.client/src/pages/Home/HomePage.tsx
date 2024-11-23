@@ -1,10 +1,14 @@
-import {useState, useEffect } from "react";
+import {useState, useEffect, useContext } from "react";
 import { IShop } from "../../types";
 import { Link } from "react-router-dom";
 import styles from '../../App.module.css'
 import homeStyles from './homepage.module.css'
+import { UserContext } from "../../contexts/UserContext";
 
 export const Homepage = () => {
+
+    const{userDetail} = useContext(UserContext);
+
     const [searchTerm, setSearchTerm] = useState(""); // State for search input
     const [shopNames , setShopNames] = useState<IShop[]>([]); //Sate with list of shops
 
@@ -34,11 +38,13 @@ export const Homepage = () => {
 
     useEffect(() => {
         loadShops();
+        
     }, []);
 
     return (
             <main className={styles.main}>
                 <h1>Selecteer een winkel</h1>
+                <h2>Hallo {userDetail?.login}</h2>
             <input 
                     className={styles.inputField} 
                     type="text" 
