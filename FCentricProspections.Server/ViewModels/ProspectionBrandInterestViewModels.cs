@@ -8,7 +8,7 @@
 
         public string BrandName {get; set;}
 
-        public string? Sales { get; set; }
+        public string? Remark { get; set; }
     }
 
     public class ProspectionBrandInterestUpdateViewModel

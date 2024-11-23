@@ -5,13 +5,9 @@ using System.Collections.Generic;
 
 namespace FCentricProspections.Server.DataModels;
 
-public partial class ContactType
+public partial class ToDoStatus
 {
     public long Id { get; set; }
-
-    public bool IsLocation { get; set; }
-
-    public int Order { get; set; }
 
     public string Name { get; set; }
 
@@ -21,7 +17,7 @@ public partial class ContactType
 
     public byte[] Timestamp { get; set; }
 
-    public virtual ICollection<ShopContact> ShopContacts { get; set; } = new List<ShopContact>();
+    public virtual ICollection<ToDo> ToDos { get; set; } = new List<ToDo>();
 
     public virtual User UserCreated { get; set; }
 }

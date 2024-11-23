@@ -65,13 +65,7 @@ public partial class ShopDelivery
 
     public virtual Shop Shop { get; set; }
 
-    public virtual ShopDeliveryOrigin ShopDeliveryOrigin { get; set; }
-
     public virtual ShopDelivery ShopDeliveryReference { get; set; }
-
-    public virtual ShopDeliveryState ShopDeliveryState { get; set; }
-
-    public virtual ShopDeliveryType ShopDeliveryType { get; set; }
 
     public virtual User UserCreated { get; set; }
 }

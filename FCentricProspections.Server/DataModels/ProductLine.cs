@@ -37,19 +37,9 @@ public partial class ProductLine
 
     public byte[] Timestamp { get; set; }
 
-    public virtual AgeCategory AgeCategory { get; set; }
-
     public virtual Brand Brand { get; set; }
 
-    public virtual Gender Gender { get; set; }
-
-    public virtual Line Line { get; set; }
-
     public virtual ICollection<ProductLineDelivery> ProductLineDeliveries { get; set; } = new List<ProductLineDelivery>();
-
-    public virtual SegmentType SegmentType { get; set; }
-
-    public virtual ICollection<ShopCompetitorProductLine> ShopCompetitorProductLines { get; set; } = new List<ShopCompetitorProductLine>();
 
     public virtual User UserCreated { get; set; }
 }

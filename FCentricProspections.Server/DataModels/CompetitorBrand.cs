@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace FCentricProspections.Server.DataModels;
 
-public partial class CompetitorBrand
+public partial class CompetitorBrand // Referentiemerken
 {
     public long Id { get; set; }
 
@@ -17,9 +17,5 @@ public partial class CompetitorBrand
 
     public byte[] Timestamp { get; set; }
 
-    public virtual ICollection<ShopCompetitorBrand> ShopCompetitorBrands { get; set; } = new List<ShopCompetitorBrand>();
-
     public virtual User UserCreated { get; set; }
-
-    public virtual ICollection<ProspectionCompetitorBrand> ProspectionCompetitorBrands { get; set; }
 }

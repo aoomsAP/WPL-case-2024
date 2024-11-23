@@ -27,15 +27,8 @@ public partial class Country
 
     public virtual ICollection<City> Cities { get; set; } = new List<City>();
 
-    public virtual Currency Currency { get; set; }
-
-    public virtual PaymentCondition PaymentCondition { get; set; }
-
-    public virtual ICollection<Province> Provinces { get; set; } = new List<Province>();
-
     public virtual ICollection<ShopDelivery> ShopDeliveries { get; set; } = new List<ShopDelivery>();
 
     public virtual User UserCreated { get; set; }
 
-    public virtual VatType VatType { get; set; }
 }

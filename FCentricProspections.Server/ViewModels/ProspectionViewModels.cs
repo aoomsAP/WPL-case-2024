@@ -9,7 +9,7 @@ namespace FCentricProspections.Server.ViewModels
         public long Id { get; set; }
 
         [Required]
-        public DateTime Date { get; set; }
+        public DateTime VisitDate { get; set; }
 
         public long ShopId { get; set; }
     }
@@ -22,29 +22,39 @@ namespace FCentricProspections.Server.ViewModels
 
         public long UserId { get; set; }
 
-        public DateTime Date { get; set; }
+        public long EmployeeId { get; set; }
+
+        public DateTime VisitDate { get; set; }
+
+        public DateTime DateCreated { get; set; }
 
         public DateTime DateLastUpdated { get; set; }
 
-        public long ContactPersonTypeId { get; set; }
+        public long ContactTypeId { get; set; }
 
-        public string? ContactPersonName { get; set; }
+        public string? ContactName { get; set; }
+
+        public string? ContactEmail { get; set; }
+
+        public string? ContactPhone { get; set; }
 
         public long VisitTypeId { get; set; }
 
         public string? VisitContext { get; set; }
 
+        public string? NewBrands { get; set; }
+
         public string? BestBrands { get; set; }
 
         public string? WorstBrands { get; set; }
 
-        public string? BrandsOut { get; set; }
+        public string? TerminatedBrands { get; set; }
 
-        [MaxLength(500, ErrorMessage = "Maximum 500 characters")]
         public string? Trends { get; set; }
 
         public string? Extra { get; set; }
     }
+
 
     public class ProspectionCreateViewModel
     {
@@ -52,25 +62,34 @@ namespace FCentricProspections.Server.ViewModels
 
         public long UserId { get; set; }
 
-        public DateTime Date { get; set; }
+        public long EmployeeId { get; set; }
+
+        public DateTime VisitDate { get; set; }
+
+        public DateTime DateCreated { get; set; }
 
         public DateTime DateLastUpdated { get; set; }
 
-        public long ContactPersonTypeId { get; set; }
+        public long ContactTypeId { get; set; }
 
-        public string? ContactPersonName { get; set; }
+        public string? ContactName { get; set; }
+
+        public string? ContactEmail { get; set; }
+
+        public string? ContactPhone { get; set; }
 
         public long VisitTypeId { get; set; }
 
         public string? VisitContext { get; set; }
 
+        public string? NewBrands { get; set; }
+
         public string? BestBrands { get; set; }
 
         public string? WorstBrands { get; set; }
 
-        public string? BrandsOut { get; set; }
+        public string? TerminatedBrands { get; set; }
 
-        [MaxLength(500, ErrorMessage = "Maximum 500 characters")]
         public string? Trends { get; set; }
 
         public string? Extra { get; set; }
@@ -82,25 +101,34 @@ namespace FCentricProspections.Server.ViewModels
 
         public long UserId { get; set; }
 
-        public DateTime Date { get; set; }
+        public long EmployeeId { get; set; }
+
+        public DateTime VisitDate { get; set; }
+
+        public DateTime DateCreated { get; set; }
 
         public DateTime DateLastUpdated { get; set; }
 
-        public long ContactPersonTypeId { get; set; }
+        public long ContactTypeId { get; set; }
 
-        public string? ContactPersonName { get; set; }
+        public string? ContactName { get; set; }
+
+        public string? ContactEmail { get; set; }
+
+        public string? ContactPhone { get; set; }
 
         public long VisitTypeId { get; set; }
 
         public string? VisitContext { get; set; }
 
+        public string? NewBrands { get; set; }
+
         public string? BestBrands { get; set; }
 
         public string? WorstBrands { get; set; }
 
-        public string? BrandsOut { get; set; }
+        public string? TerminatedBrands { get; set; }
 
-        [MaxLength(500, ErrorMessage = "Maximum 500 characters")]
         public string? Trends { get; set; }
 
         public string? Extra { get; set; }

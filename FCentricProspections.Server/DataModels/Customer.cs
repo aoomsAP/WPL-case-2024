@@ -105,17 +105,7 @@ public partial class Customer
 
     public virtual City BankCity { get; set; }
 
-    public virtual BlockedType BlockedType { get; set; }
-
-    public virtual Currency Currency { get; set; }
-
-    public virtual ICollection<CustomerLegalHistory> CustomerLegalHistories { get; set; } = new List<CustomerLegalHistory>();
-
     public virtual ICollection<CustomerShop> CustomerShops { get; set; } = new List<CustomerShop>();
-
-    public virtual CustomerType CustomerType { get; set; }
-
-    public virtual Gender Gender { get; set; }
 
     public virtual Employee KeyAccountManager { get; set; }
 

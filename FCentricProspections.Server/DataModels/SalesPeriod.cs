@@ -47,8 +47,6 @@ public partial class SalesPeriod
 
     public bool ShopifySales { get; set; }
 
-    public virtual SalesPeriodType SalesPeriodType { get; set; }
-
     public virtual ICollection<ShopDelivery> ShopDeliveries { get; set; } = new List<ShopDelivery>();
 
     public virtual User UserCreated { get; set; }

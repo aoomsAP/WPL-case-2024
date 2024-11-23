@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FCentricProspections.Server.DataModels
 {
-    public class ProspectionCompetitorBrand
+    public class ProspectionCompetitorBrand // Referentiemerken
     {
         [Key]
         public long Id { get; set; }

@@ -33,9 +33,5 @@ public partial class City
 
     public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
 
-    public virtual Province Province { get; set; }
-
-    public virtual Region Region { get; set; }
-
     public virtual User UserCreated { get; set; }
 }
