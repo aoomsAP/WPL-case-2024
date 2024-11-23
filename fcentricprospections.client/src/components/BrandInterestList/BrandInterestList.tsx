@@ -14,8 +14,8 @@ export const BrandInterestList: React.FC<BrandInterestListProps> = ({ prospectio
       const matchingBrandInterest = brands.find(b => b.id === brand.brandId);
       return (
         <div key={index} className={styles.brandInterestCard}>
-          <h3>Brand: {matchingBrandInterest ? matchingBrandInterest.name : "Unknown Brand"}</h3>
-          <p>Sales: {brand.sales}</p>
+          <h3>Brand: {matchingBrandInterest ? matchingBrandInterest.name : "Onbekend merk"}</h3>
+          <p>Opmerking: {brand.remark}</p>
         </div>
       );
     })}

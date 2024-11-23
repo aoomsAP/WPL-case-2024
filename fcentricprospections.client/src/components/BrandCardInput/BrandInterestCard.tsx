@@ -11,7 +11,7 @@ const BrandInterestCard = ({ brand }: BrandInterestCardProps) => {
 
     const { prospectionBrandInterests, setProspectionBrandInterests } = useContext(NewProspectionContext);
 
-    const [sales, setSales] = useState<string>("");
+    const [remark, setRemark] = useState<string>("");
 
     // "X" deletes the current brand from the state array
     function handleClick() {
@@ -25,7 +25,7 @@ const BrandInterestCard = ({ brand }: BrandInterestCardProps) => {
         const newProspectionBrandInterest = {
             brandId: brand.brandId,
             brandName: brand.brandName,
-            sales: sales,
+            remark: remark,
         }
 
         const newProspectionBrandInterests = prospectionBrandInterests.map(p => {
@@ -36,14 +36,14 @@ const BrandInterestCard = ({ brand }: BrandInterestCardProps) => {
         });
 
         setProspectionBrandInterests(newProspectionBrandInterests);
-    }, [sales])
+    }, [remark])
 
     return (
         <fieldset className={styles.brand_fieldset} key={brand.brandId}>
             <button className={styles.close} onClick={handleClick}>X</button>
             <legend className={styles.brand_legend}>{brand.brandName}</legend>
-            <label>Sales:</label>
-            <input type="text" value={sales} onChange={(e) => setSales(e.target.value)} />
+            <label>Opmerking:</label>
+            <textarea value={remark} onChange={(e) => setRemark(e.target.value)} />
         </fieldset>
     )
 }

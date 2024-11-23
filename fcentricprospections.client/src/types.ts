@@ -49,15 +49,20 @@ export interface IProspectionDetail {
   id?: number,
   shopId: number,
   userId?: number,
+  employeeId?: number,
   date: Date,
+  dateCreated?: Date,
   dateLastUpdated?: Date,
-  contactPersonTypeId: number,
-  contactPersonName?: string,
+  contactTypeId: number,
+  contactName?: string,
+  contactEmail?: string,
+  contactPhone?: string,
   visitTypeId: number,
   visitContext?: string,
+  newBrands?: string,
   bestBrands?: string,
   worstBrands?: string,
-  brandsOut?: string,
+  terminatedBrands?: string,
   trends?: string,
   extra?: string
 }
@@ -67,8 +72,7 @@ export interface IProspectionBrand {
   brandId: number,
   brandName: string,
   sellout?: number,
-  salesRepresentative?: string,
-  commercialSupport?: string,
+  selloutRemark?: string,
 }
 
 export interface IProspectionCompetitorBrand {
@@ -81,5 +85,13 @@ export interface IProspectionBrandInterest {
   id?: number,
   brandId: number,
   brandName: string,
-  sales?: string,
+  remark?: string,
+}
+
+export interface ITodo {
+  id?: number,
+  remarks?: string,
+  employeeId?: number,
+  toDoStatus?: string,
+  name?: string,
 }

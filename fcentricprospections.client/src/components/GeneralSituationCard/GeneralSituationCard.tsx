@@ -15,7 +15,7 @@ export const GeneralSituation: React.FC<GeneralSituationProps> = ({ detail }) =>
       <h3>Slechtste merken</h3>
       <p>{detail.worstBrands}</p>
       <h3>Merken out</h3> 
-      <p>{detail.brandsOut}</p>
+      <p>{detail.terminatedBrands}</p>
     </div>
   </section>
 );

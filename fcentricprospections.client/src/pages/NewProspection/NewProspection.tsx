@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import BrandTag from '../../components/BrandTag/BrandTag';
 import { NewProspectionContext } from '../../contexts/NewProspectionContext';
-import { IProspectionDetail } from '../../types';
+import { IProspectionBrand, IProspectionDetail } from '../../types';
 import BrandCardInput from '../../components/BrandCardInput/BrandCardInput';
 import BrandInterestCard from '../../components/BrandCardInput/BrandInterestCard';
 import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCards';
@@ -20,7 +20,8 @@ export const NewProspection = () => {
 
   const {
     setShopId,
-    shopDetail
+    shopDetail,
+    shopBrands
   } = useContext(ShopDetailContext);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export const NewProspection = () => {
   }, [])
 
   const {
-    brands,
+    allBrands,
     competitorBrands,
     prospectionBrands,
     setProspectionBrands,
@@ -49,31 +50,26 @@ export const NewProspection = () => {
   // Input fields
   const [contactType, setContactType] = useState<number>(4);
   const [contactName, setContactName] = useState<string>("");
+  const [contactEmail, setContactEmail] = useState<string>("");
+  const [contactPhone, setContactPhone] = useState<string>("");
   const [visitType, setVisitType] = useState<number>(4);
   const [visitContext, setVisitContext] = useState<string>("");
+  const [newBrands, setNewBrands] = useState<string>("");
   const [bestBrands, setBestBrands] = useState<string>("");
   const [worstBrands, setWorstBrands] = useState<string>("");
-  const [brandsOut, setBrandsOut] = useState<string>("");
+  const [terminatedBrands, setTerminatedBrands] = useState<string>("");
   const [trends, setTrends] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
 
+  // Setting default ProspectionBrands based on shopBrands list
+  useEffect(() => {
+    const defaultProspectionBrands: IProspectionBrand[] = shopBrands.map(x => ({ brandId: x.id, brandName: x.name }));
+    setProspectionBrands(defaultProspectionBrands);
+  }, [])
+
   // Search fields
-  const [brandSearch, setBrandSearch] = useState<string>("");
   const [competitorBrandSearch, setCompetitorBrandSearch] = useState<string>("");
   const [brandInterestSearch, setBrandInterestSearch] = useState<string>("");
-
-  // Filter for brands
-  const brandSearchFunc = brands.filter(brand => {
-    // If brand is already in prospectionBrands, do not include
-    if (prospectionBrands.map(x => x.brandId).find(x => x === brand.id)) return false;
-
-    // If search value is less than 3 characters, do not include
-    if (brandSearch.length < 3) return false;
-
-    // If brand name contains search value, include
-    return brand.name.toLowerCase().includes(brandSearch.toLowerCase());
-  });
-
 
   // Filter for competitor brands
   const competitorBrandSearchFunc = competitorBrands.filter(brand => {
@@ -85,9 +81,8 @@ export const NewProspection = () => {
     return brand.name.toLowerCase().includes(competitorBrandSearch.toLowerCase());
   });
 
-
   // Filter for interest search brands
-  const brandInterestSearchFunc = brands.filter(brand => {
+  const brandInterestSearchFunc = allBrands.filter(brand => {
 
     if (prospectionBrandInterests.map(x => x.brandId).find(x => x === brand.id)) return false;
 
@@ -101,15 +96,19 @@ export const NewProspection = () => {
 
     const newProspection: IProspectionDetail = {
       shopId: Number(shopId),
-      date: new Date(),
+      date: new Date(), // date needs to be picked
+      dateCreated: new Date(),
       dateLastUpdated: new Date(),
-      contactPersonTypeId: contactType,
-      contactPersonName: contactName,
+      contactTypeId: contactType,
+      contactName: contactName,
+      // contactEmail: ,
+      // contactPhone: ,
       visitTypeId: visitType,
       visitContext: visitContext,
+      // newBrands: ,
       bestBrands: bestBrands,
       worstBrands: worstBrands,
-      brandsOut: brandsOut,
+      terminatedBrands: terminatedBrands,
       trends: trends,
       extra: feedback
     }
@@ -143,16 +142,16 @@ export const NewProspection = () => {
   };
 
   // TO DO: this function currently does nothing except log things. Delete?
-  const tabChanged = ({
-    prevIndex,
-    nextIndex,
-  }: {
-    prevIndex: number;
-    nextIndex: number;
-  }) => {
-    console.log("prevIndex", prevIndex);
-    console.log("nextIndex", nextIndex);
-  };
+  // const tabChanged = ({
+  //   prevIndex,
+  //   nextIndex,
+  // }: {
+  //   prevIndex: number;
+  //   nextIndex: number;
+  // }) => {
+  //   console.log("prevIndex", prevIndex);
+  //   console.log("nextIndex", nextIndex);
+  // };
 
   return (
     <main className={styles.main}>
@@ -164,7 +163,7 @@ export const NewProspection = () => {
         finishButtonText="Verzenden"
         layout="horizontal"
         stepSize="sm"
-        onTabChange={tabChanged}
+        // onTabChange={tabChanged}
         onComplete={handleComplete}>
 
         <FormWizard.TabContent title="Info" icon={<AiOutlineCheck />} >
@@ -194,8 +193,18 @@ export const NewProspection = () => {
           </fieldset>
 
           <fieldset>
-            <legend>Contactpersoon (naam)</legend>
+            <legend>Contact naam</legend>
             <input type='text' value={contactName} onChange={(e) => setContactName(e.target.value)}></input>
+          </fieldset>
+
+          <fieldset>
+            <legend>Contact email</legend>
+            <input type='text' value={contactEmail} onChange={(e) => setContactEmail(e.target.value)}></input>
+          </fieldset>
+
+          <fieldset>
+            <legend>Contact phone</legend>
+            <input type='text' value={contactPhone} onChange={(e) => setContactPhone(e.target.value)}></input>
           </fieldset>
 
           <fieldset>
@@ -231,42 +240,14 @@ export const NewProspection = () => {
 
           {/* FC70 BRANDS */}
           <h3>FC70 merken</h3>
-          <input
-            type="text"
-            placeholder="Zoek..."
-            value={brandSearch}
-            onChange={(e) => setBrandSearch(e.target.value)} // Update state on input change
-          />
-
-          <ul>
-            {brandSearchFunc.length > 0 ? (
-              brandSearchFunc.map(brand => (
-                <li
-                  key={brand.id}
-                  onClick={() => {
-                    setProspectionBrands([...prospectionBrands, { brandId: brand.id, brandName: brand.name }]);
-                    setBrandSearch("");
-                  }}>
-                  {brand.name}
-                </li>
-              ))
-            ) : (
-              brandSearch.length < 3 ? (
-                <p>Typ minstens 3 letters.</p>
-              ) : (
-                <p>Geen merken gevonden</p>
-              )
-            )}
-          </ul>
-
           <div>
-            {prospectionBrands.map(brand => (
-              <BrandTag brandId={brand.brandId} brandName={brand.brandName} type="brand" />
+            {shopBrands.map(brand => (
+              <BrandTag brandId={brand.id} brandName={brand.name} type="brand" />
             ))}
           </div>
 
           {/* COMPETITOR BRANDS */}
-          <h3>Andere merken</h3>
+          <h3>Referentiemerken</h3>
           <input
             type="text"
             placeholder="Zoek..."
@@ -298,6 +279,13 @@ export const NewProspection = () => {
             {prospectionCompetitorBrands.map(brand => <BrandTag brandId={brand.brandId} brandName={brand.brandName} type="competitorBrand" />)}
           </div>
 
+          {/* NEW BRANDS */}
+          <fieldset>
+            <legend>Nieuwe merken</legend>
+            <p>(Merken die u niet vond in de lijst hierboven)</p>
+            <textarea value={newBrands} onChange={(e) => setNewBrands(e.target.value)} />
+          </fieldset>
+
         </FormWizard.TabContent>
 
         <FormWizard.TabContent title="Algemeen" icon={<AiOutlineCheck />}>
@@ -316,7 +304,7 @@ export const NewProspection = () => {
 
           <fieldset>
             <legend>Merken die niet meer ingekocht worden</legend>
-            <textarea value={brandsOut} onChange={(e) => setBrandsOut(e.target.value)} />
+            <textarea value={terminatedBrands} onChange={(e) => setTerminatedBrands(e.target.value)} />
           </fieldset>
 
         </FormWizard.TabContent>
@@ -326,8 +314,7 @@ export const NewProspection = () => {
           <h3>FC70 overzicht</h3>
 
           {prospectionBrands.map(brand => <BrandCardInput brand={brand} />)}
-          {prospectionBrands.length === 0 && <p>Geen FC70 merken geselecteerd.</p>}
-
+          {prospectionBrands.length === 0 && <p>Geen FC70 merken gevonden.</p>}
 
         </FormWizard.TabContent>
 
@@ -354,7 +341,7 @@ export const NewProspection = () => {
                 </li>
               ))
             ) : (
-              brandSearch.length < 3 ? (
+              brandInterestSearch.length < 3 ? (
                 <p>Typ minstens 3 letters.</p>
               ) : (
                 <p>Geen merken gevonden</p>
@@ -375,6 +362,15 @@ export const NewProspection = () => {
 
           <h4>Extra opmerkingen/feedback</h4>
           <textarea rows={4} value={feedback} onChange={(e) => setFeedback(e.target.value)} />
+
+        </FormWizard.TabContent>
+
+        <FormWizard.TabContent title="Opvolging" icon={<AiOutlineCheck />}>
+
+          <h3>Takenlijst voor opvolging</h3>
+          <p>Hier kan u items toevoegen die op basis van dit verslag moeten opgevolgd worden.</p>
+
+          {/* TO DO LIST */}
 
         </FormWizard.TabContent>
 

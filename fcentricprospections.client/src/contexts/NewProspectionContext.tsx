@@ -1,10 +1,10 @@
 import { createContext, useState, useEffect } from 'react';
-import { IBrand, ICompetitorBrand, IContactType, IProspectionDetail, IProspectionBrand, IProspectionBrandInterest, IProspectionCompetitorBrand, IVisitType } from '../types';
+import { IBrand, ICompetitorBrand, IContactType, IProspectionDetail, IProspectionBrand, IProspectionBrandInterest, IProspectionCompetitorBrand, IVisitType, ITodo } from '../types';
 
 export interface NewProspectionContext {
     // data states
-    brands: IBrand[];
-    setBrands: (brands: IBrand[]) => void;
+    allBrands: IBrand[];
+    setAllBrands: (brands: IBrand[]) => void;
     competitorBrands: ICompetitorBrand[];
     setCompetitorBrands: (competitorBrands: ICompetitorBrand[]) => void;
     contactTypes: IContactType[];
@@ -21,6 +21,8 @@ export interface NewProspectionContext {
     setProspectionCompetitorBrands: (prospectionCompetitorBrands: IProspectionCompetitorBrand[]) => void;
     prospectionBrandInterests: IProspectionBrandInterest[];
     setProspectionBrandInterests: (prospectionBrandInterests: IProspectionBrandInterest[]) => void;
+    todos: ITodo[];
+    setTodos: (todos: ITodo[]) => void;
 
     // functions
     loadBrands: () => Promise<void>;
@@ -36,8 +38,8 @@ export interface NewProspectionContext {
 
 export const NewProspectionContext = createContext<NewProspectionContext>({
     // data states
-    brands: [],
-    setBrands: () => { },
+    allBrands: [],
+    setAllBrands: () => { },
     competitorBrands: [],
     setCompetitorBrands: () => { },
     contactTypes: [],
@@ -54,6 +56,8 @@ export const NewProspectionContext = createContext<NewProspectionContext>({
     setProspectionCompetitorBrands: () => { },
     prospectionBrandInterests: [],
     setProspectionBrandInterests: () => { },
+    todos: [],
+    setTodos: () => {},
 
     // functions
     loadBrands: () => Promise.resolve(),
@@ -72,7 +76,7 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
     // states  ---------------------------------------------------------------------------------------------
 
     // data states
-    const [brands, setBrands] = useState<IBrand[]>([]);
+    const [allBrands, setAllBrands] = useState<IBrand[]>([]);
     const [competitorBrands, setCompetitorBrands] = useState<ICompetitorBrand[]>([]);
     const [contactTypes, setContactTypes] = useState<IContactType[]>([]);
     const [visitTypes, setVisitTypes] = useState<IVisitType[]>([]);
@@ -82,6 +86,7 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
     const [prospectionBrands, setProspectionBrands] = useState<IProspectionBrand[]>([]);
     const [prospectionCompetitorBrands, setProspectionCompetitorBrands] = useState<IProspectionCompetitorBrand[]>([]);
     const [prospectionBrandInterests, setProspectionBrandInterests] = useState<IProspectionBrandInterest[]>([]);
+    const [todos, setTodos] = useState<ITodo[]>([]);
 
     // functions -------------------------------------------------------------------------------------------------
 
@@ -95,7 +100,7 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
             });
 
             const json: IBrand[] = await response.json();
-            setBrands(json);
+            setAllBrands(json);
 
         } catch (error) {
             console.error('Error fetching brands data:', error);
@@ -239,8 +244,8 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
     return (
         <NewProspectionContext.Provider value={{
             // data states
-            brands: brands,
-            setBrands: setBrands,
+            allBrands: allBrands,
+            setAllBrands: setAllBrands,
             competitorBrands: competitorBrands,
             setCompetitorBrands: setCompetitorBrands,
             contactTypes: contactTypes,
@@ -257,6 +262,8 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
             setProspectionCompetitorBrands: setProspectionCompetitorBrands,
             prospectionBrandInterests: prospectionBrandInterests,
             setProspectionBrandInterests: setProspectionBrandInterests,
+            todos: todos,
+            setTodos: setTodos,
 
             // functions
             loadBrands: loadBrands,

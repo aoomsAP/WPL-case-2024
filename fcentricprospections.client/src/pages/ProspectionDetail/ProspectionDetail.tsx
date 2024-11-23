@@ -59,7 +59,7 @@ export const ProspectionDetail = () => {
           <section className={styles.contactVisitCard}>
             <div>
               {contactType && prospectionDetail && (
-                <ContactTypeCard contactType={contactType} contactPersonName={prospectionDetail.contactPersonName ?? ""} />
+                <ContactTypeCard contactType={contactType} contactPersonName={prospectionDetail.contactName ?? ""} />
               )}
 
               {visitType && prospectionDetail && <VisitTypeCard visitType={visitType} visitContext={prospectionDetail?.visitContext ?? ""} />}

@@ -12,16 +12,14 @@ const BrandCardInput = ({ brand }: BrandCardInputProps) => {
     const { prospectionBrands, setProspectionBrands } = useContext(NewProspectionContext);
 
     const [sellout, setSellout] = useState<number | undefined>(undefined);
-    const [sales, setSales] = useState<string>("");
-    const [commercial, setCommercial] = useState<string>("");
+    const [selloutRemark, setSelloutRemark] = useState<string>("");
 
     useEffect(() => {
         const newProspectionBrand = {
             brandId: brand.brandId,
             brandName: brand.brandName,
             sellout: sellout,
-            salesRepresentative: sales,
-            commercialSupport: commercial
+            selloutRemark: selloutRemark
         }
 
         const newProspectionBrands = prospectionBrands.map(p => {
@@ -32,7 +30,7 @@ const BrandCardInput = ({ brand }: BrandCardInputProps) => {
         });
 
         setProspectionBrands(newProspectionBrands);
-    }, [sellout, sales, commercial])
+    }, [sellout, selloutRemark])
 
     return (
         <fieldset className={styles.brand_fieldset} key={brand.brandId}>
@@ -41,11 +39,8 @@ const BrandCardInput = ({ brand }: BrandCardInputProps) => {
             <label>Sellout (%)</label><br />
             <input type="number" max={100} value={sellout} onChange={(e) => setSellout(+e.target.value)} /><br />
 
-            <label>Verantwoordelijke sales</label><br />
-            <input type="text" value={sales} onChange={(e) => setSales(e.target.value)} />
-
-            <label>Commercial support</label><br />
-            <input type="text" value={commercial} onChange={(e) => setCommercial(e.target.value)} />
+            <label>Sellout opmerking</label><br />
+            <textarea value={selloutRemark} onChange={(e) => setSelloutRemark(e.target.value)} />
         </fieldset>
     )
 }

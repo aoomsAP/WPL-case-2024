@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace FCentricProspections.Server.DataModels;
 
@@ -21,6 +22,7 @@ public partial class ToDo
 
     public DateTime DateCreated { get; set; }
 
+    [Timestamp]
     public byte[] Timestamp { get; set; }
 
     public virtual Employee Employee { get; set; }

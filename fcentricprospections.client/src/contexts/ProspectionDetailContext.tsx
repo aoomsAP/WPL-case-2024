@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { IBrand, ICompetitorBrand, IContactType, IProspectionBrand, IProspectionBrandInterest, IProspectionCompetitorBrand, IProspectionDetail, IVisitType } from "../types";
+import { IBrand, ICompetitorBrand, IContactType, IProspectionBrand, IProspectionBrandInterest, IProspectionCompetitorBrand, IProspectionDetail, ITodo, IVisitType } from "../types";
 
 interface ProspectionDetailContext {
   prospectionId: string | undefined,
@@ -51,11 +51,12 @@ export const ProspectionDetailProvider = ({ children }: { children: React.ReactN
   const [prospectionDetail, setProspectionDetail] = useState<IProspectionDetail | undefined>();
   const [contactType, setContactType] = useState<IContactType>();
   const [visitType, setVisitType] = useState<IVisitType>();
-  const [prospectionBrands, setProspectionBrands] = useState<IProspectionBrand[]>([]);
-  const [prospectionCompetitorBrands, setProspectionCompetitorBrands] = useState<IProspectionCompetitorBrand[]>([]);
   const [brands, setBrands] = useState<IBrand[]>([])
   const [competitorBrands, setCompetitorBrands] = useState<ICompetitorBrand[]>([])
+  const [prospectionBrands, setProspectionBrands] = useState<IProspectionBrand[]>([]);
+  const [prospectionCompetitorBrands, setProspectionCompetitorBrands] = useState<IProspectionCompetitorBrand[]>([]);
   const [prospectionBrandInterests, setProspectionBrandInterests] = useState<IProspectionBrandInterest[]>([])
+  const [todos, setTodos] = useState<ITodo[]>([])
 
   // functions
 
@@ -225,7 +226,7 @@ export const ProspectionDetailProvider = ({ children }: { children: React.ReactN
 
         if (prospectionData) {
           await Promise.all([
-            loadContactType(prospectionData.contactPersonTypeId),
+            loadContactType(prospectionData.contactTypeId),
             loadVisitType(prospectionData.visitTypeId),
             loadBrands(),
             loadCompetitorBrands(),
