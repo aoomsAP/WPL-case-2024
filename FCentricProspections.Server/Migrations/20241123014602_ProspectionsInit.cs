@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FCentricProspections.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class ProspectionsInit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -47,15 +47,20 @@ namespace FCentricProspections.Server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ShopId = table.Column<long>(type: "bigint", nullable: false),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EmployeeId = table.Column<long>(type: "bigint", nullable: false),
+                    VisitDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateLastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ContactPersonTypeId = table.Column<long>(type: "bigint", nullable: false),
-                    ContactPersonName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactTypeId = table.Column<long>(type: "bigint", nullable: false),
+                    ContactName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactPhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     VisitTypeId = table.Column<long>(type: "bigint", nullable: false),
                     VisitContext = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NewBrands = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BestBrands = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WorstBrands = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BrandsOut = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TerminatedBrands = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Trends = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Extra = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -63,8 +68,14 @@ namespace FCentricProspections.Server.Migrations
                 {
                     table.PrimaryKey("PK_Prospections", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Prospections_ProspectionContactTypes_ContactPersonTypeId",
-                        column: x => x.ContactPersonTypeId,
+                        name: "FK_Prospections_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Prospections_ProspectionContactTypes_ContactTypeId",
+                        column: x => x.ContactTypeId,
                         principalTable: "ProspectionContactTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -95,7 +106,7 @@ namespace FCentricProspections.Server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProspectionId = table.Column<long>(type: "bigint", nullable: false),
                     BrandId = table.Column<long>(type: "bigint", nullable: false),
-                    Sales = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Remark = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -123,8 +134,7 @@ namespace FCentricProspections.Server.Migrations
                     ProspectionId = table.Column<long>(type: "bigint", nullable: false),
                     BrandId = table.Column<long>(type: "bigint", nullable: false),
                     Sellout = table.Column<int>(type: "int", nullable: true),
-                    SalesRepresentative = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CommercialSupport = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    SelloutRemark = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -169,6 +179,31 @@ namespace FCentricProspections.Server.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ProspectionToDos",
+                columns: table => new
+                {
+                    ProspectionId = table.Column<long>(type: "bigint", nullable: false),
+                    ToDoId = table.Column<long>(type: "bigint", nullable: false),
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProspectionToDos", x => new { x.ProspectionId, x.ToDoId });
+                    table.ForeignKey(
+                        name: "FK_ProspectionToDos_Prospections_ProspectionId",
+                        column: x => x.ProspectionId,
+                        principalTable: "Prospections",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProspectionToDos_ToDoes_ToDoId",
+                        column: x => x.ToDoId,
+                        principalTable: "ToDoes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "ProspectionContactTypes",
                 columns: new[] { "Id", "Name" },
@@ -190,12 +225,6 @@ namespace FCentricProspections.Server.Migrations
                     { 3L, "Key account meeting" },
                     { 4L, "Other" }
                 });
-
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CompetitorBrands_UserCreatedId",
-                table: "CompetitorBrands",
-                column: "UserCreatedId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProspectionBrandInterests_BrandId",
@@ -228,9 +257,14 @@ namespace FCentricProspections.Server.Migrations
                 column: "ProspectionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Prospections_ContactPersonTypeId",
+                name: "IX_Prospections_ContactTypeId",
                 table: "Prospections",
-                column: "ContactPersonTypeId");
+                column: "ContactTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Prospections_EmployeeId",
+                table: "Prospections",
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Prospections_ShopId",
@@ -246,13 +280,18 @@ namespace FCentricProspections.Server.Migrations
                 name: "IX_Prospections_VisitTypeId",
                 table: "Prospections",
                 column: "VisitTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProspectionToDos_ToDoId",
+                table: "ProspectionToDos",
+                column: "ToDoId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ProspectionBrandInterests");
+               name: "ProspectionBrandInterests");
 
             migrationBuilder.DropTable(
                 name: "ProspectionBrands");
@@ -261,10 +300,10 @@ namespace FCentricProspections.Server.Migrations
                 name: "ProspectionCompetitorBrands");
 
             migrationBuilder.DropTable(
-                name: "Prospections");
+                name: "ProspectionToDos");
 
             migrationBuilder.DropTable(
-                name: "CompetitorBrands");
+                name: "Prospections");
 
             migrationBuilder.DropTable(
                 name: "ProspectionContactTypes");

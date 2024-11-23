@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FCentricProspections.Server.DataModels;
 
@@ -36,12 +37,6 @@ public partial class Contact
     public string SearchName2 { get; set; }
 
     public virtual Address Address { get; set; }
-
-    public virtual ICollection<CustomerLegalHistory> CustomerLegalHistories { get; set; } = new List<CustomerLegalHistory>();
-
-    public virtual Language Language { get; set; }
-
-    public virtual ICollection<ShopContact> ShopContacts { get; set; } = new List<ShopContact>();
 
     public virtual ICollection<Shop> Shops { get; set; } = new List<Shop>();
 

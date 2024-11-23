@@ -5,13 +5,15 @@ using System.Collections.Generic;
 
 namespace FCentricProspections.Server.DataModels;
 
-public partial class VatType
+public partial class ToDo
 {
     public long Id { get; set; }
 
-    public string Code { get; set; }
+    public string Remarks { get; set; }
 
-    public bool IsTaxLevy { get; set; }
+    public long? EmployeeId { get; set; }
+
+    public long ToDoStatusId { get; set; }
 
     public string Name { get; set; }
 
@@ -21,7 +23,11 @@ public partial class VatType
 
     public byte[] Timestamp { get; set; }
 
-    public virtual ICollection<Country> Countries { get; set; } = new List<Country>();
+    public virtual Employee Employee { get; set; }
+
+    public virtual ToDoStatus ToDoStatus { get; set; }
 
     public virtual User UserCreated { get; set; }
+
+    public ICollection<ProspectionToDo> ProspectionToDos { get; set; }
 }

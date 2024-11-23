@@ -5,13 +5,11 @@ using System.Collections.Generic;
 
 namespace FCentricProspections.Server.DataModels;
 
-public partial class ShopContact
+public partial class AppointmentState
 {
     public long Id { get; set; }
 
-    public long ContactId { get; set; }
-
-    public long ContactTypeId { get; set; }
+    public string Name { get; set; }
 
     public long UserCreatedId { get; set; }
 
@@ -19,13 +17,7 @@ public partial class ShopContact
 
     public byte[] Timestamp { get; set; }
 
-    public long? ShopId { get; set; }
-
-    public virtual Contact Contact { get; set; }
-
-    public virtual ContactType ContactType { get; set; }
-
-    public virtual Shop Shop { get; set; }
+    public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
     public virtual User UserCreated { get; set; }
 }

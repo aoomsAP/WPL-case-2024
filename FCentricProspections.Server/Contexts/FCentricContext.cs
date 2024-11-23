@@ -4,17 +4,22 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using FCentricProspections.Server.DataModels;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FCentricProspections.Server.Contexts;
 
-public partial class FCentricSmallContext : DbContext
+public partial class FCentricContext : DbContext
 {
-    public FCentricSmallContext(DbContextOptions<FCentricSmallContext> options)
+    public FCentricContext(DbContextOptions<FCentricContext> options)
         : base(options)
     {
     }
 
     public virtual DbSet<Address> Addresses { get; set; }
+
+    public virtual DbSet<Appointment> Appointments { get; set; }
+
+    public virtual DbSet<AppointmentState> AppointmentStates { get; set; }
 
     public virtual DbSet<Brand> Brands { get; set; }
 
@@ -30,6 +35,12 @@ public partial class FCentricSmallContext : DbContext
 
     public virtual DbSet<CustomerShop> CustomerShops { get; set; }
 
+    public virtual DbSet<Employee> Employees { get; set; }
+
+    public virtual DbSet<ProductLine> ProductLines { get; set; }
+
+    public virtual DbSet<ProductLineDelivery> ProductLineDeliveries { get; set; }
+
     public virtual DbSet<Prospection> Prospections { get; set; }
 
     public virtual DbSet<ProspectionBrand> ProspectionBrands { get; set; }
@@ -40,9 +51,19 @@ public partial class FCentricSmallContext : DbContext
 
     public virtual DbSet<ProspectionContactType> ProspectionContactTypes { get; set; }
 
+    public virtual DbSet<ProspectionToDo> ProspectionToDos { get; set; }
+
     public virtual DbSet<ProspectionVisitType> ProspectionVisitTypes { get; set; }
 
+    public virtual DbSet<SalesPeriod> SalesPeriods { get; set; }
+
     public virtual DbSet<Shop> Shops { get; set; }
+
+    public virtual DbSet<ShopDelivery> ShopDeliveries { get; set; }
+
+    public virtual DbSet<ToDo> ToDoes { get; set; }
+
+    public virtual DbSet<ToDoStatus> ToDoStatus { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -71,6 +92,19 @@ public partial class FCentricSmallContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_dbo.Prospections_dbo.Shops_ShopId");
         });
+
+        modelBuilder.Entity<ProspectionToDo>()
+        .HasKey(pt => new { pt.ProspectionId, pt.ToDoId });
+
+        modelBuilder.Entity<ProspectionToDo>()
+            .HasOne(pt => pt.Prospection)
+            .WithMany(p => p.ProspectionToDos)
+            .HasForeignKey(pt => pt.ProspectionId);
+
+        modelBuilder.Entity<ProspectionToDo>()
+            .HasOne(pt => pt.ToDo)
+            .WithMany(t => t.ProspectionToDos)
+            .HasForeignKey(pt => pt.ToDoId);
 
 
         // to implement ?

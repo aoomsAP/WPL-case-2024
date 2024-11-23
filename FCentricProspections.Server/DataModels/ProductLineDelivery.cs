@@ -37,8 +37,6 @@ public partial class ProductLineDelivery
 
     public virtual ProductLineDelivery ProductLineDeliveryRelated { get; set; }
 
-    public virtual SalesPeriodType SalesPeriodType { get; set; }
-
     public virtual ICollection<ShopDelivery> ShopDeliveries { get; set; } = new List<ShopDelivery>();
 
     public virtual User UserCreated { get; set; }

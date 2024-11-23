@@ -41,26 +41,9 @@ public partial class Shop
 
     public virtual ICollection<CustomerShop> CustomerShops { get; set; } = new List<CustomerShop>();
 
-    // NEW !
     public virtual ICollection<Prospection> Prospections { get; set; } = new List<Prospection>();
 
-    public virtual ICollection<ShopCommercialLocation> ShopCommercialLocations { get; set; } = new List<ShopCommercialLocation>();
-
-    public virtual ICollection<ShopCompetitorBrand> ShopCompetitorBrands { get; set; } = new List<ShopCompetitorBrand>();
-
-    public virtual ICollection<ShopCompetitorProductLine> ShopCompetitorProductLines { get; set; } = new List<ShopCompetitorProductLine>();
-
-    public virtual ICollection<ShopContact> ShopContacts { get; set; } = new List<ShopContact>();
-
     public virtual ICollection<ShopDelivery> ShopDeliveries { get; set; } = new List<ShopDelivery>();
-
-    public virtual ICollection<ShopGender> ShopGenders { get; set; } = new List<ShopGender>();
-
-    public virtual ICollection<ShopLine> ShopLines { get; set; } = new List<ShopLine>();
-
-    public virtual ShopType ShopType { get; set; }
-
-    public virtual Spanco Spanco { get; set; }
 
     public virtual User UserCreated { get; set; }
 }

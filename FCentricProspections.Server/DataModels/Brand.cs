@@ -28,8 +28,4 @@ public partial class Brand
     public virtual ICollection<ProductLine> ProductLines { get; set; } = new List<ProductLine>();
 
     public virtual User UserCreated { get; set; }
-
-    public virtual ICollection<ProspectionBrand> ProspectionBrands { get; set; }
-
-    public virtual ICollection<ProspectionBrandInterest> ProspectionBrandInterests { get; set; }
 }

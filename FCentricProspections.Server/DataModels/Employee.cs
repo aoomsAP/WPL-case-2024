@@ -2,7 +2,6 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FCentricProspections.Server.DataModels;
 
@@ -36,10 +35,11 @@ public partial class Employee
 
     public string MobileNumber { get; set; }
 
+    public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+
     public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
 
-    [NotMapped]
-    public virtual User User { get; set; }
+    public virtual ICollection<ToDo> ToDos { get; set; } = new List<ToDo>();
 
     public virtual User UserCreated { get; set; }
 }
