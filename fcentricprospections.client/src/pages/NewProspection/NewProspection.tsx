@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import BrandTag from '../../components/BrandTag/BrandTag';
 import { NewProspectionContext } from '../../contexts/NewProspectionContext';
-import { IProspectionBrand, IProspectionDetail } from '../../types';
+import { IProspectionBrand, IProspectionDetail, IProspectionToDo, IToDo } from '../../types';
 import BrandCardInput from '../../components/BrandCardInput/BrandCardInput';
 import BrandInterestCard from '../../components/BrandCardInput/BrandInterestCard';
 import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCards';
@@ -39,8 +39,7 @@ export const NewProspection = () => {
     setProspectionCompetitorBrands,
     prospectionBrandInterests,
     setProspectionBrandInterests,
-    todos,
-    setTodos,
+    addToDo,
     addProspection,
     updateProspectionBrands,
     updateProspectionCompetitorBrands,
@@ -51,6 +50,7 @@ export const NewProspection = () => {
   const navigate = useNavigate();
 
   // Input fields
+  const [visitDate,setVisitDate] = useState<Date>(); // TO IMPLEMENT
   const [contactType, setContactType] = useState<number>(4);
   const [contactName, setContactName] = useState<string>("");
   const [contactEmail, setContactEmail] = useState<string>("");
@@ -63,12 +63,16 @@ export const NewProspection = () => {
   const [terminatedBrands, setTerminatedBrands] = useState<string>("");
   const [trends, setTrends] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
+  const [toDos, setToDos] = useState<IToDo[]>([]); // TO IMPLEMENT
 
   // Setting default ProspectionBrands based on shopBrands list
   useEffect(() => {
+    console.log("setting default prospection brands")
     const defaultProspectionBrands: IProspectionBrand[] = shopBrands.map(x => ({ brandId: x.id, brandName: x.name }));
     setProspectionBrands(defaultProspectionBrands);
-  }, [])
+    console.log("set default prospection brands")
+    console.log(defaultProspectionBrands)
+  }, [shopBrands])
 
   // Search fields
   const [competitorBrandSearch, setCompetitorBrandSearch] = useState<string>("");
@@ -99,16 +103,18 @@ export const NewProspection = () => {
 
     const newProspection: IProspectionDetail = {
       shopId: Number(shopId),
-      date: new Date(), // date needs to be picked
+      userId: 1029, // TO DO: implement
+      employeeId: 4, // TO DO: implement
+      visitDate: new Date(), // TO DO: date needs to be picked
       dateCreated: new Date(),
       dateLastUpdated: new Date(),
       contactTypeId: contactType,
       contactName: contactName,
-      // contactEmail: ,
-      // contactPhone: ,
+      contactEmail: contactEmail,
+      contactPhone: contactPhone,
       visitTypeId: visitType,
       visitContext: visitContext,
-      // newBrands: ,
+      newBrands: newBrands,
       bestBrands: bestBrands,
       worstBrands: worstBrands,
       terminatedBrands: terminatedBrands,
@@ -117,8 +123,21 @@ export const NewProspection = () => {
     }
 
     try {
+      console.log("start handleComplete");
+
+      // Add new todos, save in new array to get toDos with id, and await response
+      const addedToDos: IToDo[] = [];
+      for (let toDo of toDos) {
+        const addedToDo = await addToDo(toDo);
+        if (addedToDo) {
+          addedToDos.push(addedToDo);
+        }
+      }
+      console.log("todos added to db", addedToDos);
+
       // Add new prospection and await response
       const createdProspection = await addProspection(newProspection);
+      console.log("new prospection added")
 
       // Only proceed if response was successful
       if (createdProspection && createdProspection.id) {
@@ -126,12 +145,26 @@ export const NewProspection = () => {
         // Get id from new prospection
         const prospectionId = createdProspection.id;
 
-        // Update the relationships
+        // Update the brand relationships
         await updateProspectionBrands(prospectionId, prospectionBrands);
         await updateProspectionBrandInterests(prospectionId, prospectionBrandInterests);
         await updateProspectionCompetitorBrands(prospectionId, prospectionCompetitorBrands);
+        console.log("Prospection/brand updates completed successfully.");
 
-        console.log("All updates completed successfully.");
+        // Update the todo relationship
+        let newProspectionToDos: IProspectionToDo[] = [];
+        for (let toDo of addedToDos) {
+          if (toDo.id) {
+            newProspectionToDos.push({
+              prospectionId: prospectionId,
+              toDoId: toDo.id,
+            })
+          }
+        };
+        await updateProspectionToDos(prospectionId, newProspectionToDos);
+        console.log("Prospection todos updates completed successfully.");
+
+        console.log("end handleComplete");
 
         navigate(`/shop/${shopId}`);
 
@@ -140,15 +173,11 @@ export const NewProspection = () => {
       }
 
     } catch (error) {
-      console.error("Error in onComplete: ", error);
+      console.error("Error in handleComplete: ", error);
     }
   };
 
-  // TO DO: this function currently does nothing except log things. Delete?
-  // const tabChanged = ({
-  //   prevIndex,
-  //   nextIndex,
-  // }: {
+  // const tabChanged = ({prevIndex,nextIndex}: {
   //   prevIndex: number;
   //   nextIndex: number;
   // }) => {
@@ -210,6 +239,8 @@ export const NewProspection = () => {
             <input type='text' value={contactPhone} onChange={(e) => setContactPhone(e.target.value)}></input>
           </fieldset>
 
+          {/* TO DO: IMPLEMENT CHECKBOX TO AUTOMATICALLY ADD TO TODOS */}
+
           <fieldset>
             <legend>Bezoek type</legend>
             <label>
@@ -244,8 +275,8 @@ export const NewProspection = () => {
           {/* FC70 BRANDS */}
           <h3>FC70 merken</h3>
           <div>
-            {shopBrands.map(brand => (
-              <BrandTag brandId={brand.id} brandName={brand.name} type="brand" />
+            {prospectionBrands.map(brand => (
+              <BrandTag brandId={brand.brandId} brandName={brand.brandName} type="brand" />
             ))}
           </div>
 
@@ -283,11 +314,11 @@ export const NewProspection = () => {
           </div>
 
           {/* NEW BRANDS */}
-          <fieldset>
-            <legend>Nieuwe merken</legend>
-            <p>(Merken die u niet vond in de lijst hierboven)</p>
-            <textarea value={newBrands} onChange={(e) => setNewBrands(e.target.value)} />
-          </fieldset>
+          <h3>Nieuwe merken</h3>
+          <legend>Merken die u niet terugvond in de lijst hierboven:</legend>
+          <textarea value={newBrands} onChange={(e) => setNewBrands(e.target.value)} />
+
+          {/* TO DO: ADD TO TODOS */}
 
         </FormWizard.TabContent>
 
@@ -316,7 +347,7 @@ export const NewProspection = () => {
 
           <h3>FC70 overzicht</h3>
 
-          {prospectionBrands.map(brand => <BrandCardInput brand={brand} />)}
+          {prospectionBrands.map(brand => <BrandCardInput brand={{ brandId: brand.brandId, brandName: brand.brandName }} />)}
           {prospectionBrands.length === 0 && <p>Geen FC70 merken gevonden.</p>}
 
         </FormWizard.TabContent>
@@ -374,6 +405,7 @@ export const NewProspection = () => {
           <p>Hier kan u items toevoegen die op basis van dit verslag moeten opgevolgd worden.</p>
 
           {/* TO DO LIST */}
+          {/* TO DO: IMPLEMENT */}
 
         </FormWizard.TabContent>
 

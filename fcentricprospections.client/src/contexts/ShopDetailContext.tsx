@@ -61,7 +61,7 @@ export const ShopDetailProvider = ({ children }: { children: React.ReactNode }) 
 
     async function loadShopBrands(shopId: string) {
       try {
-          const response = await fetch(`/api/shop/${shopId}/brands`, {
+          const response = await fetch(`/api/shops/${shopId}/brands`, {
               method: 'GET',
               headers: { 'Content-Type': 'application/json' },
           });
@@ -69,6 +69,7 @@ export const ShopDetailProvider = ({ children }: { children: React.ReactNode }) 
           const json: IBrand[] = await response.json();
           setShopBrands(json);
 
+          console.log("shop brands set");
       } catch (error) {
           console.error('Error fetching brands data:', error);
       }

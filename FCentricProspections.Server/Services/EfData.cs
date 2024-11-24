@@ -323,7 +323,9 @@ namespace FCentricProspections.Server.Services
                              {
                                  Id = b.Id,
                                  Name = b.Name,
-                             }).ToList();
+                             })
+                             .Distinct()
+                             .ToList();
 
             return brandList;
         }

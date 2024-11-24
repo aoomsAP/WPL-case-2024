@@ -41,7 +41,7 @@ export interface ICompetitorBrand {
 
 export interface IProspection {
   id: number,
-  date: Date,
+  visitDate: Date,
   shopId: number,
 }
 
@@ -50,7 +50,7 @@ export interface IProspectionDetail {
   shopId: number,
   userId?: number,
   employeeId?: number,
-  date: Date,
+  visitDate: Date,
   dateCreated?: Date,
   dateLastUpdated?: Date,
   contactTypeId: number,
@@ -92,7 +92,7 @@ export interface IToDo {
   id?: number,
   remarks?: string,
   employeeId?: number,
-  ToDoStatusId?: number,
+  toDoStatusId?: number,
   toDoStatus?: string,
   name?: string,
 }
@@ -103,7 +103,7 @@ export interface IProspectionToDo {
   toDoId: number,
   remarks?: string,
   employeeId?: number,
-  ToDoStatusId?: number,
+  toDoStatusId?: number,
   toDoStatus?: string,
   name?: string,
 }
