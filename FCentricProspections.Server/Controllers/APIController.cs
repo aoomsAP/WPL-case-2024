@@ -534,6 +534,7 @@ namespace FCentricProspections.Server.Controllers
             return Ok(competitorbrands);
         }
 
+
         // USERS ---------------------------------------------------------------------------------------------------------------------
         // ---------------------------------------------------------------------------------------------------------------------------
 
@@ -572,7 +573,7 @@ namespace FCentricProspections.Server.Controllers
         }
 
 
-        // EMPLOYEE ------------------------------------------------------------------------------------------------------------------
+        // EMPLOYEES ------------------------------------------------------------------------------------------------------------------
         // -------------------------------------------------------------------------------------------------------------------------
 
         [HttpGet()]
@@ -591,8 +592,28 @@ namespace FCentricProspections.Server.Controllers
         }
 
         [HttpGet()]
+        [Route("employees/{id}")]
+        public IActionResult GetEmployee(long id)
+        {
+            var viewModel = new EmployeeGetViewModel();
+
+            var employee = this.data.GetEmployee(id);
+            if (employee == null)
+            {
+                return NotFound("Employee not found");
+
+            }
+            viewModel.Id = employee.Id;
+            viewModel.Name = employee.Name;
+            viewModel.FirstName = employee.FirstName;
+            viewModel.UserId = employee.UserId;
+
+            return Ok(viewModel);
+        }
+
+        [HttpGet()]
         [Route("employees/{userId}")]
-        public IActionResult GetEmployee(long userId)
+        public IActionResult GetEmployeeByUserId(long userId)
         {
             var viewModel = new EmployeeGetViewModel();
 
@@ -607,7 +628,6 @@ namespace FCentricProspections.Server.Controllers
             viewModel.FirstName = employee.FirstName;
             viewModel.UserId = employee.UserId;
 
-
             return Ok(viewModel);
         }
 
@@ -618,12 +638,10 @@ namespace FCentricProspections.Server.Controllers
         [Route("employees/{id}/appointments")]
         public IActionResult GetAppointmentsByEmployeeId(long id)
         {
-
             var employee = this.data.GetEmployeeWithAppointments(id);
             if (employee == null)
             {
                 return NotFound("Employee not found");
-
             }
 
             // for each appointment in the database, 
@@ -637,6 +655,7 @@ namespace FCentricProspections.Server.Controllers
                     var viewModel = new AppointmentGetAllViewModel
                     {
                         Id = appointment.Id,
+                        EmployeeId = appointment.EmployeeId,
                         StartDate = appointment.StartDate,
                         EndDate = appointment.EndDate,
                         Remarks = appointment.Remarks,
@@ -649,9 +668,6 @@ namespace FCentricProspections.Server.Controllers
 
             // return list of viewmodel user
             return Ok(appointmentList);
-
-
-
         }
 
         [HttpGet()]
@@ -664,8 +680,8 @@ namespace FCentricProspections.Server.Controllers
             if (appointment == null)
             {
                 return NotFound("Appointment not found");
-
             }
+
             viewModel.Id = id;
             viewModel.Remarks = appointment.Remarks;
             viewModel.Name = appointment.Name;  
@@ -674,11 +690,8 @@ namespace FCentricProspections.Server.Controllers
             viewModel.EmployeeId = appointment.EmployeeId;
             viewModel.AppointmentState = appointment.AppointmentState.Name;
 
-
             return Ok(viewModel);
-
         }
-
 
 
         // TYPES ------------------------------------------------------------------------------------------------------------------
