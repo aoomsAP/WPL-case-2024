@@ -39,10 +39,13 @@ export const NewProspection = () => {
     setProspectionCompetitorBrands,
     prospectionBrandInterests,
     setProspectionBrandInterests,
+    todos,
+    setTodos,
     addProspection,
     updateProspectionBrands,
     updateProspectionCompetitorBrands,
-    updateProspectionBrandInterests
+    updateProspectionBrandInterests,
+    updateProspectionToDos,
   } = useContext(NewProspectionContext);
 
   const navigate = useNavigate();

@@ -98,6 +98,8 @@ namespace FCentricProspections.Server.Migrations
                         principalColumn: "Id");
                 });
 
+       
+
             migrationBuilder.CreateTable(
                 name: "ProspectionBrandInterests",
                 columns: table => new
@@ -183,13 +185,14 @@ namespace FCentricProspections.Server.Migrations
                 name: "ProspectionToDos",
                 columns: table => new
                 {
-                    ProspectionId = table.Column<long>(type: "bigint", nullable: false),
-                    ToDoId = table.Column<long>(type: "bigint", nullable: false),
                     Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProspectionId = table.Column<long>(type: "bigint", nullable: false),
+                    ToDoId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProspectionToDos", x => new { x.ProspectionId, x.ToDoId });
+                    table.PrimaryKey("PK_ProspectionToDos", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ProspectionToDos_Prospections_ProspectionId",
                         column: x => x.ProspectionId,
@@ -282,6 +285,11 @@ namespace FCentricProspections.Server.Migrations
                 column: "VisitTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProspectionToDos_ProspectionId",
+                table: "ProspectionToDos",
+                column: "ProspectionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProspectionToDos_ToDoId",
                 table: "ProspectionToDos",
                 column: "ToDoId");
@@ -290,8 +298,9 @@ namespace FCentricProspections.Server.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            
             migrationBuilder.DropTable(
-               name: "ProspectionBrandInterests");
+                name: "ProspectionBrandInterests");
 
             migrationBuilder.DropTable(
                 name: "ProspectionBrands");
@@ -300,16 +309,16 @@ namespace FCentricProspections.Server.Migrations
                 name: "ProspectionCompetitorBrands");
 
             migrationBuilder.DropTable(
-                name: "ProspectionToDos");
+                name: "ProspectionToDos");  
 
             migrationBuilder.DropTable(
                 name: "Prospections");
-
+        
             migrationBuilder.DropTable(
                 name: "ProspectionContactTypes");
 
             migrationBuilder.DropTable(
-                name: "ProspectionVisitTypes");
+                name: "ProspectionVisitTypes");           
         }
     }
 }

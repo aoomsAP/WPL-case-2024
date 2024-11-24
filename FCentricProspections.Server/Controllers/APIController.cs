@@ -242,6 +242,7 @@ namespace FCentricProspections.Server.Controllers
                     ToDoId = prospectionToDo.ToDoId,
                     Remarks = toDo.Remarks,
                     EmployeeId = toDo.EmployeeId,
+                    ToDoStatusId = toDo.ToDoStatus.Id,
                     ToDoStatus = toDo.ToDoStatus.Name,
                     Name = toDo.Name,
                 });
@@ -602,7 +603,7 @@ namespace FCentricProspections.Server.Controllers
             var toDos = new List<ToDoGetViewModel>();
             foreach (var toDo in this.data.GetToDos())
             {
-                toDos.Add(new ToDoGetViewModel { Id = toDo.Id, Remarks = toDo.Remarks, Name = toDo.Name, EmployeeId = toDo.EmployeeId, ToDoStatus = toDo.ToDoStatus.Name });
+                toDos.Add(new ToDoGetViewModel { Id = toDo.Id, Remarks = toDo.Remarks, Name = toDo.Name, EmployeeId = toDo.EmployeeId, ToDoStatus = toDo.ToDoStatus.Name, ToDoStatusId = toDo.ToDoStatus.Id });
             }
 
             // return list of viewmodel brand
@@ -624,6 +625,7 @@ namespace FCentricProspections.Server.Controllers
             viewModel.Id = toDo.Id;
             viewModel.Remarks = toDo.Remarks;
             viewModel.EmployeeId = toDo.EmployeeId;
+            viewModel.ToDoStatusId = toDo.ToDoStatus.Id;
             viewModel.ToDoStatus = toDo.ToDoStatus.Name;
             viewModel.Name = toDo.Name;
 

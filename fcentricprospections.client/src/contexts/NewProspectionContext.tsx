@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-import { IBrand, ICompetitorBrand, IContactType, IProspectionDetail, IProspectionBrand, IProspectionBrandInterest, IProspectionCompetitorBrand, IVisitType, ITodo } from '../types';
+import { IBrand, ICompetitorBrand, IContactType, IProspectionDetail, IProspectionBrand, IProspectionBrandInterest, IProspectionCompetitorBrand, IVisitType, IToDo, IProspectionToDo } from '../types';
 
 export interface NewProspectionContext {
     // data states
@@ -21,8 +21,8 @@ export interface NewProspectionContext {
     setProspectionCompetitorBrands: (prospectionCompetitorBrands: IProspectionCompetitorBrand[]) => void;
     prospectionBrandInterests: IProspectionBrandInterest[];
     setProspectionBrandInterests: (prospectionBrandInterests: IProspectionBrandInterest[]) => void;
-    todos: ITodo[];
-    setTodos: (todos: ITodo[]) => void;
+    todos: IToDo[];
+    setTodos: (todos: IToDo[]) => void;
 
     // functions
     loadBrands: () => Promise<void>;
@@ -31,9 +31,11 @@ export interface NewProspectionContext {
     loadVisitTypes: () => Promise<void>;
 
     addProspection: (newProspection: IProspectionDetail) => Promise<IProspectionDetail | undefined>;
+    addToDo: (newToDo: IToDo) => Promise<IToDo | undefined>;
     updateProspectionBrands: (prospectionId: number, prospectionBrands: IProspectionBrand[]) => Promise<void>;
     updateProspectionCompetitorBrands: (prospectionId: number, prospectionCompetitorBrands: IProspectionCompetitorBrand[]) => Promise<void>;
     updateProspectionBrandInterests: (prospectionId: number, prospectionBrandInterests: IProspectionBrandInterest[]) => Promise<void>;
+    updateProspectionToDos: (prospectionId: number, prospectionToDos: IProspectionToDo[]) => Promise<void>;
 }
 
 export const NewProspectionContext = createContext<NewProspectionContext>({
@@ -57,7 +59,7 @@ export const NewProspectionContext = createContext<NewProspectionContext>({
     prospectionBrandInterests: [],
     setProspectionBrandInterests: () => { },
     todos: [],
-    setTodos: () => {},
+    setTodos: () => { },
 
     // functions
     loadBrands: () => Promise.resolve(),
@@ -66,9 +68,11 @@ export const NewProspectionContext = createContext<NewProspectionContext>({
     loadVisitTypes: () => Promise.resolve(),
 
     addProspection: () => Promise.resolve(undefined),
+    addToDo: () => Promise.resolve(undefined),
     updateProspectionBrands: () => Promise.resolve(),
     updateProspectionCompetitorBrands: () => Promise.resolve(),
     updateProspectionBrandInterests: () => Promise.resolve(),
+    updateProspectionToDos: () => Promise.resolve(),
 });
 
 export function NewProspectionProvider({ children }: { children: React.ReactNode }) {
@@ -86,7 +90,7 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
     const [prospectionBrands, setProspectionBrands] = useState<IProspectionBrand[]>([]);
     const [prospectionCompetitorBrands, setProspectionCompetitorBrands] = useState<IProspectionCompetitorBrand[]>([]);
     const [prospectionBrandInterests, setProspectionBrandInterests] = useState<IProspectionBrandInterest[]>([]);
-    const [todos, setTodos] = useState<ITodo[]>([]);
+    const [todos, setTodos] = useState<IToDo[]>([]);
 
     // functions -------------------------------------------------------------------------------------------------
 
@@ -172,6 +176,23 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
         }
     }
 
+    async function addToDo(newToDo: IToDo) {
+        try {
+            const response = await fetch(`/api/todos`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newToDo),
+            });
+
+            const json: IToDo = await response.json();
+
+            console.log("Succesful POST new todo: ", json)
+            return (json);
+        } catch (error) {
+            console.error('Error POST new todo:', error);
+        }
+    }
+
     async function updateProspectionBrands(prospectionId: number, prospectionBrands: IProspectionBrand[]) {
 
         try {
@@ -232,6 +253,25 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
         }
     }
 
+    async function updateProspectionToDos(prospectionId: number, prospectionToDos: IProspectionToDo[]) {
+        try {
+            const ids: number[] = prospectionToDos.map(x => x.toDoId);
+
+            const payload = { ToDoIds: ids };
+
+            await fetch(`/api/prospections/${prospectionId}/todos`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            console.log("Succesful PUT prospection todos.")
+
+        } catch (error) {
+            console.error('Error PUT prospection todos:', error);
+        }
+    }
+
     // use effect & return ---------------------------------------------------------------------------------------------------------
 
     useEffect(() => {
@@ -270,11 +310,13 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
             loadCompetitorBrands: loadCompetitorBrands,
             loadContactTypes: loadContactTypes,
             loadVisitTypes: loadVisitTypes,
-            addProspection: addProspection,
 
+            addProspection: addProspection,
+            addToDo: addToDo,
             updateProspectionBrands: updateProspectionBrands,
             updateProspectionCompetitorBrands: updateProspectionCompetitorBrands,
             updateProspectionBrandInterests: updateProspectionBrandInterests,
+            updateProspectionToDos: updateProspectionToDos,
         }}>
             {children}
         </NewProspectionContext.Provider>

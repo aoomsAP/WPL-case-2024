@@ -88,10 +88,22 @@ export interface IProspectionBrandInterest {
   remark?: string,
 }
 
-export interface ITodo {
+export interface IToDo {
   id?: number,
   remarks?: string,
   employeeId?: number,
+  ToDoStatusId?: number,
+  toDoStatus?: string,
+  name?: string,
+}
+
+export interface IProspectionToDo {
+  id?: number,
+  prospectionId: number,
+  toDoId: number,
+  remarks?: string,
+  employeeId?: number,
+  ToDoStatusId?: number,
   toDoStatus?: string,
   name?: string,
 }

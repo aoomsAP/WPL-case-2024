@@ -12,7 +12,9 @@
 
         public long? EmployeeId { get; set; }
 
-        public string ToDoStatus { get; set; }
+        public long? ToDoStatusId { get; set; }
+
+        public string? ToDoStatus { get; set; }
 
         public string Name { get; set; }
     }
