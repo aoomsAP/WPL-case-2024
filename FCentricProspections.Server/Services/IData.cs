@@ -69,11 +69,30 @@ namespace FCentricProspections.Server.Services
         CompetitorBrand GetCompetitorBrand(long id);
 
 
-        // User ---------------------------------------------------------------------------------------------------------------------
+        // User & Employee ---------------------------------------------------------------------------------------------------------------------
         
         UserDto GetUserDto(long id);
 
         User GetUser(long id);
+
+        IEnumerable<UserDto> GetUsers();
+
+        Employee GetEmployee(long id);
+
+        Employee GetEmployeeWithAppointments(long id);
+
+        Employee GetEmployeeByUserId(long userId);
+
+        IEnumerable<EmployeeDto> GetEmployees();
+
+
+        //  Appointments -------------------------------------------------------------------------------------------------------------
+
+        Appointment GetAppointment(long id);
+
+        IEnumerable<Appointment> GetAppointments();
+
+        AppointmentState GetAppointmentState(long id);
 
 
         // Types ---------------------------------------------------------------------------------------------------------------------

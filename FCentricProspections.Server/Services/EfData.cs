@@ -370,6 +370,85 @@ namespace FCentricProspections.Server.Services
             return this.context.Users.FirstOrDefault(x => x.Id == id);
         }
 
+
+        public IEnumerable<UserDto> GetUsers()
+        {
+            var UserList = context.Users
+                .Select(s => new UserDto
+                {
+                    Id = s.Id,
+                    Login = s.Login,
+                    Blocked= s.Blocked,
+                     
+                }).ToList();
+
+            return UserList;
+        }
+
+
+        public Employee GetEmployee(long id)
+        {
+            
+
+            return this.context.Employees
+                .FirstOrDefault(x => x.Id == id);
+        }
+        public Employee GetEmployeeByUserId(long userId)
+        {
+            return this.context.Employees
+                .FirstOrDefault(x => x.UserId == userId);
+        }
+
+        public Employee GetEmployeeWithAppointments(long id)
+        {
+            return this.context.Employees
+               .Include(e => e.Appointments)
+               .FirstOrDefault(x => x.Id == id);
+        }
+
+
+        public IEnumerable<EmployeeDto> GetEmployees()
+        {
+            var EmployeeList = context.Employees
+                .Select(s => new EmployeeDto
+                {
+                    Id= s.Id,
+                    FirstName = s.FirstName,
+                    Appointments = s.Appointments,
+                    Name = s.Name,
+                    UserId = s.Id,
+                }).ToList ();
+
+            return EmployeeList;
+        }
+
+        //Appointments-------------------------------------------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------------------------------------------------------
+
+        public Appointment GetAppointment(long id)
+        {
+            return this.context.Appointments
+                .Include(a => a.AppointmentState).FirstOrDefault(a => a.Id == id);
+        }
+
+
+        public IEnumerable<Appointment> GetAppointments()
+        {
+            return this.context.Appointments
+                .Include(a => a.AppointmentState).ToList();
+        }
+
+
+        public AppointmentState GetAppointmentState(long id)
+        {
+            return this.context.AppointmentStates
+                .FirstOrDefault(a => a.Id == id);
+        }
+
+
+        
+
+
         // TYPES ---------------------------------------------------------------------------------------------------------------------
         // ---------------------------------------------------------------------------------------------------------------------------
 

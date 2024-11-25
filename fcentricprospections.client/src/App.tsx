@@ -10,6 +10,8 @@ import styles from './App.module.css'
 import { ShopDetail } from './pages/ShopDetail/ShopDetail';
 import { ShopDetailProvider } from './contexts/ShopDetailContext';
 import { ProspectionDetailProvider } from './contexts/ProspectionDetailContext';
+import { UserProvider } from './contexts/UserContext';
+import UserPage from './pages/UserPage/UserPage';
 
 const Root = () => {
 
@@ -82,6 +84,7 @@ const ProspectionDetailPage = () => {
     )
 }
 
+
 const App = () => {
     const router = createBrowserRouter([
         {
@@ -89,7 +92,11 @@ const App = () => {
             element: <Root />,
             children: [
                 {
-                    path: "",
+                    path : "",
+                    element: <UserPage/>
+                },
+                {
+                    path: "/home",
                     element: <Homepage />
                 },
                 {
@@ -113,9 +120,9 @@ const App = () => {
     ]);
 
     return (
-        <ShopListProvider>
+        <UserProvider>
             <RouterProvider router={router} />
-        </ShopListProvider>
+        </UserProvider>
     )
 }
 

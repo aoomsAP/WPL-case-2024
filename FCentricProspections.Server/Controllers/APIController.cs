@@ -713,6 +713,163 @@ namespace FCentricProspections.Server.Controllers
             return Ok(competitorbrands);
         }
 
+        // USERS ---------------------------------------------------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------------------------------------------------------
+
+        [HttpGet()]
+        [Route("users")]
+        public IActionResult GetUsers()
+        {
+            // for each user in the database, 
+            var userList = new List<UsersGetAllViewModel>();
+            foreach (var user in this.data.GetUsers())
+            {
+                userList.Add(new UsersGetAllViewModel { Id = user.Id, Login = user.Login, Blocked = user.Blocked });
+            }
+
+            // return list of viewmodel user
+            return Ok(userList);
+        }
+
+        [HttpGet()]
+        [Route("users/{id}")]
+        public IActionResult GetUser(long id)
+        {
+            var viewModel = new UserGetViewModel();
+
+            var user = this.data.GetUser(id);
+            if (user == null)
+            {
+                return NotFound("User not found");
+
+            }
+            viewModel.Id = id;
+            viewModel.Login = user.Login;
+            viewModel.Blocked = user.Blocked;
+
+            return Ok(viewModel);
+        }
+
+
+        // EMPLOYEES ------------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------------------
+
+        [HttpGet()]
+        [Route("employees")]
+        public IActionResult GetEmployees()
+        {
+            // for each user in the database, 
+            var employeeList = new List<EmployeeGetAllViewModel>();
+            foreach (var employee in this.data.GetEmployees())
+            {
+                employeeList.Add(new EmployeeGetAllViewModel { Id = employee.Id, FirstName = employee.FirstName, Name = employee.Name, UserId = employee.UserId });
+            }
+
+            // return list of viewmodel user
+            return Ok(employeeList);
+        }
+
+        [HttpGet()]
+        [Route("employees/{id}")]
+        public IActionResult GetEmployee(long id)
+        {
+            var viewModel = new EmployeeGetViewModel();
+
+            var employee = this.data.GetEmployee(id);
+            if (employee == null)
+            {
+                return NotFound("Employee not found");
+
+            }
+            viewModel.Id = employee.Id;
+            viewModel.Name = employee.Name;
+            viewModel.FirstName = employee.FirstName;
+            viewModel.UserId = employee.UserId;
+
+            return Ok(viewModel);
+        }
+
+        [HttpGet()]
+        [Route("employees/{userId}")]
+        public IActionResult GetEmployeeByUserId(long userId)
+        {
+            var viewModel = new EmployeeGetViewModel();
+
+            var employee = this.data.GetEmployeeByUserId(userId);
+            if (employee == null)
+            {
+                return NotFound("Employee not found");
+
+            }
+            viewModel.Id = employee.Id;
+            viewModel.Name = employee.Name;
+            viewModel.FirstName = employee.FirstName;
+            viewModel.UserId = employee.UserId;
+
+            return Ok(viewModel);
+        }
+
+        // APPOINTMENTS ------------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------------------
+
+        [HttpGet()]
+        [Route("employees/{id}/appointments")]
+        public IActionResult GetAppointmentsByEmployeeId(long id)
+        {
+            var employee = this.data.GetEmployeeWithAppointments(id);
+            if (employee == null)
+            {
+                return NotFound("Employee not found");
+            }
+
+            // for each appointment in the database, 
+            var appointmentList = new List<AppointmentGetAllViewModel>();
+            foreach (var app in employee.Appointments)
+            {
+                var appointment = this.data.GetAppointment(app.Id);
+                if (appointment != null)
+                {
+                    
+                    var viewModel = new AppointmentGetAllViewModel
+                    {
+                        Id = appointment.Id,
+                        EmployeeId = appointment.EmployeeId,
+                        StartDate = appointment.StartDate,
+                        EndDate = appointment.EndDate,
+                        Remarks = appointment.Remarks,
+                        Name = appointment.Name,
+                        AppointmentState = appointment.AppointmentState.Name,
+                    };
+                    appointmentList.Add(viewModel);
+                }               
+            }
+
+            // return list of viewmodel user
+            return Ok(appointmentList);
+        }
+
+        [HttpGet()]
+        [Route("appointments/{id}")]
+        public IActionResult GetAppointment(long id)
+        {
+            var viewModel = new AppointmentGetViewModel();
+
+            var appointment = this.data.GetAppointment(id);
+            if (appointment == null)
+            {
+                return NotFound("Appointment not found");
+            }
+
+            viewModel.Id = id;
+            viewModel.Remarks = appointment.Remarks;
+            viewModel.Name = appointment.Name;  
+            viewModel.StartDate = appointment.StartDate;
+            viewModel.EndDate = appointment.EndDate;
+            viewModel.EmployeeId = appointment.EmployeeId;
+            viewModel.AppointmentState = appointment.AppointmentState.Name;
+
+            return Ok(viewModel);
+        }
 
         // all brands for a given shop
         [HttpGet()]

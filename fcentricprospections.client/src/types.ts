@@ -85,6 +85,31 @@ export interface IProspectionBrandInterest {
   id?: number,
   brandId: number,
   brandName: string,
+  sales?: string,
+}
+
+export interface IUser {
+  id : string,
+  login : string,
+  blocked :  boolean,  
+}
+
+export interface IEmployee {
+  id : string,
+  firstName :  string,
+  userId? : string,
+  hideForAgenda :  boolean,
+  name : string,
+  dateCreated : Date,
+}
+
+export interface IAppointment {
+  id : string,
+  startDate : Date,
+  endDate : Date,
+  appointmentState : string,
+  name : string,
+  employeeId : number
   remark?: string,
 }
 
