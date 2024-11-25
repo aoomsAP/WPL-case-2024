@@ -1,6 +1,5 @@
 import { createBrowserRouter, Link, Outlet, RouterProvider, useLocation, useNavigate } from 'react-router-dom';
-import { Homepage } from './pages/Home/HomePage';
-import { ShopListProvider } from './contexts/ShopListContext';
+import { Homepage } from './pages/HomePage/HomePage';
 import { NewProspection } from './pages/NewProspection/NewProspection';
 import { ProspectionOverview } from './pages/ProspectionOverview/ProspectionOverview'
 import { ProspectionDetail } from './pages/ProspectionDetail/ProspectionDetail';

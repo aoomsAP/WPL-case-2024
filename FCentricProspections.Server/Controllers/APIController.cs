@@ -790,7 +790,7 @@ namespace FCentricProspections.Server.Controllers
         }
 
         [HttpGet()]
-        [Route("employees/{userId}")]
+        [Route("employees/user/{userId}")]
         public IActionResult GetEmployeeByUserId(long userId)
         {
             var viewModel = new EmployeeGetViewModel();

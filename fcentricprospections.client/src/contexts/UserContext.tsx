@@ -78,7 +78,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         try {
             console.log("start loading employee")
 
-            const response = await fetch(`/api/employees/${userId}`, {
+            const response = await fetch(`/api/employees/user/${userId}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
             });
