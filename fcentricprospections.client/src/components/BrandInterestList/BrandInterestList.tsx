@@ -1,20 +1,18 @@
 import React from 'react';
-import { IProspectionBrandInterest, IBrand } from '../../types';
+import { IProspectionBrandInterest } from '../../types';
 import styles from "./BrandInterestList.module.css"
 
 interface BrandInterestListProps {
   prospectionBrandInterests: IProspectionBrandInterest[];
-  brands: IBrand[];
 }
 
-export const BrandInterestList: React.FC<BrandInterestListProps> = ({ prospectionBrandInterests, brands }) => (
+export const BrandInterestList: React.FC<BrandInterestListProps> = ({ prospectionBrandInterests }) => (
   <section className={styles.brandInterestList}>
     <h2>Interesse FC70 merken</h2>
     {prospectionBrandInterests.map((brand, index) => {
-      const matchingBrandInterest = brands.find(b => b.id === brand.brandId);
       return (
         <div key={index} className={styles.brandInterestCard}>
-          <h3>Brand: {matchingBrandInterest ? matchingBrandInterest.name : "Onbekend merk"}</h3>
+          <h3>Brand: {brand.brandName}</h3>
           <p>Opmerking: {brand.remark}</p>
         </div>
       );

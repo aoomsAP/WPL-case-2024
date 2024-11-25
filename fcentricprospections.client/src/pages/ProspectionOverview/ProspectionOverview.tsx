@@ -26,12 +26,12 @@ export const ProspectionOverview = () => {
             <section className={styles.section}>
                 {shopProspections
                     // sort on date in descending order
-                    .sort((a, b) => (new Date(b.date).getTime()) - (new Date(a.date).getTime()))
+                    .sort((a, b) => (new Date(b.visitDate).getTime()) - (new Date(a.visitDate).getTime()))
                     // get three latest prospections
                     .map((prospection) => (
                         <button className={styles.button} key={prospection.id}>
                             <Link to={`/shop/${shopId}/prospections/${prospection.id}`}>
-                                Prospectie {new Date(prospection.date).toLocaleDateString()}<FaAngleRight className={styles.icon} />
+                                Prospectie {new Date(prospection.visitDate).toLocaleDateString()}<FaAngleRight className={styles.icon} />
                             </Link>
                         </button>
                     ))}

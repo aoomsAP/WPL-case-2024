@@ -158,6 +158,7 @@ export const ProspectionDetailProvider = ({ children }: { children: React.ReactN
 
       const json: IProspectionCompetitorBrand[] = await response.json();
       setProspectionCompetitorBrands(json);
+      console.log(json);
     } catch (error) {
       console.log(error);
     }

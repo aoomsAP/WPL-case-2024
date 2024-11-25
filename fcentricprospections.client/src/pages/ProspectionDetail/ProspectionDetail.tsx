@@ -30,7 +30,6 @@ export const ProspectionDetail = () => {
     contactType,
     visitType,
     brands,
-    competitorBrands,
     prospectionBrands,
     prospectionCompetitorBrands,
     prospectionBrandInterests,
@@ -68,11 +67,11 @@ export const ProspectionDetail = () => {
 
           <BrandList prospectionBrands={prospectionBrands} brands={brands} />
 
-          <CompetitorBrandList prospectionCompetitorBrands={prospectionCompetitorBrands} brands={competitorBrands} />
+          <CompetitorBrandList prospectionCompetitorBrands={prospectionCompetitorBrands} />
 
           {prospectionDetail && <GeneralSituation detail={prospectionDetail} />}
 
-          <BrandInterestList prospectionBrandInterests={prospectionBrandInterests} brands={brands} />
+          <BrandInterestList prospectionBrandInterests={prospectionBrandInterests} />
 
           <TextSection title="Trends en noden in de markt" text={prospectionDetail?.trends} />
           <TextSection title="Extra opmerkingen en feedback" text={prospectionDetail?.extra} />

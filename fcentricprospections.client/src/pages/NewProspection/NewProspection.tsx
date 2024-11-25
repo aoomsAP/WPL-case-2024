@@ -81,7 +81,7 @@ export const NewProspection = () => {
   // Filter for competitor brands
   const competitorBrandSearchFunc = competitorBrands.filter(brand => {
 
-    if (prospectionCompetitorBrands.map(x => x.brandId).find(x => x === brand.id)) return false;
+    if (prospectionCompetitorBrands.map(x => x.competitorBrandId).find(x => x === brand.id)) return false;
 
     if (competitorBrandSearch.length < 3) return false;
 
@@ -294,7 +294,7 @@ export const NewProspection = () => {
               competitorBrandSearchFunc.map(brand => (
                 <li key={brand.id}
                   onClick={() => {
-                    setProspectionCompetitorBrands([...prospectionCompetitorBrands, { brandId: brand.id, brandName: brand.name }]);
+                    setProspectionCompetitorBrands([...prospectionCompetitorBrands, { competitorBrandId: brand.id, competitorBrandName: brand.name }]);
                     setCompetitorBrandSearch("");
                   }}>
                   {brand.name}
@@ -310,7 +310,7 @@ export const NewProspection = () => {
           </ul>
 
           <div>
-            {prospectionCompetitorBrands.map(brand => <BrandTag brandId={brand.brandId} brandName={brand.brandName} type="competitorBrand" />)}
+                      {prospectionCompetitorBrands.map(brand => <BrandTag brandId={brand.competitorBrandId} brandName={brand.competitorBrandName} type="competitorBrand" />)}
           </div>
 
           {/* NEW BRANDS */}
