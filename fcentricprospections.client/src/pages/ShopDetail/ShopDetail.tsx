@@ -33,12 +33,12 @@ export const ShopDetail = () => {
           <ul>
             {shopProspections
               // sort on date in descending order
-              .sort((a, b) => (new Date(b.date).getTime()) - (new Date(a.date).getTime()))
+              .sort((a, b) => (new Date(b.visitDate).getTime()) - (new Date(a.visitDate).getTime()))
               // get three latest prospections
               .slice(0, 3)
               .map(prospection => (<li className={styles.li} key={prospection.id}>
                 <Link className={styles.prospectionA} to={`/shop/${shopId}/prospections/${prospection.id}`}>
-                  Prospectie {new Date(prospection.date).toLocaleDateString()}<FaAngleRight className={styles.icon} />
+                  Prospectie {new Date(prospection.visitDate).toLocaleDateString()}<FaAngleRight className={styles.icon} />
                 </Link></li>))}
           </ul>
 

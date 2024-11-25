@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FCentricProspections.Server.Migrations
 {
     [DbContext(typeof(FCentricContext))]
-    [Migration("20241123014602_ProspectionsInit")]
+    [Migration("20241124002734_ProspectionsInit")]
     partial class ProspectionsInit
     {
         /// <inheritdoc />
@@ -585,7 +585,7 @@ namespace FCentricProspections.Server.Migrations
                     b.Property<int>("Pin")
                         .HasColumnType("int");
 
-                    b.Property<long?>("RecurringAppointmentId")
+                    b.Property<long?>("RecurringAppointment_Id")
                         .HasColumnType("bigint");
 
                     b.Property<string>("TelNumber")
@@ -914,16 +914,21 @@ namespace FCentricProspections.Server.Migrations
 
             modelBuilder.Entity("FCentricProspections.Server.DataModels.ProspectionToDo", b =>
                 {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
                     b.Property<long>("ProspectionId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("ToDoId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
+                    b.HasKey("Id");
 
-                    b.HasKey("ProspectionId", "ToDoId");
+                    b.HasIndex("ProspectionId");
 
                     b.HasIndex("ToDoId");
 
@@ -1215,7 +1220,9 @@ namespace FCentricProspections.Server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Timestamp")
-                        .HasColumnType("varbinary(max)");
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.Property<long>("ToDoStatusId")
                         .HasColumnType("bigint");

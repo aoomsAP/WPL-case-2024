@@ -27,7 +27,7 @@ public partial class Employee
 
     public byte[] Timestamp { get; set; }
 
-    public long? RecurringAppointmentId { get; set; }
+    public long? RecurringAppointment_Id { get; set; }
 
     public int Pin { get; set; }
 

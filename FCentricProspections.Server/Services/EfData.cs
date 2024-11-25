@@ -189,6 +189,13 @@ namespace FCentricProspections.Server.Services
                 }).ToList();
         }
 
+        public IEnumerable<ProspectionToDo> GetProspectionToDos(long prospectionId)
+        {
+            return this.context.ProspectionToDos
+                .Where(p => p.ProspectionId == prospectionId)
+                .Include(p => p.ToDo).ToList();
+        }
+
         // ADD -----------
 
         public void AddProspection(Prospection prospection)
@@ -246,12 +253,50 @@ namespace FCentricProspections.Server.Services
             this.context.SaveChanges();
         }
 
+        public void UpdateProspectionToDo(Prospection prospection)
+        {
+            var updateProspection = GetProspection(prospection.Id);
+            updateProspection.ProspectionToDos = prospection.ProspectionToDos;
+            this.context.SaveChanges();
+        }
+
+
+        // TODOS ---------------------------------------------------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------------------------------------------------------
+
+        public IEnumerable<ToDo> GetToDos()
+        {
+            return this.context.ToDoes
+                .Include(t => t.ToDoStatus)
+                .ToList();
+        }
+
+        public ToDo GetToDo(long id)
+        {
+            return this.context.ToDoes
+                .Include(t => t.ToDoStatus)
+                .FirstOrDefault(x => x.Id == id);
+        }
+        
+        public ToDoStatus GetToDoStatus(long id)
+        {
+            return this.context.ToDoStatus
+                .FirstOrDefault(x => x.Id == id);
+        }
+        
+        public void AddToDo(ToDo toDo)
+        {
+            this.context.ToDoes.Add(toDo);
+            this.context.SaveChanges();
+        }
+
+
         // BRANDS ---------------------------------------------------------------------------------------------------------------------
         // ---------------------------------------------------------------------------------------------------------------------------
 
         public IEnumerable<BrandDto> GetBrands()
         {
-            var brandList = context.Brands
+            var brandList = this.context.Brands
                 .Select(s => new BrandDto
                 {
                     Id = s.Id,
@@ -264,6 +309,25 @@ namespace FCentricProspections.Server.Services
         public Brand GetBrand(long id)
         {
             return this.context.Brands.FirstOrDefault(x => x.Id == id);
+        }
+
+
+        public IEnumerable<BrandDto> GetBrandsByShop(long shopId)
+        {
+            var brandList = (from sd in this.context.ShopDeliveries
+                             join pld in this.context.ProductLineDeliveries on sd.ProductLineDeliveryId equals pld.Id
+                             join pl in this.context.ProductLines on pld.ProductLineId equals pl.Id
+                             join b in this.context.Brands on pl.BrandId equals b.Id
+                             where sd.ShopId == shopId && sd.SalesPeriodId == 66 // TO DO: specify SalesPeriod
+                             select new BrandDto
+                             {
+                                 Id = b.Id,
+                                 Name = b.Name,
+                             })
+                             .Distinct()
+                             .ToList();
+
+            return brandList;
         }
 
         public IEnumerable<CompetitorBrandDto> GetCompetitorBrands()
@@ -282,6 +346,7 @@ namespace FCentricProspections.Server.Services
         {
             return this.context.CompetitorBrands.FirstOrDefault(x => x.Id == id);
         }
+
 
         // USERS ---------------------------------------------------------------------------------------------------------------------
         // ---------------------------------------------------------------------------------------------------------------------------

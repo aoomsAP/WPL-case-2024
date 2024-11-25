@@ -51,7 +51,7 @@ export const ProspectionDetail = () => {
         prospectionDetail &&
         <>
           <h1 className={styles.h1}>
-            Prospectie ({new Date(prospectionDetail!.date).toLocaleDateString()})
+            Prospectie ({new Date(prospectionDetail!.visitDate).toLocaleDateString()})
           </h1>
 
           {shopDetail && <ShopDetailCard shop={shopDetail} />}
@@ -59,7 +59,7 @@ export const ProspectionDetail = () => {
           <section className={styles.contactVisitCard}>
             <div>
               {contactType && prospectionDetail && (
-                <ContactTypeCard contactType={contactType} contactPersonName={prospectionDetail.contactPersonName ?? ""} />
+                <ContactTypeCard contactType={contactType} contactPersonName={prospectionDetail.contactName ?? ""} />
               )}
 
               {visitType && prospectionDetail && <VisitTypeCard visitType={visitType} visitContext={prospectionDetail?.visitContext ?? ""} />}
@@ -75,7 +75,7 @@ export const ProspectionDetail = () => {
           <BrandInterestList prospectionBrandInterests={prospectionBrandInterests} brands={brands} />
 
           <TextSection title="Trends en noden in de markt" text={prospectionDetail?.trends} />
-          <TextSection title="Extra Opmerkingen/feedback" text={prospectionDetail?.extra} />
+          <TextSection title="Extra opmerkingen en feedback" text={prospectionDetail?.extra} />
         </>
       }
       {!prospectionDetail && <Oval />}

@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react"
-import { IProspection, IShopDetail } from "../types";
+import { IBrand, IProspection, IShopDetail } from "../types";
 
 interface ShopDetailContext {
     setShopId: (id: string) => void;
     shopDetail: IShopDetail | undefined,
     shopProspections: IProspection[],
+    shopBrands: IBrand[],
 }
 
 export const ShopDetailContext = React.createContext<ShopDetailContext>({ 
     setShopId: () => {},
     shopDetail: {} as IShopDetail,
     shopProspections: [],
+    shopBrands: [],
 });
 
 export const ShopDetailProvider = ({ children }: { children: React.ReactNode }) => {
@@ -18,6 +20,7 @@ export const ShopDetailProvider = ({ children }: { children: React.ReactNode }) 
     const [shopId, setShopId] = useState<string>();
     const [shopDetail, setShopDetail] = useState<IShopDetail | undefined>();
     const [shopProspections, setShopProspections] = useState<IProspection[]>([]);
+    const [shopBrands, setShopBrands] = useState<IBrand[]>([]);
 
     async function loadShopDetail(shopId: string) {
         try {
@@ -56,10 +59,27 @@ export const ShopDetailProvider = ({ children }: { children: React.ReactNode }) 
       }
     }
 
+    async function loadShopBrands(shopId: string) {
+      try {
+          const response = await fetch(`/api/shops/${shopId}/brands`, {
+              method: 'GET',
+              headers: { 'Content-Type': 'application/json' },
+          });
+
+          const json: IBrand[] = await response.json();
+          setShopBrands(json);
+
+          console.log("shop brands set");
+      } catch (error) {
+          console.error('Error fetching brands data:', error);
+      }
+  }
+
     useEffect(() => {
         if (shopId) {
             loadShopProspections(shopId);
             loadShopDetail(shopId);
+            loadShopBrands(shopId);
         }
     }, [shopId]);
 
@@ -67,7 +87,8 @@ export const ShopDetailProvider = ({ children }: { children: React.ReactNode }) 
         <ShopDetailContext.Provider value={{
             shopDetail: shopDetail,
             setShopId: setShopId,
-            shopProspections: shopProspections
+            shopProspections: shopProspections,
+            shopBrands: shopBrands
         }}>
             {children}
         </ShopDetailContext.Provider>

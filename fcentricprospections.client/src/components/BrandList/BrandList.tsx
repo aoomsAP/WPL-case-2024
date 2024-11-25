@@ -16,7 +16,7 @@ export const BrandList: React.FC<BrandListProps> = ({ prospectionBrands, brands 
             const matchingBrand = brands.find(b => b.id === brand.brandId);
             return (
                 <article key={index}>
-                    {matchingBrand ? <BrandCard prospectionBrand={brand} brandName={matchingBrand?.name} /> : <p className={styles.brandNotFound}>Brand not found</p>}
+                    {matchingBrand ? <BrandCard prospectionBrand={brand} brandName={matchingBrand?.name} /> : <p className={styles.brandNotFound}>Merk niet gevonden</p>}
                 </article>
             );
         })}

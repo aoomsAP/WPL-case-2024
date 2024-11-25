@@ -12,9 +12,9 @@ export const CompetitorBrandList: React.FC<CompetitorBrandListProps> = ({ prospe
     <h2>Andere merken</h2>
     <ul>
       {prospectionCompetitorBrands.map((brand, index) => {
-        const matchingCompetitorBrand = brands.find(b => b.id === brand.competitorBrandId);
+        const matchingCompetitorBrand = brands.find(b => b.id === brand.competitorBrandId); // TO DO: figure out error
         return (
-            <li key={index}>{matchingCompetitorBrand ? matchingCompetitorBrand.name : "Unknown Brand"}</li>
+            <li key={index}>{matchingCompetitorBrand ? matchingCompetitorBrand.name : "Onbekend merk"}</li>
         );
       })}
     </ul>
