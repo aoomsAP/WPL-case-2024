@@ -31,6 +31,8 @@ namespace FCentricProspections.Server.Services
 
         IEnumerable<ProspectionCompetitorBrandDto> GetProspectionCompetitorBrands(long prospectionId);
 
+        IEnumerable<ProspectionToDo> GetProspectionToDos(long prospectionId);
+
         void AddProspection(Prospection prospection);
 
         void UpdateProspection(Prospection prospection);
@@ -41,12 +43,26 @@ namespace FCentricProspections.Server.Services
 
         void UpdateProspectionBrandInterest(Prospection prospection);
 
+        public void UpdateProspectionToDo(Prospection prospection);
+
+        // ToDo --------------------------------------------------------------------------------------------------------------------------------------------
+
+        IEnumerable<ToDo> GetToDos();
+
+        ToDo GetToDo(long id);
+
+        ToDoStatus GetToDoStatus(long id);
+
+        void AddToDo(ToDo toDo);
+
 
         // Brand --------------------------------------------------------------------------------------------------------------------------------------------
 
         IEnumerable<BrandDto> GetBrands();
 
         Brand GetBrand(long id);
+
+        IEnumerable<BrandDto> GetBrandsByShop(long shopId);
 
         IEnumerable<CompetitorBrandDto> GetCompetitorBrands();
 

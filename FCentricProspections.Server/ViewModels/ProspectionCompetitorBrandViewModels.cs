@@ -13,5 +13,4 @@
     {
         public IEnumerable<long> CompetitorBrandIds { get; set; }
     }
-
 }

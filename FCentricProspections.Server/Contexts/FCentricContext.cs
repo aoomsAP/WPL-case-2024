@@ -93,20 +93,6 @@ public partial class FCentricContext : DbContext
                 .HasConstraintName("FK_dbo.Prospections_dbo.Shops_ShopId");
         });
 
-        modelBuilder.Entity<ProspectionToDo>()
-        .HasKey(pt => new { pt.ProspectionId, pt.ToDoId });
-
-        modelBuilder.Entity<ProspectionToDo>()
-            .HasOne(pt => pt.Prospection)
-            .WithMany(p => p.ProspectionToDos)
-            .HasForeignKey(pt => pt.ProspectionId);
-
-        modelBuilder.Entity<ProspectionToDo>()
-            .HasOne(pt => pt.ToDo)
-            .WithMany(t => t.ProspectionToDos)
-            .HasForeignKey(pt => pt.ToDoId);
-
-
         // to implement ?
 
         OnModelCreatingPartial(modelBuilder);

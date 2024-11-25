@@ -9,10 +9,9 @@ interface BrandCardProps {
 export const BrandCard = ({prospectionBrand, brandName} : BrandCardProps) => {
     return (
         <article className={styles.brandCard}>
-              <h3>{brandName ? brandName : "Merk onbekend"}</h3>
-              <p>Sellout: {prospectionBrand.sellout}%</p>
-              <p>Verantwoordelijke sales: {prospectionBrand.salesRepresentative}</p>
-              <p>Commercial support: {prospectionBrand.commercialSupport}</p>  
+            <h3>{brandName ? brandName : "Merk onbekend"}</h3>
+            {prospectionBrand.sellout && <p>Sellout: {prospectionBrand.sellout}{prospectionBrand.sellout ? "%" : ""}</p>}
+            {prospectionBrand.selloutRemark &&<p>Opmerking: {prospectionBrand.selloutRemark}{prospectionBrand.selloutRemark}</p>}
         </article>
     )
 }

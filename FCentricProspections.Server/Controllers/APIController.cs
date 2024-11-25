@@ -212,6 +212,46 @@ namespace FCentricProspections.Server.Controllers
             return Ok(prospectionBrandInterests);
         }
 
+        [HttpGet()]
+        [Route("prospections/{id}/todos")]
+        public IActionResult GetProspectionToDos(long id)
+        {
+            // check if prospection exists
+            var prospection = this.data.GetProspection(id);
+            if (prospection == null)
+            {
+                return NotFound("Prospection not found.");
+            }
+
+            var prospectionToDos = new List<ProspectionToDoGetViewModel>();
+
+            // get todos from prospection
+            foreach (var prospectionToDo in prospection.ProspectionToDos)
+            {
+                var toDo = this.data.GetToDo(prospectionToDo.ToDoId);
+                if (toDo == null)
+                {
+                    return NotFound("ToDo not found.");
+                }
+
+                // create & add prospection-todo viewmodel
+                prospectionToDos.Add(new ProspectionToDoGetViewModel
+                {
+                    Id = prospectionToDo.Id,
+                    ProspectionId = id,
+                    ToDoId = prospectionToDo.ToDoId,
+                    Remarks = toDo.Remarks,
+                    EmployeeId = toDo.EmployeeId,
+                    ToDoStatusId = toDo.ToDoStatus.Id,
+                    ToDoStatus = toDo.ToDoStatus.Name,
+                    Name = toDo.Name,
+                });
+            }
+
+            // return viewmodel of prospection-todo list
+            return Ok(prospectionToDos);
+        }
+
 
         // POST ------------------------------------------------------------------------
 
@@ -240,7 +280,8 @@ namespace FCentricProspections.Server.Controllers
                 Shop = this.data.GetShop(viewModel.ShopId),
                 UserId = viewModel.UserId,
                 User = this.data.GetUser(viewModel.UserId),
-                // EMPLOYEE
+                EmployeeId = viewModel.EmployeeId,
+                //Employee = this.data.GetEmployee(viewModel.EmployeeId), TO DO
                 VisitDate = viewModel.VisitDate,
                 DateLastUpdated = viewModel.DateLastUpdated,
                 ContactType = this.data.GetContactPersonType(viewModel.ContactTypeId),
@@ -260,7 +301,7 @@ namespace FCentricProspections.Server.Controllers
                 BrandInterests = new List<ProspectionBrandInterest>(),
                 Trends = viewModel.Trends,
                 Extra = viewModel.Extra,
-                // TODOES
+                ProspectionToDos = new List<ProspectionToDo>(),
             };
 
             // add prospection to database
@@ -324,7 +365,8 @@ namespace FCentricProspections.Server.Controllers
             existingProspection.Shop = this.data.GetShop(viewModel.ShopId);
             existingProspection.UserId = viewModel.UserId;
             existingProspection.User = this.data.GetUser(viewModel.UserId);
-            // EMPLOYEE
+            existingProspection.EmployeeId = viewModel.EmployeeId;
+            //existingProspection.Employee = this.data.GetEmployee(viewModel.EmployeeId); TO DO
             existingProspection.VisitDate = viewModel.VisitDate;
             existingProspection.DateLastUpdated = viewModel.DateLastUpdated;
             existingProspection.ContactType = this.data.GetContactPersonType(viewModel.ContactTypeId);
@@ -499,6 +541,143 @@ namespace FCentricProspections.Server.Controllers
             return NoContent();
         }
 
+        [HttpPut()]
+        [Route("prospections/{id}/todos")]
+        public IActionResult UpdateProspectionToDos(long id, [FromBody] ProspectionToDoUpdateViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            };
+
+            // check if prospection exists
+            var existingProspection = this.data.GetProspection(id);
+            if (existingProspection == null)
+            {
+                return NotFound("Prospection not found");
+            }
+
+            // update relationship between Prospection and ToDo 
+            var updatedProspectionToDos = new List<ProspectionToDo>();
+            foreach (var toDoId in viewModel.ToDoIds)
+            {
+                // check if todo exists
+                var toDo = this.data.GetToDo(toDoId);
+                if (toDo == null)
+                {
+                    return NotFound("ToDo not found");
+                }
+
+                // create new prospection-todo relationship
+                var prospectionToDo = new ProspectionToDo
+                {
+                    // EF creates Id
+                    ToDoId = toDo.Id,
+                    ToDo = toDo,
+                    ProspectionId = id,
+                    Prospection = existingProspection,
+                };
+
+                // add relationship to list of relationships
+                updatedProspectionToDos.Add(prospectionToDo);
+            }
+
+            // update BrandsInterest relationships list on the prospection
+            existingProspection.ProspectionToDos = updatedProspectionToDos;
+
+            // update prospection in database
+            this.data.UpdateProspectionToDo(existingProspection);
+            return NoContent();
+        }
+
+        // TODOS ------------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------------------
+
+        // GET
+
+        [HttpGet()]
+        [Route("todos")]
+        public IActionResult GetToDos()
+        {
+            // for each brand in the database, collect copy that adheres to viewmodel (excluding all details)
+            var toDos = new List<ToDoGetViewModel>();
+            foreach (var toDo in this.data.GetToDos())
+            {
+                toDos.Add(new ToDoGetViewModel { Id = toDo.Id, Remarks = toDo.Remarks, Name = toDo.Name, EmployeeId = toDo.EmployeeId, ToDoStatus = toDo.ToDoStatus.Name, ToDoStatusId = toDo.ToDoStatus.Id });
+            }
+
+            // return list of viewmodel brand
+            return Ok(toDos);
+        }
+
+        [HttpGet()]
+        [Route("todos/{id}")]
+        public IActionResult GetToDo(long id)
+        {
+            var viewModel = new ToDoGetViewModel();
+
+            var toDo = this.data.GetToDo(id);
+            if (toDo == null)
+            {
+                return NotFound("ToDo not found.");
+            }
+
+            viewModel.Id = toDo.Id;
+            viewModel.Remarks = toDo.Remarks;
+            viewModel.EmployeeId = toDo.EmployeeId;
+            viewModel.ToDoStatusId = toDo.ToDoStatus.Id;
+            viewModel.ToDoStatus = toDo.ToDoStatus.Name;
+            viewModel.Name = toDo.Name;
+
+            // return list of viewmodel brand
+            return Ok(viewModel);
+        }
+
+        // POST
+
+        [HttpPost()]
+        [Route("todos")]
+        public IActionResult CreateToDo([FromBody] ToDoCreateViewModel viewModel)
+        {
+            // check if modelstate is valid
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // create new todo object based on view model data
+            var newToDo = new ToDo
+            {
+                // EF creates Id
+                Remarks = viewModel.Remarks,
+                EmployeeId = viewModel.EmployeeId,
+                //Employee = this.data.GetEmployee(viewModel.EmployeeId),
+                ToDoStatusId = viewModel.ToDoStatusId,
+                ToDoStatus = this.data.GetToDoStatus(viewModel.ToDoStatusId),
+                Name = viewModel.Name,
+                UserCreatedId = viewModel.UserCreatedId,
+                UserCreated = this.data.GetUser(viewModel.UserCreatedId),
+                DateCreated = viewModel.DateCreated,
+            };
+
+            // add todo to database
+            this.data.AddToDo(newToDo);
+
+            // return viewmodel of object that was just created
+            return CreatedAtAction(
+                nameof(this.data.GetToDo),
+                new { id = newToDo.Id },
+                new ToDoGetViewModel
+                {
+                    Id = newToDo.Id,
+                    Remarks = newToDo.Remarks,
+                    EmployeeId = newToDo.EmployeeId,
+                    ToDoStatus = newToDo.ToDoStatus.Name,
+                    Name = newToDo.Name,
+                });
+        }
+
+
         // BRANDS ------------------------------------------------------------------------------------------------------------------
         // -------------------------------------------------------------------------------------------------------------------------
 
@@ -533,7 +712,6 @@ namespace FCentricProspections.Server.Controllers
             // return list of viewmodel competitor brand
             return Ok(competitorbrands);
         }
-
 
         // USERS ---------------------------------------------------------------------------------------------------------------------
         // ---------------------------------------------------------------------------------------------------------------------------
@@ -693,6 +871,29 @@ namespace FCentricProspections.Server.Controllers
             return Ok(viewModel);
         }
 
+        // all brands for a given shop
+        [HttpGet()]
+        [Route("shops/{id}/brands")]
+        public IActionResult GetShopBrands(long id)
+        {
+            var shop = this.data.GetShopDetail(id);
+            if (shop == null)
+            {
+                return NotFound("Shop not found.");
+            }
+
+            var brands = new List<BrandGetAllViewModel>();
+
+            // get prospections from a shop
+            foreach (var brand in this.data.GetBrandsByShop(id))
+            {
+                // create prospection viewmodel
+                brands.Add(new BrandGetAllViewModel { Id = brand.Id, Name = brand.Name });
+            }
+
+            // return list of viewmodel prospections
+            return Ok(brands);
+        }
 
         // TYPES ------------------------------------------------------------------------------------------------------------------
         // -------------------------------------------------------------------------------------------------------------------------
