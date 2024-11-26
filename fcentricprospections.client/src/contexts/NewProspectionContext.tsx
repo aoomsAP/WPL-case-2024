@@ -28,7 +28,7 @@ export interface NewProspectionContext {
 
     // functions
     loadBrands: () => Promise<void>;
-    loadCompetitorBrands: () => Promise<void>;
+    loadCompetitorBrands: () => Promise<ICompetitorBrand[]>;
     loadContactTypes: () => Promise<void>;
     loadVisitTypes: () => Promise<void>;
 
@@ -126,6 +126,7 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
 
             const json: ICompetitorBrand[] = await response.json();
             setCompetitorBrands(json);
+            return json;
 
         } catch (error) {
             console.error('Error fetching competitor brands data:', error);

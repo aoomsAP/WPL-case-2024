@@ -117,6 +117,7 @@ export interface IToDo {
   id?: number,
   remarks?: string,
   employeeId?: number,
+  employeeName?: string,
   toDoStatusId?: number,
   toDoStatus?: string,
   name?: string,

@@ -15,6 +15,9 @@ const BrandInterestCard = ({ brand }: BrandInterestCardProps) => {
 
     // "X" deletes the current brand from the state array
     function handleClick() {
+        // Reset remark
+        setRemark("");
+
         // Filter out the current brand
         const filteredProspectionBrandInterests = prospectionBrandInterests.filter(b => b.brandId !== brand.brandId);
         // Set new filtered array
