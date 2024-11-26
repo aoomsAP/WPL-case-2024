@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { FaAngleRight } from "react-icons/fa";
-import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCards';
+import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCard';
 import styles from './ShopDetail.module.css';
 import { ShopDetailContext } from '../../contexts/ShopDetailContext';
 

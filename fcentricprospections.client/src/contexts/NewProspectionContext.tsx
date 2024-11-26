@@ -23,10 +23,12 @@ export interface NewProspectionContext {
     setProspectionBrandInterests: (prospectionBrandInterests: IProspectionBrandInterest[]) => void;
     prospectionToDos: IProspectionToDo[];
     setProspectionToDos: (prospectionToDos: IProspectionToDo[]) => void;
+    toDos: IToDo[];
+    setToDos: (toDos: IToDo[]) => void;
 
     // functions
     loadBrands: () => Promise<void>;
-    loadCompetitorBrands: () => Promise<void>;
+    loadCompetitorBrands: () => Promise<ICompetitorBrand[]>;
     loadContactTypes: () => Promise<void>;
     loadVisitTypes: () => Promise<void>;
 
@@ -60,10 +62,12 @@ export const NewProspectionContext = createContext<NewProspectionContext>({
     setProspectionBrandInterests: () => { },
     prospectionToDos: [],
     setProspectionToDos: () => { },
+    toDos: [],
+    setToDos: () => {},
 
     // functions
     loadBrands: () => Promise.resolve(),
-    loadCompetitorBrands: () => Promise.resolve(),
+    loadCompetitorBrands: () => Promise.resolve([]),
     loadContactTypes: () => Promise.resolve(),
     loadVisitTypes: () => Promise.resolve(),
 
@@ -91,6 +95,8 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
     const [prospectionCompetitorBrands, setProspectionCompetitorBrands] = useState<IProspectionCompetitorBrand[]>([]);
     const [prospectionBrandInterests, setProspectionBrandInterests] = useState<IProspectionBrandInterest[]>([]);
     const [prospectionToDos, setProspectionToDos] = useState<IProspectionToDo[]>([]);
+    const [toDos, setToDos] = useState<IToDo[]>([]); // TO IMPLEMENT
+
 
     // functions -------------------------------------------------------------------------------------------------
 
@@ -118,9 +124,13 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
                 headers: { 'Content-Type': 'application/json' },
             });
 
-            const json: ICompetitorBrand[] = await response.json();
-            setCompetitorBrands(json);
+            const json = await response.json();
 
+            // If undefined, return empty array
+            const compBrands = json || [];
+
+            setCompetitorBrands(compBrands);
+            return compBrands;
         } catch (error) {
             console.error('Error fetching competitor brands data:', error);
         }
@@ -234,7 +244,7 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
 
     async function updateProspectionCompetitorBrands(prospectionId: number, prospectionCompetitorBrands: IProspectionCompetitorBrand[]) {
         try {
-            const ids: number[] = prospectionCompetitorBrands.map(x => x.brandId);
+            const ids: number[] = prospectionCompetitorBrands.map(x => x.competitorBrandId);
 
             const payload = { CompetitorBrandIds: ids };
 
@@ -304,6 +314,8 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
             setProspectionBrandInterests: setProspectionBrandInterests,
             prospectionToDos: prospectionToDos,
             setProspectionToDos: setProspectionToDos,
+            toDos: toDos,
+            setToDos: setToDos,
 
             // functions
             loadBrands: loadBrands,

@@ -11,6 +11,7 @@ interface UserContext {
     loadAppointmentShown: (id: string) => Promise<IAppointment[]>; 
     user: IUser | undefined;
     employee: IEmployee | undefined;
+    employees: IEmployee[],
     appointments: IAppointment[];
     employeeList  : IEmployee[];
     shownAppointments : IAppointment[];
@@ -28,6 +29,7 @@ export const UserContext = React.createContext<UserContext>({
     loadAppointmentShown: async() => [],
     user: {} as IUser,
     employee: {} as IEmployee,
+    employees: [],
     appointments: [],
     shownAppointments: [],
     employeeList : [],
@@ -40,18 +42,18 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
     const [userId, setUserId] = useState<string>();
     const [user, setUser] = useState<IUser>();
+    const [usersList, setUsersList] = useState<IUser[]>([]);
     const [employee, setEmployee] = useState<IEmployee>();
+    const [employees, setEmployees] = useState<IEmployee[]>([]);
     const [appointments, setAppointments] = useState<IAppointment[]>([]);
     const [employeeList , setEmployeeList] = useState<IEmployee[]>([]);
     
     //Voor de agenda, dit zijn de afspraken die getoond worden
     const[shownAppointments , setShownAppointments] = useState<IAppointment[]>([]);
 
-    //Temp state
-    const [usersList, setUsersList] = useState<IUser[]>([]);
 
-    //temp loader meerdere users
-    async function loadUsersTemp() {
+
+    async function loadUsers() {
         try {
             const response = await fetch(`/api/users`, {
                 method: 'GET',
@@ -61,12 +63,27 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             setUsersList(json);
         }
         catch (error) {
-            console.error('Error fetching userdata data:', error);
+            console.error('Error fetching users data:', error);
+        }
+    }
+
+    async function loadEmployees() {
+        try {
+            const response = await fetch(`/api/employees`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            });
+            const json: IEmployee[] = await response.json();
+            setEmployees(json);
+        }
+        catch (error) {
+            console.error('Error fetching employees data:', error);
         }
     }
 
     useEffect(() => {
-        loadUsersTemp();
+        loadUsers();
+        loadEmployees();
         //temp
         console.log("Lijst user ingeladen")
 
@@ -203,6 +220,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             loadAppointmentShown: loadAppointmentShown,
             user: user,
             employee: employee,
+            employees: employees,
             appointments: appointments,
             employeeList :employeeList,
             shownAppointments : shownAppointments,

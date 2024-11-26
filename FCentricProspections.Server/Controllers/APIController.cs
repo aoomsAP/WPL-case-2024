@@ -141,14 +141,17 @@ namespace FCentricProspections.Server.Controllers
             // get brands from prospection
             foreach (var prospectionBrand in prospection.Brands)
             {
+                var brand = this.data.GetBrand(prospectionBrand.BrandId);
+
                 // create & add prospection-brand viewmodel
                 prospectionBrands.Add(new ProspectionBrandGetViewModel
                 {
                     Id = prospectionBrand.Id,
                     BrandId = prospectionBrand.BrandId,
+                    BrandName = brand.Name,
                     Sellout = prospectionBrand.Sellout,
                     SelloutRemark = prospectionBrand.SelloutRemark,
-                });
+                }); ;
             }
 
             // return viewmodel of prospection-brands list
@@ -171,12 +174,15 @@ namespace FCentricProspections.Server.Controllers
             // get competitor brands from prospection
             foreach (var prospectionCompetitorBrand in prospection.CompetitorBrands)
             {
+                var brand = this.data.GetCompetitorBrand(prospectionCompetitorBrand.CompetitorBrandId);
+
                 // create & add prospection-competitorbrand viewmodel
                 prospectionCompetitorBrands.Add(new ProspectionCompetitorBrandGetViewModel
                 {
                     Id = prospectionCompetitorBrand.Id,
                     CompetitorBrandId = prospectionCompetitorBrand.CompetitorBrandId,
-                });
+                    CompetitorBrandName = brand.Name,
+                });;
             }
 
             // return viewmodel of prospection-competitorbrand list
@@ -199,11 +205,14 @@ namespace FCentricProspections.Server.Controllers
             // get brands from prospection
             foreach (var prospectionBrandInterest in prospection.BrandInterests)
             {
+                var brand = this.data.GetBrand(prospectionBrandInterest.BrandId);
+
                 // create & add prospection-brandinterest viewmodel
                 prospectionBrandInterests.Add(new ProspectionBrandInterestGetViewModel
                 {
                     Id = prospectionBrandInterest.Id,
                     BrandId = prospectionBrandInterest.BrandId,
+                    BrandName = brand.Name,
                     Remark = prospectionBrandInterest.Remark
                 });
             }
