@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useContext } from "react";
-import { ShopDetailCard } from "../../components/ShopDetailCard/ShopDetailCards";
+import { ShopDetailCard } from "../../components/ShopDetailCard/ShopDetailCard";
 import { ContactTypeCard } from "../../components/ContactTypeCard/ContactTypeCard";
 import { VisitTypeCard } from "../../components/VisitTypeCard/VisitTypeCard";
 import { GeneralSituation } from "../../components/GeneralSituationCard/GeneralSituationCard";

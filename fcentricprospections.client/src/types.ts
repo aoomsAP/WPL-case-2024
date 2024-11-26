@@ -120,6 +120,8 @@ export interface IToDo {
   toDoStatusId?: number,
   toDoStatus?: string,
   name?: string,
+  dateCreated?: Date,
+  userCreatedId?: number,
 }
 
 export interface IProspectionToDo {

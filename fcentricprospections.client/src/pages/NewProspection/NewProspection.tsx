@@ -8,15 +8,19 @@ import { NewProspectionContext } from '../../contexts/NewProspectionContext';
 import { IProspectionBrand, IProspectionDetail, IProspectionToDo, IToDo } from '../../types';
 import BrandCardInput from '../../components/BrandCardInput/BrandCardInput';
 import BrandInterestCard from '../../components/BrandCardInput/BrandInterestCard';
-import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCards';
 import { AiOutlineCheck } from "react-icons/ai";
 import { ShopDetailContext } from '../../contexts/ShopDetailContext';
+import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCard';
+import ToDoModule from '../../components/ToDoModule/ToDoModule';
+import { UserContext } from '../../contexts/UserContext';
 
 export const NewProspection = () => {
 
   const { shopId } = useParams<{ shopId: string }>();
 
   // Contexts
+
+  const {user} = useContext(UserContext);
 
   const {
     setShopId,
@@ -39,6 +43,8 @@ export const NewProspection = () => {
     setProspectionCompetitorBrands,
     prospectionBrandInterests,
     setProspectionBrandInterests,
+    toDos,
+    setToDos,
     addToDo,
     addProspection,
     updateProspectionBrands,
@@ -50,7 +56,7 @@ export const NewProspection = () => {
   const navigate = useNavigate();
 
   // Input fields
-  const [visitDate,setVisitDate] = useState<Date>(); // TO IMPLEMENT
+  const [visitDate, setVisitDate] = useState<Date>(); // TO IMPLEMENT
   const [contactType, setContactType] = useState<number>(4);
   const [contactName, setContactName] = useState<string>("");
   const [contactEmail, setContactEmail] = useState<string>("");
@@ -63,7 +69,6 @@ export const NewProspection = () => {
   const [terminatedBrands, setTerminatedBrands] = useState<string>("");
   const [trends, setTrends] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
-  const [toDos, setToDos] = useState<IToDo[]>([]); // TO IMPLEMENT
 
   // Setting default ProspectionBrands based on shopBrands list
   useEffect(() => {
@@ -128,7 +133,14 @@ export const NewProspection = () => {
       // Add new todos, save in new array to get toDos with id, and await response
       const addedToDos: IToDo[] = [];
       for (let toDo of toDos) {
-        const addedToDo = await addToDo(toDo);
+        const addedToDo = await addToDo({
+          remarks: toDo.remarks,
+          employeeId: toDo.employeeId,
+          toDoStatusId: toDo.toDoStatusId,
+          name: toDo.name,
+          dateCreated: new Date(),
+          userCreatedId: user ? +user.id : 0,
+        });
         if (addedToDo) {
           addedToDos.push(addedToDo);
         }
@@ -310,7 +322,7 @@ export const NewProspection = () => {
           </ul>
 
           <div>
-                      {prospectionCompetitorBrands.map(brand => <BrandTag brandId={brand.competitorBrandId} brandName={brand.competitorBrandName} type="competitorBrand" />)}
+            {prospectionCompetitorBrands.map(brand => <BrandTag brandId={brand.competitorBrandId} brandName={brand.competitorBrandName} type="competitorBrand" />)}
           </div>
 
           {/* NEW BRANDS */}
@@ -405,7 +417,7 @@ export const NewProspection = () => {
           <p>Hier kan u items toevoegen die op basis van dit verslag moeten opgevolgd worden.</p>
 
           {/* TO DO LIST */}
-          {/* TO DO: IMPLEMENT */}
+          <ToDoModule toDos={toDos} setToDos={setToDos} />
 
         </FormWizard.TabContent>
 

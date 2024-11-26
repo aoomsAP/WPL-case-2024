@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import styles from './ProspectionOverview.module.css'
-import { ShopDetailCard } from "../../components/ShopDetailCard/ShopDetailCards";
+import { ShopDetailCard } from "../../components/ShopDetailCard/ShopDetailCard";
 import { FaAngleRight } from "react-icons/fa";
 import { ShopDetailContext } from "../../contexts/ShopDetailContext";
 

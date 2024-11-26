@@ -23,6 +23,8 @@ export interface NewProspectionContext {
     setProspectionBrandInterests: (prospectionBrandInterests: IProspectionBrandInterest[]) => void;
     prospectionToDos: IProspectionToDo[];
     setProspectionToDos: (prospectionToDos: IProspectionToDo[]) => void;
+    toDos: IToDo[];
+    setToDos: (toDos: IToDo[]) => void;
 
     // functions
     loadBrands: () => Promise<void>;
@@ -60,6 +62,8 @@ export const NewProspectionContext = createContext<NewProspectionContext>({
     setProspectionBrandInterests: () => { },
     prospectionToDos: [],
     setProspectionToDos: () => { },
+    toDos: [],
+    setToDos: () => {},
 
     // functions
     loadBrands: () => Promise.resolve(),
@@ -91,6 +95,8 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
     const [prospectionCompetitorBrands, setProspectionCompetitorBrands] = useState<IProspectionCompetitorBrand[]>([]);
     const [prospectionBrandInterests, setProspectionBrandInterests] = useState<IProspectionBrandInterest[]>([]);
     const [prospectionToDos, setProspectionToDos] = useState<IProspectionToDo[]>([]);
+    const [toDos, setToDos] = useState<IToDo[]>([]); // TO IMPLEMENT
+
 
     // functions -------------------------------------------------------------------------------------------------
 
@@ -234,7 +240,7 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
 
     async function updateProspectionCompetitorBrands(prospectionId: number, prospectionCompetitorBrands: IProspectionCompetitorBrand[]) {
         try {
-            const ids: number[] = prospectionCompetitorBrands.map(x => x.brandId);
+            const ids: number[] = prospectionCompetitorBrands.map(x => x.competitorBrandId);
 
             const payload = { CompetitorBrandIds: ids };
 
@@ -304,6 +310,8 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
             setProspectionBrandInterests: setProspectionBrandInterests,
             prospectionToDos: prospectionToDos,
             setProspectionToDos: setProspectionToDos,
+            toDos: toDos,
+            setToDos: setToDos,
 
             // functions
             loadBrands: loadBrands,

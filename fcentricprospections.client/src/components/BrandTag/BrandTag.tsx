@@ -23,7 +23,7 @@ const BrandTag = ({ brandId, brandName, type }: BrandTagProps) => {
                 break;
             case "competitorBrand": {
                 // Filter out the current competitor brand
-                const filteredProspectionCompetitorBrands = prospectionCompetitorBrands.filter(brand => brandId !== brand.brandId);
+                const filteredProspectionCompetitorBrands = prospectionCompetitorBrands.filter(brand => brandId !== brand.competitorBrandId);
                 // Set new filtered array
                 setProspectionCompetitorBrands(filteredProspectionCompetitorBrands);
                 break;
