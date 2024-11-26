@@ -77,15 +77,15 @@ export interface IProspectionBrand {
 
 export interface IProspectionCompetitorBrand {
   id?: number,
-  brandId: number,
-  brandName: string,
+  competitorBrandId: number,
+  competitorBrandName: string,
 }
 
 export interface IProspectionBrandInterest {
   id?: number,
   brandId: number,
   brandName: string,
-  sales?: string,
+  remark?: string,
 }
 
 export interface IUser {
@@ -117,9 +117,12 @@ export interface IToDo {
   id?: number,
   remarks?: string,
   employeeId?: number,
+  employeeName?: string,
   toDoStatusId?: number,
   toDoStatus?: string,
   name?: string,
+  dateCreated?: Date,
+  userCreatedId?: number,
 }
 
 export interface IProspectionToDo {

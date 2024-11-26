@@ -5,18 +5,24 @@ import { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import BrandTag from '../../components/BrandTag/BrandTag';
 import { NewProspectionContext } from '../../contexts/NewProspectionContext';
-import { IProspectionBrand, IProspectionDetail, IProspectionToDo, IToDo } from '../../types';
+import { ICompetitorBrand, IProspectionBrand, IProspectionCompetitorBrand, IProspectionDetail, IProspectionToDo, IToDo } from '../../types';
 import BrandCardInput from '../../components/BrandCardInput/BrandCardInput';
 import BrandInterestCard from '../../components/BrandCardInput/BrandInterestCard';
-import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCards';
 import { AiOutlineCheck } from "react-icons/ai";
 import { ShopDetailContext } from '../../contexts/ShopDetailContext';
+import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCard';
+import ToDoModule from '../../components/ToDoModule/ToDoModule';
+import { UserContext } from '../../contexts/UserContext';
+import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
 
 export const NewProspection = () => {
 
   const { shopId } = useParams<{ shopId: string }>();
 
   // Contexts
+
+  const { user } = useContext(UserContext);
 
   const {
     setShopId,
@@ -33,12 +39,15 @@ export const NewProspection = () => {
   const {
     allBrands,
     competitorBrands,
+    loadCompetitorBrands,
     prospectionBrands,
     setProspectionBrands,
     prospectionCompetitorBrands,
     setProspectionCompetitorBrands,
     prospectionBrandInterests,
     setProspectionBrandInterests,
+    toDos,
+    setToDos,
     addToDo,
     addProspection,
     updateProspectionBrands,
@@ -50,7 +59,7 @@ export const NewProspection = () => {
   const navigate = useNavigate();
 
   // Input fields
-  const [visitDate,setVisitDate] = useState<Date>(); // TO IMPLEMENT
+  const [visitDate, setVisitDate] = useState<Date>(); // TO IMPLEMENT
   const [contactType, setContactType] = useState<number>(4);
   const [contactName, setContactName] = useState<string>("");
   const [contactEmail, setContactEmail] = useState<string>("");
@@ -63,7 +72,6 @@ export const NewProspection = () => {
   const [terminatedBrands, setTerminatedBrands] = useState<string>("");
   const [trends, setTrends] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
-  const [toDos, setToDos] = useState<IToDo[]>([]); // TO IMPLEMENT
 
   // Setting default ProspectionBrands based on shopBrands list
   useEffect(() => {
@@ -74,19 +82,60 @@ export const NewProspection = () => {
     console.log(defaultProspectionBrands)
   }, [shopBrands])
 
+  // Setting prospection brand interest todos 
+  useEffect(() => {
+    let newInterestToDos = [];
+
+    // Create todo for each interest
+    for (let interest of prospectionBrandInterests) {
+      let brandInterestToDo = {
+        name: "FC70 merk interesse",
+        remarks: interest.brandName,
+        employeeId: 0, // TO DO: WHO?
+        toDoStatusId: 1, // DEFAULT
+      };
+      newInterestToDos.push(brandInterestToDo);
+    }
+
+    const toDosWithoutBrandInterests = toDos.filter(x => x.name !== "FC70 merk interesse");
+    const newToDos = [...toDosWithoutBrandInterests, ...newInterestToDos];
+
+    console.log("setting new todos for prospection brand interest")
+    setToDos(newToDos);
+  }, [prospectionBrandInterests])
+
+  // Setting contact info todos 
+  useEffect(() => {
+    if (contactName != "" && contactEmail != "" && contactPhone != "") {
+      // Create todo for each interest
+      let contactInfoToDo = {
+        name: "Nieuwe contact info",
+        remarks: `Contact type: ${contactType}\nContact naam:${contactName}\nContact email:${contactEmail}\nContact phone:${contactPhone}`,
+        employeeId: 0, // TO DO: WHO?
+        toDoStatusId: 1, // DEFAULT
+      };
+
+      const toDosWithoutContact = toDos.filter(x => x.name !== "Nieuwe contact info");
+      const newToDos = [...toDosWithoutContact, contactInfoToDo];
+
+      console.log("setting new todos for contact info")
+      setToDos(newToDos);
+    }
+  }, [contactName, contactEmail, contactPhone, contactType])
+
   // Search fields
-  const [competitorBrandSearch, setCompetitorBrandSearch] = useState<string>("");
+  //const [competitorBrandSearch, setCompetitorBrandSearch] = useState<string>("");
   const [brandInterestSearch, setBrandInterestSearch] = useState<string>("");
 
   // Filter for competitor brands
-  const competitorBrandSearchFunc = competitorBrands.filter(brand => {
+  // const competitorBrandSearchFunc = competitorBrands.filter(brand => {
 
-    if (prospectionCompetitorBrands.map(x => x.brandId).find(x => x === brand.id)) return false;
+  //   if (prospectionCompetitorBrands.map(x => x.competitorBrandId).find(x => x === brand.id)) return false;
 
-    if (competitorBrandSearch.length < 3) return false;
+  //   if (competitorBrandSearch.length < 3) return false;
 
-    return brand.name.toLowerCase().includes(competitorBrandSearch.toLowerCase());
-  });
+  //   return brand.name.toLowerCase().includes(competitorBrandSearch.toLowerCase());
+  // });
 
   // Filter for interest search brands
   const brandInterestSearchFunc = allBrands.filter(brand => {
@@ -128,7 +177,14 @@ export const NewProspection = () => {
       // Add new todos, save in new array to get toDos with id, and await response
       const addedToDos: IToDo[] = [];
       for (let toDo of toDos) {
-        const addedToDo = await addToDo(toDo);
+        const addedToDo = await addToDo({
+          remarks: toDo.remarks,
+          employeeId: toDo.employeeId,
+          toDoStatusId: toDo.toDoStatusId,
+          name: toDo.name,
+          dateCreated: new Date(),
+          userCreatedId: user ? +user.id : 0,
+        });
         if (addedToDo) {
           addedToDos.push(addedToDo);
         }
@@ -184,6 +240,42 @@ export const NewProspection = () => {
   //   console.log("prevIndex", prevIndex);
   //   console.log("nextIndex", nextIndex);
   // };
+
+  interface CompetitorBrandOption {
+    value: string;
+    label: string;
+  }
+
+  // const [competitorBrandsOptions, setCompetitorBrandsOptions] = useState<CompetitorBrandOption[]>([]);
+
+  // useEffect(() => {
+  //   const isValidCompetitorBrand = (competitorBrand: ICompetitorBrand) =>
+  //     !!competitorBrand && !!competitorBrand.id && !!competitorBrand.name;
+
+  //   let competitorBrandOptions: CompetitorBrandOption[] = competitorBrands
+  //     .filter(isValidCompetitorBrand)
+  //     .map((competitorBrand) => ({
+  //       value: competitorBrand.id.toString(),
+  //       label: competitorBrand.name
+  //     }));
+  //   setCompetitorBrandsOptions(competitorBrandOptions);
+  // }, [competitorBrands])
+
+  async function loadCompetitorBrandOptions() {
+    const isValidCompetitorBrand = (competitorBrand: ICompetitorBrand) =>
+      !!competitorBrand && !!competitorBrand.id && !!competitorBrand.name;
+
+    const loadedCompetitorBrands = await loadCompetitorBrands();
+
+    let competitorBrandOptions: CompetitorBrandOption[] = loadedCompetitorBrands
+      .filter(isValidCompetitorBrand)
+      .map((competitorBrand) => ({
+        value: competitorBrand.id.toString(),
+        label: competitorBrand.name
+      }));
+
+      return competitorBrandOptions;
+  }
 
   return (
     <main className={styles.main}>
@@ -282,43 +374,46 @@ export const NewProspection = () => {
 
           {/* COMPETITOR BRANDS */}
           <h3>Referentiemerken</h3>
-          <input
-            type="text"
-            placeholder="Zoek..."
-            value={competitorBrandSearch}
-            onChange={(e) => setCompetitorBrandSearch(e.target.value)} // Update state on input change
-          />
 
-          <ul>
-            {competitorBrandSearchFunc.length > 0 ? (
-              competitorBrandSearchFunc.map(brand => (
-                <li key={brand.id}
-                  onClick={() => {
-                    setProspectionCompetitorBrands([...prospectionCompetitorBrands, { brandId: brand.id, brandName: brand.name }]);
-                    setCompetitorBrandSearch("");
-                  }}>
-                  {brand.name}
-                </li>
-              ))
-            ) : (
-              competitorBrandSearch.length < 3 ? (
-                <p>Typ minstens 3 letters.</p>
-              ) : (
-                <p>Geen merken gevonden</p>
-              )
-            )}
-          </ul>
+          {competitorBrands && <AsyncSelect
+            className="basic-multi-select"
+            classNamePrefix="select"
+            isMulti
+            isClearable={true}
+            isSearchable={true}
+            name="competitorBrand"
+            cacheOptions
+            defaultOptions
+            loadOptions={loadCompetitorBrandOptions}
+            onChange={(e) => {
+              const newProspectionCompetitorBrands : IProspectionCompetitorBrand[] = e.map(x => ({competitorBrandId: +x.value, competitorBrandName: x.label}))
+              setProspectionCompetitorBrands(newProspectionCompetitorBrands);
+            }}
+          />}
 
           <div>
-            {prospectionCompetitorBrands.map(brand => <BrandTag brandId={brand.brandId} brandName={brand.brandName} type="competitorBrand" />)}
+            {prospectionCompetitorBrands.map(brand => <BrandTag brandId={brand.competitorBrandId} brandName={brand.competitorBrandName} type="competitorBrand" />)}
           </div>
 
           {/* NEW BRANDS */}
           <h3>Nieuwe merken</h3>
           <legend>Merken die u niet terugvond in de lijst hierboven:</legend>
-          <textarea value={newBrands} onChange={(e) => setNewBrands(e.target.value)} />
+          <textarea value={newBrands} onChange={(e) => {
+            // set newBrands
+            setNewBrands(e.target.value);
 
-          {/* TO DO: ADD TO TODOS */}
+            // Update newBrands toDo item
+            let newBrandsToDo = {
+              name: "Nieuwe brands",
+              remarks: newBrands,
+              employeeId: 0, // WHO?
+              toDoStatusId: 1, // DEFAULT
+            };
+            const toDosWithoutNewBrands = toDos.filter(x => x.name !== "Nieuwe brands");
+            const newToDos = [...toDosWithoutNewBrands, newBrandsToDo];
+            console.log("setting new todo for newbrands")
+            setToDos(newToDos);
+          }} />
 
         </FormWizard.TabContent>
 
@@ -368,7 +463,10 @@ export const NewProspection = () => {
               brandInterestSearchFunc.map(brand => (
                 <li key={brand.id}
                   onClick={() => {
+                    // set prospection brand interests
                     setProspectionBrandInterests([...prospectionBrandInterests, { brandId: brand.id, brandName: brand.name }]);
+
+                    // clear search
                     setBrandInterestSearch("");
                   }}>
                   {brand.name}
@@ -405,7 +503,7 @@ export const NewProspection = () => {
           <p>Hier kan u items toevoegen die op basis van dit verslag moeten opgevolgd worden.</p>
 
           {/* TO DO LIST */}
-          {/* TO DO: IMPLEMENT */}
+          <ToDoModule toDos={toDos} setToDos={setToDos} />
 
         </FormWizard.TabContent>
 

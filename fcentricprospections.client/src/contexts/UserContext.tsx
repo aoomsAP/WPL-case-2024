@@ -7,6 +7,7 @@ interface UserContext {
     setEmployee: (id: IEmployee) => void;
     user: IUser | undefined;
     employee: IEmployee | undefined;
+    employees: IEmployee[],
     appointments: IAppointment[];
 
     //temp
@@ -18,6 +19,7 @@ export const UserContext = React.createContext<UserContext>({
     setEmployee: () => { },
     user: {} as IUser,
     employee: {} as IEmployee,
+    employees: [],
     appointments: [],
 
     //temp
@@ -28,14 +30,14 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
     const [userId, setUserId] = useState<string>();
     const [user, setUser] = useState<IUser>();
+    const [usersList, setUsersList] = useState<IUser[]>([]);
     const [employee, setEmployee] = useState<IEmployee>();
+    const [employees, setEmployees] = useState<IEmployee[]>([]);
     const [appointments, setAppointments] = useState<IAppointment[]>([]);
 
-    //Temp state
-    const [usersList, setUsersList] = useState<IUser[]>([]);
 
-    //temp loader meerdere users
-    async function loadUsersTemp() {
+
+    async function loadUsers() {
         try {
             const response = await fetch(`/api/users`, {
                 method: 'GET',
@@ -45,12 +47,27 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             setUsersList(json);
         }
         catch (error) {
-            console.error('Error fetching userdata data:', error);
+            console.error('Error fetching users data:', error);
+        }
+    }
+
+    async function loadEmployees() {
+        try {
+            const response = await fetch(`/api/employees`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            });
+            const json: IEmployee[] = await response.json();
+            setEmployees(json);
+        }
+        catch (error) {
+            console.error('Error fetching employees data:', error);
         }
     }
 
     useEffect(() => {
-        loadUsersTemp();
+        loadUsers();
+        loadEmployees();
         //temp
         console.log("Lijst user ingeladen")
 
@@ -136,6 +153,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             setEmployee: setEmployee,
             user: user,
             employee: employee,
+            employees: employees,
             appointments: appointments,
 
             //temp
