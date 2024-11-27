@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import BrandTag from '../../components/BrandTag/BrandTag';
 import { NewProspectionContext } from '../../contexts/NewProspectionContext';
-import { ICompetitorBrand, IProspectionBrand, IProspectionCompetitorBrand, IProspectionDetail, IProspectionToDo, IToDo } from '../../types';
+import { ICompetitorBrand, IProspectionBrand, IProspectionCompetitorBrand, IProspectionDetail, IProspectionToDo, IToDo, OptionType } from '../../types';
 import BrandCardInput from '../../components/BrandCardInput/BrandCardInput';
 import BrandInterestCard from '../../components/BrandCardInput/BrandInterestCard';
 import { AiOutlineCheck } from "react-icons/ai";
@@ -91,7 +91,7 @@ export const NewProspection = () => {
       let brandInterestToDo = {
         name: "FC70 merk interesse",
         remarks: interest.brandName,
-        employeeId: 0, // TO DO: WHO?
+        employeeId: 4, // TO DO: WHO?
         toDoStatusId: 1, // DEFAULT
       };
       newInterestToDos.push(brandInterestToDo);
@@ -111,7 +111,7 @@ export const NewProspection = () => {
       let contactInfoToDo = {
         name: "Nieuwe contact info",
         remarks: `Contact type: ${contactType}\nContact naam:${contactName}\nContact email:${contactEmail}\nContact phone:${contactPhone}`,
-        employeeId: 0, // TO DO: WHO?
+        employeeId: 4, // TO DO: WHO?
         toDoStatusId: 1, // DEFAULT
       };
 
@@ -126,16 +126,6 @@ export const NewProspection = () => {
   // Search fields
   //const [competitorBrandSearch, setCompetitorBrandSearch] = useState<string>("");
   const [brandInterestSearch, setBrandInterestSearch] = useState<string>("");
-
-  // Filter for competitor brands
-  // const competitorBrandSearchFunc = competitorBrands.filter(brand => {
-
-  //   if (prospectionCompetitorBrands.map(x => x.competitorBrandId).find(x => x === brand.id)) return false;
-
-  //   if (competitorBrandSearch.length < 3) return false;
-
-  //   return brand.name.toLowerCase().includes(competitorBrandSearch.toLowerCase());
-  // });
 
   // Filter for interest search brands
   const brandInterestSearchFunc = allBrands.filter(brand => {
@@ -241,18 +231,13 @@ export const NewProspection = () => {
   //   console.log("nextIndex", nextIndex);
   // };
 
-  interface CompetitorBrandOption {
-    value: string;
-    label: string;
-  }
-
-  const [competitorBrandsOptions, setCompetitorBrandsOptions] = useState<CompetitorBrandOption[]>([]);
+  const [competitorBrandsOptions, setCompetitorBrandsOptions] = useState<OptionType[]>([]);
 
   useEffect(() => {
     const isValidCompetitorBrand = (competitorBrand: ICompetitorBrand) =>
       !!competitorBrand && !!competitorBrand.id && !!competitorBrand.name;
 
-    let competitorBrandOptions: CompetitorBrandOption[] = competitorBrands
+    let competitorBrandOptions: OptionType[] = competitorBrands
       .filter(isValidCompetitorBrand)
       .map((competitorBrand) => ({
         value: competitorBrand.id.toString(),
@@ -375,7 +360,7 @@ export const NewProspection = () => {
           {/* COMPETITOR BRANDS */}
           <h3>Referentiemerken</h3>
 
-          {competitorBrands && <Select<CompetitorBrandOption, true>
+          {competitorBrands && <Select<OptionType, true>
             className="basic-multi-select"
             classNamePrefix="select"
             isMulti
@@ -389,9 +374,9 @@ export const NewProspection = () => {
               MenuList,
               Option,
             }}
-            onChange={(selectedOptions: MultiValue<CompetitorBrandOption>) => {
+            onChange={(selectedOptions: MultiValue<OptionType>) => {
               const newProspectionCompetitorBrands: IProspectionCompetitorBrand[] = selectedOptions
-                .map((x: CompetitorBrandOption) => ({
+                .map((x: OptionType) => ({
                   competitorBrandId: +x.value,
                   competitorBrandName: x.label,
                 }));
@@ -410,7 +395,7 @@ export const NewProspection = () => {
             let newBrandsToDo = {
               name: "Nieuwe brands",
               remarks: newBrands,
-              employeeId: 0, // WHO?
+              employeeId: 4, // TO DO: WHO?
               toDoStatusId: 1, // DEFAULT
             };
             const toDosWithoutNewBrands = toDos.filter(x => x.name !== "Nieuwe brands");

@@ -132,7 +132,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
-    // Loads the appointments of one user with appointments setter
+    // Loads, sets & returns appointments of current user
     async function loadAppointments(employeeId: string) {
         try {
             console.log(`loading appointments for employee ${employeeId}`);
@@ -146,12 +146,13 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
             console.log(`successfully loaded appointments for employee ${employeeId}`, json)
             setAppointments(json);
+            return json;
         } catch (error) {
             console.error('Error fetching appointments data:', error);
         }
     }
 
-    // Loads & returns appointsments for a user
+    // Loads & returns appointments for a specific user
     async function loadAppointmentShown(employeeId: string): Promise<IAppointment[]> {
         try {
             console.log(`loading appointments for employee ${employeeId}`);
@@ -179,15 +180,12 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
         if (loadedEmployee) {
             // Loads appointments with newly loaded employee id
-            await loadAppointments(loadedEmployee.id);
+            const loadedAppointments = await loadAppointments(loadedEmployee.id);
+
+            // Sets shownAppointment with default appointments
+            if (loadedAppointments) setShownAppointments(loadedAppointments);
         }
     }
-
-    // Load all users & employees upon mount
-    useEffect(() => {
-        loadUsers();
-        loadEmployees();
-    }, [])
 
     // Load user specific data upon receiving userId
     useEffect(() => {
@@ -196,6 +194,12 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             console.log("user id ", userId, ' is ingeladen')
         }
     }, [userId]);
+
+    // Load all users & employees upon mount
+    useEffect(() => {
+        loadUsers();
+        loadEmployees();
+    }, [])
 
     return (
         <UserContext.Provider value={{
@@ -213,7 +217,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             setAppointments: setAppointments,
             shownAppointments: shownAppointments,
             setShownAppointments: setShownAppointments,
-        
+
             // loading functions
             loadUser: loadUser,
             loadUsers: loadUsers,

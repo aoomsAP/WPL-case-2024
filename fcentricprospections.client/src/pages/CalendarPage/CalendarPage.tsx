@@ -1,26 +1,32 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { EmployeeSelect } from './EmployeeSelect';
+import { EventInput } from '@fullcalendar/core';
 
 export const CalendarPage = () => {
 
-    const { shownAppointments, appointments } = useContext(UserContext);
+    const { shownAppointments } = useContext(UserContext);
 
-    const events = appointments.map((appointment) => ({
-        title: appointment.name ? appointment.name : (appointment.remarks ? appointment.remarks : "Geen details"),
-        start: appointment.startDate,
-        end: appointment.endDate,
-        color: "steelblue", // Changes the background color
-    }));
+    const [events, setEvents] = useState<EventInput>();
 
-    console.log(appointments);
+    useEffect(() => {
+        console.log(shownAppointments);
+
+        const events = shownAppointments.map((appointment) => ({
+            title: appointment.name ? appointment.name : (appointment.remarks ? appointment.remarks : "Geen details"),
+            start: appointment.startDate,
+            end: appointment.endDate,
+            color: "steelblue", // Changes the background color
+        }));
+        setEvents(events);
+    }, [shownAppointments])
 
     return (
         <>
-            {/* <EmployeeSelect /> */}
+            <EmployeeSelect />
 
             <FullCalendar
                 plugins={[dayGridPlugin, timeGridPlugin]}
