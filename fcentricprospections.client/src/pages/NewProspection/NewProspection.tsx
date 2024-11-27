@@ -13,8 +13,9 @@ import { ShopDetailContext } from '../../contexts/ShopDetailContext';
 import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCard';
 import ToDoModule from '../../components/ToDoModule/ToDoModule';
 import { UserContext } from '../../contexts/UserContext';
-import Select, { createFilter } from 'react-select';
-import AsyncSelect from 'react-select/async';
+import Select, { createFilter, MultiValue } from 'react-select';
+import MenuList from "../../components/ToDoModule/MenuList/MenuList"; // Custom MenuList
+import Option from "../../components/ToDoModule/Option/Option"; // Custom Option
 
 export const NewProspection = () => {
 
@@ -39,7 +40,6 @@ export const NewProspection = () => {
   const {
     allBrands,
     competitorBrands,
-    loadCompetitorBrands,
     prospectionBrands,
     setProspectionBrands,
     prospectionCompetitorBrands,
@@ -375,7 +375,7 @@ export const NewProspection = () => {
           {/* COMPETITOR BRANDS */}
           <h3>Referentiemerken</h3>
 
-          {competitorBrands && <Select
+          {competitorBrands && <Select<CompetitorBrandOption, true>
             className="basic-multi-select"
             classNamePrefix="select"
             isMulti
@@ -385,8 +385,16 @@ export const NewProspection = () => {
             filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
             maxMenuHeight={200} // Limit height to improve rendering
             options={competitorBrandsOptions}
-            onChange={(e) => {
-              const newProspectionCompetitorBrands: IProspectionCompetitorBrand[] = e.map(x => ({ competitorBrandId: +x.value, competitorBrandName: x.label }))
+            components={{ // Custom components to make use of react-window to improve rendering
+              MenuList,
+              Option,
+            }}
+            onChange={(selectedOptions: MultiValue<CompetitorBrandOption>) => {
+              const newProspectionCompetitorBrands: IProspectionCompetitorBrand[] = selectedOptions
+                .map((x: CompetitorBrandOption) => ({
+                  competitorBrandId: +x.value,
+                  competitorBrandName: x.label,
+                }));
               setProspectionCompetitorBrands(newProspectionCompetitorBrands);
             }}
           />}

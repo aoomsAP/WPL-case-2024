@@ -15,13 +15,16 @@
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/react": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
+    "@types/react-window": "^1.8.8",
+    "classnames": "^2.5.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-form-wizard-component": "^0.2.7",
     "react-icons": "^5.3.0",
     "react-loader-spinner": "^6.1.6",
     "react-router-dom": "^6.27.0",
-    "react-select": "^5.8.3"
+    "react-select": "^5.8.3",
+    "react-window": "^1.8.10"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
