@@ -1,57 +1,70 @@
 // Implement UserContext
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IAppointment, IEmployee, IUser } from "../types";
 
 interface UserContext {
-    setUserId: (id: string) => void;
-    setEmployee: (id: IEmployee) => void;
-    setShownAppointments: Dispatch<SetStateAction<IAppointment[]>>; //voegt toe aan de appointments die tezien zijn
-    loadEmployeeList: ()=> void;
-    loadAppointments : (id: string)=> void;
-    loadAppointmentShown: (id: string) => Promise<IAppointment[]>; 
-    user: IUser | undefined;
-    employee: IEmployee | undefined;
+    // states
+    userId: string,
+    setUserId: (userId: string) => void,
+    user: IUser | undefined,
+    setUser: (user: IUser) => void,
+    users: IUser[],
+    setUsers: (users: IUser[]) => void,
+    employee: IEmployee | undefined,
+    setEmployee: (employee: IEmployee) => void,
     employees: IEmployee[],
-    appointments: IAppointment[];
-    employeeList  : IEmployee[];
-    shownAppointments : IAppointment[];
+    setEmployees: (employee: IEmployee[]) => void,
+    appointments: IAppointment[],
+    setAppointments: (appointments: IAppointment[]) => void,
+    shownAppointments: IAppointment[],
+    setShownAppointments: (shownAppointments: IAppointment[]) => void,
 
-    //temp
-    userList: IUser[];
+    // loading functions
+    loadUser: (userId: string) => void;
+    loadUsers: () => void;
+    loadEmployee: (userId: string) => void;
+    loadEmployees: () => void;
+    loadAppointments: (id: string) => void;
+    loadAppointmentShown: (id: string) => Promise<IAppointment[]>;
 }
 
 export const UserContext = React.createContext<UserContext>({
+    // states
+    userId: "",
     setUserId: () => { },
-    setEmployee: () => { },
-    loadEmployeeList : ()=>{} ,
-    loadAppointments: () => {},
-    setShownAppointments: ()=>{},
-    loadAppointmentShown: async() => [],
     user: {} as IUser,
+    setUser: () => { },
+    users: [],
+    setUsers: () => { },
     employee: {} as IEmployee,
+    setEmployee: () => { },
     employees: [],
+    setEmployees: () => { },
     appointments: [],
+    setAppointments: () => { },
     shownAppointments: [],
-    employeeList : [],
+    setShownAppointments: () => { },
 
-    //temp
-    userList: []
+    // loading functions
+    loadUser: async () => { },
+    loadUsers: async () => { },
+    loadEmployee: async () => { },
+    loadEmployees: async () => { },
+    loadAppointments: async () => { },
+    loadAppointmentShown: async () => [],
 });
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
-    const [userId, setUserId] = useState<string>();
+    const [userId, setUserId] = useState<string>("");
     const [user, setUser] = useState<IUser>();
-    const [usersList, setUsersList] = useState<IUser[]>([]);
+    const [users, setUsers] = useState<IUser[]>([]);
     const [employee, setEmployee] = useState<IEmployee>();
     const [employees, setEmployees] = useState<IEmployee[]>([]);
     const [appointments, setAppointments] = useState<IAppointment[]>([]);
-    const [employeeList , setEmployeeList] = useState<IEmployee[]>([]);
-    
-    //Voor de agenda, dit zijn de afspraken die getoond worden
-    const[shownAppointments , setShownAppointments] = useState<IAppointment[]>([]);
 
-
+    // Voor de agenda, dit zijn de afspraken die getoond worden
+    const [shownAppointments, setShownAppointments] = useState<IAppointment[]>([]);
 
     async function loadUsers() {
         try {
@@ -60,34 +73,12 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
                 headers: { 'Content-Type': 'application/json' },
             });
             const json: IUser[] = await response.json();
-            setUsersList(json);
+            setUsers(json);
         }
         catch (error) {
             console.error('Error fetching users data:', error);
         }
     }
-
-    async function loadEmployees() {
-        try {
-            const response = await fetch(`/api/employees`, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-            });
-            const json: IEmployee[] = await response.json();
-            setEmployees(json);
-        }
-        catch (error) {
-            console.error('Error fetching employees data:', error);
-        }
-    }
-
-    useEffect(() => {
-        loadUsers();
-        loadEmployees();
-        //temp
-        console.log("Lijst user ingeladen")
-
-    }, [])
 
     async function loadUser(userId: string) {
         try {
@@ -107,7 +98,21 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
-    async function loadEmployeeData(userId: string) {
+    async function loadEmployees() {
+        try {
+            const response = await fetch(`/api/employees`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            });
+            const json: IEmployee[] = await response.json();
+            setEmployees(json);
+        }
+        catch (error) {
+            console.error('Error fetching employees data:', error);
+        }
+    }
+
+    async function loadEmployee(userId: string) {
         try {
             console.log("start loading employee")
 
@@ -127,31 +132,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
-    async function loadEmployeeList() {
+    // Loads the appointments of one user with appointments setter
+    async function loadAppointments(employeeId: string) {
         try {
-            console.log("start loading employees")
-
-            const response = await fetch(`/api/employees`, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-            });
-
-            const json: IEmployee[] = await response.json();
-            console.log("loaded employees", json);
-
-            setEmployeeList(json);
-
-            return json;
-        } catch (error) {
-            console.error('Error fetching employee data:', error);
-        }
-    }
-
-    //loads the appointments of one user
-    async function loadAppointments(employeeId: string | undefined) {
-        try {
-            console.log("loading appointments");
-            console.log("employee id: ", employeeId)
+            console.log(`loading appointments for employee ${employeeId}`);
 
             const response = await fetch(`/api/employees/${employeeId}/appointments`, {
                 method: 'GET',
@@ -160,19 +144,17 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
             const json: IAppointment[] = await response.json();
 
-            console.log("loaded appointments", json)
-            
+            console.log(`successfully loaded appointments for employee ${employeeId}`, json)
             setAppointments(json);
         } catch (error) {
             console.error('Error fetching appointments data:', error);
         }
     }
 
-    //Loads the appointsments for a user to be shown in the agenda
-    async function loadAppointmentShown(employeeId: string | undefined) :Promise<IAppointment[]> {
+    // Loads & returns appointsments for a user
+    async function loadAppointmentShown(employeeId: string): Promise<IAppointment[]> {
         try {
-            console.log("loading appointments");
-            console.log("employee id: ", employeeId)
+            console.log(`loading appointments for employee ${employeeId}`);
 
             const response = await fetch(`/api/employees/${employeeId}/appointments`, {
                 method: 'GET',
@@ -181,52 +163,64 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
             const json: IAppointment[] = await response.json();
 
-            console.log("loaded appointments", json)
-            
-            return(json);
+            console.log(`successfully loaded appointments for employee ${employeeId}`, json)
+
+            return (json);
         } catch (error) {
             console.error('Error fetching appointments data:', error);
-            return([])
+            return ([])
         }
     }
 
-
-
-
-
-    async function loadData(userId: string) {
+    // Loads data based on a specific userId
+    async function loadUserData(userId: string) {
         await loadUser(userId);
-        const loadedEmployee = await loadEmployeeData(userId);
+        const loadedEmployee = await loadEmployee(userId);
 
-        // load appointments with newly loaded employee id
-        // ! setState() is ASYNC and therefore does not contain the correct data yet
-        await loadAppointments(loadedEmployee?.id);
+        if (loadedEmployee) {
+            // Loads appointments with newly loaded employee id
+            await loadAppointments(loadedEmployee.id);
+        }
     }
 
+    // Load all users & employees upon mount
+    useEffect(() => {
+        loadUsers();
+        loadEmployees();
+    }, [])
+
+    // Load user specific data upon receiving userId
     useEffect(() => {
         if (userId) {
-            loadData(userId)
+            loadUserData(userId)
             console.log("user id ", userId, ' is ingeladen')
         }
     }, [userId]);
 
     return (
         <UserContext.Provider value={{
+            userId: userId,
             setUserId: setUserId,
-            setEmployee: setEmployee,
-            loadEmployeeList: loadEmployeeList,
-            loadAppointments: loadAppointments,
-            setShownAppointments : setShownAppointments,
-            loadAppointmentShown: loadAppointmentShown,
             user: user,
+            setUser: setUser,
+            users: users,
+            setUsers: setUsers,
             employee: employee,
+            setEmployee: setEmployee,
             employees: employees,
+            setEmployees: setEmployees,
             appointments: appointments,
-            employeeList :employeeList,
-            shownAppointments : shownAppointments,
-
-            //temp
-            userList: usersList
+            setAppointments: setAppointments,
+            shownAppointments: shownAppointments,
+            setShownAppointments: setShownAppointments,
+        
+            // loading functions
+            loadUser: loadUser,
+            loadUsers: loadUsers,
+            loadEmployee: loadEmployee,
+            loadEmployees: loadEmployees,
+            loadAppointments: loadAppointments,
+            loadAppointmentShown: loadAppointmentShown,
         }}>
             {children}
         </UserContext.Provider>

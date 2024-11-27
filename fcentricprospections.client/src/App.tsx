@@ -32,14 +32,14 @@ const Root = () => {
                     </button>
                 </Link>
 
-            {/* Show Agenda button only if user is set */}
-            {user && (
-                <Link to={"/Agenda"}>
-                    <button className={styles.button}>
-                        <TfiAgenda  className={styles.homeIcon} />
-                    </button>
-                </Link>
-            )}
+                {/* Show Agenda button only if user is set */}
+                {user && (
+                    <Link to={"/agenda"}>
+                        <button className={styles.button}>
+                            <TfiAgenda className={styles.homeIcon} />
+                        </button>
+                    </Link>
+                )}
 
                 {/* If location isn't "Home", show "Back" button */}
                 {location.pathname !== "/" &&
@@ -106,16 +106,16 @@ const App = () => {
             element: <Root />,
             children: [
                 {
-                    path : "",
-                    element: <UserPage/>
+                    path: "",
+                    element: <UserPage />
                 },
                 {
                     path: "/home",
                     element: <Homepage />
                 },
                 {
-                    path : "/agenda",
-                    element: <CalendarPage/>
+                    path: "/agenda",
+                    element: <CalendarPage />
                 },
                 {
                     path: "shop/:shopId",

@@ -110,7 +110,7 @@ export interface IAppointment {
   appointmentState : string,
   name : string,
   employeeId : number
-  remark?: string,
+  remarks?: string,
 }
 
 export interface IToDo {
