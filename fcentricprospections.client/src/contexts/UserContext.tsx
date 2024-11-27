@@ -135,7 +135,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     // Loads, sets & returns appointments of current user
     async function loadAppointments(employeeId: string) {
         try {
-            console.log(`loading appointments for employee ${employeeId}`);
+            console.log(`loading appointments for user-employee ${employeeId}`);
 
             const response = await fetch(`/api/employees/${employeeId}/appointments`, {
                 method: 'GET',
@@ -144,7 +144,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
             const json: IAppointment[] = await response.json();
 
-            console.log(`successfully loaded appointments for employee ${employeeId}`, json)
+            console.log(`successfully loaded appointments for user-employee ${employeeId}`, json)
             setAppointments(json);
             return json;
         } catch (error) {

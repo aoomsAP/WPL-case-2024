@@ -59,7 +59,7 @@ export const NewProspection = () => {
   const navigate = useNavigate();
 
   // Input fields
-  const [visitDate, setVisitDate] = useState<Date>(); // TO IMPLEMENT
+  const [visitDate, setVisitDate] = useState<Date>(); // TO DO: IMPLEMENT WITH INPUT[DATE]
   const [contactType, setContactType] = useState<number>(4);
   const [contactName, setContactName] = useState<string>("");
   const [contactEmail, setContactEmail] = useState<string>("");
@@ -245,22 +245,6 @@ export const NewProspection = () => {
       }));
     setCompetitorBrandsOptions(competitorBrandOptions);
   }, [competitorBrands])
-
-  // async function loadCompetitorBrandOptions() {
-  //   const isValidCompetitorBrand = (competitorBrand: ICompetitorBrand) =>
-  //     !!competitorBrand && !!competitorBrand.id && !!competitorBrand.name;
-
-  //   const loadedCompetitorBrands = await loadCompetitorBrands();
-
-  //   let competitorBrandOptions: CompetitorBrandOption[] = loadedCompetitorBrands
-  //     .filter(isValidCompetitorBrand)
-  //     .map((competitorBrand) => ({
-  //       value: competitorBrand.id.toString(),
-  //       label: competitorBrand.name
-  //     }));
-
-  //   return competitorBrandOptions;
-  // }
 
   return (
     <main className={styles.main}>

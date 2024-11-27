@@ -8,25 +8,23 @@ import { EventInput } from '@fullcalendar/core';
 
 export const CalendarPage = () => {
 
-    const { shownAppointments } = useContext(UserContext);
+    const { appointments } = useContext(UserContext);
 
-    const [events, setEvents] = useState<EventInput>();
+    const [events, setEvents] = useState<EventInput[]>([]);
 
     useEffect(() => {
-        console.log(shownAppointments);
-
-        const events = shownAppointments.map((appointment) => ({
+        const userEvents = appointments.map((appointment) => ({
             title: appointment.name ? appointment.name : (appointment.remarks ? appointment.remarks : "Geen details"),
             start: appointment.startDate,
             end: appointment.endDate,
-            color: "steelblue", // Changes the background color
+            color: "steelblue", // User colors
         }));
-        setEvents(events);
-    }, [shownAppointments])
+        setEvents(userEvents);
+    }, [appointments])
 
     return (
         <>
-            <EmployeeSelect />
+            <EmployeeSelect setEvents={setEvents} />
 
             <FullCalendar
                 plugins={[dayGridPlugin, timeGridPlugin]}
@@ -39,6 +37,7 @@ export const CalendarPage = () => {
                     right: "dayGridMonth,timeGridWeek,timeGridDay", // View toggle buttons
                 }}
                 slotDuration="00:30:00"
+                progressiveEventRendering
                 events={events}
             />
         </>
