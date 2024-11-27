@@ -67,7 +67,7 @@ export const NewProspectionContext = createContext<NewProspectionContext>({
 
     // functions
     loadBrands: () => Promise.resolve(),
-    loadCompetitorBrands: () => Promise.resolve(),
+    loadCompetitorBrands: () => Promise.resolve([]),
     loadContactTypes: () => Promise.resolve(),
     loadVisitTypes: () => Promise.resolve(),
 
@@ -124,10 +124,13 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
                 headers: { 'Content-Type': 'application/json' },
             });
 
-            const json: ICompetitorBrand[] = await response.json();
-            setCompetitorBrands(json);
-            return json;
+            const json = await response.json();
 
+            // If undefined, return empty array
+            const compBrands = json || [];
+
+            setCompetitorBrands(compBrands);
+            return compBrands;
         } catch (error) {
             console.error('Error fetching competitor brands data:', error);
         }

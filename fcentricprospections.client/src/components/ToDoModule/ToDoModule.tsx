@@ -1,5 +1,5 @@
 import { FormEvent, useContext, useEffect, useState } from "react";
-import { IEmployee, IToDo } from "../../types";
+import { IEmployee, IToDo, OptionType } from "../../types";
 import styles from "./ToDoModule.module.css"
 import { UserContext } from "../../contexts/UserContext";
 import Select from 'react-select';
@@ -9,11 +9,6 @@ interface ToDoModuleProps {
     setToDos: (toDos: IToDo[]) => void;
 }
 
-interface EmployeeOption {
-    value: string;
-    label: string;
-}
-
 const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
 
     const { employees } = useContext(UserContext);
@@ -21,7 +16,7 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
     const [title, setTitle] = useState<string>(""); // "Name" in db
     const [description, setDescription] = useState<string>("");
     const [employee, setEmployee] = useState<IEmployee>();
-    const [employeesOptions, setEmployeesOptions] = useState<EmployeeOption[]>([]);
+    const [employeesOptions, setEmployeesOptions] = useState<OptionType[]>([]);
 
     // Search fields
     // const [employeeSearch, setEmployeeSearch] = useState<string>("");
@@ -55,11 +50,12 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
         setToDos(filteredToDos);
     }
 
+    // Map employees to options for react-select
     useEffect(() => {
         const isValidEmployee = (employee: IEmployee) =>
             !!employee && !!employee.id && !!employee.name;
 
-        let employeesOptions: EmployeeOption[] = employees
+        let employeesOptions: OptionType[] = employees
             .filter(isValidEmployee)
             .map((employee) => ({
                 value: employee.id,

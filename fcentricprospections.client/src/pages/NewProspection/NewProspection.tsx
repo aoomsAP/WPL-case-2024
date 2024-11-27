@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import BrandTag from '../../components/BrandTag/BrandTag';
 import { NewProspectionContext } from '../../contexts/NewProspectionContext';
-import { ICompetitorBrand, IProspectionBrand, IProspectionCompetitorBrand, IProspectionDetail, IProspectionToDo, IToDo } from '../../types';
+import { ICompetitorBrand, IProspectionBrand, IProspectionCompetitorBrand, IProspectionDetail, IProspectionToDo, IToDo, OptionType } from '../../types';
 import BrandCardInput from '../../components/BrandCardInput/BrandCardInput';
 import BrandInterestCard from '../../components/BrandCardInput/BrandInterestCard';
 import { AiOutlineCheck } from "react-icons/ai";
@@ -13,8 +13,9 @@ import { ShopDetailContext } from '../../contexts/ShopDetailContext';
 import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCard';
 import ToDoModule from '../../components/ToDoModule/ToDoModule';
 import { UserContext } from '../../contexts/UserContext';
-import Select from 'react-select';
-import AsyncSelect from 'react-select/async';
+import Select, { createFilter, MultiValue } from 'react-select';
+import MenuList from "../../components/ToDoModule/MenuList/MenuList"; // Custom MenuList
+import Option from "../../components/ToDoModule/Option/Option"; // Custom Option
 
 export const NewProspection = () => {
 
@@ -39,7 +40,6 @@ export const NewProspection = () => {
   const {
     allBrands,
     competitorBrands,
-    loadCompetitorBrands,
     prospectionBrands,
     setProspectionBrands,
     prospectionCompetitorBrands,
@@ -59,7 +59,7 @@ export const NewProspection = () => {
   const navigate = useNavigate();
 
   // Input fields
-  const [visitDate, setVisitDate] = useState<Date>(); // TO IMPLEMENT
+  const [visitDate, setVisitDate] = useState<Date>(); // TO DO: IMPLEMENT WITH INPUT[DATE]
   const [contactType, setContactType] = useState<number>(4);
   const [contactName, setContactName] = useState<string>("");
   const [contactEmail, setContactEmail] = useState<string>("");
@@ -91,7 +91,7 @@ export const NewProspection = () => {
       let brandInterestToDo = {
         name: "FC70 merk interesse",
         remarks: interest.brandName,
-        employeeId: 0, // TO DO: WHO?
+        employeeId: 4, // TO DO: WHO?
         toDoStatusId: 1, // DEFAULT
       };
       newInterestToDos.push(brandInterestToDo);
@@ -111,7 +111,7 @@ export const NewProspection = () => {
       let contactInfoToDo = {
         name: "Nieuwe contact info",
         remarks: `Contact type: ${contactType}\nContact naam:${contactName}\nContact email:${contactEmail}\nContact phone:${contactPhone}`,
-        employeeId: 0, // TO DO: WHO?
+        employeeId: 4, // TO DO: WHO?
         toDoStatusId: 1, // DEFAULT
       };
 
@@ -126,16 +126,6 @@ export const NewProspection = () => {
   // Search fields
   //const [competitorBrandSearch, setCompetitorBrandSearch] = useState<string>("");
   const [brandInterestSearch, setBrandInterestSearch] = useState<string>("");
-
-  // Filter for competitor brands
-  // const competitorBrandSearchFunc = competitorBrands.filter(brand => {
-
-  //   if (prospectionCompetitorBrands.map(x => x.competitorBrandId).find(x => x === brand.id)) return false;
-
-  //   if (competitorBrandSearch.length < 3) return false;
-
-  //   return brand.name.toLowerCase().includes(competitorBrandSearch.toLowerCase());
-  // });
 
   // Filter for interest search brands
   const brandInterestSearchFunc = allBrands.filter(brand => {
@@ -241,41 +231,20 @@ export const NewProspection = () => {
   //   console.log("nextIndex", nextIndex);
   // };
 
-  interface CompetitorBrandOption {
-    value: string;
-    label: string;
-  }
+  const [competitorBrandsOptions, setCompetitorBrandsOptions] = useState<OptionType[]>([]);
 
-  // const [competitorBrandsOptions, setCompetitorBrandsOptions] = useState<CompetitorBrandOption[]>([]);
-
-  // useEffect(() => {
-  //   const isValidCompetitorBrand = (competitorBrand: ICompetitorBrand) =>
-  //     !!competitorBrand && !!competitorBrand.id && !!competitorBrand.name;
-
-  //   let competitorBrandOptions: CompetitorBrandOption[] = competitorBrands
-  //     .filter(isValidCompetitorBrand)
-  //     .map((competitorBrand) => ({
-  //       value: competitorBrand.id.toString(),
-  //       label: competitorBrand.name
-  //     }));
-  //   setCompetitorBrandsOptions(competitorBrandOptions);
-  // }, [competitorBrands])
-
-  async function loadCompetitorBrandOptions() {
+  useEffect(() => {
     const isValidCompetitorBrand = (competitorBrand: ICompetitorBrand) =>
       !!competitorBrand && !!competitorBrand.id && !!competitorBrand.name;
 
-    const loadedCompetitorBrands = await loadCompetitorBrands();
-
-    let competitorBrandOptions: CompetitorBrandOption[] = loadedCompetitorBrands
+    let competitorBrandOptions: OptionType[] = competitorBrands
       .filter(isValidCompetitorBrand)
       .map((competitorBrand) => ({
         value: competitorBrand.id.toString(),
         label: competitorBrand.name
       }));
-
-      return competitorBrandOptions;
-  }
+    setCompetitorBrandsOptions(competitorBrandOptions);
+  }, [competitorBrands])
 
   return (
     <main className={styles.main}>
@@ -375,25 +344,29 @@ export const NewProspection = () => {
           {/* COMPETITOR BRANDS */}
           <h3>Referentiemerken</h3>
 
-          {competitorBrands && <AsyncSelect
+          {competitorBrands && <Select<OptionType, true>
             className="basic-multi-select"
             classNamePrefix="select"
             isMulti
             isClearable={true}
             isSearchable={true}
             name="competitorBrand"
-            cacheOptions
-            defaultOptions
-            loadOptions={loadCompetitorBrandOptions}
-            onChange={(e) => {
-              const newProspectionCompetitorBrands : IProspectionCompetitorBrand[] = e.map(x => ({competitorBrandId: +x.value, competitorBrandName: x.label}))
+            filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
+            maxMenuHeight={200} // Limit height to improve rendering
+            options={competitorBrandsOptions}
+            components={{ // Custom components to make use of react-window to improve rendering
+              MenuList,
+              Option,
+            }}
+            onChange={(selectedOptions: MultiValue<OptionType>) => {
+              const newProspectionCompetitorBrands: IProspectionCompetitorBrand[] = selectedOptions
+                .map((x: OptionType) => ({
+                  competitorBrandId: +x.value,
+                  competitorBrandName: x.label,
+                }));
               setProspectionCompetitorBrands(newProspectionCompetitorBrands);
             }}
           />}
-
-          <div>
-            {prospectionCompetitorBrands.map(brand => <BrandTag brandId={brand.competitorBrandId} brandName={brand.competitorBrandName} type="competitorBrand" />)}
-          </div>
 
           {/* NEW BRANDS */}
           <h3>Nieuwe merken</h3>
@@ -406,7 +379,7 @@ export const NewProspection = () => {
             let newBrandsToDo = {
               name: "Nieuwe brands",
               remarks: newBrands,
-              employeeId: 0, // WHO?
+              employeeId: 4, // TO DO: WHO?
               toDoStatusId: 1, // DEFAULT
             };
             const toDosWithoutNewBrands = toDos.filter(x => x.name !== "Nieuwe brands");

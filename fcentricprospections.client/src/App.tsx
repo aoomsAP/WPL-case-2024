@@ -9,13 +9,19 @@ import styles from './App.module.css'
 import { ShopDetail } from './pages/ShopDetail/ShopDetail';
 import { ShopDetailProvider } from './contexts/ShopDetailContext';
 import { ProspectionDetailProvider } from './contexts/ProspectionDetailContext';
-import { UserProvider } from './contexts/UserContext';
+import { UserContext, UserProvider } from './contexts/UserContext';
 import UserPage from './pages/UserPage/UserPage';
+import { CalendarPage } from './pages/CalendarPage/CalendarPage';
+import { TfiAgenda } from "react-icons/tfi";
+import { useContext } from 'react';
 
 const Root = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
+
+    const { user } = useContext(UserContext);
+
 
     return (
         <>
@@ -25,6 +31,15 @@ const Root = () => {
                         {<AiFillHome className={styles.homeIcon} />}
                     </button>
                 </Link>
+
+                {/* Show Agenda button only if user is set */}
+                {user && (
+                    <Link to={"/agenda"}>
+                        <button className={styles.button}>
+                            <TfiAgenda className={styles.homeIcon} />
+                        </button>
+                    </Link>
+                )}
 
                 {/* If location isn't "Home", show "Back" button */}
                 {location.pathname !== "/" &&
@@ -91,12 +106,16 @@ const App = () => {
             element: <Root />,
             children: [
                 {
-                    path : "",
-                    element: <UserPage/>
+                    path: "",
+                    element: <UserPage />
                 },
                 {
                     path: "/home",
                     element: <Homepage />
+                },
+                {
+                    path: "/agenda",
+                    element: <CalendarPage />
                 },
                 {
                     path: "shop/:shopId",

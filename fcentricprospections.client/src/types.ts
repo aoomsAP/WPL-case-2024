@@ -110,7 +110,7 @@ export interface IAppointment {
   appointmentState : string,
   name : string,
   employeeId : number
-  remark?: string,
+  remarks?: string,
 }
 
 export interface IToDo {
@@ -134,4 +134,9 @@ export interface IProspectionToDo {
   toDoStatusId?: number,
   toDoStatus?: string,
   name?: string,
+}
+
+export type OptionType = {
+  label: string
+  value: string
 }

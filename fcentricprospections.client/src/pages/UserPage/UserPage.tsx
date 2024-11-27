@@ -6,12 +6,12 @@ import styles from '../../App.module.css'
 
 const UserPage = () => {
 
-    const { setUserId, userList } = useContext(UserContext);
+    const { setUserId, users } = useContext(UserContext);
 
     const [searchTerm, setSearchTerm] = useState(""); // State for search input
 
     // Filter user names based on the search term, ensuring at least 3 characters are typed
-    const filteredUSerNames = userList.filter(user => {
+    const filteredUSerNames = users.filter(user => {
         // Check if the search term is at least 3 characters long
         if (searchTerm.length < 3) return false; // If less than 3 characters, do not include
         return user.login.toLowerCase().includes(searchTerm.toLowerCase()); // Otherwise, filter based on name

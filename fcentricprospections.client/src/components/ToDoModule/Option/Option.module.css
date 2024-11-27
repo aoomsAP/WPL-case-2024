@@ -1,0 +1,22 @@
+.react-select__option {
+    display: block;
+    font-size: 16px;
+    color: rgb(36, 36, 36);
+    padding: 11px 12px;
+    width: 100%;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+.react-select__option:hover {
+    background-color: #EBECF0; 
+}
+
+.react-select__option--is-selected {
+    background-color: #42526E;
+    color: #FFFFFF; 
+};
+
+.react-select__option--is-selected:hover {
+    background-color: #42526E;
+};
