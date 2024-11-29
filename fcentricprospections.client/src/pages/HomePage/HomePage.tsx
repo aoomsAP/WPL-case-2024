@@ -1,24 +1,40 @@
 import { useState, useEffect, useContext } from "react";
-import { IShop } from "../../types";
-import { Link } from "react-router-dom";
-import styles from '../../App.module.css'
-import homeStyles from './homepage.module.css'
+import { IShop, OptionType } from "../../types";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import { Oval } from "react-loader-spinner";
+import Select from "react-select";
+import { createFilter} from "react-select";
+import MenuListSingle from "../../components/ToDoModule/MenuList/MenuListSingle";
+import styles from './HomePage.module.css'
+import Option from "../../components/ToDoModule/Option/Option";
 
 export const Homepage = () => {
+
+    
+    const navigate = useNavigate();
 
     const { user, employee, appointments } = useContext(UserContext);
 
     const [searchTerm, setSearchTerm] = useState(""); // State for search input
     const [shopNames, setShopNames] = useState<IShop[]>([]); //Sate with list of shops
 
-    // Filter shop names based on the search term, ensuring at least 3 characters are typed
-    const filteredShopNames = shopNames.filter(shop => {
-        // Check if the search term is at least 3 characters long
-        if (searchTerm.length < 3) return false; // If less than 3 characters, do not include
-        return shop.name.toLowerCase().includes(searchTerm.toLowerCase()); // Otherwise, filter based on name
-    });
+    const[shopListOptions , setShopListOptions] = useState<OptionType[]>([]);
+
+    useEffect(() => {
+        const isValidShopOption = (shopOption: IShop) =>
+          !!shopOption && !!shopOption.id && !!shopOption.name;
+    
+        let shopOptionOptions: OptionType[] = shopNames
+          .filter(isValidShopOption )
+          .map((shopOption) => ({
+            value: shopOption.id.toString(),
+            label: `${shopOption.name} ${shopOption.city}`
+
+          }));
+        setShopListOptions(shopOptionOptions);
+      }, [shopNames])
+    
 
     const loadShops = async () => {
         try {
@@ -42,7 +58,7 @@ export const Homepage = () => {
     }, []);
 
     return (
-        <main className={styles.main}>
+        <main className={`${styles.main} ${styles.homepage}`}>
             <div>
                 {/* FOR TESTING PURPOSES */}
                 <h2>Hallo, {employee ? employee?.firstName : user?.login}</h2>
@@ -70,28 +86,32 @@ export const Homepage = () => {
 
             <h1>Selecteer een winkel</h1>
 
-            <input
-                className={styles.inputField}
-                type="text"
-                placeholder="Zoek..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)} // Update state on input change
-            />
-            <ul className={homeStyles.ul}>
-                {filteredShopNames.length > 0 ? (
-                    filteredShopNames.map(shop => (
-                        <li className={homeStyles.li} key={shop.id}>  {/* Ensure each `li` has a unique `key` */}
-                            <Link className={homeStyles.a} to={`/shop/${shop.id}`}>{shop.name}</Link>
-                        </li>
-                    ))
-                ) : (
-                    searchTerm.length < 3 ? (
-                        <li className={homeStyles.li1}>Typ minstens 3 letters.</li> // Instruction message if less than 3 characters
-                    ) : (
-                        <li>Geen winkels gevonden</li> // Message if no shops match
-                    )
-                )}
-            </ul>
+            
+            {shopNames && <Select<OptionType>
+            className="basic-single"
+            classNamePrefix="select"
+            isClearable={true}
+            isSearchable={true}
+            name="shopSelect"
+            filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
+            maxMenuHeight={200} // Limit height to improve rendering
+            options={shopListOptions}
+            components={{ // Custom components to make use of react-window to improve rendering
+                
+                Option,
+              }}
+
+            onChange={(e) => {
+                navigate(`/shop/${e?.value}`);
+            }}
+            
+          />}
+
+
+
+           
+
+
         </main>
     );
 };

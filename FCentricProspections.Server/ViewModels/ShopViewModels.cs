@@ -9,6 +9,8 @@ namespace FCentricProspections.Server.ViewModels
         public long Id { get; set; }
 
         public string Name { get; set; }
+
+        public string City { get; set; }
     }
 
     public class ShopGetDetailViewModel
@@ -21,5 +23,7 @@ namespace FCentricProspections.Server.ViewModels
         public AddressDto Address { get; set; }
 
         public string Customer { get; set; }
+
+        public string City { get; set; }
     }
 }
