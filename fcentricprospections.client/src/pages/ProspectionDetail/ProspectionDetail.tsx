@@ -12,6 +12,9 @@ import styles from "./ProspectionDetail.module.css";
 import { Oval } from 'react-loader-spinner'
 import { ShopDetailContext } from "../../contexts/ShopDetailContext";
 import { ProspectionDetailContext } from "../../contexts/ProspectionDetailContext";
+import { ToDoContainer } from "../../components/ToDo/ToDoContainer";
+
+
 
 export const ProspectionDetail = () => {
 
@@ -33,6 +36,7 @@ export const ProspectionDetail = () => {
     prospectionBrands,
     prospectionCompetitorBrands,
     prospectionBrandInterests,
+    prospectionToDos
   } = useContext(ProspectionDetailContext);
 
   useEffect(() => {
@@ -58,7 +62,7 @@ export const ProspectionDetail = () => {
           <section className={styles.contactVisitCard}>
             <div>
               {contactType && prospectionDetail && (
-                <ContactTypeCard contactType={contactType} contactPersonName={prospectionDetail.contactName ?? ""} />
+                <ContactTypeCard contactType={contactType} contactPersonName={prospectionDetail.contactName ?? ""} contactEmail={prospectionDetail.contactEmail  ?? ""} contactPhone={prospectionDetail.contactPhone ?? ""} />
               )}
 
               {visitType && prospectionDetail && <VisitTypeCard visitType={visitType} visitContext={prospectionDetail?.visitContext ?? ""} />}
@@ -69,12 +73,15 @@ export const ProspectionDetail = () => {
 
           <CompetitorBrandList prospectionCompetitorBrands={prospectionCompetitorBrands} />
 
+          <TextSection title="Nieuwe Merken" text={prospectionDetail.newBrands}/>
+
           {prospectionDetail && <GeneralSituation detail={prospectionDetail} />}
 
           <BrandInterestList prospectionBrandInterests={prospectionBrandInterests} />
 
           <TextSection title="Trends en noden in de markt" text={prospectionDetail?.trends} />
           <TextSection title="Extra opmerkingen en feedback" text={prospectionDetail?.extra} />
+          <ToDoContainer todos={prospectionToDos}/>
         </>
       }
       {!prospectionDetail && <Oval />}
