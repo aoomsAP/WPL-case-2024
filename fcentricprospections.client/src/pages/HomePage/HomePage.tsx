@@ -29,7 +29,7 @@ export const Homepage = () => {
           .filter(isValidShopOption )
           .map((shopOption) => ({
             value: shopOption.id.toString(),
-            label: `${shopOption.name} ${shopOption.city}`
+            label: `${shopOption.name}`
 
           }));
         setShopListOptions(shopOptionOptions);
@@ -38,13 +38,14 @@ export const Homepage = () => {
 
     const loadShops = async () => {
         try {
+            console.log("start loading shops")
             const response = await fetch('/api/shops', {
                 method: 'GET',  // Specify the method if it's not 'GET' by default
                 headers: {
                     'Content-Type': 'application/json',  // Define the expected content type                   
                 },
             });
-            console.log(response)
+            console.log("finished loading shops", response)
             const json: IShop[] = await response.json();
             setShopNames(json);
         }

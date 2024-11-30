@@ -31,7 +31,7 @@ namespace FCentricProspections.Server.Controllers
             var shops = new List<ShopGetAllViewModel>();
             foreach (var shop in this.data.GetShops())
             {
-                shops.Add(new ShopGetAllViewModel { Id = shop.Id, Name = shop.Name ,City = shop.City });
+                shops.Add(new ShopGetAllViewModel { Id = shop.Id, Name = shop.Name });
             }
 
             // return list of viewmodel shops

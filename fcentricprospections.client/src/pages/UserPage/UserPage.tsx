@@ -17,18 +17,16 @@ const UserPage = () => {
         const isValidUserOption = (userOption: IUser) =>
           !!userOption && !!userOption.id && !!userOption.login;
     
-        let userOption: OptionType[] = users
+        let userOptions: OptionType[] = users
           .filter(isValidUserOption )
           .map((userOption) => ({
             value: userOption.id.toString(),
             label: `${userOption.login} `
 
           }));
-        setUserOptions(userOption)
-      }, [userOptions])
+        setUserOptions(userOptions)
+      }, [users])
     
-
-
 
     return (
         <main className={styles.main}>

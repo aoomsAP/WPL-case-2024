@@ -59,7 +59,9 @@ public partial class FCentricContext : DbContext
     public virtual DbSet<SalesPeriod> SalesPeriods { get; set; }
 
     public virtual DbSet<Shop> Shops { get; set; }
+
     public virtual DbSet<ShopContact> ShopContacts { get; set; }
+
     public virtual DbSet<ShopDelivery> ShopDeliveries { get; set; }
 
     public virtual DbSet<ToDo> ToDoes { get; set; }
@@ -68,6 +70,7 @@ public partial class FCentricContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<ShopDetailsView> ShopDetailsView { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
