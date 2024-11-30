@@ -9,7 +9,7 @@ export interface IShopDetail {
   name: string;
   address: Address;
   customer: string;
-
+  owner: string;
 }
 
 export interface Address {

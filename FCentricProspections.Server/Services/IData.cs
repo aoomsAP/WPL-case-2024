@@ -14,6 +14,8 @@ namespace FCentricProspections.Server.Services
 
         Shop GetShop(long id);
 
+        CustomerDto GetOwner(long id);
+
 
         // Prospection --------------------------------------------------------------------------------------------------------------------------------------------
 

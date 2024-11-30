@@ -35,6 +35,7 @@ const ShopCard = ({ shopId }: ShopCardProps) => {
                     <p>{shop.name}</p>
                     <p>Klant: {shop.customer}</p>
                     <p>Address: {shop.address.street1}</p>
+                    <p>Eigenaar: {shop.owner ? shop.owner : "geen gegevens"}</p>
                 </>}
         </>
     )
