@@ -3,6 +3,7 @@ import { IEmployee, IToDo, OptionType } from "../../types";
 import styles from "./ToDoModule.module.css"
 import { UserContext } from "../../contexts/UserContext";
 import Select from 'react-select';
+import ToDoEditable from "./ToDoEditable";
 
 interface ToDoModuleProps {
     toDos: IToDo[];
@@ -18,10 +19,6 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
     const [employee, setEmployee] = useState<IEmployee>();
     const [employeesOptions, setEmployeesOptions] = useState<OptionType[]>([]);
 
-    // Search fields
-    // const [employeeSearch, setEmployeeSearch] = useState<string>("");
-    // const employeeSearchResult = employees.filter((employee: IEmployee) => employee.name.toLowerCase().includes(employeeSearch.toLowerCase()));
-
     function onSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         console.log("Submit handler");
@@ -31,8 +28,8 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
                 name: title,
                 remarks: description,
                 employeeId: +employee.id,
-                toDoStatusId: 1, // DEFAULT
                 employeeName: employee.name,
+                toDoStatusId: 1, // DEFAULT
             }
             const newToDos = [...toDos, newToDo];
             console.log(newToDos);
@@ -40,14 +37,6 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
         } else {
             console.log("Invalid task");
         }
-    }
-
-    // "X" deletes the current todo from the state array
-    function handleClick(deleteIndex: number) {
-        // Filter out the current todo
-        const filteredToDos = toDos.filter((_, i) => i !== deleteIndex);
-        // Set new filtered array
-        setToDos(filteredToDos);
     }
 
     // Map employees to options for react-select
@@ -85,7 +74,7 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
                         className="basic-single"
                         classNamePrefix="select"
                         defaultValue={employeesOptions[0]}
-                        placeholder={""}
+                        placeholder={"Kies een persoon"}
                         isClearable={true}
                         isSearchable={true}
                         name="employee"
@@ -103,13 +92,9 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
             {/* TO DO CONTAINER */}
             <div className={styles.toDoContainer}>
                 {
-                    toDos.map((toDo, i) =>
-                        <div key={i} className={styles.toDo}>
-                            <button className={styles.close} onClick={() => handleClick(i)}>X</button>
-                            <p><strong>Titel: {toDo.name}</strong></p>
-                            <p>Taak: {toDo.remarks}</p>
-                            <p>Toegewezen aan: {toDo.employeeName}</p>
-                        </div>
+                    toDos
+                    .map((toDo, i) =>
+                        <ToDoEditable index={i} toDo={toDo} toDos={toDos} setToDos={setToDos} employeesOptions={employeesOptions}/>
                     )
                 }
             </div>

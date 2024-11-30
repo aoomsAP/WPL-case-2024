@@ -20,10 +20,11 @@ import Option from "../../components/ToDoModule/Option/Option"; // Custom Option
 export const NewProspection = () => {
 
   const { shopId } = useParams<{ shopId: string }>();
+  const navigate = useNavigate();
 
-  // Contexts
+  // Contexts --------------------------------------------------------------------------------------------------------------------
 
-  const { user } = useContext(UserContext);
+  const { user, employee } = useContext(UserContext);
 
   const {
     setShopId,
@@ -56,9 +57,8 @@ export const NewProspection = () => {
     updateProspectionToDos,
   } = useContext(NewProspectionContext);
 
-  const navigate = useNavigate();
+  // Input fields / states --------------------------------------------------------------------------------------------------------------------
 
-  // Input fields
   const [visitDate, setVisitDate] = useState<Date>(); // TO DO: IMPLEMENT WITH INPUT[DATE]
   const [contactType, setContactType] = useState<number>(4);
   const [contactName, setContactName] = useState<string>("");
@@ -73,58 +73,82 @@ export const NewProspection = () => {
   const [trends, setTrends] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
 
-  // Setting default ProspectionBrands based on shopBrands list
-  useEffect(() => {
-    console.log("setting default prospection brands")
-    const defaultProspectionBrands: IProspectionBrand[] = shopBrands.map(x => ({ brandId: x.id, brandName: x.name }));
-    setProspectionBrands(defaultProspectionBrands);
-    console.log("set default prospection brands")
-    console.log(defaultProspectionBrands)
-  }, [shopBrands])
+  // Todos --------------------------------------------------------------------------------------------------------------------
 
-  // Setting prospection brand interest todos 
+  // Contact info todos 
+  useEffect(() => {
+    if (contactName != "" || contactEmail != "" || contactPhone != "") {
+
+      const remarks = `${contactName.length > 0 ? `Contact naam: ${contactName}, ` : ""}${contactEmail.length > 0 ? `Contact email: ${contactEmail}, ` : ""}${contactPhone.length > 0 ? `Contact telefoon: ${contactPhone}` : ""}`
+
+      // Create todo for each interest
+      let contactInfoToDo = {
+        name: "Nieuwe contact info",
+        remarks: remarks,
+        employeeId: 0, // TO DO: WHO? DEFAULT? 0 WILL RESULT IN ERROR
+        toDoStatusId: 1, // DEFAULT
+      };
+
+      // Filter out contact info todo, as to only replace that one
+      const toDosWithoutContact = toDos.filter(x => x.name !== "Nieuwe contact info");
+      const newToDos = [...toDosWithoutContact, contactInfoToDo];
+      setToDos(newToDos);
+    }
+  }, [contactName, contactEmail, contactPhone, contactType])
+
+  // NewBrands todos 
+  useEffect(() => {
+    // Update newBrands toDo item
+    let newBrandsToDo = {
+      name: "Nieuwe brands",
+      remarks: newBrands,
+      employeeId: 0, // TO DO: WHO? DEFAULT? 0 WILL RESULT IN ERROR
+      toDoStatusId: 1, // DEFAULT
+    };
+    // Filter out newBrands todos, as to only replace that one
+    const toDosWithoutNewBrands = toDos.filter(x => x.name !== "Nieuwe brands");
+    const newToDos = [...toDosWithoutNewBrands, newBrandsToDo];
+    setToDos(newToDos);
+  }, [newBrands])
+
+  // Prospection brand interest todos 
   useEffect(() => {
     let newInterestToDos = [];
 
     // Create todo for each interest
     for (let interest of prospectionBrandInterests) {
       let brandInterestToDo = {
-        name: "FC70 merk interesse",
+        name: "FC70 brand interesse",
         remarks: interest.brandName,
-        employeeId: 4, // TO DO: WHO?
+        employeeId: 0, // TO DO: WHO? DEFAULT? 0 WILL RESULT IN ERROR
         toDoStatusId: 1, // DEFAULT
       };
       newInterestToDos.push(brandInterestToDo);
     }
-
-    const toDosWithoutBrandInterests = toDos.filter(x => x.name !== "FC70 merk interesse");
+    // Filter out FC70 brand interest todos, as to only replace those
+    const toDosWithoutBrandInterests = toDos.filter(x => x.name !== "FC70 brand interesse");
     const newToDos = [...toDosWithoutBrandInterests, ...newInterestToDos];
-
-    console.log("setting new todos for prospection brand interest")
     setToDos(newToDos);
   }, [prospectionBrandInterests])
 
-  // Setting contact info todos 
+  // Select -------------------------------------------------------------------------------------------------------------------
+
+  // Creating competitor brand options for react-select
+  const [competitorBrandsOptions, setCompetitorBrandsOptions] = useState<OptionType[]>([]);
   useEffect(() => {
-    if (contactName != "" && contactEmail != "" && contactPhone != "") {
-      // Create todo for each interest
-      let contactInfoToDo = {
-        name: "Nieuwe contact info",
-        remarks: `Contact type: ${contactType}\nContact naam:${contactName}\nContact email:${contactEmail}\nContact phone:${contactPhone}`,
-        employeeId: 4, // TO DO: WHO?
-        toDoStatusId: 1, // DEFAULT
-      };
+    const isValidCompetitorBrand = (competitorBrand: ICompetitorBrand) =>
+      !!competitorBrand && !!competitorBrand.id && !!competitorBrand.name;
 
-      const toDosWithoutContact = toDos.filter(x => x.name !== "Nieuwe contact info");
-      const newToDos = [...toDosWithoutContact, contactInfoToDo];
+    let competitorBrandOptions: OptionType[] = competitorBrands
+      .filter(isValidCompetitorBrand)
+      .map((competitorBrand) => ({
+        value: competitorBrand.id.toString(),
+        label: competitorBrand.name
+      }));
+    setCompetitorBrandsOptions(competitorBrandOptions);
+  }, [competitorBrands])
 
-      console.log("setting new todos for contact info")
-      setToDos(newToDos);
-    }
-  }, [contactName, contactEmail, contactPhone, contactType])
-
-  // Search fields
-  //const [competitorBrandSearch, setCompetitorBrandSearch] = useState<string>("");
+  // Search fields - react-select not (yet) implemented for brand interest seardch
   const [brandInterestSearch, setBrandInterestSearch] = useState<string>("");
 
   // Filter for interest search brands
@@ -137,32 +161,51 @@ export const NewProspection = () => {
     return brand.name.toLowerCase().includes(brandInterestSearch.toLowerCase());
   });
 
-  // Submit function
+
+  // Setting default ProspectionBrands based on shopBrands list --------------------------------------------------------------------------------------------------------------------
+
+  useEffect(() => {
+    console.log("setting default prospection brands")
+    const defaultProspectionBrands: IProspectionBrand[] = shopBrands.map(x => ({ brandId: x.id, brandName: x.name }));
+    setProspectionBrands(defaultProspectionBrands);
+    console.log("set default prospection brands")
+    console.log(defaultProspectionBrands)
+  }, [shopBrands])
+
+  // Submit function ------------------------------------------------------------------------------------------------------------------------------------
+
   async function handleComplete() {
-
-    const newProspection: IProspectionDetail = {
-      shopId: Number(shopId),
-      userId: 1029, // TO DO: implement
-      employeeId: 4, // TO DO: implement
-      visitDate: new Date(), // TO DO: date needs to be picked
-      dateCreated: new Date(),
-      dateLastUpdated: new Date(),
-      contactTypeId: contactType,
-      contactName: contactName,
-      contactEmail: contactEmail,
-      contactPhone: contactPhone,
-      visitTypeId: visitType,
-      visitContext: visitContext,
-      newBrands: newBrands,
-      bestBrands: bestBrands,
-      worstBrands: worstBrands,
-      terminatedBrands: terminatedBrands,
-      trends: trends,
-      extra: feedback
-    }
-
     try {
       console.log("start handleComplete");
+
+      if (!user?.id) {
+        throw Error("Invalid user id");
+      }
+
+      if (!employee?.id) {
+        throw Error("Invalid employee id");
+      }
+
+      const newProspection: IProspectionDetail = {
+        shopId: Number(shopId),
+        userId: +user.id,
+        employeeId: +employee.id,
+        visitDate: new Date(), // TO DO: date needs to be picked
+        dateCreated: new Date(),
+        dateLastUpdated: new Date(),
+        contactTypeId: contactType,
+        contactName: contactName,
+        contactEmail: contactEmail,
+        contactPhone: contactPhone,
+        visitTypeId: visitType,
+        visitContext: visitContext,
+        newBrands: newBrands,
+        bestBrands: bestBrands,
+        worstBrands: worstBrands,
+        terminatedBrands: terminatedBrands,
+        trends: trends,
+        extra: feedback
+      }
 
       // Add new todos, save in new array to get toDos with id, and await response
       const addedToDos: IToDo[] = [];
@@ -231,21 +274,6 @@ export const NewProspection = () => {
   //   console.log("nextIndex", nextIndex);
   // };
 
-  const [competitorBrandsOptions, setCompetitorBrandsOptions] = useState<OptionType[]>([]);
-
-  useEffect(() => {
-    const isValidCompetitorBrand = (competitorBrand: ICompetitorBrand) =>
-      !!competitorBrand && !!competitorBrand.id && !!competitorBrand.name;
-
-    let competitorBrandOptions: OptionType[] = competitorBrands
-      .filter(isValidCompetitorBrand)
-      .map((competitorBrand) => ({
-        value: competitorBrand.id.toString(),
-        label: competitorBrand.name
-      }));
-    setCompetitorBrandsOptions(competitorBrandOptions);
-  }, [competitorBrands])
-
   return (
     <main className={styles.main}>
 
@@ -299,8 +327,6 @@ export const NewProspection = () => {
             <legend>Contact phone</legend>
             <input type='text' value={contactPhone} onChange={(e) => setContactPhone(e.target.value)}></input>
           </fieldset>
-
-          {/* TO DO: IMPLEMENT CHECKBOX TO AUTOMATICALLY ADD TO TODOS */}
 
           <fieldset>
             <legend>Bezoek type</legend>
@@ -374,18 +400,6 @@ export const NewProspection = () => {
           <textarea value={newBrands} onChange={(e) => {
             // set newBrands
             setNewBrands(e.target.value);
-
-            // Update newBrands toDo item
-            let newBrandsToDo = {
-              name: "Nieuwe brands",
-              remarks: newBrands,
-              employeeId: 4, // TO DO: WHO?
-              toDoStatusId: 1, // DEFAULT
-            };
-            const toDosWithoutNewBrands = toDos.filter(x => x.name !== "Nieuwe brands");
-            const newToDos = [...toDosWithoutNewBrands, newBrandsToDo];
-            console.log("setting new todo for newbrands")
-            setToDos(newToDos);
           }} />
 
         </FormWizard.TabContent>
@@ -475,7 +489,6 @@ export const NewProspection = () => {
           <h3>Takenlijst voor opvolging</h3>
           <p>Hier kan u items toevoegen die op basis van dit verslag moeten opgevolgd worden.</p>
 
-          {/* TO DO LIST */}
           <ToDoModule toDos={toDos} setToDos={setToDos} />
 
         </FormWizard.TabContent>

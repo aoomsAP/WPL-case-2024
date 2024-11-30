@@ -1,0 +1,28 @@
+.input_container {
+    position: relative;
+    width: 100%;
+    border: 1px lightgrey solid;
+    border-radius: 5px;
+}
+
+.edit_cursor {
+    cursor:text;
+}
+
+.input_container p {
+    margin: 0;
+    width: 100%;
+    padding: 0.5rem;
+}
+
+.input_container input {
+    padding: 0.5rem;
+}
+
+.edit_icon {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 20px;
+    color: lightgrey;
+}
