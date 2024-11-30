@@ -21,17 +21,12 @@ namespace FCentricProspections.Server.Services
 
         public IEnumerable<ShopListDto> GetShops()
         {
-            var ShopList = (from s in this.context.Shops
-                            join contact in this.context.Contacts on s.ContactId equals contact.Id
-                            join address in this.context.Addresses on contact.AddressId equals address.Id
-                            join city in this.context.Cities on address.CityId equals city.Id
-                            select new ShopListDto
-                            {
-                                Id = s.Id,
-                                Name = s.Name,
-                                City = city.Name
-                            }).ToList();
-                
+            var ShopList = context.Shops
+                .Select(s => new ShopListDto
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                }).ToList();
 
             return ShopList;
         }
