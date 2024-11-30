@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using FCentricProspections.Server.DataModels;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using FCentricProspections.Server.DomainModels;
 
 namespace FCentricProspections.Server.Contexts;
 
@@ -58,7 +59,7 @@ public partial class FCentricContext : DbContext
     public virtual DbSet<SalesPeriod> SalesPeriods { get; set; }
 
     public virtual DbSet<Shop> Shops { get; set; }
-
+    public virtual DbSet<ShopContact> ShopContacts { get; set; }
     public virtual DbSet<ShopDelivery> ShopDeliveries { get; set; }
 
     public virtual DbSet<ToDo> ToDoes { get; set; }
@@ -66,6 +67,7 @@ public partial class FCentricContext : DbContext
     public virtual DbSet<ToDoStatus> ToDoStatus { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
