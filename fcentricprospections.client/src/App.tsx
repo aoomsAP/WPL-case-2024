@@ -14,6 +14,7 @@ import UserPage from './pages/UserPage/UserPage';
 import { CalendarPage } from './pages/CalendarPage/CalendarPage';
 import { TfiAgenda } from "react-icons/tfi";
 import { useContext } from 'react';
+import NewShop from './pages/NewShop/NewShop';
 
 const Root = () => {
 
@@ -61,6 +62,14 @@ const Root = () => {
 }
 
 // Page/Provider wrappers
+
+const NewShopPage = () => {
+    return (
+        <NewProspectionProvider>
+            <NewShop />
+        </NewProspectionProvider >
+    )
+}
 
 const ShopDetailPage = () => {
     return (
@@ -116,6 +125,10 @@ const App = () => {
                 {
                     path: "/agenda",
                     element: <CalendarPage />
+                },
+                {
+                    path: "newshop",
+                    element: <NewShopPage />
                 },
                 {
                     path: "shop/:shopId",
