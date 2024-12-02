@@ -1,6 +1,7 @@
 export interface IShop {
   id: string; // Example property, replace with real ones
   name: string; // Example property
+  // city: string;
 }
 
 export interface IShopDetail {
@@ -8,6 +9,7 @@ export interface IShopDetail {
   name: string;
   address: Address;
   customer: string;
+  owner: string;
 }
 
 export interface Address {

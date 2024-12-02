@@ -50,10 +50,20 @@ namespace FCentricProspections.Server.Controllers
                 return NotFound("Shop not found.");
             }
 
+            var owner = this.data.GetOwner(shop.Id);
+
             viewModel.Id = shop.Id;
             viewModel.Name = shop.Name;
             viewModel.Address = shop.Address;
             viewModel.Customer = shop.Customer.Name;
+            if(owner is not null)
+            {
+                viewModel.Owner = owner.Name;
+            } else
+            {
+                viewModel.Owner = null;
+            }
+           
 
             // return viewmodel of shop
             return Ok(viewModel);

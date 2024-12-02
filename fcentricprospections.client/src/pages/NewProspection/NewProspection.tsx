@@ -60,7 +60,7 @@ export const NewProspection = () => {
 
   // Input fields / states --------------------------------------------------------------------------------------------------------------------
 
-  const [visitDate, setVisitDate] = useState<Date>(); // TO DO: IMPLEMENT WITH INPUT[DATE]
+  const [visitDate, setVisitDate] = useState<Date>(new Date());
   const [contactType, setContactType] = useState<number>(4);
   const [contactName, setContactName] = useState<string>("");
   const [contactEmail, setContactEmail] = useState<string>("");
@@ -200,7 +200,7 @@ export const NewProspection = () => {
         shopId: Number(shopId),
         userId: +user.id,
         employeeId: +employee.id,
-        visitDate: new Date(), // TO DO: date needs to be picked
+        visitDate: visitDate,
         dateCreated: new Date(),
         dateLastUpdated: new Date(),
         contactTypeId: contactType,
@@ -306,6 +306,16 @@ export const NewProspection = () => {
         <FormWizard.TabContent title="Info" icon={<AiOutlineCheck />} >
 
           {shopDetail && <ShopDetailCard shop={shopDetail} />}
+
+          <fieldset>
+            <legend>Datum van prospectie</legend>
+            <input 
+              type="date" 
+              value={visitDate ? visitDate.toISOString().substring(0, 10) : ''} 
+              onChange={(e) => setVisitDate(new Date(e.target.value))} 
+            />
+          </fieldset>
+
 
           <h3>Informatie</h3>
 

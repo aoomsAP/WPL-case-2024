@@ -18,6 +18,7 @@ namespace FCentricProspections.Server.Services
         // SHOPS ---------------------------------------------------------------------------------------------------------------------
         // ---------------------------------------------------------------------------------------------------------------------------
 
+
         public IEnumerable<ShopListDto> GetShops()
         {
             var ShopList = context.Shops
@@ -49,6 +50,7 @@ namespace FCentricProspections.Server.Services
                                   Name = s.Name,
                                   Address = new AddressDto { Id = address.Id, Street1 = address.Street1, Street2 = address.Street2, PostalCode = address.PostalCode, City = city.Name, Country = country.Name },
                                   Customer = new CustomerDto { Id = customer.Id, Name = customer.Name },
+
                               }).SingleOrDefault();
 
             return shopDetail;
@@ -59,6 +61,22 @@ namespace FCentricProspections.Server.Services
             return this.context.Shops
                 .Include(s => s.Prospections)
                 .FirstOrDefault(x => x.Id == id);
+        }
+
+        public CustomerDto GetOwner(long id)
+        {
+            var owner = (from sc in this.context.ShopContacts
+                         join c in this.context.Contacts on sc.ContactId equals c.Id
+                         where sc.Shop_Id == id && sc.ContactTypeId == 5
+                         select new CustomerDto
+                         {
+                             Id = sc.ContactId,
+                             Name = c.Name
+                         })
+                         .FirstOrDefault();
+
+            return owner;
+               
         }
 
         // PROSPECTIONS ---------------------------------------------------------------------------------------------------------------------
@@ -485,5 +503,6 @@ namespace FCentricProspections.Server.Services
         {
             return this.context.ProspectionVisitTypes.FirstOrDefault(x => x.Id == id);
         }
+
     }
 }
