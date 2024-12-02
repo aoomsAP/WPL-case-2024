@@ -34,3 +34,28 @@ a{
 .basic-single {
 width: 100%;
 }
+
+.button {
+    margin-top: 2rem;
+    border: 1px solid var(--secondary-color);
+    background-color: var(--secondary-color);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: var(--primary-color);
+}
+
+.button:hover * {
+    color: var(--secondary-color);
+}
+
+.a {
+    color: var(--primary-color);
+}
+
+.a:hover {
+    color: var(--secondary-color);
+}
