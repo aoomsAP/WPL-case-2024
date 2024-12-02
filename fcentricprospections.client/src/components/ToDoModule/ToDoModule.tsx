@@ -3,6 +3,8 @@ import { IEmployee, IToDo, OptionType } from "../../types";
 import styles from "./ToDoModule.module.css"
 import { UserContext } from "../../contexts/UserContext";
 import Select from 'react-select';
+import ToDoEditable from "./ToDoEditable";
+import { v4 as uuidv4 } from 'uuid';
 
 interface ToDoModuleProps {
     toDos: IToDo[];
@@ -15,24 +17,21 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
 
     const [title, setTitle] = useState<string>(""); // "Name" in db
     const [description, setDescription] = useState<string>("");
-    const [employee, setEmployee] = useState<IEmployee>();
+    const [selectedEmployee, setSelectedEmployee] = useState<OptionType>();
     const [employeesOptions, setEmployeesOptions] = useState<OptionType[]>([]);
-
-    // Search fields
-    // const [employeeSearch, setEmployeeSearch] = useState<string>("");
-    // const employeeSearchResult = employees.filter((employee: IEmployee) => employee.name.toLowerCase().includes(employeeSearch.toLowerCase()));
 
     function onSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         console.log("Submit handler");
-        if (employee && description.length > 0) {
+        console.log("employee", selectedEmployee);
+        if (selectedEmployee && description.length > 0) {
             const newToDo: IToDo = {
-                id: (toDos.length > 0 ? (toDos[toDos.length - 1]?.id ?? 0) + 1 : 1),
+                id: uuidv4(), // generate temporary unique id
                 name: title,
                 remarks: description,
-                employeeId: +employee.id,
+                employeeId: +selectedEmployee.value,
+                employeeName: selectedEmployee.label,
                 toDoStatusId: 1, // DEFAULT
-                employeeName: employee.name,
             }
             const newToDos = [...toDos, newToDo];
             console.log(newToDos);
@@ -40,14 +39,6 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
         } else {
             console.log("Invalid task");
         }
-    }
-
-    // "X" deletes the current todo from the state array
-    function handleClick(deleteIndex: number) {
-        // Filter out the current todo
-        const filteredToDos = toDos.filter((_, i) => i !== deleteIndex);
-        // Set new filtered array
-        setToDos(filteredToDos);
     }
 
     // Map employees to options for react-select
@@ -58,7 +49,7 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
         let employeesOptions: OptionType[] = employees
             .filter(isValidEmployee)
             .map((employee) => ({
-                value: employee.id,
+                value: employee.id.toString(),
                 label: employee.name
             }));
         setEmployeesOptions(employeesOptions);
@@ -84,15 +75,16 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
                     {employeesOptions && <Select
                         className="basic-single"
                         classNamePrefix="select"
-                        defaultValue={employeesOptions[0]}
-                        placeholder={""}
+                        defaultValue={selectedEmployee}
+                        placeholder={"Kies een persoon"}
                         isClearable={true}
                         isSearchable={true}
                         name="employee"
                         options={employeesOptions}
                         onChange={(e) => {
-                            const selectedEmployee = employees.find(x => x.id === e?.value);
-                            setEmployee(selectedEmployee);
+                            if (e) {
+                                setSelectedEmployee(e);
+                            }
                         }}
                     />}
 
@@ -103,14 +95,10 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
             {/* TO DO CONTAINER */}
             <div className={styles.toDoContainer}>
                 {
-                    toDos.map((toDo, i) =>
-                        <div key={i} className={styles.toDo}>
-                            <button className={styles.close} onClick={() => handleClick(i)}>X</button>
-                            <p><strong>Titel: {toDo.name}</strong></p>
-                            <p>Taak: {toDo.remarks}</p>
-                            <p>Toegewezen aan: {toDo.employeeName}</p>
-                        </div>
-                    )
+                    toDos
+                        .map((toDo, i) =>
+                            <ToDoEditable index={i} toDo={toDo} toDos={toDos} setToDos={setToDos} employeesOptions={employeesOptions} />
+                        )
                 }
             </div>
         </>

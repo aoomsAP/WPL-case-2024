@@ -45,8 +45,9 @@ export const Homepage = () => {
                     'Content-Type': 'application/json',  // Define the expected content type                   
                 },
             });
-            console.log("finished loading shops", response)
             const json: IShop[] = await response.json();
+            console.log("shops loaded", json)
+            console.log("amount of shops", json.length)
             setShopNames(json);
         }
         catch (error) {

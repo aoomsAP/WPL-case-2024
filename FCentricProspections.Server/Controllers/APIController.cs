@@ -291,6 +291,12 @@ namespace FCentricProspections.Server.Controllers
                 return NotFound("Shop not found");
             }
 
+            var employee = this.data.GetEmployee(viewModel.EmployeeId);
+            if (employee == null)
+            {
+                return UnprocessableEntity("Employee id is not valid");
+            }
+
             // create new prospection object based on view model data
             var newProspection = new Prospection
             {
@@ -300,7 +306,7 @@ namespace FCentricProspections.Server.Controllers
                 UserId = viewModel.UserId,
                 User = this.data.GetUser(viewModel.UserId),
                 EmployeeId = viewModel.EmployeeId,
-                //Employee = this.data.GetEmployee(viewModel.EmployeeId), TO DO
+                Employee = employee,
                 VisitDate = viewModel.VisitDate,
                 DateLastUpdated = viewModel.DateLastUpdated,
                 ContactType = this.data.GetContactPersonType(viewModel.ContactTypeId),
@@ -379,13 +385,19 @@ namespace FCentricProspections.Server.Controllers
                 return NotFound("Shop not found");
             }
 
+            var employee = this.data.GetEmployee(viewModel.EmployeeId);
+            if (employee == null)
+            {
+                return UnprocessableEntity("Employee id is not valid");
+            }
+
             // update prospection fields 
             existingProspection.ShopId = viewModel.ShopId;
             existingProspection.Shop = this.data.GetShop(viewModel.ShopId);
             existingProspection.UserId = viewModel.UserId;
             existingProspection.User = this.data.GetUser(viewModel.UserId);
             existingProspection.EmployeeId = viewModel.EmployeeId;
-            //existingProspection.Employee = this.data.GetEmployee(viewModel.EmployeeId); TO DO
+            existingProspection.Employee = employee;
             existingProspection.VisitDate = viewModel.VisitDate;
             existingProspection.DateLastUpdated = viewModel.DateLastUpdated;
             existingProspection.ContactType = this.data.GetContactPersonType(viewModel.ContactTypeId);
@@ -664,13 +676,19 @@ namespace FCentricProspections.Server.Controllers
                 return BadRequest(ModelState);
             }
 
+            var employee = this.data.GetEmployee(viewModel.EmployeeId ?? 0);
+            if (employee == null)
+            {
+                return UnprocessableEntity("Employee id is not valid");
+            }
+
             // create new todo object based on view model data
             var newToDo = new ToDo
             {
                 // EF creates Id
                 Remarks = viewModel.Remarks,
                 EmployeeId = viewModel.EmployeeId,
-                //Employee = this.data.GetEmployee(viewModel.EmployeeId),
+                Employee = employee,
                 ToDoStatusId = viewModel.ToDoStatusId,
                 ToDoStatus = this.data.GetToDoStatus(viewModel.ToDoStatusId),
                 Name = viewModel.Name,

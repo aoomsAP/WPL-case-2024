@@ -116,7 +116,7 @@ export interface IAppointment {
 }
 
 export interface IToDo {
-  id?: number,
+  id?: number | string,
   remarks?: string,
   employeeId?: number,
   employeeName?: string,
