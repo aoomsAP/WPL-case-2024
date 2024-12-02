@@ -10,6 +10,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DataModels\ContactChannels.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="DataModels\NewFile.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\fcentricprospections.client\fcentricprospections.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>

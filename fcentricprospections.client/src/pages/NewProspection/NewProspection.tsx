@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import BrandTag from '../../components/BrandTag/BrandTag';
 import { NewProspectionContext } from '../../contexts/NewProspectionContext';
-import { ICompetitorBrand, IProspectionBrand, IProspectionCompetitorBrand, IProspectionDetail, IProspectionToDo, IToDo, OptionType } from '../../types';
+import { ICompetitorBrand, IContactInfo, IProspectionBrand, IProspectionCompetitorBrand, IProspectionDetail, IProspectionToDo, IToDo, OptionType } from '../../types';
 import BrandCardInput from '../../components/BrandCardInput/BrandCardInput';
 import BrandInterestCard from '../../components/BrandCardInput/BrandInterestCard';
 import { AiOutlineCheck } from "react-icons/ai";
@@ -42,6 +42,7 @@ export const NewProspection = () => {
   const {
     allBrands,
     competitorBrands,
+    loadContactInfo,
     prospectionBrands,
     setProspectionBrands,
     prospectionCompetitorBrands,
@@ -73,6 +74,31 @@ export const NewProspection = () => {
   const [terminatedBrands, setTerminatedBrands] = useState<string>("");
   const [trends, setTrends] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
+
+  const [contactInfo, setContactInfo] = useState<IContactInfo>();
+
+  // Contact info -----------------------------------------------------------------------------------------------------------
+
+  async function loadContactInfoFromDb(shopId: string, contactTypeId: number) {
+    const loadedContactInfo = await loadContactInfo(shopId, contactTypeId);
+    setContactInfo(loadedContactInfo);
+  }
+
+  useEffect(() => {
+
+    let contactTypeCast : number = 0;
+
+    switch (contactType) {
+      case 1: contactTypeCast = 5; break;
+      case 2: contactTypeCast = 6; break;
+      case 3: contactTypeCast = 7; break;
+      default: setContactInfo(undefined); break;
+    }
+
+    if (shopId && contactTypeCast != 0) {
+      loadContactInfoFromDb(shopId, contactTypeCast);
+    }
+  }, [contactType])
 
   // Todos --------------------------------------------------------------------------------------------------------------------
 
@@ -309,10 +335,10 @@ export const NewProspection = () => {
 
           <fieldset>
             <legend>Datum van prospectie</legend>
-            <input 
-              type="date" 
-              value={visitDate ? visitDate.toISOString().substring(0, 10) : ''} 
-              onChange={(e) => setVisitDate(new Date(e.target.value))} 
+            <input
+              type="date"
+              value={visitDate ? visitDate.toISOString().substring(0, 10) : ''}
+              onChange={(e) => setVisitDate(new Date(e.target.value))}
             />
           </fieldset>
 
@@ -338,6 +364,12 @@ export const NewProspection = () => {
               Overig
             </label>
           </fieldset>
+
+            <fieldset>
+              <p>Huidige naam: {contactInfo?.name ?? "Geen naam gevonden"}</p>
+              <p>Huidige email: {contactInfo?.email ?? "Geen email gevonden"}</p>
+              <p>Huidge telefoonnummer: {contactInfo?.phoneNumber ?? "Geen telefoonnummer gevonden"}</p>
+            </fieldset>
 
           <fieldset>
             <legend>Contact naam</legend>

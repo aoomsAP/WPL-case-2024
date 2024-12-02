@@ -69,6 +69,45 @@ namespace FCentricProspections.Server.Controllers
             return Ok(viewModel);
         }
 
+
+        // CONTACT INFO ------------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------------------------
+
+        [HttpGet()]
+        [Route("contactinfo/{shopId}/{contactTypeId}")]
+        public IActionResult GetContactInfo(long shopId, long contactTypeId)
+        {
+            var viewModel = new ContactInfoGetViewModel();
+
+            var shop = this.data.GetShopDetail(shopId);
+            if (shop == null)
+            {
+                return NotFound("Shop not found.");
+            }
+
+            var contacttype = this.data.GetContactType(contactTypeId);
+            if (contacttype == null)
+            {
+                return UnprocessableEntity("ContactType id is not valid");
+            }
+
+            var contactinfo = this.data.GetContactInfo(shopId, contactTypeId);
+            if (contactinfo == null)
+            {
+                return NotFound("ContactInfo not found.");
+            }
+
+            viewModel.ContactId = contactinfo.ContactId;
+            viewModel.ContactTypeId = contactinfo.ContactTypeId;
+            viewModel.ContactTypeName = contactinfo.ContactTypeName;
+            viewModel.Name = contactinfo.Name;
+            viewModel.PhoneNumber = contactinfo.PhoneNumber;
+            viewModel.Email = contactinfo.Email;
+
+            // return viewmodel of contact info
+            return Ok(viewModel);
+        }
+
         // PROSPECTIONS ------------------------------------------------------------------------------------------------------------------
         // -------------------------------------------------------------------------------------------------------------------------------
 

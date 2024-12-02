@@ -14,7 +14,13 @@ namespace FCentricProspections.Server.Services
 
         Shop GetShop(long id);
 
-        CustomerDto GetOwner(long id);
+        // Contact info -----------------------------------------------------------------------------------------------------------------------------------------
+
+        OwnerDto GetOwner(long id);
+
+        public ContactType GetContactType(long id);
+
+        ContactInfoDto GetContactInfo(long shopId, long contactInfoId);
 
 
         // Prospection --------------------------------------------------------------------------------------------------------------------------------------------

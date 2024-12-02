@@ -43,6 +43,8 @@ public partial class Shop
 
     public virtual ICollection<Prospection> Prospections { get; set; } = new List<Prospection>();
 
+    public virtual ICollection<ShopContact> ShopContacts { get; set; } = new List<ShopContact>();
+
     public virtual ICollection<ShopDelivery> ShopDeliveries { get; set; } = new List<ShopDelivery>();
 
     public virtual User UserCreated { get; set; }
