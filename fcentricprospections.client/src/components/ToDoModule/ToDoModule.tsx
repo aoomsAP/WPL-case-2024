@@ -4,6 +4,7 @@ import styles from "./ToDoModule.module.css"
 import { UserContext } from "../../contexts/UserContext";
 import Select from 'react-select';
 import ToDoEditable from "./ToDoEditable";
+import { v4 as uuidv4 } from 'uuid';
 
 interface ToDoModuleProps {
     toDos: IToDo[];
@@ -16,19 +17,20 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
 
     const [title, setTitle] = useState<string>(""); // "Name" in db
     const [description, setDescription] = useState<string>("");
-    const [employee, setEmployee] = useState<IEmployee>();
+    const [selectedEmployee, setSelectedEmployee] = useState<OptionType>();
     const [employeesOptions, setEmployeesOptions] = useState<OptionType[]>([]);
 
     function onSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         console.log("Submit handler");
-        if (employee && description.length > 0) {
+        console.log("employee", selectedEmployee);
+        if (selectedEmployee && description.length > 0) {
             const newToDo: IToDo = {
-                id: (toDos.length > 0 ? (toDos[toDos.length - 1]?.id ?? 0) + 1 : 1),
+                id: uuidv4(), // generate temporary unique id
                 name: title,
                 remarks: description,
-                employeeId: +employee.id,
-                employeeName: employee.name,
+                employeeId: +selectedEmployee.value,
+                employeeName: selectedEmployee.label,
                 toDoStatusId: 1, // DEFAULT
             }
             const newToDos = [...toDos, newToDo];
@@ -47,7 +49,7 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
         let employeesOptions: OptionType[] = employees
             .filter(isValidEmployee)
             .map((employee) => ({
-                value: employee.id,
+                value: employee.id.toString(),
                 label: employee.name
             }));
         setEmployeesOptions(employeesOptions);
@@ -73,15 +75,16 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
                     {employeesOptions && <Select
                         className="basic-single"
                         classNamePrefix="select"
-                        defaultValue={employeesOptions[0]}
+                        defaultValue={selectedEmployee}
                         placeholder={"Kies een persoon"}
                         isClearable={true}
                         isSearchable={true}
                         name="employee"
                         options={employeesOptions}
                         onChange={(e) => {
-                            const selectedEmployee = employees.find(x => x.id === e?.value);
-                            setEmployee(selectedEmployee);
+                            if (e) {
+                                setSelectedEmployee(e);
+                            }
                         }}
                     />}
 
@@ -93,9 +96,9 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
             <div className={styles.toDoContainer}>
                 {
                     toDos
-                    .map((toDo, i) =>
-                        <ToDoEditable index={i} toDo={toDo} toDos={toDos} setToDos={setToDos} employeesOptions={employeesOptions}/>
-                    )
+                        .map((toDo, i) =>
+                            <ToDoEditable index={i} toDo={toDo} toDos={toDos} setToDos={setToDos} employeesOptions={employeesOptions} />
+                        )
                 }
             </div>
         </>

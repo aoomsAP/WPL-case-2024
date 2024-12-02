@@ -95,7 +95,7 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
     const [prospectionCompetitorBrands, setProspectionCompetitorBrands] = useState<IProspectionCompetitorBrand[]>([]);
     const [prospectionBrandInterests, setProspectionBrandInterests] = useState<IProspectionBrandInterest[]>([]);
     const [prospectionToDos, setProspectionToDos] = useState<IProspectionToDo[]>([]);
-    const [toDos, setToDos] = useState<IToDo[]>([]); // TO IMPLEMENT
+    const [toDos, setToDos] = useState<IToDo[]>([]);
 
 
     // functions -------------------------------------------------------------------------------------------------
@@ -125,6 +125,8 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
             });
 
             const json = await response.json();
+
+            console.log("amount of competitor brands loaded", json.length)
 
             // If undefined, return empty array
             const compBrands = json || [];

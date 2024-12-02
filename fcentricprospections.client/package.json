@@ -24,7 +24,8 @@
     "react-loader-spinner": "^6.1.6",
     "react-router-dom": "^6.27.0",
     "react-select": "^5.8.3",
-    "react-window": "^1.8.10"
+    "react-window": "^1.8.10",
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",

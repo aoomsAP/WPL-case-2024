@@ -16,6 +16,7 @@ import { UserContext } from '../../contexts/UserContext';
 import Select, { createFilter, MultiValue } from 'react-select';
 import MenuList from "../../components/ToDoModule/MenuList/MenuList"; // Custom MenuList
 import Option from "../../components/ToDoModule/Option/Option"; // Custom Option
+import { v4 as uuidv4 } from 'uuid';
 
 export const NewProspection = () => {
 
@@ -77,12 +78,15 @@ export const NewProspection = () => {
 
   // Contact info todos 
   useEffect(() => {
+    console.log("todos at contact useffect", toDos);
+
     if (contactName != "" || contactEmail != "" || contactPhone != "") {
 
       const remarks = `${contactName.length > 0 ? `Contact naam: ${contactName}, ` : ""}${contactEmail.length > 0 ? `Contact email: ${contactEmail}, ` : ""}${contactPhone.length > 0 ? `Contact telefoon: ${contactPhone}` : ""}`
 
       // Create todo for each interest
       let contactInfoToDo = {
+        id: uuidv4(), // generate temporary unique id
         name: "Nieuwe contact info",
         remarks: remarks,
         employeeId: 0, // TO DO: WHO? DEFAULT? 0 WILL RESULT IN ERROR
@@ -98,8 +102,11 @@ export const NewProspection = () => {
 
   // NewBrands todos 
   useEffect(() => {
+    console.log("todos at new brands useffect", toDos);
+
     // Update newBrands toDo item
     let newBrandsToDo = {
+      id: uuidv4(), // generate temporary unique id
       name: "Nieuwe brands",
       remarks: newBrands,
       employeeId: 0, // TO DO: WHO? DEFAULT? 0 WILL RESULT IN ERROR
@@ -113,11 +120,14 @@ export const NewProspection = () => {
 
   // Prospection brand interest todos 
   useEffect(() => {
+    console.log("todos at brandi nterest useffect", toDos);
+
     let newInterestToDos = [];
 
     // Create todo for each interest
     for (let interest of prospectionBrandInterests) {
       let brandInterestToDo = {
+        id: uuidv4(), // generate temporary unique id
         name: "FC70 brand interesse",
         remarks: interest.brandName,
         employeeId: 0, // TO DO: WHO? DEFAULT? 0 WILL RESULT IN ERROR
@@ -210,6 +220,12 @@ export const NewProspection = () => {
       // Add new todos, save in new array to get toDos with id, and await response
       const addedToDos: IToDo[] = [];
       for (let toDo of toDos) {
+
+        if (toDo.employeeId === 0 || toDo.employeeId == undefined) {
+          alert("Selecteer een geldige persoon voor elke taak.");
+          return;
+        }
+
         const addedToDo = await addToDo({
           remarks: toDo.remarks,
           employeeId: toDo.employeeId,
@@ -246,7 +262,7 @@ export const NewProspection = () => {
           if (toDo.id) {
             newProspectionToDos.push({
               prospectionId: prospectionId,
-              toDoId: toDo.id,
+              toDoId: +toDo.id,
             })
           }
         };
