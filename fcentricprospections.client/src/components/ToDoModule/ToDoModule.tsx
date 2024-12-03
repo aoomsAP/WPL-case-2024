@@ -64,11 +64,13 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
 
                     {/* Title */}
                     <label htmlFor="title">Naam van taak:</label>
-                    <input type="text" name="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+                    <input type="text" name="title" value={title} placeholder="Titel..."
+                        onChange={(e) => setTitle(e.target.value)} />
 
                     {/* Description */}
                     <label htmlFor="description">Omschrijving van de taak:</label>
-                    <textarea name="description" value={description} onChange={(e) => setDescription(e.target.value)} />
+                    <textarea name="description" value={description} placeholder="Omschrijving..."
+                        onChange={(e) => setDescription(e.target.value)} />
 
                     {/* Employee */}
                     <label htmlFor="employee">Aan wie is de taak gericht?</label>

@@ -37,10 +37,12 @@ const BrandCardInput = ({ brand }: BrandCardInputProps) => {
             <legend className={styles.brand_legend}>{brand.brandName}</legend>
 
             <label>Sellout (%)</label><br />
-            <input type="number" max={100} value={sellout} onChange={(e) => setSellout(+e.target.value)} /><br />
+            <input type="number" max={100} value={sellout} placeholder="[0-100]"
+            onChange={(e) => setSellout(+e.target.value)} /><br />
 
             <label>Sellout opmerking</label><br />
-            <textarea value={selloutRemark} onChange={(e) => setSelloutRemark(e.target.value)} />
+            <textarea value={selloutRemark} placeholder="Sellout omschrijving..."
+            onChange={(e) => setSelloutRemark(e.target.value)} />
         </fieldset>
     )
 }
