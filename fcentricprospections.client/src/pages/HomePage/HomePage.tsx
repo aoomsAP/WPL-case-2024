@@ -2,10 +2,8 @@ import { useState, useEffect, useContext } from "react";
 import { IShop, OptionType } from "../../types";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
-import { Oval } from "react-loader-spinner";
 import Select from "react-select";
 import { createFilter } from "react-select";
-import MenuListSingle from "../../components/ToDoModule/MenuList/MenuListSingle";
 import styles from './HomePage.module.css'
 import Option from "../../components/ToDoModule/Option/Option";
 
@@ -14,7 +12,7 @@ export const Homepage = () => {
 
     const navigate = useNavigate();
 
-    const { user, employee, appointments } = useContext(UserContext);
+    const { user, employee } = useContext(UserContext);
 
     const [shopNames, setShopNames] = useState<IShop[]>([]); //Sate with list of shops
 

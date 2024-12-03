@@ -13,7 +13,7 @@ export const BrandInterestList: React.FC<BrandInterestListProps> = ({ prospectio
       return (
         <div key={index} className={styles.brandInterestCard}>
           <h3>Brand: {brand.brandName}</h3>
-          <p>Opmerking: {brand.remark}</p>
+          {brand.remark &&<p>Opmerking: {brand.remark}</p>}
         </div>
       );
     })}

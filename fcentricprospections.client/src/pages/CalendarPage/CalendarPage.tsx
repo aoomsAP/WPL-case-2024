@@ -5,6 +5,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { EmployeeSelect } from './EmployeeSelect';
 import { EventInput } from '@fullcalendar/core';
+import { Oval } from 'react-loader-spinner';
 
 export const CalendarPage = () => {
 
@@ -24,22 +25,26 @@ export const CalendarPage = () => {
 
     return (
         <>
-            <EmployeeSelect setEvents={setEvents} />
-
-            <FullCalendar
-                plugins={[dayGridPlugin, timeGridPlugin]}
-                initialView="dayGridMonth"
-                weekends={false}
-                navLinks={true}
-                headerToolbar={{
-                    left: "prev,next today", // Navigation buttons
-                    center: "title", // Title in the center
-                    right: "dayGridMonth,timeGridWeek,timeGridDay", // View toggle buttons
-                }}
-                slotDuration="00:30:00"
-                progressiveEventRendering
-                events={events}
-            />
+            {events.length > 1
+                ? <>
+                    <EmployeeSelect setEvents={setEvents} />
+                    <FullCalendar
+                        plugins={[dayGridPlugin, timeGridPlugin]}
+                        initialView="dayGridMonth"
+                        weekends={false}
+                        navLinks={true}
+                        headerToolbar={{
+                            left: "prev,next today", // Navigation buttons
+                            center: "title", // Title in the center
+                            right: "dayGridMonth,timeGridWeek,timeGridDay", // View toggle buttons
+                        }}
+                        slotDuration="00:30:00"
+                        progressiveEventRendering
+                        events={events}
+                    />
+                </>
+                : <Oval />
+            }
         </>
     );
 }

@@ -106,3 +106,41 @@ fieldset {
 .react-form-wizard .stepTitle {
   font-size: small;
 }
+
+/* REACT SELECT  ----------------------------------------------- */
+
+.select__menu {
+  background-color: white !important;
+  z-index: 2 !important;
+}
+
+.react-select__option {
+  display: block;
+  font-size: 16px;
+  color: rgb(36, 36, 36);
+  padding: 11px 12px;
+  width: 100%;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.react-select__option:hover {
+  background-color: #EBECF0; 
+}
+
+.react-select__option--is-selected {
+  background-color: #42526E;
+  color: #FFFFFF; 
+};
+
+.react-select__option--is-selected:hover {
+  background-color: #42526E;
+};
+
+
+/* FULL CALENDAR */
+
+/* attempt to not have "day/month/week" button show on top of select */
+.fc .fc-button-group > .fc-button.fc-button-active {
+  z-index: 0 !important;
+}

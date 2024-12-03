@@ -1,31 +1,29 @@
 import { useContext } from "react";
 import { IProspectionToDo } from "../../types";
 import { UserContext } from "../../contexts/UserContext";
-import style from "./todoitem.module.css"
+import styles from "./ToDoItem.module.css"
 
-interface ToDoItemProps{
-    todo : IProspectionToDo
+interface ToDoItemProps {
+    todo: IProspectionToDo
 }
 
-export const ToDoItem = ({todo}: ToDoItemProps) => {
+export const ToDoItem = ({ todo }: ToDoItemProps) => {
 
-    const {employees} = useContext(UserContext)
+    const { employees } = useContext(UserContext)
 
-    return(
-        <article key={todo.id} className={style.TodoCard}>
+    return (
+        <article key={todo.id} className={styles.toDoCard}>
 
-          <label className={style.todolabel}>Title</label>
+            <h3>{todo.name}</h3>
+            <p>{todo.remarks}</p>
 
-          <p className={style.todop}>{todo.name}</p>
+            <div>
+                <label>Toegewezen aan: </label>
+                <span className={styles.todolabel}>
+                    {employees.find(x => x.id == (todo.employeeId)?.toString())?.name}
+                </span>
+            </div>
 
-          <label className={style.todolabel}>Omschrijving</label>
-
-          <p className={style.todop}>{todo.remarks}</p>
-
-          <label className={style.todolabel}>Toegewezen aan</label>
-
-          <p className={style.todop}>{employees.find(x => x.id == (todo.employeeId)?.toString())?.name}</p>
-          
         </article>
     );
 }
