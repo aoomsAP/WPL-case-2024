@@ -5,6 +5,8 @@ import styles from '../HomePage/HomePage.module.css'
 import { IUser, OptionType } from "../../types";
 import Select from "react-select";
 import { createFilter } from "react-select";
+import Option from "../../components/ToDoModule/Option/Option";
+import MenuList from "../../components/ToDoModule/MenuList/MenuListSingle";
 
 const UserPage = () => {
 
@@ -41,13 +43,15 @@ const UserPage = () => {
             filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
             maxMenuHeight={200} // Limit height to improve rendering
             options={userOptions}
+            components={{ // Custom components to make use of react-window to improve rendering    
+              Option,
+              MenuList, // Custom menu list rendering
+          }}
             onChange={(e) => {
                 if (e?.value){
-
                     setUserId(e.value)
                     navigate(`/home`);
-                }
-               
+                }               
             }}/>}
 
             

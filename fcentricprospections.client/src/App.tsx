@@ -34,7 +34,7 @@ const Root = () => {
                 </Link>
 
                 {/* Show Agenda button only if user is set */}
-                {user && (
+                {(user && location.pathname !== "/") && (
                     <Link to={"/agenda"}>
                         <button className={styles.button}>
                             <TfiAgenda className={styles.homeIcon} />

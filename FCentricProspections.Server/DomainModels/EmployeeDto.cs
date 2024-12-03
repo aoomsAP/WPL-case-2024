@@ -10,7 +10,7 @@ namespace FCentricProspections.Server.DomainModels
 
         public string Name { get; set; }
 
-        public long UserId { get; set; }
+        public long? UserId { get; set; }
 
         public IEnumerable<Appointment> Appointments { get; set; }
     }

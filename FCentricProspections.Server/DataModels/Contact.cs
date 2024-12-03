@@ -38,6 +38,10 @@ public partial class Contact
 
     public virtual Address Address { get; set; }
 
+    public virtual ICollection<ContactChannel> ContactChannels { get; set; } = new List<ContactChannel>();
+
+    public virtual ICollection<ShopContact> ShopContacts { get; set; } = new List<ShopContact>();
+
     public virtual ICollection<Shop> Shops { get; set; } = new List<Shop>();
 
     public virtual User UserCreated { get; set; }

@@ -46,7 +46,8 @@ const BrandInterestCard = ({ brand }: BrandInterestCardProps) => {
             <button className={styles.close} onClick={handleClick}>X</button>
             <legend className={styles.brand_legend}>{brand.brandName}</legend>
             <label>Opmerking:</label>
-            <textarea value={remark} onChange={(e) => setRemark(e.target.value)} />
+            <textarea value={remark} placeholder={`Opmerking over interesse in ${brand.brandName}...`}
+            onChange={(e) => setRemark(e.target.value)} />
         </fieldset>
     )
 }

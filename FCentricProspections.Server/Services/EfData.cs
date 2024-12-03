@@ -63,12 +63,15 @@ namespace FCentricProspections.Server.Services
                 .FirstOrDefault(x => x.Id == id);
         }
 
-        public CustomerDto GetOwner(long id)
+        // CONTACT INFO ---------------------------------------------------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------------------------------------------------------
+
+        public OwnerDto GetOwner(long id)
         {
             var owner = (from sc in this.context.ShopContacts
                          join c in this.context.Contacts on sc.ContactId equals c.Id
                          where sc.Shop_Id == id && sc.ContactTypeId == 5
-                         select new CustomerDto
+                         select new OwnerDto
                          {
                              Id = sc.ContactId,
                              Name = c.Name
@@ -76,7 +79,49 @@ namespace FCentricProspections.Server.Services
                          .FirstOrDefault();
 
             return owner;
-               
+        }
+
+        public ContactType GetContactType(long id)
+        {
+            var contacttype = this.context.ContactTypes
+                         .FirstOrDefault(x => x.Id == id);
+
+            return contacttype;
+        }
+
+        public ContactInfoDto GetContactInfo(long shopId, long contactTypeId)
+        {
+            var contactInfo =
+              (from shop in this.context.Shops
+
+               join shopContact in this.context.ShopContacts on shop.Id equals shopContact.Shop_Id
+
+               join contactType in this.context.ContactTypes on shopContact.ContactTypeId equals contactType.Id
+
+               join contact in this.context.Contacts on shopContact.ContactId equals contact.Id
+
+               join phoneGroup in this.context.ContactChannels.Where(cc => cc.ContactChannelDescriptionId == 1)
+                   on shopContact.ContactId equals phoneGroup.Contact_Id into phoneJoin
+               from phone in phoneJoin.DefaultIfEmpty() // Left join for phone
+
+               join emailGroup in this.context.ContactChannels.Where(cc => cc.ContactChannelDescriptionId == 3)
+                   on shopContact.ContactId equals emailGroup.Contact_Id into emailJoin
+               from email in emailJoin.DefaultIfEmpty() // Left join for email
+
+               where shop.Id == shopId && shopContact.ContactTypeId == contactTypeId
+
+               select new ContactInfoDto
+               {
+                   ContactId = contact.Id,
+                   ContactTypeId = contactType.Id,
+                   ContactTypeName = contactType.Name,
+                   Name = contact.Name,
+                   PhoneNumber = phone != null ? phone.Value : null,
+                   Email = email != null ? email.Value : null,
+               })
+              .FirstOrDefault();
+
+            return contactInfo;
         }
 
         // PROSPECTIONS ---------------------------------------------------------------------------------------------------------------------
@@ -295,13 +340,13 @@ namespace FCentricProspections.Server.Services
                 .Include(t => t.ToDoStatus)
                 .FirstOrDefault(x => x.Id == id);
         }
-        
+
         public ToDoStatus GetToDoStatus(long id)
         {
             return this.context.ToDoStatus
                 .FirstOrDefault(x => x.Id == id);
         }
-        
+
         public void AddToDo(ToDo toDo)
         {
             this.context.ToDoes.Add(toDo);
@@ -396,8 +441,8 @@ namespace FCentricProspections.Server.Services
                 {
                     Id = s.Id,
                     Login = s.Login,
-                    Blocked= s.Blocked,
-                     
+                    Blocked = s.Blocked,
+
                 }).ToList();
 
             return UserList;
@@ -406,22 +451,37 @@ namespace FCentricProspections.Server.Services
 
         public Employee GetEmployee(long id)
         {
-            
+
 
             return this.context.Employees
                 .FirstOrDefault(x => x.Id == id);
         }
+
         public Employee GetEmployeeByUserId(long userId)
         {
             return this.context.Employees
                 .FirstOrDefault(x => x.UserId == userId);
         }
 
-        public Employee GetEmployeeWithAppointments(long id)
+        public EmployeeDto GetEmployeeWithAppointments(long id)
         {
+            // TEMPORARY TIME LIMIT
+
+            var startOf2024 = new DateTime(2024, 1, 1);
+
             return this.context.Employees
-               .Include(e => e.Appointments)
-               .FirstOrDefault(x => x.Id == id);
+                .Where(e => e.Id == id)
+                .Select(e => new EmployeeDto
+                {
+                    Id = e.Id,
+                    FirstName = e.FirstName,
+                    Name = e.Name,
+                    UserId = e.UserId,
+                    Appointments = e.Appointments
+                        .Where(a => a.StartDate >= startOf2024 || a.EndDate >= startOf2024)
+                        .ToList()
+                })
+                .FirstOrDefault();
         }
 
 
@@ -430,12 +490,12 @@ namespace FCentricProspections.Server.Services
             var EmployeeList = context.Employees
                 .Select(s => new EmployeeDto
                 {
-                    Id= s.Id,
+                    Id = s.Id,
                     FirstName = s.FirstName,
                     Appointments = s.Appointments,
                     Name = s.Name,
                     UserId = s.Id,
-                }).ToList ();
+                }).ToList();
 
             return EmployeeList;
         }
@@ -453,18 +513,28 @@ namespace FCentricProspections.Server.Services
         public IEnumerable<Appointment> GetAppointments()
         {
             return this.context.Appointments
-                .Include(a => a.AppointmentState).ToList();
+                .Include(a => a.AppointmentState)
+                .ToList();
         }
 
+        public IEnumerable<Appointment> GetAppointmentsByEmployeeId(long employeeId)
+        {
+            // TEMPORARY TIME LIMIT
+
+            var startOf2024 = new DateTime(2024, 1, 1);
+
+            return this.context.Appointments
+                .Where(e => e.EmployeeId == employeeId)
+                .Where(a => a.StartDate >= startOf2024 || a.EndDate >= startOf2024)
+                .Include(a => a.AppointmentState)
+                .ToList();
+        }
 
         public AppointmentState GetAppointmentState(long id)
         {
             return this.context.AppointmentStates
                 .FirstOrDefault(a => a.Id == id);
         }
-
-
-        
 
 
         // TYPES ---------------------------------------------------------------------------------------------------------------------

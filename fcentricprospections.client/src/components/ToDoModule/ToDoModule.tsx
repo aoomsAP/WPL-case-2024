@@ -2,9 +2,11 @@ import { FormEvent, useContext, useEffect, useState } from "react";
 import { IEmployee, IToDo, OptionType } from "../../types";
 import styles from "./ToDoModule.module.css"
 import { UserContext } from "../../contexts/UserContext";
-import Select from 'react-select';
+import Select, { createFilter } from 'react-select';
 import ToDoEditable from "./ToDoEditable";
 import { v4 as uuidv4 } from 'uuid';
+import Option from "./Option/Option";
+import MenuList from "./MenuList/MenuListSingle";
 
 interface ToDoModuleProps {
     toDos: IToDo[];
@@ -64,11 +66,13 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
 
                     {/* Title */}
                     <label htmlFor="title">Naam van taak:</label>
-                    <input type="text" name="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+                    <input type="text" name="title" value={title} placeholder="Titel..."
+                        onChange={(e) => setTitle(e.target.value)} />
 
                     {/* Description */}
                     <label htmlFor="description">Omschrijving van de taak:</label>
-                    <textarea name="description" value={description} onChange={(e) => setDescription(e.target.value)} />
+                    <textarea name="description" value={description} placeholder="Omschrijving..."
+                        onChange={(e) => setDescription(e.target.value)} />
 
                     {/* Employee */}
                     <label htmlFor="employee">Aan wie is de taak gericht?</label>
@@ -81,6 +85,12 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
                         isSearchable={true}
                         name="employee"
                         options={employeesOptions}
+                        components={{ // Custom components to make use of react-window to improve rendering    
+                            Option,
+                            MenuList, // Custom menu list rendering
+                        }}
+                        maxMenuHeight={200} // Limit height to improve rendering
+                        filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
                         onChange={(e) => {
                             if (e) {
                                 setSelectedEmployee(e);

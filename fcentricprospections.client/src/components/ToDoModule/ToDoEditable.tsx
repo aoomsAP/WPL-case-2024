@@ -1,7 +1,9 @@
-import Select from "react-select";
+import Select, { createFilter } from "react-select";
 import { IToDo, OptionType } from "../../types";
 import styles from "./ToDoEditable.module.css"
 import EditableInput from "./EditableInput";
+import Option from "./Option/Option";
+import MenuList from "./MenuList/MenuListSingle";
 
 interface ToDoEditableProps {
     index: number,
@@ -84,7 +86,13 @@ export default function ToDoEditable({ index, toDo, toDos, setToDos, employeesOp
                 isClearable={true}
                 isSearchable={true}
                 name="employee"
+                maxMenuHeight={200} // Limit height to improve rendering
                 options={employeesOptions}
+                components={{ // Custom components to make use of react-window to improve rendering    
+                    Option,
+                    MenuList, // Custom menu list rendering
+                }}
+                filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
                 onChange={(e) => {
                     if (e) {
                         updateToDo({

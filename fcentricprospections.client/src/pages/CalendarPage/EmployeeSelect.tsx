@@ -5,6 +5,7 @@ import Select, { createFilter, MultiValue } from 'react-select';
 import MenuList from "../../components/ToDoModule/MenuList/MenuList";
 import Option from "../../components/ToDoModule/Option/Option";
 import { EventInput } from '@fullcalendar/core';
+import { Oval } from "react-loader-spinner";
 
 interface EmployeeSelectProps {
     setEvents: (events: EventInput[]) => void;
@@ -16,6 +17,7 @@ export const EmployeeSelect = ({ setEvents }: EmployeeSelectProps) => {
 
     const [employeesOptions, setEmployeesOptions] = useState<OptionType[]>([]);
     const [selectedEmployees, setSelectedEmployees] = useState<string[]>([]); // ids of selected employees
+    const [appLoading, setAppLoading] = useState<boolean>(false);
 
     // TO DO: write more efficiently: filter first, then only add NEWLY selected employee appointments
     async function updateEvents() {
@@ -27,9 +29,10 @@ export const EmployeeSelect = ({ setEvents }: EmployeeSelectProps) => {
             color: "steelblue",
         }));
 
-        const colors = ["coral", "salmon", "aubergine", "purple", "red", "orange", "pink"];
+        const colors = ["crimson", "purple", "mediumvioletred", "orangered", "indigo", "darkred"];
 
         // Add appointments for every currently selected employee
+        setAppLoading(true);
         for (let [index, id] of selectedEmployees.entries()) {
             const newAppointments: IAppointment[] = await loadAppointmentShown(id);
             const newEvents = newAppointments.map((appointment) => ({
@@ -40,7 +43,7 @@ export const EmployeeSelect = ({ setEvents }: EmployeeSelectProps) => {
             }));
             allEvents = [...allEvents, ...newEvents];
         }
-
+        setAppLoading(false);
         setEvents(allEvents);
     }
 
@@ -86,6 +89,12 @@ export const EmployeeSelect = ({ setEvents }: EmployeeSelectProps) => {
                     setSelectedEmployees(newSelectedOptions);
                 }}
             />}
+
+            {(appLoading || !appointments) &&
+                <div style={{ padding: "1rem" }}>
+                    <Oval width={36} height={36} />
+                </div>
+            }
 
         </div>
     );

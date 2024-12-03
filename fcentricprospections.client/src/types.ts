@@ -91,27 +91,27 @@ export interface IProspectionBrandInterest {
 }
 
 export interface IUser {
-  id : string,
-  login : string,
-  blocked :  boolean,  
+  id: string,
+  login: string,
+  blocked: boolean,
 }
 
 export interface IEmployee {
-  id : string,
-  firstName :  string,
-  userId? : string,
-  hideForAgenda :  boolean,
-  name : string,
-  dateCreated : Date,
+  id: string,
+  firstName: string,
+  userId?: string,
+  hideForAgenda: boolean,
+  name: string,
+  dateCreated: Date,
 }
 
 export interface IAppointment {
-  id : string,
-  startDate : Date,
-  endDate : Date,
-  appointmentState : string,
-  name : string,
-  employeeId : number
+  id: string,
+  startDate: Date,
+  endDate: Date,
+  appointmentState: string,
+  name: string,
+  employeeId: number
   remarks?: string,
 }
 
@@ -141,4 +141,13 @@ export interface IProspectionToDo {
 export type OptionType = {
   label: string
   value: string
+}
+
+export interface IContactInfo {
+  contactId: number,
+  contactTypeId: number,
+  contactTypeName: string,
+  name?: string,
+  email?: string,
+  phoneNumber?: string,
 }

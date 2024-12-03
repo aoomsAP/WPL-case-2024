@@ -2,35 +2,29 @@ import { FixedSizeList as List, ListChildComponentProps } from "react-window";
 import { MenuListProps } from "react-select";
 import { OptionType } from "../../../types";
 
-const MenuListSingle = (props: MenuListProps<OptionType, false>) => {
-  const itemHeight = 35;
-  const { options, children, maxHeight, getValue } = props;
+const MenuList = (props: MenuListProps<OptionType, false>) => {
+    const itemHeight = 35; // Define the height of each item
+    const { options, children, maxHeight } = props;
 
-  // Get the selected value
-  const [value] = getValue(); 
-  const initialOffset = value ? options.indexOf(value) * itemHeight : 0;
+    // If children is null or undefined, return early to avoid errors
+    if (!children || !Array.isArray(children)) {
+        return null;
+    }
 
-  // Ensure children is an array or handle null/undefined
-  const childrenArray = Array.isArray(children) ? children : [];
-
-  return (
-    <div style={{ paddingTop: 4 }}>
-      <List
-        height={maxHeight}
-        itemCount={options.length} // Use the length of options for single select
-        itemSize={itemHeight}
-        initialScrollOffset={initialOffset}
-        width="100%"
-      >
-        {({ index, style }: ListChildComponentProps) => (
-          <div style={{ ...style }}>
-            {/* Ensure we're accessing children correctly */}
-            {childrenArray[index] ?? null} {/* Safely access children */}
-          </div>
-        )}
-      </List>
-    </div>
-  );
+    return (
+        <div style={{ paddingTop: 4 }}>
+            <List
+                height={Math.min(maxHeight, options.length * itemHeight)} // Ensure the height doesn't exceed available options
+                itemCount={children.length} // The number of items to render
+                itemSize={itemHeight} // Height of each item
+                width="100%"
+            >
+                {({ index, style }: ListChildComponentProps) => (
+                    <div style={style}>{children[index]}</div>
+                )}
+            </List>
+        </div>
+    );
 };
 
-export default MenuListSingle;
+export default MenuList;

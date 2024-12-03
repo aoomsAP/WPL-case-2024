@@ -30,6 +30,12 @@ public partial class FCentricContext : DbContext
 
     public virtual DbSet<Contact> Contacts { get; set; }
 
+    public virtual DbSet<ContactChannel> ContactChannels { get; set; }
+
+    public virtual DbSet<ContactChannelDescription> ContactChannelDescriptions { get; set; }
+
+    public virtual DbSet<ContactType> ContactTypes { get; set; }
+
     public virtual DbSet<Country> Countries { get; set; }
 
     public virtual DbSet<Customer> Customers { get; set; }

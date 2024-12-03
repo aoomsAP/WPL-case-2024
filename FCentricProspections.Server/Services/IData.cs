@@ -14,7 +14,13 @@ namespace FCentricProspections.Server.Services
 
         Shop GetShop(long id);
 
-        CustomerDto GetOwner(long id);
+        // Contact info -----------------------------------------------------------------------------------------------------------------------------------------
+
+        OwnerDto GetOwner(long id);
+
+        public ContactType GetContactType(long id);
+
+        ContactInfoDto GetContactInfo(long shopId, long contactInfoId);
 
 
         // Prospection --------------------------------------------------------------------------------------------------------------------------------------------
@@ -81,7 +87,7 @@ namespace FCentricProspections.Server.Services
 
         Employee GetEmployee(long id);
 
-        Employee GetEmployeeWithAppointments(long id);
+        EmployeeDto GetEmployeeWithAppointments(long id);
 
         Employee GetEmployeeByUserId(long userId);
 
@@ -93,6 +99,8 @@ namespace FCentricProspections.Server.Services
         Appointment GetAppointment(long id);
 
         IEnumerable<Appointment> GetAppointments();
+
+        IEnumerable<Appointment> GetAppointmentsByEmployeeId(long employeeId);
 
         AppointmentState GetAppointmentState(long id);
 

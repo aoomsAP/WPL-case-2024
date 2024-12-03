@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-import { IBrand, ICompetitorBrand, IContactType, IProspectionDetail, IProspectionBrand, IProspectionBrandInterest, IProspectionCompetitorBrand, IVisitType, IToDo, IProspectionToDo } from '../types';
+import { IBrand, ICompetitorBrand, IContactType, IProspectionDetail, IProspectionBrand, IProspectionBrandInterest, IProspectionCompetitorBrand, IVisitType, IToDo, IProspectionToDo, IContactInfo } from '../types';
 
 export interface NewProspectionContext {
     // data states
@@ -31,6 +31,7 @@ export interface NewProspectionContext {
     loadCompetitorBrands: () => Promise<ICompetitorBrand[]>;
     loadContactTypes: () => Promise<void>;
     loadVisitTypes: () => Promise<void>;
+    loadContactInfo: (shopId: string, contactTypeId: number) => Promise<IContactInfo|undefined>;
 
     addProspection: (newProspection: IProspectionDetail) => Promise<IProspectionDetail | undefined>;
     addToDo: (newToDo: IToDo) => Promise<IToDo | undefined>;
@@ -70,6 +71,7 @@ export const NewProspectionContext = createContext<NewProspectionContext>({
     loadCompetitorBrands: () => Promise.resolve([]),
     loadContactTypes: () => Promise.resolve(),
     loadVisitTypes: () => Promise.resolve(),
+    loadContactInfo: () => Promise.resolve({} as IContactInfo | undefined),
 
     addProspection: () => Promise.resolve(undefined),
     addToDo: () => Promise.resolve(undefined),
@@ -165,6 +167,20 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
 
         } catch (error) {
             console.error('Error fetching visit types:', error);
+        }
+    }
+
+    async function loadContactInfo(shopId: string, contactTypeId: number) {
+        try {
+            const response = await fetch(`/api/contactinfo/${shopId}/${contactTypeId}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            const json: IContactInfo = await response.json();
+            return json;
+        } catch (error) {
+            console.error('Error fetching contact info:', error);
         }
     }
 
@@ -324,6 +340,7 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
             loadCompetitorBrands: loadCompetitorBrands,
             loadContactTypes: loadContactTypes,
             loadVisitTypes: loadVisitTypes,
+            loadContactInfo: loadContactInfo,
 
             addProspection: addProspection,
             addToDo: addToDo,

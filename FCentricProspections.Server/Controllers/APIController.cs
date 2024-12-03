@@ -56,16 +56,56 @@ namespace FCentricProspections.Server.Controllers
             viewModel.Name = shop.Name;
             viewModel.Address = shop.Address;
             viewModel.Customer = shop.Customer.Name;
-            if(owner is not null)
+            if (owner is not null)
             {
                 viewModel.Owner = owner.Name;
-            } else
+            }
+            else
             {
                 viewModel.Owner = null;
             }
-           
+
 
             // return viewmodel of shop
+            return Ok(viewModel);
+        }
+
+
+        // CONTACT INFO ------------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------------------------
+
+        [HttpGet()]
+        [Route("contactinfo/{shopId}/{contactTypeId}")]
+        public IActionResult GetContactInfo(long shopId, long contactTypeId)
+        {
+            var viewModel = new ContactInfoGetViewModel();
+
+            var shop = this.data.GetShopDetail(shopId);
+            if (shop == null)
+            {
+                return NotFound("Shop not found.");
+            }
+
+            var contacttype = this.data.GetContactType(contactTypeId);
+            if (contacttype == null)
+            {
+                return UnprocessableEntity("ContactType id is not valid");
+            }
+
+            var contactinfo = this.data.GetContactInfo(shopId, contactTypeId);
+            if (contactinfo == null)
+            {
+                return NotFound("ContactInfo not found.");
+            }
+
+            viewModel.ContactId = contactinfo.ContactId;
+            viewModel.ContactTypeId = contactinfo.ContactTypeId;
+            viewModel.ContactTypeName = contactinfo.ContactTypeName;
+            viewModel.Name = contactinfo.Name;
+            viewModel.PhoneNumber = contactinfo.PhoneNumber;
+            viewModel.Email = contactinfo.Email;
+
+            // return viewmodel of contact info
             return Ok(viewModel);
         }
 
@@ -192,7 +232,7 @@ namespace FCentricProspections.Server.Controllers
                     Id = prospectionCompetitorBrand.Id,
                     CompetitorBrandId = prospectionCompetitorBrand.CompetitorBrandId,
                     CompetitorBrandName = brand.Name,
-                });;
+                }); ;
             }
 
             // return viewmodel of prospection-competitorbrand list
@@ -859,26 +899,23 @@ namespace FCentricProspections.Server.Controllers
                 return NotFound("Employee not found");
             }
 
+            var appointments = this.data.GetAppointmentsByEmployeeId(id);
+
             // for each appointment in the database, 
             var appointmentList = new List<AppointmentGetAllViewModel>();
-            foreach (var app in employee.Appointments)
+            foreach (var app in appointments)
             {
-                var appointment = this.data.GetAppointment(app.Id);
-                if (appointment != null)
+                var viewModel = new AppointmentGetAllViewModel
                 {
-                    
-                    var viewModel = new AppointmentGetAllViewModel
-                    {
-                        Id = appointment.Id,
-                        EmployeeId = appointment.EmployeeId,
-                        StartDate = appointment.StartDate,
-                        EndDate = appointment.EndDate,
-                        Remarks = appointment.Remarks,
-                        Name = appointment.Name,
-                        AppointmentState = appointment.AppointmentState.Name,
-                    };
-                    appointmentList.Add(viewModel);
-                }               
+                    Id = app.Id,
+                    EmployeeId = app.EmployeeId,
+                    StartDate = app.StartDate,
+                    EndDate = app.EndDate,
+                    Remarks = app.Remarks,
+                    Name = app.Name,
+                    AppointmentState = app.AppointmentState.Name,
+                };
+                appointmentList.Add(viewModel);
             }
 
             // return list of viewmodel user
@@ -899,7 +936,7 @@ namespace FCentricProspections.Server.Controllers
 
             viewModel.Id = id;
             viewModel.Remarks = appointment.Remarks;
-            viewModel.Name = appointment.Name;  
+            viewModel.Name = appointment.Name;
             viewModel.StartDate = appointment.StartDate;
             viewModel.EndDate = appointment.EndDate;
             viewModel.EmployeeId = appointment.EmployeeId;

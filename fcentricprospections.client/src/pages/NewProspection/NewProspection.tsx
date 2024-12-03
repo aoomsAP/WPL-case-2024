@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import BrandTag from '../../components/BrandTag/BrandTag';
 import { NewProspectionContext } from '../../contexts/NewProspectionContext';
-import { ICompetitorBrand, IProspectionBrand, IProspectionCompetitorBrand, IProspectionDetail, IProspectionToDo, IToDo, OptionType } from '../../types';
+import { ICompetitorBrand, IContactInfo, IProspectionBrand, IProspectionCompetitorBrand, IProspectionDetail, IProspectionToDo, IToDo, OptionType } from '../../types';
 import BrandCardInput from '../../components/BrandCardInput/BrandCardInput';
 import BrandInterestCard from '../../components/BrandCardInput/BrandInterestCard';
 import { AiOutlineCheck } from "react-icons/ai";
@@ -42,6 +42,7 @@ export const NewProspection = () => {
   const {
     allBrands,
     competitorBrands,
+    loadContactInfo,
     prospectionBrands,
     setProspectionBrands,
     prospectionCompetitorBrands,
@@ -74,6 +75,31 @@ export const NewProspection = () => {
   const [trends, setTrends] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
 
+  const [contactInfo, setContactInfo] = useState<IContactInfo>();
+
+  // Contact info -----------------------------------------------------------------------------------------------------------
+
+  async function loadContactInfoFromDb(shopId: string, contactTypeId: number) {
+    const loadedContactInfo = await loadContactInfo(shopId, contactTypeId);
+    setContactInfo(loadedContactInfo);
+  }
+
+  useEffect(() => {
+
+    let contactTypeCast: number = 0;
+
+    switch (contactType) {
+      case 1: contactTypeCast = 5; break; // Owner
+      case 2: contactTypeCast = 6; break; // Buyer
+      case 3: contactTypeCast = 7; break; // SalesPerson / ShopManager
+      default: setContactInfo(undefined); break;
+    }
+
+    if (shopId && contactTypeCast != 0) {
+      loadContactInfoFromDb(shopId, contactTypeCast);
+    }
+  }, [contactType])
+
   // Todos --------------------------------------------------------------------------------------------------------------------
 
   // Contact info todos 
@@ -82,13 +108,15 @@ export const NewProspection = () => {
 
     if (contactName != "" || contactEmail != "" || contactPhone != "") {
 
-      const remarks = `${contactName.length > 0 ? `Contact naam: ${contactName}, ` : ""}${contactEmail.length > 0 ? `Contact email: ${contactEmail}, ` : ""}${contactPhone.length > 0 ? `Contact telefoon: ${contactPhone}` : ""}`
+      const newContactName = `${contactName.length > 1 ? `Contact naam: ${contactName}` : ""}`
+      const newContactEmail = `${contactEmail.length > 1 ? `Contact email: ${contactEmail}` : ""}`
+      const newContactPhone = `${contactPhone.length > 1 ? `Contact telefoon: ${contactPhone}` : ""}`
 
       // Create todo for each interest
       let contactInfoToDo = {
         id: uuidv4(), // generate temporary unique id
         name: "Nieuwe contact info",
-        remarks: remarks,
+        remarks: newContactName + (newContactName ? " - " : "") + newContactEmail + (newContactEmail ? " - " : "") + newContactPhone,
         employeeId: 0, // TO DO: WHO? DEFAULT? 0 WILL RESULT IN ERROR
         toDoStatusId: 1, // DEFAULT
       };
@@ -189,10 +217,12 @@ export const NewProspection = () => {
       console.log("start handleComplete");
 
       if (!user?.id) {
+        alert("Geen geldige gebruiker. Probeer opnieuw in the loggen.");
         throw Error("Invalid user id");
       }
 
       if (!employee?.id) {
+        alert("Geen geldige gebruiker. Probeer opnieuw in the loggen.");
         throw Error("Invalid employee id");
       }
 
@@ -305,20 +335,22 @@ export const NewProspection = () => {
 
         <FormWizard.TabContent title="Info" icon={<AiOutlineCheck />} >
 
+          {/* Shop info */}
           {shopDetail && <ShopDetailCard shop={shopDetail} />}
 
+          {/* Visit Date */}
           <fieldset>
             <legend>Datum van prospectie</legend>
-            <input 
-              type="date" 
-              value={visitDate ? visitDate.toISOString().substring(0, 10) : ''} 
-              onChange={(e) => setVisitDate(new Date(e.target.value))} 
+            <input
+              type="date"
+              value={visitDate ? visitDate.toISOString().substring(0, 10) : ''}
+              onChange={(e) => setVisitDate(new Date(e.target.value))}
             />
           </fieldset>
 
-
           <h3>Informatie</h3>
 
+          {/* Contact type */}
           <fieldset>
             <legend>Contact type</legend>
             <label>
@@ -339,19 +371,23 @@ export const NewProspection = () => {
             </label>
           </fieldset>
 
+          {/* Contact type */}
           <fieldset>
             <legend>Contact naam</legend>
-            <input type='text' value={contactName} onChange={(e) => setContactName(e.target.value)}></input>
+            <p style={{ marginTop: 0 }}>Huidige naam: {contactInfo?.name ?? "Geen naam gevonden"}</p>
+            <input type='text' placeholder='Update naam' value={contactName} onChange={(e) => setContactName(e.target.value)}></input>
           </fieldset>
 
           <fieldset>
             <legend>Contact email</legend>
-            <input type='text' value={contactEmail} onChange={(e) => setContactEmail(e.target.value)}></input>
+            <p style={{ marginTop: 0 }}>Huidige email: {contactInfo?.email ?? "Geen email gevonden"}</p>
+            <input type='text' placeholder='Update email' value={contactEmail} onChange={(e) => setContactEmail(e.target.value)}></input>
           </fieldset>
 
           <fieldset>
             <legend>Contact phone</legend>
-            <input type='text' value={contactPhone} onChange={(e) => setContactPhone(e.target.value)}></input>
+            <p style={{ marginTop: 0 }}>Huidge telefoonnummer: {contactInfo?.phoneNumber ?? "Geen telefoonnummer gevonden"}</p>
+            <input type='text' placeholder='Update telefoonnummer' value={contactPhone} onChange={(e) => setContactPhone(e.target.value)}></input>
           </fieldset>
 
           <fieldset>
@@ -377,7 +413,7 @@ export const NewProspection = () => {
           <fieldset>
             <legend>Reden van bezoek</legend>
 
-            <textarea maxLength={500} rows={3} value={visitContext} onChange={(e) => setVisitContext(e.target.value)} />
+            <textarea maxLength={500} rows={3} value={visitContext} placeholder='Dit bezoek werd gepland ter gelegenheid van...' onChange={(e) => setVisitContext(e.target.value)} />
 
           </fieldset>
 
@@ -423,10 +459,10 @@ export const NewProspection = () => {
           {/* NEW BRANDS */}
           <h3>Nieuwe merken</h3>
           <legend>Merken die u niet terugvond in de lijst hierboven:</legend>
-          <textarea value={newBrands} onChange={(e) => {
-            // set newBrands
-            setNewBrands(e.target.value);
-          }} />
+          <textarea value={newBrands} placeholder='Nieuwe merk met collectie voor dames/heren/kinderen'
+            onChange={(e) => {
+              setNewBrands(e.target.value);
+            }} />
 
         </FormWizard.TabContent>
 
@@ -436,17 +472,20 @@ export const NewProspection = () => {
 
           <fieldset>
             <legend>Beste merken</legend>
-            <textarea value={bestBrands} onChange={(e) => setBestBrands(e.target.value)} />
+            <textarea value={bestBrands} placeholder='De beste merken dit seizoen waren...'
+              onChange={(e) => setBestBrands(e.target.value)} />
           </fieldset>
 
           <fieldset>
             <legend>Slechtste merken</legend>
-            <textarea value={worstBrands} onChange={(e) => setWorstBrands(e.target.value)} />
+            <textarea value={worstBrands} placeholder='De slechtste merken dit seizoen waren...'
+              onChange={(e) => setWorstBrands(e.target.value)} />
           </fieldset>
 
           <fieldset>
             <legend>Merken die niet meer ingekocht worden</legend>
-            <textarea value={terminatedBrands} onChange={(e) => setTerminatedBrands(e.target.value)} />
+            <textarea value={terminatedBrands} placeholder='Deze merken worden niet meer ingekocht volgend seizoen...'
+              onChange={(e) => setTerminatedBrands(e.target.value)} />
           </fieldset>
 
         </FormWizard.TabContent>
@@ -502,11 +541,17 @@ export const NewProspection = () => {
 
           <h3>Feedback</h3>
 
-          <h4>Trends en noden in de markt</h4>
-          <textarea rows={4} value={trends} onChange={(e) => setTrends(e.target.value)} />
+          <fieldset>
+            <legend>Trends en noden in de markt</legend>
+            <textarea rows={4} value={trends} placeholder='Trends en noden in de markt...'
+            onChange={(e) => setTrends(e.target.value)} />
+          </fieldset>
 
-          <h4>Extra opmerkingen/feedback</h4>
-          <textarea rows={4} value={feedback} onChange={(e) => setFeedback(e.target.value)} />
+          <fieldset>
+            <legend>Extra opmerkingen/feedback</legend>
+            <textarea rows={4} value={feedback} placeholder='Er kwam nog extra feedback met betrekking tot...'
+            onChange={(e) => setFeedback(e.target.value)} />
+          </fieldset>
 
         </FormWizard.TabContent>
 

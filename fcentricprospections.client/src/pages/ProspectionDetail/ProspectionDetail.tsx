@@ -60,12 +60,13 @@ export const ProspectionDetail = () => {
           {shopDetail && <ShopDetailCard shop={shopDetail} />}
 
           <section className={styles.contactVisitCard}>
+            <h2>Bezoek informatie</h2>
             <div>
               {contactType && prospectionDetail && (
-                <ContactTypeCard contactType={contactType} contactPersonName={prospectionDetail.contactName ?? ""} contactEmail={prospectionDetail.contactEmail  ?? ""} contactPhone={prospectionDetail.contactPhone ?? ""} />
+                <ContactTypeCard contactType={contactType} contactPersonName={prospectionDetail.contactName} contactEmail={prospectionDetail.contactEmail} contactPhone={prospectionDetail.contactPhone} />
               )}
 
-              {visitType && prospectionDetail && <VisitTypeCard visitType={visitType} visitContext={prospectionDetail?.visitContext ?? ""} />}
+              {visitType && prospectionDetail && <VisitTypeCard visitType={visitType} visitContext={prospectionDetail?.visitContext} />}
             </div>
           </section>
 
