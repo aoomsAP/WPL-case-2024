@@ -2,9 +2,11 @@ import { FormEvent, useContext, useEffect, useState } from "react";
 import { IEmployee, IToDo, OptionType } from "../../types";
 import styles from "./ToDoModule.module.css"
 import { UserContext } from "../../contexts/UserContext";
-import Select from 'react-select';
+import Select, { createFilter } from 'react-select';
 import ToDoEditable from "./ToDoEditable";
 import { v4 as uuidv4 } from 'uuid';
+import Option from "./Option/Option";
+import MenuList from "./MenuList/MenuListSingle";
 
 interface ToDoModuleProps {
     toDos: IToDo[];
@@ -83,6 +85,12 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
                         isSearchable={true}
                         name="employee"
                         options={employeesOptions}
+                        components={{ // Custom components to make use of react-window to improve rendering    
+                            Option,
+                            MenuList, // Custom menu list rendering
+                        }}
+                        maxMenuHeight={200} // Limit height to improve rendering
+                        filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
                         onChange={(e) => {
                             if (e) {
                                 setSelectedEmployee(e);

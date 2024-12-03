@@ -6,6 +6,7 @@ import Select from "react-select";
 import { createFilter } from "react-select";
 import styles from './HomePage.module.css'
 import Option from "../../components/ToDoModule/Option/Option";
+import MenuList from "../../components/ToDoModule/MenuList/MenuListSingle";
 
 export const Homepage = () => {
 
@@ -76,6 +77,7 @@ export const Homepage = () => {
                 options={shopListOptions}
                 components={{ // Custom components to make use of react-window to improve rendering    
                     Option,
+                    MenuList, // Custom menu list rendering
                 }}
                 onChange={(e) => {
                     navigate(`/shop/${e?.value}`);
