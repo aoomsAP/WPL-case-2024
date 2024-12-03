@@ -29,7 +29,7 @@ export const EmployeeSelect = ({ setEvents }: EmployeeSelectProps) => {
             color: "steelblue",
         }));
 
-        const colors = ["coral", "salmon", "aubergine", "purple", "red", "orange", "pink"];
+        const colors = ["crimson", "purple", "mediumvioletred", "orangered", "indigo", "darkred"];
 
         // Add appointments for every currently selected employee
         setAppLoading(true);

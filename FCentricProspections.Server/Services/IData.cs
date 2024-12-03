@@ -87,7 +87,7 @@ namespace FCentricProspections.Server.Services
 
         Employee GetEmployee(long id);
 
-        Employee GetEmployeeWithAppointments(long id);
+        EmployeeDto GetEmployeeWithAppointments(long id);
 
         Employee GetEmployeeByUserId(long userId);
 
@@ -99,6 +99,8 @@ namespace FCentricProspections.Server.Services
         Appointment GetAppointment(long id);
 
         IEnumerable<Appointment> GetAppointments();
+
+        IEnumerable<Appointment> GetAppointmentsByEmployeeId(long employeeId);
 
         AppointmentState GetAppointmentState(long id);
 

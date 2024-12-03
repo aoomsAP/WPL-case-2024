@@ -456,17 +456,32 @@ namespace FCentricProspections.Server.Services
             return this.context.Employees
                 .FirstOrDefault(x => x.Id == id);
         }
+
         public Employee GetEmployeeByUserId(long userId)
         {
             return this.context.Employees
                 .FirstOrDefault(x => x.UserId == userId);
         }
 
-        public Employee GetEmployeeWithAppointments(long id)
+        public EmployeeDto GetEmployeeWithAppointments(long id)
         {
+            // TEMPORARY TIME LIMIT
+
+            var startOf2024 = new DateTime(2024, 1, 1);
+
             return this.context.Employees
-               .Include(e => e.Appointments)
-               .FirstOrDefault(x => x.Id == id);
+                .Where(e => e.Id == id)
+                .Select(e => new EmployeeDto
+                {
+                    Id = e.Id,
+                    FirstName = e.FirstName,
+                    Name = e.Name,
+                    UserId = e.UserId,
+                    Appointments = e.Appointments
+                        .Where(a => a.StartDate >= startOf2024 || a.EndDate >= startOf2024)
+                        .ToList()
+                })
+                .FirstOrDefault();
         }
 
 
@@ -498,18 +513,28 @@ namespace FCentricProspections.Server.Services
         public IEnumerable<Appointment> GetAppointments()
         {
             return this.context.Appointments
-                .Include(a => a.AppointmentState).ToList();
+                .Include(a => a.AppointmentState)
+                .ToList();
         }
 
+        public IEnumerable<Appointment> GetAppointmentsByEmployeeId(long employeeId)
+        {
+            // TEMPORARY TIME LIMIT
+
+            var startOf2024 = new DateTime(2024, 1, 1);
+
+            return this.context.Appointments
+                .Where(e => e.EmployeeId == employeeId)
+                .Where(a => a.StartDate >= startOf2024 || a.EndDate >= startOf2024)
+                .Include(a => a.AppointmentState)
+                .ToList();
+        }
 
         public AppointmentState GetAppointmentState(long id)
         {
             return this.context.AppointmentStates
                 .FirstOrDefault(a => a.Id == id);
         }
-
-
-
 
 
         // TYPES ---------------------------------------------------------------------------------------------------------------------
