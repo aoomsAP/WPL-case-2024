@@ -6,6 +6,7 @@ import MenuList from "../../components/ToDoModule/MenuList/MenuList";
 import Option from "../../components/ToDoModule/Option/Option";
 import { EventInput } from '@fullcalendar/core';
 import { Oval } from "react-loader-spinner";
+import style from './CalenderPage.module.css'
 
 interface EmployeeSelectProps {
     setEvents: (events: EventInput[]) => void;
@@ -67,8 +68,8 @@ export const EmployeeSelect = ({ setEvents }: EmployeeSelectProps) => {
     }, [employees])
 
     return (
-        <div style={{ marginBottom: "2rem", zIndex: 999 }}>
-            <label htmlFor="employee">Vergelijk met de kalender van een collega:</label>
+        <div className={style.Search}>
+            <label  htmlFor="employee">Vergelijk met de kalender van een collega:</label>
 
             {employeesOptions && <Select<OptionType, true>
                 className="basic-multi-select"
@@ -91,7 +92,7 @@ export const EmployeeSelect = ({ setEvents }: EmployeeSelectProps) => {
             />}
 
             {(appLoading || !appointments) &&
-                <div style={{ padding: "1rem" }}>
+                <div  style={{ padding: "1rem" }}>
                     <Oval width={36} height={36} />
                 </div>
             }

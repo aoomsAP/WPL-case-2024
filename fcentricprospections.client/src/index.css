@@ -144,3 +144,63 @@ fieldset {
 .fc .fc-button-group > .fc-button.fc-button-active {
   z-index: 0 !important;
 }
+
+
+.calendarContainer {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.topControls {
+  margin-bottom: 16px;
+}
+
+.fc-header-toolbar {
+  max-width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.fc-toolbar-title {
+  font-size: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.fc-toolbar .fc-button-group {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.fc-toolbar .fc-button {
+  padding: 4px 8px;
+  font-size: 14px;
+  margin: 2px;
+}
+
+.fc-toolbar .fc-button:hover {
+  background-color: #f0f0f0;
+}
+
+@media (max-width: 768px) {
+  .fc-header-toolbar {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+
+  .fc-toolbar-title {
+      text-align: left;
+      margin-bottom: 8px;
+  }
+
+  .fc-toolbar .fc-button-group {
+      margin-bottom: 8px;
+  }
+}
