@@ -1,13 +1,8 @@
-.Search{
-    margin-bottom:  1rem;
-    z-index: 999;
-    font-weight: 500;
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
-    
+.employeeSelect {
+    margin-bottom: 2rem;
 }
 
-.calendarContainer {
+.container {
     max-width: 100%;
     margin: 0 auto;
     padding: 0.5rem;
