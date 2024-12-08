@@ -61,7 +61,7 @@ export const CalendarPage = () => {
                         headerToolbar={{
                             left: "prev,next today",
                             center: "title",
-                            right: `${windowWidth > 700 ? 'dayGridMonth,timeGridWeek,timeGridDay' : 'listMonth,timeGridDay'}`
+                            right: `${windowWidth > 700 ? 'dayGridMonth,timeGridWeek,timeGridDay' : 'dayGridMonth,listMonth,timeGridDay'}`
                         }}
                         slotMinTime="07:00:00" // Start timegrid from 7am
                         slotDuration="00:30:00"
