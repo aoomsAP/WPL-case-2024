@@ -525,6 +525,7 @@ namespace FCentricProspections.Server.Services
 
             return this.context.Appointments
                 .Where(e => e.EmployeeId == employeeId)
+                .Where(e => e.IsDeleted == false)
                 .Where(a => a.StartDate >= startOf2024 || a.EndDate >= startOf2024)
                 .Include(a => a.AppointmentState)
                 .ToList();

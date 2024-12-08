@@ -21,7 +21,6 @@ export const CalendarPage = () => {
     function isAllDay(startDate: Date, endDate: Date): boolean {
         const businessStartHour = 9; // 9 AM
         const businessEndHour = 18; // 6 PM
-    
         return (
             startDate.getHours() <= businessStartHour &&
             endDate.getHours() >= businessEndHour &&
@@ -40,7 +39,7 @@ export const CalendarPage = () => {
         setEvents(userEvents);
     }, [appointments]);
 
-    const handleWindowResize = (arg: { view: { type: string } }) => {
+    const handleWindowResize = (_: { view: { type: string } }) => {
         setWindowWidth(window.innerWidth);
     };
 
