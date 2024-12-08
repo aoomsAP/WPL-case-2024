@@ -103,7 +103,6 @@ namespace FCentricProspections.Server.Controllers
                 ShopDeliveries = new List<ShopDelivery>(),
                 ContactId = viewModel.ContactId,
                 Contact = this.data.GetContact(viewModel.ContactId),
-                Timestamp = null
             };
 
             // add shop to database
@@ -225,7 +224,6 @@ namespace FCentricProspections.Server.Controllers
                UserCreated = user,
                DateCreated = viewModel.DateCreated,
                Contacts = new List<Contact>(),
-               Timestamp = null
             };
 
             // add address to database
@@ -314,7 +312,6 @@ namespace FCentricProspections.Server.Controllers
                 ContactChannels = new List<ContactChannel>(),
                 ShopContacts = new List<ShopContact>(),
                 Shops = new List<Shop>(),
-                Timestamp = null
             };
 
             // add contact to database
