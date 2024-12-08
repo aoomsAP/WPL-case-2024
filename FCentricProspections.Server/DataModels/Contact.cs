@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FCentricProspections.Server.DataModels;
@@ -28,6 +29,7 @@ public partial class Contact
 
     public DateTime DateCreated { get; set; }
 
+    [Timestamp]
     public byte[] Timestamp { get; set; }
 
     public long? WebUserId { get; set; }

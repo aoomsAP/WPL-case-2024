@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace FCentricProspections.Server.DataModels;
 
@@ -31,6 +32,7 @@ public partial class Shop
 
     public DateTime DateCreated { get; set; }
 
+    [Timestamp]
     public byte[] Timestamp { get; set; }
 
     public string SearchName { get; set; }

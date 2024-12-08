@@ -14,6 +14,21 @@ namespace FCentricProspections.Server.Services
 
         Shop GetShop(long id);
 
+        void AddShop (Shop shop);
+
+
+        // Address -----------------------------------------------------------------------------------------------------------------------------------------
+
+        Address GetAddress(long id);
+        void AddAddress(Address address);
+        Contact GetContact(long id);
+        void AddContact (Contact contact);
+
+        City GetCity(long id);
+        IEnumerable<CityDto> GetCities(long countryId);
+        Country GetCountry(long id);
+        IEnumerable<CountryDto> GetCountries();
+
         // Contact info -----------------------------------------------------------------------------------------------------------------------------------------
 
         OwnerDto GetOwner(long id);

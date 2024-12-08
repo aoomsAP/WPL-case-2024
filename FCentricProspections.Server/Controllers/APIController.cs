@@ -70,6 +70,267 @@ namespace FCentricProspections.Server.Controllers
             return Ok(viewModel);
         }
 
+        [HttpPost()]
+        [Route("shops")]
+        public IActionResult CreateShop([FromBody] ShopCreateViewModel viewModel)
+        {
+            // check if modelstate is valid
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // check if user exists
+            var user = this.data.GetUser(viewModel.UserCreatedId);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            // create new shop object based on view model data
+            var newShop = new Shop
+            {
+                // EF creates Id
+                ShopTypeId = 6, // hardcoded 6 = Prospect
+                Name = viewModel.Name,
+                UserCreatedId = viewModel.UserCreatedId,
+                UserCreated = user,
+                DateCreated = viewModel.DateCreated,
+                IsParallelSales = false, // hardcoded
+                CustomerShops = new List<CustomerShop>(),
+                Prospections = new List<Prospection>(),
+                ShopContacts = new List<ShopContact>(),
+                ShopDeliveries = new List<ShopDelivery>(),
+                ContactId = viewModel.ContactId,
+                Contact = this.data.GetContact(viewModel.ContactId),
+            };
+
+            // add shop to database
+            this.data.AddShop(newShop);
+
+            // return viewmodel of object that was just created
+            return CreatedAtAction(
+                nameof(this.data.GetShopDetail),
+                new { id = newShop.Id },
+                new NewShopGetViewModel
+                {
+                    Id = newShop.Id,
+                    ShopTypeId = viewModel.ShopTypeId,
+                    Name = newShop.Name,
+                    UserCreatedId = newShop.UserCreatedId,
+                    DateCreated = newShop.DateCreated,
+                    ContactId = newShop.ContactId
+                });
+        }
+
+        // ADDRESS -----------------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------------------------
+
+        [HttpGet()]
+        [Route("addresses/{id}")]
+        public IActionResult GetAddress(long id)
+        {
+            var viewModel = new AddressGetViewModel();
+
+            var address = this.data.GetAddress(id);
+
+            if (address == null)
+            {
+                return NotFound("Address not found");
+            }
+
+            viewModel.Id = address.Id;
+            viewModel.Street1 = address.Street1;
+            viewModel.PostalCode = address.PostalCode;
+            viewModel.DateCreated = address.DateCreated;
+            viewModel.CityId = address.CityId;
+
+            // return viewmodel of address
+            return Ok(viewModel);
+        }
+
+        [HttpGet()]
+        [Route("countries")]
+        public IActionResult GetCountries()
+        {
+            // for each country in the database, collect copy that adheres to viewmodel (excluding all details)
+            var countries = new List<CountryGetViewModel>();
+            foreach (var country in this.data.GetCountries())
+            {
+                countries.Add(new CountryGetViewModel { Id = country.Id, Name = country.Name });
+            }
+
+            // return list of viewmodel countries
+            return Ok(countries);
+        }
+
+        [HttpGet()]
+        [Route("countries/{countryId}/cities")]
+        public IActionResult GetCities(long countryId)
+        {
+            var country = this.data.GetCountry(countryId);
+            if (country == null)
+            {
+                return NotFound("Country not found");
+            }
+
+            // for each city in the database, collect copy that adheres to viewmodel (excluding all details)
+            var cities = new List<CityGetViewModel>();
+            foreach (var city in this.data.GetCities(countryId))
+            {
+                cities.Add(new CityGetViewModel { Id = city.Id, Name = city.Name, PostalCode = city.PostalCode, CountryId = city.CountryId});
+            }
+
+            // return list of viewmodel cities
+            return Ok(cities);
+        }
+
+        [HttpPost()]
+        [Route("addresses")]
+        public IActionResult CreateAddress([FromBody] AddressCreateViewModel viewModel)
+        {
+            // check if modelstate is valid
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // check if user exists
+            var user = this.data.GetUser(viewModel.UserCreatedId);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            // check if city exists
+            var city = this.data.GetCity(viewModel.CityId ?? 0);
+            if (city == null)
+            {
+                return NotFound("City not found");
+            }
+
+            // create new address object based on view model data
+            var newAddress = new Address
+            {
+                // EF creates Id
+               Name = null,
+               Attention = null,
+               Street1 = viewModel.Street1,
+               Street2 = null,
+               CityId = viewModel.CityId,
+               City = city,
+               PostalCode = viewModel.PostalCode,
+               UserCreatedId = viewModel.UserCreatedId,
+               UserCreated = user,
+               DateCreated = viewModel.DateCreated,
+               Contacts = new List<Contact>(),
+            };
+
+            // add address to database
+            this.data.AddAddress(newAddress);
+
+            // return viewmodel of object that was just created
+            return CreatedAtAction(
+                nameof(this.data.GetAddress),
+                new { id = newAddress.Id },
+                new AddressGetViewModel
+                {
+                    Id = newAddress.Id,
+                    Street1 = newAddress.Street1,
+                    CityId = newAddress.CityId,
+                    PostalCode = newAddress.PostalCode,
+                    DateCreated = newAddress.DateCreated
+                });
+        }
+
+        // CONTACT -----------------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------------------------
+
+        [HttpGet()]
+        [Route("contacts/{id}")]
+        public IActionResult GetContact(long id)
+        {
+            var viewModel = new ContactGetViewModel();
+
+            var contact = this.data.GetContact(id);
+
+            if (contact == null)
+            {
+                return NotFound("Contact not found");
+            }
+
+            viewModel.Id = contact.Id;
+            viewModel.Name = contact.Name;
+            viewModel.AddressId = contact.AddressId;
+            viewModel.DateCreated = contact.DateCreated;
+            viewModel.UserCreatedId = contact.UserCreatedId;
+
+            // return viewmodel of contact
+            return Ok(viewModel);
+        }
+
+        [HttpPost()]
+        [Route("contact")]
+        public IActionResult CreateContact([FromBody] ContactCreateViewModel viewModel)
+        {
+            // check if modelstate is valid
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // check if user exists
+            var user = this.data.GetUser(viewModel.UserCreatedId);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            // check if address exists
+            var address = this.data.GetAddress(viewModel.AddressId ?? 0);
+            if (address == null)
+            {
+                return NotFound("Address not found");
+            }
+
+            // create new contact object based on view model data
+            var newContact = new Contact
+            {
+                // EF creates Id
+                FirstName = null,
+                IsSupplierContact = false,
+                AddressId = viewModel.AddressId,
+                Remarks = null,
+                IsHidden = false,
+                Name = viewModel.Name,
+                UserCreatedId = viewModel.UserCreatedId,
+                UserCreated = user,
+                DateCreated = viewModel.DateCreated,
+                SearchName = null, // TO BE IMPLEMENTED
+                SearchName2 = null, // TO BE IMPLEMENTED
+                Address = address,
+                ContactChannels = new List<ContactChannel>(),
+                ShopContacts = new List<ShopContact>(),
+                Shops = new List<Shop>(),
+            };
+
+            // add contact to database
+            this.data.AddContact(newContact);
+
+            // return viewmodel of object that was just created
+            return CreatedAtAction(
+                nameof(this.data.GetContact),
+                new { id = newContact.Id },
+                new ContactGetViewModel
+                {
+                    Id = newContact.Id,
+                    AddressId = newContact.AddressId,
+                    DateCreated = newContact.DateCreated,
+                    UserCreatedId= newContact.UserCreatedId,
+                    Name = newContact.Name
+                });
+        }
+
 
         // CONTACT INFO ------------------------------------------------------------------------------------------------------------------
         // -------------------------------------------------------------------------------------------------------------------------------

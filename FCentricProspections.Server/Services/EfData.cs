@@ -62,6 +62,87 @@ namespace FCentricProspections.Server.Services
                 .Include(s => s.Prospections)
                 .FirstOrDefault(x => x.Id == id);
         }
+        public void AddShop (Shop shop)
+        {
+            this.context.Shops.Add(shop);
+            this.context.SaveChanges();
+        }
+
+
+        // ADDRESS ---------------------------------------------------------------------------------------------------------------------
+        // ---------------------------------------------------------------------------------------------------------------------------
+
+        public Address GetAddress(long id)
+        {
+            return this.context.Addresses
+                .Include(a => a.City)
+                .ThenInclude(a => a.Country)
+                .FirstOrDefault(a => a.Id == id);
+        }
+
+        public void AddAddress(Address address)
+        {
+            this.context.Addresses.Add(address);
+            this.context.SaveChanges();
+        }
+        
+        public Contact GetContact(long id)
+        {
+            return this.context.Contacts
+                .Include(c => c.Address)
+                .FirstOrDefault(c => c.Id == id);
+        }
+
+        public void AddContact(Contact contact)
+        {
+            this.context.Contacts.Add(contact);
+            this.context.SaveChanges();
+        }
+
+        public City GetCity(long id)
+        {
+            return this.context.Cities
+                .Include(c => c.Country)
+                .FirstOrDefault(c => c.Id == id);
+        }
+        public IEnumerable<CityDto> GetCities(long countryId)
+        {
+            return this.context.Cities
+                .Include(c => c.Country)
+                .Where(c => c.CountryId == countryId)
+                .Select(c => new CityDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    CountryId = c.CountryId,
+                    Country = new CountryDto
+                    {
+                        Id = c.Country.Id,
+                        Name = c.Country.Name
+                    },
+                    PostalCode = c.PostalCode,
+                }).ToList();
+        }
+
+        public Country GetCountry(long id)
+        {
+            return this.context.Countries
+                .FirstOrDefault(c => c.Id ==  id);
+        }
+
+        public IEnumerable<CountryDto> GetCountries()
+        {
+            var countryList = context.Countries
+                .Select(s => new CountryDto
+                {
+                    Id = s.Id,
+                    Name = s.Name
+                }).ToList();
+
+            return countryList;
+        }
+
+
 
         // CONTACT INFO ---------------------------------------------------------------------------------------------------------------------
         // ---------------------------------------------------------------------------------------------------------------------------
