@@ -52,7 +52,9 @@ button a {
   display: block;
 }
 
-input[type="text"], input[type="number"], textarea {
+input[type="text"],
+input[type="number"],
+textarea {
   font-family: inherit;
   padding: 0.5rem;
   font-size: 1rem;
@@ -60,7 +62,8 @@ input[type="text"], input[type="number"], textarea {
   border-radius: 0.25rem;
 }
 
-input[type="text"], textarea {
+input[type="text"],
+textarea {
   width: 100%;
 }
 
@@ -109,9 +112,10 @@ fieldset {
 
 /* REACT SELECT  ----------------------------------------------- */
 
+/* select menu has to appear on top of calendar */
 .select__menu {
   background-color: white !important;
-  z-index: 2 !important;
+  z-index: 3 !important;
 }
 
 .react-select__option {
@@ -125,22 +129,53 @@ fieldset {
 }
 
 .react-select__option:hover {
-  background-color: #EBECF0; 
+  background-color: #EBECF0;
 }
 
 .react-select__option--is-selected {
   background-color: #42526E;
-  color: #FFFFFF; 
-};
+  color: #FFFFFF;
+}
 
 .react-select__option--is-selected:hover {
   background-color: #42526E;
-};
-
+}
 
 /* FULL CALENDAR */
 
 /* attempt to not have "day/month/week" button show on top of select */
-.fc .fc-button-group > .fc-button.fc-button-active {
+.fc .fc-button-group>.fc-button.fc-button-active {
   z-index: 0 !important;
+}
+
+.fc-toolbar {
+  text-transform: capitalize;
+}
+
+@media (max-width: 700px) {
+  .fc-toolbar {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .fc-toolbar-chunk {
+    font-size: 0.9rem;
+    order: 2;
+  }
+
+  .fc-toolbar-chunk:nth-child(2) {
+    flex-basis: 100%;
+    order: 1;
+    margin-bottom: 1rem;
+  }
+
+  .fc-toolbar-title {
+    text-align: center;
+    font-size: 1.75rem !important;
+  }
+
+  /* sticky day header has to appear on top of other elements, but BELOW select menu (z-index 3) */
+  .fc-list-day>th {
+    z-index: 2;
+  }
 }
