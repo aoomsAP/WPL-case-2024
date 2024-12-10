@@ -10,6 +10,7 @@ export interface IShopDetail {
   address: Address;
   customer: string;
   owner: string;
+  shopTypeId: number,
 }
 
 export interface Address {
@@ -19,6 +20,33 @@ export interface Address {
   postalcode: string;
   city: string;
   country: string;
+}
+
+export interface IAddressCreate {
+  id?: number;
+  street1: string;
+  street2?: string;
+  postalCode: string;
+  cityId: number;
+  userCreatedId: string,
+  dateCreated: Date,
+}
+
+export interface IContactCreate {
+  id?: number;
+  addressId: number,
+  name?: string,
+  userCreatedId: string,
+  dateCreated: Date,
+}
+
+export interface IShopCreate {
+  id?: number;
+  name?: string,
+  userCreatedId: string,
+  dateCreated: Date,
+  isParallelSales: boolean,
+  contactId: number,
 }
 
 export interface IContactType {
