@@ -90,7 +90,11 @@ export const Homepage = () => {
                     MenuList, // Custom menu list rendering
                 }}
                 onChange={(e) => {
-                    navigate(`/shop/${e?.value}`);
+                    if(e?.value != undefined){
+                        navigate(`/shop/${e?.value}`);
+                    }
+
+                    
                 }}
             />}
 

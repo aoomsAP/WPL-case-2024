@@ -478,7 +478,7 @@ namespace FCentricProspections.Server.Services
                              join pld in this.context.ProductLineDeliveries on sd.ProductLineDeliveryId equals pld.Id
                              join pl in this.context.ProductLines on pld.ProductLineId equals pl.Id
                              join b in this.context.Brands on pl.BrandId equals b.Id
-                             where sd.ShopId == shopId && sd.SalesPeriodId == 66 // TO DO: specify SalesPeriod
+                             where sd.ShopId == shopId && (sd.SalesPeriodId ==  66 || sd.SalesPeriodId == 67 ) 
                              select new BrandDto
                              {
                                  Id = b.Id,
