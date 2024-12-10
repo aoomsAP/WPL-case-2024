@@ -25,11 +25,21 @@ export const Homepage = () => {
 
         let shopOptionOptions: OptionType[] = shopNames
             .filter(isValidShopOption)
-            .map((shopOption) => ({
-                value: shopOption.id.toString(),
-                label: `${shopOption.name}`
-
-            }));
+            .map((shopOption) => {
+                if(shopOption.name.includes(shopOption.city)){
+                    return({
+                        value: shopOption.id.toString(),
+                        
+                         label: `${shopOption.name}`
+                    })
+                } 
+                return({
+                    value: shopOption.id.toString(),
+                    
+                     label: `${shopOption.name} - ${shopOption.city}`
+    
+                })
+            });
         setShopListOptions(shopOptionOptions);
     }, [shopNames])
 

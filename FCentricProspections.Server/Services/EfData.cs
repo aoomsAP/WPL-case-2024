@@ -15,21 +15,37 @@ namespace FCentricProspections.Server.Services
             this.context = context;
         }
 
-        // SHOPS ---------------------------------------------------------------------------------------------------------------------
-        // ---------------------------------------------------------------------------------------------------------------------------
-
-
         public IEnumerable<ShopListDto> GetShops()
         {
-            var ShopList = context.Shops
-                .Select(s => new ShopListDto
-                {
-                    Id = s.Id,
-                    Name = s.Name,
-                }).ToList();
+            var shopList = (
+                          from shop in context.Shops
+                          join contact in context.Contacts on shop.ContactId equals contact.Id
+                          join address in context.Addresses on contact.AddressId equals address.Id
+                          join city in context.Cities on address.CityId equals city.Id
+                          join country in context.Countries on city.CountryId equals country.Id
+                          join fashionDocumentShop in context.FashionDocumentShops on shop.Id equals fashionDocumentShop.ShopId
+                          join fashionDocument in context.FashionDocuments on fashionDocumentShop.FashionDocument_Id equals fashionDocument.Id
+                          where fashionDocument.SalesPeriodId > 63
+                          orderby shop.Name, city.Name
+                          select new ShopListDto
+                          {
+                              Name = shop.Name,
+                              Id = shop.Id,
+                              City = city.Name
+                          })
+                .Distinct()
+                .ToList();
 
-            return ShopList;
+
+
+                
+               
+
+
+            return shopList;
         }
+
+
 
         public ShopDetailDto GetShopDetail(long id)
         {

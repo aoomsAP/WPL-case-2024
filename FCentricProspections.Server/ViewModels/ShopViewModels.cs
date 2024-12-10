@@ -11,7 +11,7 @@ namespace FCentricProspections.Server.ViewModels
 
         public string Name { get; set; }
 
-        //public string City { get; set; }
+        public string City { get; set; }
     }
 
     public class ShopGetDetailViewModel
@@ -25,7 +25,7 @@ namespace FCentricProspections.Server.ViewModels
 
         public string Customer { get; set; }
 
-        //public string City { get; set; }
+        public string City { get; set; }
 
         public string? Owner { get; set; }
     }

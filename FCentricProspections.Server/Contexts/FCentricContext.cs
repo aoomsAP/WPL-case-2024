@@ -44,6 +44,10 @@ public partial class FCentricContext : DbContext
 
     public virtual DbSet<Employee> Employees { get; set; }
 
+    public virtual DbSet<FashionDocumentShop> FashionDocumentShops { get; set; }
+
+    public virtual DbSet<FashionDocument> FashionDocuments { get; set; }
+
     public virtual DbSet<ProductLine> ProductLines { get; set; }
 
     public virtual DbSet<ProductLineDelivery> ProductLineDeliveries { get; set; }
