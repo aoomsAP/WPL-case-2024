@@ -22,6 +22,18 @@ export interface Address {
   country: string;
 }
 
+export interface ICountry {
+  id: number,
+  name: string,
+}
+
+export interface ICity {
+  id: number,
+  name: string,
+  postalCode: string,
+  countryId: number,
+}
+
 export interface IAddressCreate {
   id?: number;
   street1: string;

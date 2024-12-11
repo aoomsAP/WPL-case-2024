@@ -1,87 +1,92 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import FormWizard from "react-form-wizard-component";
 import { AiOutlineCheck } from "react-icons/ai";
 import styles from "./NewShop.module.css"
 import { UserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import { IAddressCreate, IContactCreate, IShopCreate } from "../../types";
+import { ICity, OptionType } from "../../types";
+import { NewShopContext } from "../../contexts/NewShopContext";
+import { createFilter } from "react-select";
+import Select from "react-select";
+import Option from "../../components/ToDoModule/Option/Option";
+import MenuList from "../../components/ToDoModule/MenuList/MenuListSingle";
 
 export default function NewShop() {
 
     const { userId } = useContext(UserContext);
+    const { addAddress, addContact, addShop, countries, loadCities } = useContext(NewShopContext);
 
     const navigate = useNavigate();
 
     const [name, setName] = useState<string>("");
     const [street, setStreet] = useState<string>("");
-    const [postalCode, setPostalCode] = useState<string>("");
     const [streetNumber, setStreetNumber] = useState<number>(0);
     const [postbox, setPostbox] = useState<string>("");
-    const [cityId, setCityId] = useState<number>(0);
-    const [country, setCountry] = useState<string>("");
+    const [postalCode, setPostalCode] = useState<OptionType>();
+    const [city, setCity] = useState<OptionType>();
+    const [country, setCountry] = useState<OptionType>();
 
-    // TO DO: put in context?
-    async function addAddress(newAddress: IAddressCreate) {
-        try {
-            const response = await fetch(`/api/addresses`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newAddress),
-            });
+    const [countryOptions, setCountryOptions] = useState<OptionType[]>([]);
+    const [cities, setCities] = useState<ICity[]>([]);
+    const [cityOptions, setCityOptions] = useState<OptionType[]>([]);
+    const [postalCodeOptions, setPostalCodeOptions] = useState<OptionType[]>([]);
 
-            const json: IAddressCreate = await response.json();
+    // Map countries to options for react-select
+    useEffect(() => {
+        let countryOptions: OptionType[] = countries
+            .map((country) => ({
+                value: country.id.toString(),
+                label: country.name
+            }));
+        setCountryOptions(countryOptions);
+    }, [countries])
 
-            console.log("Succesful POST new address: ", json)
-            return (json);
-
-        } catch (error) {
-            console.error('Error POST new address:', error);
+    // Load & set cities
+    async function setCitiesFunc(countryId: number) {
+        const citiesByCountry = await loadCities(countryId);
+        if (citiesByCountry) {
+            setCities(citiesByCountry);
         }
     }
 
-    async function addContact(newContact: IContactCreate) {
-        try {
-            const response = await fetch(`/api/contacts`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newContact),
-            });
-
-            const json: IContactCreate = await response.json();
-
-            console.log("Succesful POST new contact: ", json)
-            return (json);
-
-        } catch (error) {
-            console.error('Error POST new contact:', error);
+    // Load cities when country is selected
+    useEffect(() => {
+        if (country) {
+            setCitiesFunc(+country.value);
         }
-    }
+    }, [country]);
 
-    async function addShop(newShop: IShopCreate) {
-        try {
-            const response = await fetch(`/api/shops`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newShop),
-            });
+    // Map cities to options for react-select
+    useEffect(() => {
+        let cityOptions: OptionType[] = cities
+            .map((city) => ({
+                value: city.id.toString(),
+                label: city.name
+            }));
+        setCityOptions(cityOptions);
+    }, [cities]);
 
-            const json: IShopCreate = await response.json();
-
-            console.log("Succesful POST new shop: ", json)
-            return (json);
-
-        } catch (error) {
-            console.error('Error POST new shop:', error);
-        }
-    }
+    // Map postal codes to options for react-select
+    useEffect(() => {
+        let postalCodeOptions: OptionType[] = cities
+            .map((city) => ({
+                value: city.postalCode,
+                label: city.postalCode,
+            }));
+        setPostalCodeOptions(postalCodeOptions);
+    }, [cities])
 
     async function handleComplete() {
 
         try {
+            if (!city || !postalCode) {
+                throw Error("No valid city selected");
+            }
+
             const newAddress = {
-                street1: `${street} ${streetNumber}`,
-                cityId: cityId,
-                postalCode: postalCode,
+                street1: `${street} ${streetNumber}${postbox ? ` / ${postbox}` : ""}`,
+                cityId: +city.value,
+                postalCode: postalCode.label,
                 userCreatedId: userId,
                 dateCreated: new Date(),
             }
@@ -150,13 +155,31 @@ export default function NewShop() {
                     <fieldset className={styles.address}>
                         <legend>Adres</legend>
                         <div>
-                            {/* TO DO: SELECT */}
-                            <label>
-                                Land:
-                                <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} />
-                            </label>
+                            {/* Countries select */}
+                            <label htmlFor="country">Selecteer het land:</label>
+                            {countryOptions && <Select
+                                className="basic-single"
+                                classNamePrefix="select"
+                                defaultValue={country}
+                                placeholder={"Kies een land"}
+                                isClearable={true}
+                                isSearchable={true}
+                                name="country"
+                                options={countryOptions}
+                                components={{ // Custom components to make use of react-window to improve rendering    
+                                    Option,
+                                    MenuList, // Custom menu list rendering
+                                }}
+                                maxMenuHeight={200} // Limit height to improve rendering
+                                filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
+                                onChange={(e) => {
+                                    if (e) {
+                                        setCountry(e);
+                                    }
+                                }}
+                            />}
                         </div>
-                        <div style={{ display: "flex", flexDirection: "row" }}>
+                        <div style={{ display: "flex", flexDirection: "row", margin: "1rem 0" }}>
                             <label style={{ flexBasis: "50%" }}>
                                 Straat
                                 <input type="text" value={street} onChange={(e) => setStreet(e.target.value)} />
@@ -170,23 +193,76 @@ export default function NewShop() {
                                 <input type="text" value={postbox} onChange={(e) => setPostbox(e.target.value)} />
                             </label>
                         </div>
-                        <div style={{ display: "flex", flexDirection: "row" }}>
-                            <label style={{ flexBasis: "25%" }}>
-                                Postcode
-                                <input type="text" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} />
-                            </label>
-                            {/* TO DO: REPLACE WITH SELECT */}
-                            <label style={{ flexBasis: "75%" }}>
-                                Woonplaats
-                                <input type="text" value={city} onChange={(e) => setCity(e.target.value)} />
-                            </label>
+                        <div style={{ display: "flex", flexDirection: "row", margin: "1rem 0" }}>
+                            {/* PostalCode select */}
+                            <div style={{ flexBasis: "25%" }}>
+                                <label htmlFor="postalCode">Postcode:</label>
+                                {countryOptions && <Select
+                                    isDisabled={country ? false : true}
+                                    className="basic-single"
+                                    classNamePrefix="select"
+                                    // if city is already selected, find matching postalCode
+                                    value={postalCode}
+                                    placeholder={"0000"}
+                                    isSearchable={true}
+                                    name="postalCode"
+                                    options={postalCodeOptions}
+                                    components={{ // Custom components to make use of react-window to improve rendering    
+                                        Option,
+                                        MenuList, // Custom menu list rendering
+                                    }}
+                                    maxMenuHeight={200} // Limit height to improve rendering
+                                    filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
+                                    onChange={(e) => {
+                                        if (e) {
+                                            setPostalCode(e);
+                                            const linkedCity = cities.find((city) => city.postalCode == e.value);
+                                            if (linkedCity) {
+                                                setCity({ value: linkedCity.id.toString(), label: linkedCity.name });
+                                            }
+                                        }
+                                    }}
+                                />}
+                            </div>
+                            {/* City select */}
+                            <div style={{ flexBasis: "75%" }}>
+                                <label htmlFor="city">Woonplaats:</label>
+                                {countryOptions && <Select
+                                    isDisabled={country ? false : true}
+                                    className="basic-single"
+                                    classNamePrefix="select"
+                                    // if postalCode is already selected, find matching city
+                                    value={city}
+                                    placeholder={"Kies een woonplaats"}
+                                    isClearable={true}
+                                    isSearchable={true}
+                                    name="city"
+                                    options={cityOptions}
+                                    components={{ // Custom components to make use of react-window to improve rendering    
+                                        Option,
+                                        MenuList, // Custom menu list rendering
+                                    }}
+                                    maxMenuHeight={200} // Limit height to improve rendering
+                                    filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
+                                    onChange={(e) => {
+                                        if (e) {
+                                            setCity(e);
+                                            const selectedCity = cities.find((city) => city.id.toString() == e.value);
+                                            if (selectedCity) {
+                                                setPostalCode({ value: selectedCity.postalCode, label: selectedCity.postalCode });
+                                            }
+                                        }
+                                    }}
+                                />}
+                            </div>
+
                         </div>
 
                     </fieldset>
 
                 </FormWizard.TabContent>
 
-            </FormWizard>
+            </FormWizard >
 
         </>
     )
