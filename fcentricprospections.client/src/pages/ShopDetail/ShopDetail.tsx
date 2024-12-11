@@ -30,7 +30,7 @@ export const ShopDetail = () => {
             </Link>
           </button>
 
-          <ul>
+          <ul className={styles.ul}>
             {shopProspections
               // sort on date in descending order
               .sort((a, b) => (new Date(b.visitDate).getTime()) - (new Date(a.visitDate).getTime()))

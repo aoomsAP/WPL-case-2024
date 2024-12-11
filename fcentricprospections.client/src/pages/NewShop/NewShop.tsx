@@ -1,33 +1,135 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import FormWizard from "react-form-wizard-component";
 import { AiOutlineCheck } from "react-icons/ai";
 import styles from "./NewShop.module.css"
-import { NewProspectionContext } from "../../contexts/NewProspectionContext";
+import { UserContext } from "../../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
+import { ICity, OptionType } from "../../types";
+import { NewShopContext } from "../../contexts/NewShopContext";
+import { createFilter } from "react-select";
+import Select from "react-select";
+import Option from "../../components/ToDoModule/Option/Option";
+import MenuList from "../../components/ToDoModule/MenuList/MenuListSingle";
 
 export default function NewShop() {
 
-    // const { toDos, setToDos } = useContext(NewProspectionContext);
+    const { userId } = useContext(UserContext);
+    const { addAddress, addContact, addShop, countries, loadCities } = useContext(NewShopContext);
+
+    const navigate = useNavigate();
 
     const [name, setName] = useState<string>("");
     const [street, setStreet] = useState<string>("");
-    const [postalCode, setPostalCode] = useState<string>("");
     const [streetNumber, setStreetNumber] = useState<number>(0);
     const [postbox, setPostbox] = useState<string>("");
-    const [city, setCity] = useState<string>("");
-    const [country, setCountry] = useState<string>("");
+    const [postalCode, setPostalCode] = useState<OptionType>();
+    const [city, setCity] = useState<OptionType>();
+    const [country, setCountry] = useState<OptionType>();
 
-    function newShopInTodos() {
-        // TO DO: implement
+    const [countryOptions, setCountryOptions] = useState<OptionType[]>([]);
+    const [cities, setCities] = useState<ICity[]>([]);
+    const [cityOptions, setCityOptions] = useState<OptionType[]>([]);
+    const [postalCodeOptions, setPostalCodeOptions] = useState<OptionType[]>([]);
+
+    // Map countries to options for react-select
+    useEffect(() => {
+        let countryOptions: OptionType[] = countries
+            .map((country) => ({
+                value: country.id.toString(),
+                label: country.name
+            }));
+        setCountryOptions(countryOptions);
+    }, [countries])
+
+    // Load & set cities
+    async function setCitiesFunc(countryId: number) {
+        const citiesByCountry = await loadCities(countryId);
+        if (citiesByCountry) {
+            setCities(citiesByCountry);
+        }
     }
+
+    // Load cities when country is selected
+    useEffect(() => {
+        if (country) {
+            setCitiesFunc(+country.value);
+        }
+    }, [country]);
+
+    // Map cities to options for react-select
+    useEffect(() => {
+        let cityOptions: OptionType[] = cities
+            .map((city) => ({
+                value: city.id.toString(),
+                label: city.name
+            }));
+        setCityOptions(cityOptions);
+    }, [cities]);
+
+    // Map postal codes to options for react-select
+    useEffect(() => {
+        let postalCodeOptions: OptionType[] = cities
+            .map((city) => ({
+                value: city.postalCode,
+                label: city.postalCode,
+            }));
+        setPostalCodeOptions(postalCodeOptions);
+    }, [cities])
 
     async function handleComplete() {
 
-        // TO DO:
-        // const newShop = { shopName : name, shopType: 6 (== Prospect) }
-        // const loadedShop = await addShop(newShop)
-        // newShopInTodos({ shopId: id, shopName: name, address: addressinfo })
-        // navigate(`/shop/${loadedShop.id}`)
+        try {
+            if (!city || !postalCode) {
+                throw Error("No valid city selected");
+            }
 
+            const newAddress = {
+                street1: `${street} ${streetNumber}${postbox ? ` / ${postbox}` : ""}`,
+                cityId: +city.value,
+                postalCode: postalCode.label,
+                userCreatedId: userId,
+                dateCreated: new Date(),
+            }
+
+            const addedAddress = await addAddress(newAddress);
+
+            if (!addedAddress || !addedAddress?.id) {
+                throw Error("Error while adding address");
+            }
+
+            const newContact = {
+                name: name,
+                userCreatedId: userId,
+                dateCreated: new Date(),
+                addressId: addedAddress.id,
+            }
+
+            const addedContact = await addContact(newContact);
+
+            if (!addedContact || !addedContact?.id) {
+                throw Error("Error while adding contact");
+            }
+
+            const newShop = {
+                name: name.toUpperCase(), // All caps like in db?
+                shopTypeId: 6, // Hardcoded, = "Prospect"
+                userCreatedId: userId.toString(),
+                dateCreated: new Date(),
+                isParallelSales: false, // Hardcoded
+                contactId: addedContact.id,
+            }
+
+            const addedShop = await addShop(newShop);
+
+            if (!addedShop || !addedShop?.id) {
+                throw Error("Error while adding shop");
+            }
+
+            navigate(`/shop/${addedShop.id}`)
+
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     return (
@@ -47,47 +149,129 @@ export default function NewShop() {
 
                     <fieldset>
                         <legend>Naam</legend>
-                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+                        <label htmlFor="name">Geef naam van de winkel:</label>
+                        <input type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} />
                     </fieldset>
 
                     <fieldset className={styles.address}>
                         <legend>Adres</legend>
-                        <div>
-                            <label>
-                                Land:
-                                <input type="text" value={country} onChange={(e) => setCountry(e.target.value)} />
-                            </label>
-                        </div>
-                        <div style={{ display: "flex", flexDirection: "row" }}>
-                            <label style={{ flexBasis: "50%" }}>
-                                Straat
-                                <input type="text" value={street} onChange={(e) => setStreet(e.target.value)} />
-                            </label>
-                            <label style={{ flexBasis: "25%" }}>
-                                Nummer
-                                <input type="number" value={streetNumber} onChange={(e) => setStreetNumber(+e.target.value)} />
-                            </label>
-                            <label style={{ flexBasis: "25%" }}>
-                                Toevoeging
-                                <input type="text" value={postbox} onChange={(e) => setPostbox(e.target.value)} />
-                            </label>
-                        </div>
-                        <div style={{ display: "flex", flexDirection: "row" }}>
-                            <label style={{ flexBasis: "25%" }}>
-                                Postcode
-                                <input type="text" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} />
-                            </label>
-                            <label style={{ flexBasis: "75%" }}>
-                                Woonplaats
-                                <input type="text" value={city} onChange={(e) => setCity(e.target.value)} />
-                            </label>
+
+                        {/* Country select */}
+                        <div style={{ marginBottom: "1rem" }}>
+                            <label htmlFor="country">Selecteer het land:</label>
+                            {countryOptions && <Select
+                                className="basic-single"
+                                classNamePrefix="select"
+                                defaultValue={country}
+                                placeholder={"Kies een land"}
+                                isSearchable={true}
+                                name="country"
+                                options={countryOptions}
+                                components={{ // Custom components to make use of react-window to improve rendering    
+                                    Option,
+                                    MenuList, // Custom menu list rendering
+                                }}
+                                maxMenuHeight={200} // Limit height to improve rendering
+                                filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
+                                onChange={(e) => {
+                                    if (e) {
+                                        setCountry(e);
+                                    }
+                                }}
+                            />}
                         </div>
 
+                        {/* Only show full address form when country is selected */}
+                        {country && <>
+
+                            {/* Street, street number & postbox/extra info */}
+                            <div style={{ display: "flex", flexDirection: "row", margin: "1rem 0" }}>
+                                <label style={{ flexBasis: "50%" }}>
+                                    Straat
+                                    <input type="text" value={street} onChange={(e) => setStreet(e.target.value)} />
+                                </label>
+                                <label style={{ flexBasis: "25%" }}>
+                                    Nummer
+                                    <input type="number" defaultValue={streetNumber} onChange={(e) => setStreetNumber(+e.target.value)} />
+                                </label>
+                                <label style={{ flexBasis: "25%" }}>
+                                    Toevoeging
+                                    <input type="text" value={postbox} onChange={(e) => setPostbox(e.target.value)} />
+                                </label>
+                            </div>
+
+                            {/* Postal code & city */}
+                            <div style={{ display: "flex", flexDirection: "row", margin: "1rem 0" }}>
+
+                                {/* PostalCode select */}
+                                <div style={{ flexBasis: "25%" }}>
+                                    <label htmlFor="postalCode">Postcode:</label>
+                                    {countryOptions && <Select
+                                        isDisabled={country ? false : true}
+                                        className="basic-single"
+                                        classNamePrefix="select"
+                                        value={postalCode}
+                                        placeholder={"0000"}
+                                        isSearchable={true}
+                                        name="postalCode"
+                                        options={postalCodeOptions}
+                                        components={{ // Custom components to make use of react-window to improve rendering    
+                                            Option,
+                                            MenuList, // Custom menu list rendering
+                                        }}
+                                        maxMenuHeight={200} // Limit height to improve rendering
+                                        filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
+                                        onChange={(e) => {
+                                            if (e) {
+                                                setPostalCode(e);
+                                                // Find city based on selected postal code for autofill purposes
+                                                const linkedCity = cities.find((city) => city.postalCode == e.value);
+                                                if (linkedCity) {
+                                                    setCity({ value: linkedCity.id.toString(), label: linkedCity.name });
+                                                }
+                                            }
+                                        }}
+                                    />}
+                                </div>
+
+                                {/* City select */}
+                                <div style={{ flexBasis: "75%" }}>
+                                    <label htmlFor="city">Woonplaats:</label>
+                                    {countryOptions && <Select
+                                        isDisabled={country ? false : true}
+                                        className="basic-single"
+                                        classNamePrefix="select"
+                                        value={city}
+                                        placeholder={"Kies een woonplaats"}
+                                        isClearable={true}
+                                        isSearchable={true}
+                                        name="city"
+                                        options={cityOptions}
+                                        components={{ // Custom components to make use of react-window to improve rendering    
+                                            Option,
+                                            MenuList, // Custom menu list rendering
+                                        }}
+                                        maxMenuHeight={200} // Limit height to improve rendering
+                                        filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
+                                        onChange={(e) => {
+                                            if (e) {
+                                                setCity(e);
+                                                // Find postal code based on selected city for autofill for autofill purposes
+                                                const selectedCity = cities.find((city) => city.id.toString() == e.value);
+                                                if (selectedCity) {
+                                                    setPostalCode({ value: selectedCity.postalCode, label: selectedCity.postalCode });
+                                                }
+                                            }
+                                        }}
+                                    />}
+                                </div>
+                            </div>
+                        </>}
                     </fieldset>
 
                 </FormWizard.TabContent>
 
-            </FormWizard>
+            </FormWizard >
 
         </>
     )

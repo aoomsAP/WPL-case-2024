@@ -15,6 +15,7 @@ import { CalendarPage } from './pages/CalendarPage/CalendarPage';
 import { TfiAgenda } from "react-icons/tfi";
 import { useContext } from 'react';
 import NewShop from './pages/NewShop/NewShop';
+import { NewShopProvider } from './contexts/NewShopContext';
 
 const Root = () => {
 
@@ -66,7 +67,9 @@ const Root = () => {
 const NewShopPage = () => {
     return (
         <NewProspectionProvider>
-            <NewShop />
+            <NewShopProvider>
+                <NewShop />
+            </NewShopProvider>
         </NewProspectionProvider >
     )
 }

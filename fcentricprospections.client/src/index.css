@@ -48,6 +48,21 @@ main {
   padding: 1rem;
 }
 
+a {
+  color: black;
+  text-decoration: none;
+  font-weight: 400;
+  font-size: large;
+}
+
+ul {
+  background-color: var(--primary-color);
+  overflow-y: auto;
+  /* Enables vertical scrolling */
+  max-height: 50rem;
+  /* Set a height limit for the scroll to appear */
+}
+
 button a {
   display: block;
 }
@@ -72,7 +87,6 @@ fieldset {
   padding: 1rem;
   margin: 1rem 0;
 }
-
 
 /* FORM WIZARD ----------------------------------------------- */
 
