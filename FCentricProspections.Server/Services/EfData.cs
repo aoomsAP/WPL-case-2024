@@ -33,24 +33,37 @@ namespace FCentricProspections.Server.Services
 
         public ShopDetailDto GetShopDetail(long id)
         {
-            // "projection queries in Entity Framework"
-            // https://www.tektutorialshub.com/entity-framework/join-query-entity-framework/
-
             var shopDetail = (from s in this.context.Shops
                               join contact in this.context.Contacts on s.ContactId equals contact.Id
                               join address in this.context.Addresses on contact.AddressId equals address.Id
                               join city in this.context.Cities on address.CityId equals city.Id
                               join country in this.context.Countries on city.CountryId equals country.Id
-                              join customerShop in this.context.CustomerShops on s.Id equals customerShop.ShopId
-                              join customer in this.context.Customers on customerShop.CustomerId equals customer.Id
-                              where s.Id == id && customerShop.IsActive == true
+                              join customerShop in this.context.CustomerShops on s.Id equals customerShop.ShopId into customerShopGroup
+                              from customerShop in customerShopGroup.DefaultIfEmpty() // Left join for customerShop, so it's allowed to be empty
+                              join customer in this.context.Customers on customerShop.CustomerId equals customer.Id into customerGroup
+                              from customer in customerGroup.DefaultIfEmpty() // Left join for customer, so it's allowed if customer does not exist
+                              join shopType in this.context.ShopTypes on s.ShopTypeId equals shopType.Id into shopTypeGroup
+                              from shopType in shopTypeGroup.DefaultIfEmpty() // Left join for shopType, so it's allowed to be empty
+                              where s.Id == id
                               select new ShopDetailDto
                               {
                                   Id = s.Id,
                                   Name = s.Name,
-                                  Address = new AddressDto { Id = address.Id, Street1 = address.Street1, Street2 = address.Street2, PostalCode = address.PostalCode, City = city.Name, Country = country.Name },
-                                  Customer = new CustomerDto { Id = customer.Id, Name = customer.Name },
-
+                                  Address = new AddressDto
+                                  {
+                                      Id = address.Id,
+                                      Street1 = address.Street1,
+                                      Street2 = address.Street2,
+                                      PostalCode = address.PostalCode,
+                                      City = city.Name,
+                                      Country = country.Name
+                                  },
+                                  Customer = customer == null ? null : new CustomerDto
+                                  {
+                                      Id = customer.Id,
+                                      Name = customer.Name
+                                  },
+                                  ShopTypeId = shopType.Id,
                               }).SingleOrDefault();
 
             return shopDetail;

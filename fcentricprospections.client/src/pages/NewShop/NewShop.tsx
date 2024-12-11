@@ -111,11 +111,11 @@ export default function NewShop() {
             }
 
             const newShop = {
-                name: name,
-                shopTypeId: 6, // = Prospect
+                name: name.toUpperCase(), // All caps like in db?
+                shopTypeId: 6, // Hardcoded, = "Prospect"
                 userCreatedId: userId.toString(),
                 dateCreated: new Date(),
-                isParallelSales: false,
+                isParallelSales: false, // Hardcoded
                 contactId: addedContact.id,
             }
 
@@ -149,20 +149,21 @@ export default function NewShop() {
 
                     <fieldset>
                         <legend>Naam</legend>
-                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+                        <label htmlFor="name">Geef naam van de winkel:</label>
+                        <input type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} />
                     </fieldset>
 
                     <fieldset className={styles.address}>
                         <legend>Adres</legend>
-                        <div>
-                            {/* Countries select */}
+
+                        {/* Country select */}
+                        <div style={{ marginBottom: "1rem" }}>
                             <label htmlFor="country">Selecteer het land:</label>
                             {countryOptions && <Select
                                 className="basic-single"
                                 classNamePrefix="select"
                                 defaultValue={country}
                                 placeholder={"Kies een land"}
-                                isClearable={true}
                                 isSearchable={true}
                                 name="country"
                                 options={countryOptions}
@@ -179,85 +180,93 @@ export default function NewShop() {
                                 }}
                             />}
                         </div>
-                        <div style={{ display: "flex", flexDirection: "row", margin: "1rem 0" }}>
-                            <label style={{ flexBasis: "50%" }}>
-                                Straat
-                                <input type="text" value={street} onChange={(e) => setStreet(e.target.value)} />
-                            </label>
-                            <label style={{ flexBasis: "25%" }}>
-                                Nummer
-                                <input type="number" value={streetNumber} onChange={(e) => setStreetNumber(+e.target.value)} />
-                            </label>
-                            <label style={{ flexBasis: "25%" }}>
-                                Toevoeging
-                                <input type="text" value={postbox} onChange={(e) => setPostbox(e.target.value)} />
-                            </label>
-                        </div>
-                        <div style={{ display: "flex", flexDirection: "row", margin: "1rem 0" }}>
-                            {/* PostalCode select */}
-                            <div style={{ flexBasis: "25%" }}>
-                                <label htmlFor="postalCode">Postcode:</label>
-                                {countryOptions && <Select
-                                    isDisabled={country ? false : true}
-                                    className="basic-single"
-                                    classNamePrefix="select"
-                                    // if city is already selected, find matching postalCode
-                                    value={postalCode}
-                                    placeholder={"0000"}
-                                    isSearchable={true}
-                                    name="postalCode"
-                                    options={postalCodeOptions}
-                                    components={{ // Custom components to make use of react-window to improve rendering    
-                                        Option,
-                                        MenuList, // Custom menu list rendering
-                                    }}
-                                    maxMenuHeight={200} // Limit height to improve rendering
-                                    filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
-                                    onChange={(e) => {
-                                        if (e) {
-                                            setPostalCode(e);
-                                            const linkedCity = cities.find((city) => city.postalCode == e.value);
-                                            if (linkedCity) {
-                                                setCity({ value: linkedCity.id.toString(), label: linkedCity.name });
-                                            }
-                                        }
-                                    }}
-                                />}
-                            </div>
-                            {/* City select */}
-                            <div style={{ flexBasis: "75%" }}>
-                                <label htmlFor="city">Woonplaats:</label>
-                                {countryOptions && <Select
-                                    isDisabled={country ? false : true}
-                                    className="basic-single"
-                                    classNamePrefix="select"
-                                    // if postalCode is already selected, find matching city
-                                    value={city}
-                                    placeholder={"Kies een woonplaats"}
-                                    isClearable={true}
-                                    isSearchable={true}
-                                    name="city"
-                                    options={cityOptions}
-                                    components={{ // Custom components to make use of react-window to improve rendering    
-                                        Option,
-                                        MenuList, // Custom menu list rendering
-                                    }}
-                                    maxMenuHeight={200} // Limit height to improve rendering
-                                    filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
-                                    onChange={(e) => {
-                                        if (e) {
-                                            setCity(e);
-                                            const selectedCity = cities.find((city) => city.id.toString() == e.value);
-                                            if (selectedCity) {
-                                                setPostalCode({ value: selectedCity.postalCode, label: selectedCity.postalCode });
-                                            }
-                                        }
-                                    }}
-                                />}
+
+                        {/* Only show full address form when country is selected */}
+                        {country && <>
+
+                            {/* Street, street number & postbox/extra info */}
+                            <div style={{ display: "flex", flexDirection: "row", margin: "1rem 0" }}>
+                                <label style={{ flexBasis: "50%" }}>
+                                    Straat
+                                    <input type="text" value={street} onChange={(e) => setStreet(e.target.value)} />
+                                </label>
+                                <label style={{ flexBasis: "25%" }}>
+                                    Nummer
+                                    <input type="number" defaultValue={streetNumber} onChange={(e) => setStreetNumber(+e.target.value)} />
+                                </label>
+                                <label style={{ flexBasis: "25%" }}>
+                                    Toevoeging
+                                    <input type="text" value={postbox} onChange={(e) => setPostbox(e.target.value)} />
+                                </label>
                             </div>
 
-                        </div>
+                            {/* Postal code & city */}
+                            <div style={{ display: "flex", flexDirection: "row", margin: "1rem 0" }}>
 
+                                {/* PostalCode select */}
+                                <div style={{ flexBasis: "25%" }}>
+                                    <label htmlFor="postalCode">Postcode:</label>
+                                    {countryOptions && <Select
+                                        isDisabled={country ? false : true}
+                                        className="basic-single"
+                                        classNamePrefix="select"
+                                        value={postalCode}
+                                        placeholder={"0000"}
+                                        isSearchable={true}
+                                        name="postalCode"
+                                        options={postalCodeOptions}
+                                        components={{ // Custom components to make use of react-window to improve rendering    
+                                            Option,
+                                            MenuList, // Custom menu list rendering
+                                        }}
+                                        maxMenuHeight={200} // Limit height to improve rendering
+                                        filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
+                                        onChange={(e) => {
+                                            if (e) {
+                                                setPostalCode(e);
+                                                // Find city based on selected postal code for autofill purposes
+                                                const linkedCity = cities.find((city) => city.postalCode == e.value);
+                                                if (linkedCity) {
+                                                    setCity({ value: linkedCity.id.toString(), label: linkedCity.name });
+                                                }
+                                            }
+                                        }}
+                                    />}
+                                </div>
+
+                                {/* City select */}
+                                <div style={{ flexBasis: "75%" }}>
+                                    <label htmlFor="city">Woonplaats:</label>
+                                    {countryOptions && <Select
+                                        isDisabled={country ? false : true}
+                                        className="basic-single"
+                                        classNamePrefix="select"
+                                        value={city}
+                                        placeholder={"Kies een woonplaats"}
+                                        isClearable={true}
+                                        isSearchable={true}
+                                        name="city"
+                                        options={cityOptions}
+                                        components={{ // Custom components to make use of react-window to improve rendering    
+                                            Option,
+                                            MenuList, // Custom menu list rendering
+                                        }}
+                                        maxMenuHeight={200} // Limit height to improve rendering
+                                        filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
+                                        onChange={(e) => {
+                                            if (e) {
+                                                setCity(e);
+                                                // Find postal code based on selected city for autofill for autofill purposes
+                                                const selectedCity = cities.find((city) => city.id.toString() == e.value);
+                                                if (selectedCity) {
+                                                    setPostalCode({ value: selectedCity.postalCode, label: selectedCity.postalCode });
+                                                }
+                                            }
+                                        }}
+                                    />}
+                                </div>
+                            </div>
+                        </>}
                     </fieldset>
 
                 </FormWizard.TabContent>

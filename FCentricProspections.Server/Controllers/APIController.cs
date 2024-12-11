@@ -5,6 +5,7 @@ using FCentricProspections.Server.DomainModels;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Metrics;
+using System.Text.RegularExpressions;
 
 namespace FCentricProspections.Server.Controllers
 {
@@ -55,7 +56,12 @@ namespace FCentricProspections.Server.Controllers
             viewModel.Id = shop.Id;
             viewModel.Name = shop.Name;
             viewModel.Address = shop.Address;
-            viewModel.Customer = shop.Customer.Name;
+
+            if (shop.Customer is not null)
+            {
+                viewModel.Customer = shop.Customer.Name;
+            }
+            
             if (owner is not null)
             {
                 viewModel.Owner = owner.Name;
@@ -65,6 +71,10 @@ namespace FCentricProspections.Server.Controllers
                 viewModel.Owner = null;
             }
 
+            if (shop.ShopTypeId is not null)
+            {
+                viewModel.ShopTypeId = shop.ShopTypeId;
+            }           
 
             // return viewmodel of shop
             return Ok(viewModel);
@@ -103,6 +113,7 @@ namespace FCentricProspections.Server.Controllers
                 ShopDeliveries = new List<ShopDelivery>(),
                 ContactId = viewModel.ContactId,
                 Contact = this.data.GetContact(viewModel.ContactId),
+                SearchName = Regex.Replace(viewModel.Name, @"[-\s/]", ""), // Aims to filter out hyphens, whitespace and slashes
             };
 
             // add shop to database
@@ -115,7 +126,7 @@ namespace FCentricProspections.Server.Controllers
                 new NewShopGetViewModel
                 {
                     Id = newShop.Id,
-                    ShopTypeId = viewModel.ShopTypeId,
+                    ShopTypeId = newShop.ShopTypeId,
                     Name = newShop.Name,
                     UserCreatedId = newShop.UserCreatedId,
                     DateCreated = newShop.DateCreated,
@@ -270,7 +281,7 @@ namespace FCentricProspections.Server.Controllers
         }
 
         [HttpPost()]
-        [Route("contact")]
+        [Route("contacts")]
         public IActionResult CreateContact([FromBody] ContactCreateViewModel viewModel)
         {
             // check if modelstate is valid
