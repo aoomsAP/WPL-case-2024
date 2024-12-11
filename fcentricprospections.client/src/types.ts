@@ -1,7 +1,7 @@
 export interface IShop {
   id: string; // Example property, replace with real ones
   name: string; // Example property
-  // city: string;
+  city: string;
 }
 
 export interface IShopDetail {
