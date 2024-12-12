@@ -74,6 +74,8 @@ public partial class FCentricContext : DbContext
 
     public virtual DbSet<ShopDelivery> ShopDeliveries { get; set; }
 
+    public virtual DbSet<ShopType> ShopTypes { get; set; }
+
     public virtual DbSet<ToDo> ToDoes { get; set; }
 
     public virtual DbSet<ToDoStatus> ToDoStatus { get; set; }

@@ -12,8 +12,8 @@ export const ShopDetailCard = ({shop}: ShopDetailProps) => {
       {shop &&
         <div>
           <p>Winkel: {shop.name}</p>
-          <p>Klant: {shop.customer}</p>
-          <p>Adres: {shop.address.street1}, {shop.address.city}</p>
+          <p>Klant: {shop.customer ? shop.customer : "geen gegevens"}</p>
+          <p>Adres: {shop.address.street1}, {shop.address.city}, {shop.address.country}</p>
           <p>Eigenaar: {shop.owner ? shop.owner : "geen gegevens"}</p>
         </div>}
     </section>

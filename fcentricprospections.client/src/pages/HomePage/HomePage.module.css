@@ -1,34 +1,6 @@
-ul{
-    align-items: center;
-    background-color: var(--primary-color);
-    padding-left: 0;
-    overflow-y: auto; /* Enables vertical scrolling */
-    max-height: 50rem; /* Set a height limit for the scroll to appear */
-}
 .li1{
     list-style-type: none;
     
-}
-
-li{
-    list-style-type: none;
-    text-align: center;
-    margin-top: 0.5rem;
-    border-width: 1px;
-    border-color: var(--primary-color);
-    border-style: solid;
-    border-radius: 0.5rem;
-    
-}
-li:hover{
-    border-color: var(--secondairy-color) ;
-}
-
-a{
-    color: black;
-    text-decoration: none;
-    font-weight: 400;
-    font-size: large;
 }
 
 .basic-single {

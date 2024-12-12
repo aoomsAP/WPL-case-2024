@@ -1,1 +1,21 @@
+.ul {
+    padding-left: 0;
+}
 
+.li {
+    list-style-type: none;
+    text-align: left;
+    margin-top: 0.5rem;
+    border-width: 1px;
+    border-color: var(--primary-color);
+    border-style: solid;
+    border-radius: 0.5rem;
+}
+
+.li:hover {
+    border-color: var(--secondairy-color);
+}
+
+.cardsContainer {
+    margin-top: 2rem;
+}

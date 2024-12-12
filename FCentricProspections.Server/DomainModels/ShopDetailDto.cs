@@ -10,5 +10,7 @@ public partial class ShopDetailDto
 
     public CustomerDto Customer { get; set; }
 
+    public long? ShopTypeId { get; set; }
+
     public virtual ICollection<ProspectionListDto> Prospections { get; set; } = new List<ProspectionListDto>();
 }

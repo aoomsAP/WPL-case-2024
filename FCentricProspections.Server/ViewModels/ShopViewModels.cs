@@ -25,9 +25,9 @@ namespace FCentricProspections.Server.ViewModels
 
         public string Customer { get; set; }
 
-        public string City { get; set; }
-
         public string? Owner { get; set; }
+
+        public long? ShopTypeId { get; set; }
     }
 
     public class ShopCreateViewModel
@@ -49,6 +49,7 @@ namespace FCentricProspections.Server.ViewModels
     public class NewShopGetViewModel
     {
         public long Id { get; set; }
+
         public long? ShopTypeId { get; set; }
 
         public string Name { get; set; }
@@ -58,6 +59,7 @@ namespace FCentricProspections.Server.ViewModels
         public DateTime DateCreated { get; set; }
 
         public bool IsParallelSales { get; set; }
+
         public long? ContactId { get; set; }
     }
 }
