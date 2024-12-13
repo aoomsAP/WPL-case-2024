@@ -320,6 +320,21 @@ export const NewProspection = () => {
   //   console.log("nextIndex", nextIndex);
   // };
 
+  // check validate tab
+  const checkValidateTab = () => {
+    console.log(trends);
+    console.log(feedback);
+    if (trends === "" || feedback === "") {
+      return false;
+    }
+    return true;
+  };
+  // error messages
+  const errorMessages = () => {
+    // add alert if trends or feedback are empty
+    alert("Please fill in the required fields");
+  };
+
   return (
     <main className={styles.main}>
 
@@ -580,13 +595,17 @@ export const NewProspection = () => {
           <h3>Feedback</h3>
 
           <fieldset>
-            <legend>Trends en noden in de markt</legend>
+            <legend>Trends en noden in de markt
+              <span style={{ color: "red", fontSize: "20px", fontWeight: "bold" }}> *</span>
+            </legend>
             <textarea rows={4} value={trends} placeholder='Trends en noden in de markt...'
               onChange={(e) => setTrends(e.target.value)} />
           </fieldset>
 
           <fieldset>
-            <legend>Extra opmerkingen/feedback</legend>
+            <legend>Extra opmerkingen/feedback
+              <span style={{ color: "red", fontSize: "20px", fontWeight: "bold" }}> *</span>
+            </legend>
             <textarea rows={4} value={feedback} placeholder='Er kwam nog extra feedback met betrekking tot...'
               onChange={(e) => setFeedback(e.target.value)} />
           </fieldset>
@@ -595,7 +614,7 @@ export const NewProspection = () => {
 
         {/* TO DOS -------------------------------------------------------------------------------------------------- */}
 
-        <FormWizard.TabContent title="Opvolging" icon={<AiOutlineCheck />}>
+        <FormWizard.TabContent title="Opvolging" icon={<AiOutlineCheck />} isValid={checkValidateTab()} validationError={errorMessages}>
 
           <h3>Takenlijst voor opvolging</h3>
           <p>Hier kan u items toevoegen die op basis van dit verslag moeten opgevolgd worden.</p>
