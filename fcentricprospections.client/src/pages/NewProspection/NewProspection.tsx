@@ -77,6 +77,21 @@ export const NewProspection = () => {
 
   const [contactInfo, setContactInfo] = useState<IContactInfo>();
 
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+
+  // Window Width UseEffect-------------------------------------------------------------------------------------------------
+  useEffect(() => {
+    const updateWidth = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    const interval = setInterval(updateWidth, 500);
+
+    updateWidth();
+
+    return () => clearInterval(interval);
+  }, []);
+
   // Contact info -----------------------------------------------------------------------------------------------------------
 
   async function loadContactInfoFromDb(shopId: string, contactTypeId: number) {
@@ -210,6 +225,7 @@ export const NewProspection = () => {
     console.log(defaultProspectionBrands)
   }, [shopBrands])
 
+
   // Submit function ------------------------------------------------------------------------------------------------------------------------------------
 
   async function handleComplete() {
@@ -312,30 +328,28 @@ export const NewProspection = () => {
     }
   };
 
-  // const tabChanged = ({prevIndex,nextIndex}: {
-  //   prevIndex: number;
-  //   nextIndex: number;
-  // }) => {
-  //   console.log("prevIndex", prevIndex);
-  //   console.log("nextIndex", nextIndex);
-  // };
 
   return (
     <main className={styles.main}>
 
       <FormWizard
+        color="black"
         title="Nieuwe prospectie"
         nextButtonText="Volgende"
+        
         backButtonText="Vorige"
         finishButtonText="Verzenden"
         layout="horizontal"
         stepSize="sm"
-        // onTabChange={tabChanged}
+
+        
+        
+       
         onComplete={handleComplete}>
 
         {/* CONTACT DETAILS ----------------------------------------------------------- */}
 
-        <FormWizard.TabContent title="Info" icon={<AiOutlineCheck />} >
+        <FormWizard.TabContent title={windowWidth < 700 ? "" : "Info"} icon={<AiOutlineCheck color="#D4AF37" width={50} />}   >
 
           {/* Shop info */}
           {shopDetail && <ShopDetailCard shop={shopDetail} />}
@@ -449,7 +463,7 @@ export const NewProspection = () => {
 
         {/* BRANDMIX ---------------------------------------------------------------------------------------------------------------------- */}
 
-        <FormWizard.TabContent title="Brandmix" icon={<AiOutlineCheck />}>
+        <FormWizard.TabContent title={windowWidth < 700 ? "" : "Brandmix"} icon={<AiOutlineCheck color="#D4AF37" />}>
 
           {/* FC70 BRANDS */}
           <h3>FC70 merken</h3>
@@ -500,7 +514,7 @@ export const NewProspection = () => {
 
         {/* BEST BRANDS, WORST BRANDS, TERMINATED BRANDS ----------------------------------------------------------------------------------------- */}
 
-        <FormWizard.TabContent title="Algemeen" icon={<AiOutlineCheck />}>
+        <FormWizard.TabContent title={windowWidth < 700 ? " " : "Algemeen"} icon={<AiOutlineCheck color="#D4AF37"/>}>
           <h3>Algemene situatie</h3>
 
           <fieldset>
@@ -524,7 +538,7 @@ export const NewProspection = () => {
 
         {/* FC70 BRANDS SELLOUT --------------------------------------------------------------------------------------------- */}
 
-        <FormWizard.TabContent title="FC70" icon={<AiOutlineCheck />}>
+        <FormWizard.TabContent title={windowWidth < 700 ? " " : "FC70"} icon={<AiOutlineCheck color="#D4AF37"  />}>
 
           <h3>FC70 overzicht</h3>
 
@@ -533,7 +547,7 @@ export const NewProspection = () => {
 
         </FormWizard.TabContent>
 
-        <FormWizard.TabContent title="Interesses" icon={<AiOutlineCheck />}>
+        <FormWizard.TabContent title={windowWidth < 700 ? "" : "Interesses"} icon={<AiOutlineCheck color="#D4AF37" />}>
 
           <h3>Interesse FC70 merken</h3>
 
@@ -575,7 +589,7 @@ export const NewProspection = () => {
 
         {/* FEEDBACK ---------------------------------------------------------------------------------------------- */}
 
-        <FormWizard.TabContent title="Feedback" icon={<AiOutlineCheck />}>
+        <FormWizard.TabContent title={windowWidth < 700 ? " " : "Feedback"} icon={<AiOutlineCheck color="#D4AF37" />}>
 
           <h3>Feedback</h3>
 
@@ -595,7 +609,7 @@ export const NewProspection = () => {
 
         {/* TO DOS -------------------------------------------------------------------------------------------------- */}
 
-        <FormWizard.TabContent title="Opvolging" icon={<AiOutlineCheck />}>
+        <FormWizard.TabContent title={windowWidth < 700 ? " " : "Opvolging"} icon={<AiOutlineCheck  color="#D4AF37" />}>
 
           <h3>Takenlijst voor opvolging</h3>
           <p>Hier kan u items toevoegen die op basis van dit verslag moeten opgevolgd worden.</p>

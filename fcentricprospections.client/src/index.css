@@ -83,6 +83,10 @@ textarea {
   width: 100%;
 }
 
+/* Optionally, you can style the input itself */
+input[type="radio"]:checked {
+  accent-color: #D4AF37; }
+
 fieldset {
   background-color: #f9f9f9;
   padding: 1rem;
@@ -125,6 +129,24 @@ fieldset {
   font-size: small;
 }
 
+
+.wizard-btn{
+  color:#D4AF37 !important;
+}
+.wizard-btn:hover{
+  color: black!important;
+  background-color: #D4AF37;
+}
+
+
+@media (max-width: 700px) {
+  .smooth-border-left-to-right{
+    margin-top: 0.5em;
+  
+    
+
+  }
+  }
 /* REACT SELECT  ----------------------------------------------- */
 
 /* select menu has to appear on top of calendar */

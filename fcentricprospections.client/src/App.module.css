@@ -53,7 +53,7 @@
 }
 
 .button:hover * {
-    color: var(--primary-color);
+    color:  #D4AF37;
 }
 
 .homeIcon {
