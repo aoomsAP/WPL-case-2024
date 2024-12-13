@@ -117,7 +117,7 @@ export const NewProspection = () => {
         id: uuidv4(), // generate temporary unique id
         name: "Nieuwe contact info",
         remarks: newContactName + (newContactName ? " - " : "") + newContactEmail + (newContactEmail ? " - " : "") + newContactPhone,
-        employeeId: 0, // TO DO: WHO? DEFAULT? 0 WILL RESULT IN ERROR
+        employeeId: 3, // TEMPORARY DEFAULT
         toDoStatusId: 1, // DEFAULT
       };
 
@@ -137,7 +137,7 @@ export const NewProspection = () => {
       id: uuidv4(), // generate temporary unique id
       name: "Nieuwe brands",
       remarks: newBrands,
-      employeeId: 0, // TO DO: WHO? DEFAULT? 0 WILL RESULT IN ERROR
+      employeeId: 3, // TEMPORARY DEFAULT
       toDoStatusId: 1, // DEFAULT
     };
     // Filter out newBrands todos, as to only replace that one
@@ -148,24 +148,22 @@ export const NewProspection = () => {
 
   // Prospection brand interest todos 
   useEffect(() => {
-    console.log("todos at brandi nterest useffect", toDos);
+    console.log("todos at brand interest useffect", toDos);
+    
+    let brandInterestsNames = prospectionBrandInterests.map(i => `Merk: ${i.brandName}${i.remark ? `\nOpmerking: ${i.remark}` : ""}\n`).join('\n');
 
-    let newInterestToDos = [];
-
-    // Create todo for each interest
-    for (let interest of prospectionBrandInterests) {
-      let brandInterestToDo = {
-        id: uuidv4(), // generate temporary unique id
-        name: "FC70 brand interesse",
-        remarks: interest.brandName,
-        employeeId: 0, // TO DO: WHO? DEFAULT? 0 WILL RESULT IN ERROR
-        toDoStatusId: 1, // DEFAULT
-      };
-      newInterestToDos.push(brandInterestToDo);
-    }
+    // Create one todo for all brand interests
+    let brandInterestToDo = {
+      id: uuidv4(), // generate temporary unique id
+      name: "FC70 brand interesses",
+      remarks: brandInterestsNames,
+      employeeId: 3, // TEMPORARY DEFAULT
+      toDoStatusId: 1, // DEFAULT
+    };
+    
     // Filter out FC70 brand interest todos, as to only replace those
-    const toDosWithoutBrandInterests = toDos.filter(x => x.name !== "FC70 brand interesse");
-    const newToDos = [...toDosWithoutBrandInterests, ...newInterestToDos];
+    const toDosWithoutBrandInterests = toDos.filter(x => x.name !== "FC70 brand interesses");
+    const newToDos = [...toDosWithoutBrandInterests, brandInterestToDo];
     setToDos(newToDos);
   }, [prospectionBrandInterests])
 
@@ -319,6 +317,22 @@ export const NewProspection = () => {
   //   console.log("prevIndex", prevIndex);
   //   console.log("nextIndex", nextIndex);
   // };
+
+  // check validate tab
+  const checkValidateTab = () => {
+    console.log(trends);
+    console.log(feedback);
+    if (trends === "" || feedback === "") {
+      return false;
+    }
+    return true;
+  };
+
+  // error messages
+  const errorMessages = () => {
+    // add alert if trends or feedback are empty
+    alert("Gelieve de verplichte velden in te vullen.");
+  };
 
   return (
     <main className={styles.main}>
@@ -580,13 +594,17 @@ export const NewProspection = () => {
           <h3>Feedback</h3>
 
           <fieldset>
-            <legend>Trends en noden in de markt</legend>
+            <legend>Trends en noden in de markt
+              <span style={{ color: "red", fontSize: "20px", fontWeight: "bold" }}> *</span>
+            </legend>
             <textarea rows={4} value={trends} placeholder='Trends en noden in de markt...'
               onChange={(e) => setTrends(e.target.value)} />
           </fieldset>
 
           <fieldset>
-            <legend>Extra opmerkingen/feedback</legend>
+            <legend>Extra opmerkingen/feedback
+              <span style={{ color: "red", fontSize: "20px", fontWeight: "bold" }}> *</span>
+            </legend>
             <textarea rows={4} value={feedback} placeholder='Er kwam nog extra feedback met betrekking tot...'
               onChange={(e) => setFeedback(e.target.value)} />
           </fieldset>
@@ -595,7 +613,7 @@ export const NewProspection = () => {
 
         {/* TO DOS -------------------------------------------------------------------------------------------------- */}
 
-        <FormWizard.TabContent title="Opvolging" icon={<AiOutlineCheck />}>
+        <FormWizard.TabContent title="Opvolging" icon={<AiOutlineCheck />} isValid={checkValidateTab()} validationError={errorMessages}>
 
           <h3>Takenlijst voor opvolging</h3>
           <p>Hier kan u items toevoegen die op basis van dit verslag moeten opgevolgd worden.</p>

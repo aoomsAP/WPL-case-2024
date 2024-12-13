@@ -43,6 +43,14 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
         }
     }
 
+    // Create new list without the automatic todo's
+    
+    const userAddedToDos: IToDo[] = toDos.filter(toDo =>
+        toDo.name !== "Nieuwe brands" &&
+        toDo.name !== "Nieuwe contact info" &&
+        toDo.name !== "FC70 brand interesses"
+    );
+    
     // Map employees to options for react-select
     useEffect(() => {
         const isValidEmployee = (employee: IEmployee) =>
@@ -105,9 +113,9 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
             {/* TO DO CONTAINER */}
             <div className={styles.toDoContainer}>
                 {
-                    toDos
+                    userAddedToDos
                         .map((toDo, i) =>
-                            <ToDoEditable index={i} toDo={toDo} toDos={toDos} setToDos={setToDos} employeesOptions={employeesOptions} />
+                            <ToDoEditable index={i} toDo={toDo} toDos={userAddedToDos} setToDos={setToDos} employeesOptions={employeesOptions} />
                         )
                 }
             </div>

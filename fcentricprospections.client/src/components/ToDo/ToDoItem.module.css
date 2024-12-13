@@ -6,6 +6,7 @@
     margin-bottom: 0.5rem;
     padding: 1rem;
     background-color: white;
+    white-space: pre-wrap;
 }
 
 .toDoCard h3 {
