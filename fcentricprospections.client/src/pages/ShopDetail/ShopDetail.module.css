@@ -20,26 +20,15 @@
 
 .button {
     border: 1px solid var(--secondary-color);
-    background-color: var(--secondary-color);
+    background-color: var(--primary-color);
     border-radius: 0.5rem;
     padding: 0.5rem;
-    cursor: pointer;
 }
-
-.button:hover {
-    background-color: var(--primary-color);
-}
-
-.button:hover * {
-    color: var(--secondary-color);
-}
-
-.a {
-    color: var(--primary-color);
-}
-
-.a:hover {
-    color: var(--secondary-color);
+.button:hover a {
+    color: #D4AF37; /* Gold color for the link text */
+  }
+.button:hover{
+    background-color: var(--secondary-color);
 }
 
 .ul {
