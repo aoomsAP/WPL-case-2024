@@ -148,24 +148,22 @@ export const NewProspection = () => {
 
   // Prospection brand interest todos 
   useEffect(() => {
-    console.log("todos at brandi nterest useffect", toDos);
+    console.log("todos at brand interest useffect", toDos);
+    
+    let brandInterestsNames = prospectionBrandInterests.map(i => i.brandName).join(', ');
 
-    let newInterestToDos = [];
-
-    // Create todo for each interest
-    for (let interest of prospectionBrandInterests) {
-      let brandInterestToDo = {
-        id: uuidv4(), // generate temporary unique id
-        name: "FC70 brand interesse",
-        remarks: interest.brandName,
-        employeeId: 3, // TEMPORARY DEFAULT
-        toDoStatusId: 1, // DEFAULT
-      };
-      newInterestToDos.push(brandInterestToDo);
-    }
+    // Create one todo for all brand interests
+    let brandInterestToDo = {
+      id: uuidv4(), // generate temporary unique id
+      name: "FC70 brand interesse",
+      remarks: brandInterestsNames,
+      employeeId: 3, // TEMPORARY DEFAULT
+      toDoStatusId: 1, // DEFAULT
+    };
+    
     // Filter out FC70 brand interest todos, as to only replace those
     const toDosWithoutBrandInterests = toDos.filter(x => x.name !== "FC70 brand interesse");
-    const newToDos = [...toDosWithoutBrandInterests, ...newInterestToDos];
+    const newToDos = [...toDosWithoutBrandInterests, brandInterestToDo];
     setToDos(newToDos);
   }, [prospectionBrandInterests])
 
