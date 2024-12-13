@@ -388,25 +388,30 @@ export const NewProspection = () => {
               onChange={(e) => setContactName(e.target.value)}></input>
           </fieldset>
 
-          <fieldset>
-            <legend>Contact email</legend>
-            <p style={{ marginTop: 0 }}>Huidige email: {contactInfo?.email ?? "Geen email gevonden"}</p>
-            <input
-              type='text'
-              placeholder='Update email'
-              value={contactEmail}
-              onChange={(e) => setContactEmail(e.target.value)}></input>
-          </fieldset>
+          {/* Toon email en telefoonnummer als het geen verkoper of overig is*/}
+          {contactType !== 3 && contactType !== 4 && (
+            <>
+              <fieldset>
+                <legend>Contact email</legend>
+                <p style={{ marginTop: 0 }}>Huidige email: {contactInfo?.email ?? "Geen email gevonden"}</p>
+                <input
+                  type='text'
+                  placeholder='Update email'
+                  value={contactEmail}
+                  onChange={(e) => setContactEmail(e.target.value)}></input>
+              </fieldset>
 
-          <fieldset>
-            <legend>Contact phone</legend>
-            <p style={{ marginTop: 0 }}>Huidge telefoonnummer: {contactInfo?.phoneNumber ?? "Geen telefoonnummer gevonden"}</p>
-            <input
-              type='text'
-              placeholder='Update telefoonnummer'
-              value={contactPhone}
-              onChange={(e) => setContactPhone(e.target.value)}></input>
-          </fieldset>
+              <fieldset>
+                <legend>Contact phone</legend>
+                <p style={{ marginTop: 0 }}>Huidge telefoonnummer: {contactInfo?.phoneNumber ?? "Geen telefoonnummer gevonden"}</p>
+                <input
+                  type='text'
+                  placeholder='Update telefoonnummer'
+                  value={contactPhone}
+                  onChange={(e) => setContactPhone(e.target.value)}></input>
+              </fieldset>
+            </>
+          )}
 
           <fieldset>
             <legend>Bezoek type</legend>
