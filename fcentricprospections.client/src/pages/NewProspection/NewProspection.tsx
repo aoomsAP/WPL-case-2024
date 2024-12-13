@@ -117,7 +117,7 @@ export const NewProspection = () => {
         id: uuidv4(), // generate temporary unique id
         name: "Nieuwe contact info",
         remarks: newContactName + (newContactName ? " - " : "") + newContactEmail + (newContactEmail ? " - " : "") + newContactPhone,
-        employeeId: 0, // TO DO: WHO? DEFAULT? 0 WILL RESULT IN ERROR
+        employeeId: 3, // TEMPORARY DEFAULT
         toDoStatusId: 1, // DEFAULT
       };
 
@@ -137,7 +137,7 @@ export const NewProspection = () => {
       id: uuidv4(), // generate temporary unique id
       name: "Nieuwe brands",
       remarks: newBrands,
-      employeeId: 0, // TO DO: WHO? DEFAULT? 0 WILL RESULT IN ERROR
+      employeeId: 3, // TEMPORARY DEFAULT
       toDoStatusId: 1, // DEFAULT
     };
     // Filter out newBrands todos, as to only replace that one
@@ -158,7 +158,7 @@ export const NewProspection = () => {
         id: uuidv4(), // generate temporary unique id
         name: "FC70 brand interesse",
         remarks: interest.brandName,
-        employeeId: 0, // TO DO: WHO? DEFAULT? 0 WILL RESULT IN ERROR
+        employeeId: 3, // TEMPORARY DEFAULT
         toDoStatusId: 1, // DEFAULT
       };
       newInterestToDos.push(brandInterestToDo);
