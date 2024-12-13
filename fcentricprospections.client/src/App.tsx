@@ -16,6 +16,7 @@ import { TfiAgenda } from "react-icons/tfi";
 import { useContext } from 'react';
 import NewShop from './pages/NewShop/NewShop';
 import { NewShopProvider } from './contexts/NewShopContext';
+import ErrorPage from './pages/ErrorPage/ErrorPage';
 
 const Root = () => {
 
@@ -148,6 +149,10 @@ const App = () => {
                 {
                     path: "shop/:shopId/prospections/:prospectionId",
                     element: <ProspectionDetailPage />
+                },
+                {
+                    path: "*",
+                    element: <ErrorPage/>
                 }
             ]
         }

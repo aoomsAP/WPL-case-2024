@@ -3,6 +3,7 @@ using FCentricProspections.Server.Contexts;
 using Microsoft.EntityFrameworkCore;
 using FCentricProspections.Server.DomainModels;
 using System.Net;
+using System.Linq;
 
 namespace FCentricProspections.Server.Services
 {
@@ -17,33 +18,50 @@ namespace FCentricProspections.Server.Services
 
         public IEnumerable<ShopListDto> GetShops()
         {
-            var shopList = (
-                          from shop in context.Shops
-                          join contact in context.Contacts on shop.ContactId equals contact.Id
-                          join address in context.Addresses on contact.AddressId equals address.Id
-                          join city in context.Cities on address.CityId equals city.Id
-                          join country in context.Countries on city.CountryId equals country.Id
-                          join fashionDocumentShop in context.FashionDocumentShops on shop.Id equals fashionDocumentShop.ShopId
-                          join fashionDocument in context.FashionDocuments on fashionDocumentShop.FashionDocument_Id equals fashionDocument.Id
-                          where fashionDocument.SalesPeriodId > 63
-                          orderby shop.Name, city.Name
-                          select new ShopListDto
-                          {
-                              Name = shop.Name,
-                              Id = shop.Id,
-                              City = city.Name
-                          })
-                .Distinct()
+            DateTime oneYearAgo = DateTime.Now.AddYears(-1);
+
+            // First, get the shops created in the last year and project them into ShopListDto
+            var recentShops = (from shop in context.Shops
+                               where shop.DateCreated > oneYearAgo
+                               join contact in context.Contacts on shop.ContactId equals contact.Id
+                               join address in context.Addresses on contact.AddressId equals address.Id
+                               join city in context.Cities on address.CityId equals city.Id
+                               join country in context.Countries on city.CountryId equals country.Id
+                               select new ShopListDto
+                               {
+                                   Name = shop.Name,
+                                   Id = shop.Id,
+                                   City = city.Name
+                               }).ToList(); // Materialize recent shops into memory
+
+            // Second, get the shops associated with fashion documents with a SalesPeriodId > 63
+            var fashionDocumentShops = (from fashionDocument in context.FashionDocuments
+                                        where fashionDocument.SalesPeriodId > 63
+                                        join fashionDocumentShop in context.FashionDocumentShops on fashionDocument.Id equals fashionDocumentShop.FashionDocument_Id
+                                        join shop in context.Shops on fashionDocumentShop.ShopId equals shop.Id
+                                        join contact in context.Contacts on shop.ContactId equals contact.Id
+                                        join address in context.Addresses on contact.AddressId equals address.Id
+                                        join city in context.Cities on address.CityId equals city.Id
+                                        join country in context.Countries on city.CountryId equals country.Id
+                                        select new ShopListDto
+                                        {
+                                            Name = shop.Name,
+                                            Id = shop.Id,
+                                            City = city.Name
+                                        }).Distinct().ToList(); // Materialize fashion document shops into memory
+
+            // Combine recent shops and those linked with a valid fashion document
+            var shopList = recentShops
+                .Union(fashionDocumentShops)  // Combine the two lists
+                .Distinct()  // Ensure uniqueness
+                .OrderBy(shop => shop.Name)  // Order by name descending
+                .ThenBy(city => city.Name)
                 .ToList();
-
-
-
-                
-               
-
 
             return shopList;
         }
+
+
 
 
 
