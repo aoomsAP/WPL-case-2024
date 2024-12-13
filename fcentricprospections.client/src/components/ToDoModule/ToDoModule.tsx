@@ -48,7 +48,7 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
     const userAddedToDos: IToDo[] = toDos.filter(toDo =>
         toDo.name !== "Nieuwe brands" &&
         toDo.name !== "Nieuwe contact info" &&
-        toDo.name !== "FC70 brand interesse"
+        toDo.name !== "FC70 brand interesses"
     );
     
     // Map employees to options for react-select

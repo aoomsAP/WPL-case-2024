@@ -150,19 +150,19 @@ export const NewProspection = () => {
   useEffect(() => {
     console.log("todos at brand interest useffect", toDos);
     
-    let brandInterestsNames = prospectionBrandInterests.map(i => i.brandName).join(', ');
+    let brandInterestsNames = prospectionBrandInterests.map(i => `Merk: ${i.brandName}${i.remark ? `\nOpmerking: ${i.remark}` : ""}\n`).join('\n');
 
     // Create one todo for all brand interests
     let brandInterestToDo = {
       id: uuidv4(), // generate temporary unique id
-      name: "FC70 brand interesse",
+      name: "FC70 brand interesses",
       remarks: brandInterestsNames,
       employeeId: 3, // TEMPORARY DEFAULT
       toDoStatusId: 1, // DEFAULT
     };
     
     // Filter out FC70 brand interest todos, as to only replace those
-    const toDosWithoutBrandInterests = toDos.filter(x => x.name !== "FC70 brand interesse");
+    const toDosWithoutBrandInterests = toDos.filter(x => x.name !== "FC70 brand interesses");
     const newToDos = [...toDosWithoutBrandInterests, brandInterestToDo];
     setToDos(newToDos);
   }, [prospectionBrandInterests])
@@ -327,10 +327,11 @@ export const NewProspection = () => {
     }
     return true;
   };
+
   // error messages
   const errorMessages = () => {
     // add alert if trends or feedback are empty
-    alert("Please fill in the required fields");
+    alert("Gelieve de verplichte velden in te vullen.");
   };
 
   return (

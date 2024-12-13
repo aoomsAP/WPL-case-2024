@@ -17,7 +17,7 @@ export default function ToDoEditable({ index, toDo, toDos, setToDos, employeesOp
 
     const isDisabled = (toDo.name === "Nieuwe brands") ||
         (toDo.name === "Nieuwe contact info") ||
-        (toDo.name === "FC70 brand interesse")
+        (toDo.name === "FC70 brand interesses")
 
     // Update a specific todo
     const updateToDo = (updatedFields: Partial<IToDo>) => {
