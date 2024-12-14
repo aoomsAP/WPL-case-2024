@@ -52,7 +52,9 @@ namespace FCentricProspections.Server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Timestamp")
-                        .HasColumnType("varbinary(max)");
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.Property<long>("UserCreatedId")
                         .HasColumnType("bigint");
@@ -297,7 +299,9 @@ namespace FCentricProspections.Server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Timestamp")
-                        .HasColumnType("varbinary(max)");
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.Property<long>("UserCreatedId")
                         .HasColumnType("bigint");
@@ -312,6 +316,164 @@ namespace FCentricProspections.Server.Migrations
                     b.HasIndex("UserCreatedId");
 
                     b.ToTable("Contacts");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ContactChannel", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("ContactChannelDescriptionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ContactId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("Contact_Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<bool>("UseForAppointmentEmails")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("UserCreatedId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContactChannelDescriptionId");
+
+                    b.HasIndex("ContactId");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.ToTable("ContactChannels");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ContactChannelDescription", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("ContactChannelTypeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long>("UserCreatedId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContactChannelTypeId");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.ToTable("ContactChannelDescriptions");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ContactChannelType", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<long>("UserCreatedId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ValidationRegex")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.ToTable("ContactChannelType");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ContactType", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsLocation")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<long>("UserCreatedId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.ToTable("ContactTypes");
                 });
 
             modelBuilder.Entity("FCentricProspections.Server.DataModels.Country", b =>
@@ -602,6 +764,115 @@ namespace FCentricProspections.Server.Migrations
                     b.HasIndex("UserCreatedId");
 
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.FashionDocument", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("AccountingCodeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("BoxNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("CustomerLegalHistoryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("DeliveryAddressId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DeliveryMethodId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DestinationShopId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("EmailInvoicingTeam")
+                        .HasColumnType("bit");
+
+                    b.Property<long?>("FileImportLogId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("LoyaltyVoucherBarcodeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("PaymentConditionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("PosId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("PosTicketCancellationReasonDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("PosTicketCancellationReasonId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("PublicationId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SalesPeriodId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("SourceShopId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("TransferHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeliveryAddressId");
+
+                    b.HasIndex("DestinationShopId");
+
+                    b.HasIndex("SalesPeriodId");
+
+                    b.HasIndex("SourceShopId");
+
+                    b.ToTable("FashionDocuments");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.FashionDocumentShop", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("FashionDocumentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("FashionDocument_Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ShopId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("Timestamp")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<long>("UserCreatedId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FashionDocumentId");
+
+                    b.HasIndex("ShopId");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.ToTable("FashionDocumentShops");
                 });
 
             modelBuilder.Entity("FCentricProspections.Server.DataModels.ProductLine", b =>
@@ -1088,6 +1359,49 @@ namespace FCentricProspections.Server.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long>("UserCreatedId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContactId");
+
+                    b.HasIndex("ShopTypeId");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.ToTable("Shops");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ShopContact", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("ContactId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ContactTypeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("ShopId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("Shop_Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<long>("UserCreatedId")
@@ -1097,9 +1411,11 @@ namespace FCentricProspections.Server.Migrations
 
                     b.HasIndex("ContactId");
 
-                    b.HasIndex("UserCreatedId");
+                    b.HasIndex("ContactTypeId");
 
-                    b.ToTable("Shops");
+                    b.HasIndex("ShopId");
+
+                    b.ToTable("ShopContacts");
                 });
 
             modelBuilder.Entity("FCentricProspections.Server.DataModels.ShopDelivery", b =>
@@ -1196,7 +1512,7 @@ namespace FCentricProspections.Server.Migrations
                     b.ToTable("ShopDeliveries");
                 });
 
-            modelBuilder.Entity("FCentricProspections.Server.DataModels.ToDo", b =>
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ShopType", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -1207,8 +1523,45 @@ namespace FCentricProspections.Server.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<long?>("EmployeeId")
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long>("UserCreatedId")
                         .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.ToTable("ShopTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 6L,
+                            DateCreated = new DateTime(2024, 12, 14, 2, 50, 42, 190, DateTimeKind.Local).AddTicks(292),
+                            Name = "Prospection",
+                            UserCreatedId = 103L
+                        });
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ToDo", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -1224,18 +1577,44 @@ namespace FCentricProspections.Server.Migrations
                     b.Property<long>("ToDoStatusId")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("ToDoTypeId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("UserCreatedId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ToDoStatusId");
+
+                    b.HasIndex("ToDoTypeId");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.ToTable("ToDoes");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ToDoEmployee", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("EmployeeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ToDoId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EmployeeId");
 
-                    b.HasIndex("ToDoStatusId");
+                    b.HasIndex("ToDoId");
 
-                    b.HasIndex("UserCreatedId");
-
-                    b.ToTable("ToDoes");
+                    b.ToTable("ToDoEmployees");
                 });
 
             modelBuilder.Entity("FCentricProspections.Server.DataModels.ToDoStatus", b =>
@@ -1253,7 +1632,9 @@ namespace FCentricProspections.Server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Timestamp")
-                        .HasColumnType("varbinary(max)");
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.Property<long>("UserCreatedId")
                         .HasColumnType("bigint");
@@ -1263,6 +1644,79 @@ namespace FCentricProspections.Server.Migrations
                     b.HasIndex("UserCreatedId");
 
                     b.ToTable("ToDoStatus");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            DateCreated = new DateTime(2024, 12, 14, 2, 50, 42, 190, DateTimeKind.Local).AddTicks(267),
+                            Name = "Ongoing",
+                            UserCreatedId = 103L
+                        });
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ToDoType", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("AssignEmployeesQuery")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long>("UserCreatedId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.ToTable("ToDoTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            DateCreated = new DateTime(2024, 12, 14, 2, 50, 42, 190, DateTimeKind.Local).AddTicks(168),
+                            Name = "New contact info",
+                            UserCreatedId = 103L
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            DateCreated = new DateTime(2024, 12, 14, 2, 50, 42, 190, DateTimeKind.Local).AddTicks(237),
+                            Name = "New brands",
+                            UserCreatedId = 103L
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            DateCreated = new DateTime(2024, 12, 14, 2, 50, 42, 190, DateTimeKind.Local).AddTicks(240),
+                            Name = "Brand interests",
+                            UserCreatedId = 103L
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            DateCreated = new DateTime(2024, 12, 14, 2, 50, 42, 190, DateTimeKind.Local).AddTicks(242),
+                            Name = "Other",
+                            UserCreatedId = 103L
+                        });
                 });
 
             modelBuilder.Entity("FCentricProspections.Server.DataModels.User", b =>
@@ -1397,6 +1851,74 @@ namespace FCentricProspections.Server.Migrations
                     b.Navigation("UserCreated");
                 });
 
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ContactChannel", b =>
+                {
+                    b.HasOne("FCentricProspections.Server.DataModels.ContactChannelDescription", "ContactChannelDescription")
+                        .WithMany("ContactChannels")
+                        .HasForeignKey("ContactChannelDescriptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FCentricProspections.Server.DataModels.Contact", "Contact")
+                        .WithMany("ContactChannels")
+                        .HasForeignKey("ContactId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FCentricProspections.Server.DataModels.User", "UserCreated")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contact");
+
+                    b.Navigation("ContactChannelDescription");
+
+                    b.Navigation("UserCreated");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ContactChannelDescription", b =>
+                {
+                    b.HasOne("FCentricProspections.Server.DataModels.ContactChannelType", "ContactChannelType")
+                        .WithMany("ContactChannelDescriptions")
+                        .HasForeignKey("ContactChannelTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FCentricProspections.Server.DataModels.User", "UserCreated")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ContactChannelType");
+
+                    b.Navigation("UserCreated");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ContactChannelType", b =>
+                {
+                    b.HasOne("FCentricProspections.Server.DataModels.User", "UserCreated")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserCreated");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ContactType", b =>
+                {
+                    b.HasOne("FCentricProspections.Server.DataModels.User", "UserCreated")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserCreated");
+                });
+
             modelBuilder.Entity("FCentricProspections.Server.DataModels.Country", b =>
                 {
                     b.HasOne("FCentricProspections.Server.DataModels.User", "UserCreated")
@@ -1465,6 +1987,62 @@ namespace FCentricProspections.Server.Migrations
                         .HasForeignKey("UserCreatedId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("UserCreated");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.FashionDocument", b =>
+                {
+                    b.HasOne("FCentricProspections.Server.DataModels.Contact", "DeliveryAddress")
+                        .WithMany()
+                        .HasForeignKey("DeliveryAddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FCentricProspections.Server.DataModels.Shop", "DestinationShop")
+                        .WithMany()
+                        .HasForeignKey("DestinationShopId");
+
+                    b.HasOne("FCentricProspections.Server.DataModels.SalesPeriod", "SalesPeriod")
+                        .WithMany()
+                        .HasForeignKey("SalesPeriodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FCentricProspections.Server.DataModels.Shop", "SourceShop")
+                        .WithMany()
+                        .HasForeignKey("SourceShopId");
+
+                    b.Navigation("DeliveryAddress");
+
+                    b.Navigation("DestinationShop");
+
+                    b.Navigation("SalesPeriod");
+
+                    b.Navigation("SourceShop");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.FashionDocumentShop", b =>
+                {
+                    b.HasOne("FCentricProspections.Server.DataModels.FashionDocument", "FashionDocument")
+                        .WithMany("FashionDocumentShops")
+                        .HasForeignKey("FashionDocumentId");
+
+                    b.HasOne("FCentricProspections.Server.DataModels.Shop", "Shop")
+                        .WithMany()
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FCentricProspections.Server.DataModels.User", "UserCreated")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FashionDocument");
+
+                    b.Navigation("Shop");
 
                     b.Navigation("UserCreated");
                 });
@@ -1649,6 +2227,10 @@ namespace FCentricProspections.Server.Migrations
                         .WithMany("Shops")
                         .HasForeignKey("ContactId");
 
+                    b.HasOne("FCentricProspections.Server.DataModels.ShopType", null)
+                        .WithMany("Shops")
+                        .HasForeignKey("ShopTypeId");
+
                     b.HasOne("FCentricProspections.Server.DataModels.User", "UserCreated")
                         .WithMany("Shops")
                         .HasForeignKey("UserCreatedId")
@@ -1658,6 +2240,25 @@ namespace FCentricProspections.Server.Migrations
                     b.Navigation("Contact");
 
                     b.Navigation("UserCreated");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ShopContact", b =>
+                {
+                    b.HasOne("FCentricProspections.Server.DataModels.Contact", null)
+                        .WithMany("ShopContacts")
+                        .HasForeignKey("ContactId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FCentricProspections.Server.DataModels.ContactType", null)
+                        .WithMany("ShopContacts")
+                        .HasForeignKey("ContactTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FCentricProspections.Server.DataModels.Shop", null)
+                        .WithMany("ShopContacts")
+                        .HasForeignKey("ShopId");
                 });
 
             modelBuilder.Entity("FCentricProspections.Server.DataModels.ShopDelivery", b =>
@@ -1705,15 +2306,28 @@ namespace FCentricProspections.Server.Migrations
                     b.Navigation("UserCreated");
                 });
 
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ShopType", b =>
+                {
+                    b.HasOne("FCentricProspections.Server.DataModels.User", "UserCreated")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserCreated");
+                });
+
             modelBuilder.Entity("FCentricProspections.Server.DataModels.ToDo", b =>
                 {
-                    b.HasOne("FCentricProspections.Server.DataModels.Employee", "Employee")
-                        .WithMany("ToDos")
-                        .HasForeignKey("EmployeeId");
-
                     b.HasOne("FCentricProspections.Server.DataModels.ToDoStatus", "ToDoStatus")
                         .WithMany("ToDos")
                         .HasForeignKey("ToDoStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FCentricProspections.Server.DataModels.ToDoType", "ToDoType")
+                        .WithMany("ToDos")
+                        .HasForeignKey("ToDoTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1723,17 +2337,47 @@ namespace FCentricProspections.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Employee");
-
                     b.Navigation("ToDoStatus");
 
+                    b.Navigation("ToDoType");
+
                     b.Navigation("UserCreated");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ToDoEmployee", b =>
+                {
+                    b.HasOne("FCentricProspections.Server.DataModels.Employee", "Employee")
+                        .WithMany("ToDos")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FCentricProspections.Server.DataModels.ToDo", "ToDo")
+                        .WithMany("Employees")
+                        .HasForeignKey("ToDoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("ToDo");
                 });
 
             modelBuilder.Entity("FCentricProspections.Server.DataModels.ToDoStatus", b =>
                 {
                     b.HasOne("FCentricProspections.Server.DataModels.User", "UserCreated")
                         .WithMany("ToDoStatuses")
+                        .HasForeignKey("UserCreatedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserCreated");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ToDoType", b =>
+                {
+                    b.HasOne("FCentricProspections.Server.DataModels.User", "UserCreated")
+                        .WithMany()
                         .HasForeignKey("UserCreatedId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1765,7 +2409,26 @@ namespace FCentricProspections.Server.Migrations
 
             modelBuilder.Entity("FCentricProspections.Server.DataModels.Contact", b =>
                 {
+                    b.Navigation("ContactChannels");
+
+                    b.Navigation("ShopContacts");
+
                     b.Navigation("Shops");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ContactChannelDescription", b =>
+                {
+                    b.Navigation("ContactChannels");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ContactChannelType", b =>
+                {
+                    b.Navigation("ContactChannelDescriptions");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ContactType", b =>
+                {
+                    b.Navigation("ShopContacts");
                 });
 
             modelBuilder.Entity("FCentricProspections.Server.DataModels.Country", b =>
@@ -1787,6 +2450,11 @@ namespace FCentricProspections.Server.Migrations
                     b.Navigation("Customers");
 
                     b.Navigation("ToDos");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.FashionDocument", b =>
+                {
+                    b.Navigation("FashionDocumentShops");
                 });
 
             modelBuilder.Entity("FCentricProspections.Server.DataModels.ProductLine", b =>
@@ -1823,6 +2491,8 @@ namespace FCentricProspections.Server.Migrations
 
                     b.Navigation("Prospections");
 
+                    b.Navigation("ShopContacts");
+
                     b.Navigation("ShopDeliveries");
                 });
 
@@ -1831,12 +2501,24 @@ namespace FCentricProspections.Server.Migrations
                     b.Navigation("InverseShopDeliveryReference");
                 });
 
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ShopType", b =>
+                {
+                    b.Navigation("Shops");
+                });
+
             modelBuilder.Entity("FCentricProspections.Server.DataModels.ToDo", b =>
                 {
+                    b.Navigation("Employees");
+
                     b.Navigation("ProspectionToDos");
                 });
 
             modelBuilder.Entity("FCentricProspections.Server.DataModels.ToDoStatus", b =>
+                {
+                    b.Navigation("ToDos");
+                });
+
+            modelBuilder.Entity("FCentricProspections.Server.DataModels.ToDoType", b =>
                 {
                     b.Navigation("ToDos");
                 });

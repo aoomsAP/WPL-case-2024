@@ -39,7 +39,7 @@ public partial class Employee
 
     public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
 
-    public virtual ICollection<ToDo> ToDos { get; set; } = new List<ToDo>();
+    public virtual ICollection<ToDoEmployee> ToDos { get; set; } = new List<ToDoEmployee>();
 
     public virtual User UserCreated { get; set; }
 }

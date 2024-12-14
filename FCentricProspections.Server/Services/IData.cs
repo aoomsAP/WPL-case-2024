@@ -76,7 +76,11 @@ namespace FCentricProspections.Server.Services
 
         ToDoStatus GetToDoStatus(long id);
 
+        ToDoType GetToDoType(long id);
+
         void AddToDo(ToDo toDo);
+
+        public void UpdateToDoEmployee(ToDo toDo);
 
 
         // Brand --------------------------------------------------------------------------------------------------------------------------------------------

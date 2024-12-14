@@ -32,7 +32,7 @@ namespace FCentricProspections.Server.Controllers
             var shops = new List<ShopGetAllViewModel>();
             foreach (var shop in this.data.GetShops())
             {
-                shops.Add(new ShopGetAllViewModel { Id = shop.Id, Name = shop.Name ,City = shop.City });
+                shops.Add(new ShopGetAllViewModel { Id = shop.Id, Name = shop.Name, City = shop.City });
             }
 
             // return list of viewmodel shops
@@ -61,7 +61,7 @@ namespace FCentricProspections.Server.Controllers
             {
                 viewModel.Customer = shop.Customer.Name;
             }
-            
+
             if (owner is not null)
             {
                 viewModel.Owner = owner.Name;
@@ -74,7 +74,7 @@ namespace FCentricProspections.Server.Controllers
             if (shop.ShopTypeId is not null)
             {
                 viewModel.ShopTypeId = shop.ShopTypeId;
-            }           
+            }
 
             // return viewmodel of shop
             return Ok(viewModel);
@@ -189,7 +189,7 @@ namespace FCentricProspections.Server.Controllers
             var cities = new List<CityGetViewModel>();
             foreach (var city in this.data.GetCities(countryId))
             {
-                cities.Add(new CityGetViewModel { Id = city.Id, Name = city.Name, PostalCode = city.PostalCode, CountryId = city.CountryId});
+                cities.Add(new CityGetViewModel { Id = city.Id, Name = city.Name, PostalCode = city.PostalCode, CountryId = city.CountryId });
             }
 
             // return list of viewmodel cities
@@ -224,17 +224,17 @@ namespace FCentricProspections.Server.Controllers
             var newAddress = new Address
             {
                 // EF creates Id
-               Name = null,
-               Attention = null,
-               Street1 = viewModel.Street1,
-               Street2 = null,
-               CityId = viewModel.CityId,
-               City = city,
-               PostalCode = viewModel.PostalCode,
-               UserCreatedId = viewModel.UserCreatedId,
-               UserCreated = user,
-               DateCreated = viewModel.DateCreated,
-               Contacts = new List<Contact>(),
+                Name = null,
+                Attention = null,
+                Street1 = viewModel.Street1,
+                Street2 = null,
+                CityId = viewModel.CityId,
+                City = city,
+                PostalCode = viewModel.PostalCode,
+                UserCreatedId = viewModel.UserCreatedId,
+                UserCreated = user,
+                DateCreated = viewModel.DateCreated,
+                Contacts = new List<Contact>(),
             };
 
             // add address to database
@@ -337,7 +337,7 @@ namespace FCentricProspections.Server.Controllers
                     Id = newContact.Id,
                     AddressId = newContact.AddressId,
                     DateCreated = newContact.DateCreated,
-                    UserCreatedId= newContact.UserCreatedId,
+                    UserCreatedId = newContact.UserCreatedId,
                     Name = newContact.Name
                 });
         }
@@ -572,7 +572,8 @@ namespace FCentricProspections.Server.Controllers
                     ProspectionId = id,
                     ToDoId = prospectionToDo.ToDoId,
                     Remarks = toDo.Remarks,
-                    EmployeeId = toDo.EmployeeId,
+                    ToDoTypeId = toDo.ToDoTypeId,
+                    ToDoType = toDo.ToDoType.Name,
                     ToDoStatusId = toDo.ToDoStatus.Id,
                     ToDoStatus = toDo.ToDoStatus.Name,
                     Name = toDo.Name,
@@ -946,7 +947,16 @@ namespace FCentricProspections.Server.Controllers
             var toDos = new List<ToDoGetViewModel>();
             foreach (var toDo in this.data.GetToDos())
             {
-                toDos.Add(new ToDoGetViewModel { Id = toDo.Id, Remarks = toDo.Remarks, Name = toDo.Name, EmployeeId = toDo.EmployeeId, ToDoStatus = toDo.ToDoStatus.Name, ToDoStatusId = toDo.ToDoStatus.Id });
+                toDos.Add(new ToDoGetViewModel
+                {
+                    Id = toDo.Id,
+                    Remarks = toDo.Remarks,
+                    Name = toDo.Name,
+                    ToDoType = toDo.ToDoType.Name,
+                    ToDoTypeId = toDo.ToDoType.Id,
+                    ToDoStatus = toDo.ToDoStatus.Name,
+                    ToDoStatusId = toDo.ToDoStatus.Id
+                });
             }
 
             // return list of viewmodel brand
@@ -967,7 +977,8 @@ namespace FCentricProspections.Server.Controllers
 
             viewModel.Id = toDo.Id;
             viewModel.Remarks = toDo.Remarks;
-            viewModel.EmployeeId = toDo.EmployeeId;
+            viewModel.ToDoTypeId = toDo.ToDoType.Id;
+            viewModel.ToDoType = toDo.ToDoType.Name;
             viewModel.ToDoStatusId = toDo.ToDoStatus.Id;
             viewModel.ToDoStatus = toDo.ToDoStatus.Name;
             viewModel.Name = toDo.Name;
@@ -988,10 +999,16 @@ namespace FCentricProspections.Server.Controllers
                 return BadRequest(ModelState);
             }
 
-            var employee = this.data.GetEmployee(viewModel.EmployeeId ?? 0);
-            if (employee == null)
+            var toDoStatus = this.data.GetToDoStatus(viewModel.ToDoStatusId);
+            if (toDoStatus == null)
             {
-                return UnprocessableEntity("Employee id is not valid");
+                return UnprocessableEntity("ToDoStatus id is not valid");
+            }
+
+            var toDoType = this.data.GetToDoType(viewModel.ToDoTypeId);
+            if (toDoType == null)
+            {
+                return UnprocessableEntity("ToDoType id is not valid");
             }
 
             // create new todo object based on view model data
@@ -999,10 +1016,10 @@ namespace FCentricProspections.Server.Controllers
             {
                 // EF creates Id
                 Remarks = viewModel.Remarks,
-                EmployeeId = viewModel.EmployeeId,
-                Employee = employee,
+                ToDoTypeId = viewModel.ToDoTypeId,
+                ToDoType = toDoType,
                 ToDoStatusId = viewModel.ToDoStatusId,
-                ToDoStatus = this.data.GetToDoStatus(viewModel.ToDoStatusId),
+                ToDoStatus = toDoStatus,
                 Name = viewModel.Name,
                 UserCreatedId = viewModel.UserCreatedId,
                 UserCreated = this.data.GetUser(viewModel.UserCreatedId),
@@ -1020,10 +1037,59 @@ namespace FCentricProspections.Server.Controllers
                 {
                     Id = newToDo.Id,
                     Remarks = newToDo.Remarks,
-                    EmployeeId = newToDo.EmployeeId,
+                    ToDoType = newToDo.ToDoType.Name,
                     ToDoStatus = newToDo.ToDoStatus.Name,
                     Name = newToDo.Name,
                 });
+        }
+
+        [HttpPut()]
+        [Route("todos/{id}/employees")]
+        public IActionResult UpdateToDoEmployees(long id, [FromBody] ToDoEmployeeUpdateViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            };
+
+            // check if prospection exists
+            var existingToDo = this.data.GetToDo(id);
+            if (existingToDo == null)
+            {
+                return NotFound("ToDo not found");
+            }
+
+            // update relationship between ToDo and Employee 
+            var updatedToDoEmployees = new List<ToDoEmployee>();
+            foreach (var employeeId in viewModel.EmployeeIds)
+            {
+                // check if employee exists
+                var employee = this.data.GetEmployee(employeeId);
+                if (employee == null)
+                {
+                    return NotFound("Employee not found");
+                }
+
+                // create new todo-employee relationship
+                var toDoEmployee = new ToDoEmployee
+                {
+                    // EF creates Id
+                    ToDoId = id,
+                    ToDo = existingToDo,
+                    EmployeeId = employee.Id,
+                    Employee = employee,
+                };
+
+                // add relationship to list of relationships
+                updatedToDoEmployees.Add(toDoEmployee);
+            }
+
+            // update BrandsInterest relationships list on the prospection
+            existingToDo.Employees = updatedToDoEmployees;
+
+            // update prospection in database
+            this.data.UpdateToDoEmployee(existingToDo);
+            return NoContent();
         }
 
 

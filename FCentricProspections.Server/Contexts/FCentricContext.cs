@@ -78,12 +78,13 @@ public partial class FCentricContext : DbContext
 
     public virtual DbSet<ToDo> ToDoes { get; set; }
 
+    public virtual DbSet<ToDoEmployee> ToDoEmployees { get; set; }
+
     public virtual DbSet<ToDoStatus> ToDoStatus { get; set; }
 
+    public virtual DbSet<ToDoType> ToDoTypes { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
-
-    public virtual DbSet<ShopDetailsView> ShopDetailsView { get; set; }
-
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -101,6 +102,21 @@ public partial class FCentricContext : DbContext
             new ProspectionVisitType { Id = 4, Name = "Other" }
         );
 
+        modelBuilder.Entity<ToDoType>().HasData(
+        new ToDoType { Id = 1, Name = "New contact info", UserCreatedId = 103, DateCreated = DateTime.Now },
+        new ToDoType { Id = 2, Name = "New brands", UserCreatedId = 103, DateCreated = DateTime.Now },
+        new ToDoType { Id = 3, Name = "Brand interests", UserCreatedId = 103, DateCreated = DateTime.Now },
+        new ToDoType { Id = 4, Name = "Other", UserCreatedId = 103, DateCreated = DateTime.Now }
+    );
+
+        modelBuilder.Entity<ToDoStatus>().HasData(
+        new ToDoStatus { Id = 1, Name = "Ongoing", UserCreatedId = 103, DateCreated = DateTime.Now }
+        );
+
+        modelBuilder.Entity<ShopType>().HasData(
+new ShopType { Id = 6, Name = "Prospection", UserCreatedId = 103, DateCreated = DateTime.Now }
+);
+
         modelBuilder.Entity<Prospection>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -109,8 +125,6 @@ public partial class FCentricContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_dbo.Prospections_dbo.Shops_ShopId");
         });
-
-        // to implement ?
 
         OnModelCreatingPartial(modelBuilder);
     }

@@ -2,11 +2,13 @@
 
 namespace FCentricProspections.Server.DataModels
 {
-    public class ShopType
+    public class ToDoType
     {
         public long Id { get; set; }
 
         public string Name { get; set; }
+
+        public string? AssignEmployeesQuery { get; set; }
 
         public long UserCreatedId { get; set; }
 
@@ -15,7 +17,7 @@ namespace FCentricProspections.Server.DataModels
         [Timestamp]
         public byte[] Timestamp { get; set; }
 
-        public virtual ICollection<Shop> Shops { get; set; } = new List<Shop>();
+        public virtual ICollection<ToDo> ToDos { get; set; } = new List<ToDo>();
 
         public virtual User UserCreated { get; set; }
     }

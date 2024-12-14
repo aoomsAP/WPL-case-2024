@@ -109,7 +109,7 @@ namespace FCentricProspections.Server.Services
                 .Include(s => s.Prospections)
                 .FirstOrDefault(x => x.Id == id);
         }
-        public void AddShop (Shop shop)
+        public void AddShop(Shop shop)
         {
             this.context.Shops.Add(shop);
             this.context.SaveChanges();
@@ -132,7 +132,7 @@ namespace FCentricProspections.Server.Services
             this.context.Addresses.Add(address);
             this.context.SaveChanges();
         }
-        
+
         public Contact GetContact(long id)
         {
             return this.context.Contacts
@@ -174,7 +174,7 @@ namespace FCentricProspections.Server.Services
         public Country GetCountry(long id)
         {
             return this.context.Countries
-                .FirstOrDefault(c => c.Id ==  id);
+                .FirstOrDefault(c => c.Id == id);
         }
 
         public IEnumerable<CountryDto> GetCountries()
@@ -459,6 +459,8 @@ namespace FCentricProspections.Server.Services
         {
             return this.context.ToDoes
                 .Include(t => t.ToDoStatus)
+                .Include(t => t.ToDoType)
+                .Include(t => t.Employees)
                 .ToList();
         }
 
@@ -466,6 +468,8 @@ namespace FCentricProspections.Server.Services
         {
             return this.context.ToDoes
                 .Include(t => t.ToDoStatus)
+                .Include(t => t.ToDoType)
+                .Include(t => t.Employees)
                 .FirstOrDefault(x => x.Id == id);
         }
 
@@ -475,12 +479,33 @@ namespace FCentricProspections.Server.Services
                 .FirstOrDefault(x => x.Id == id);
         }
 
+        public ToDoType GetToDoType(long id)
+        {
+            return this.context.ToDoTypes
+                .FirstOrDefault(x => x.Id == id);
+        }
+
+        public IEnumerable<ToDoEmployee> GetToDoEmployees(long id)
+        {
+            return this.context.ToDoEmployees
+                .Where(t => t.Id == id)
+                .Include(t => t.ToDo)
+                .Include(t => t.Employee)
+                .ToList();
+        }
+
         public void AddToDo(ToDo toDo)
         {
             this.context.ToDoes.Add(toDo);
             this.context.SaveChanges();
         }
 
+        public void UpdateToDoEmployee(ToDo toDo)
+        {
+            var updateToDo = GetToDo(toDo.Id);
+            updateToDo.Employees = toDo.Employees;
+            this.context.SaveChanges();
+        }
 
         // BRANDS ---------------------------------------------------------------------------------------------------------------------
         // ---------------------------------------------------------------------------------------------------------------------------
@@ -509,7 +534,7 @@ namespace FCentricProspections.Server.Services
                              join pld in this.context.ProductLineDeliveries on sd.ProductLineDeliveryId equals pld.Id
                              join pl in this.context.ProductLines on pld.ProductLineId equals pl.Id
                              join b in this.context.Brands on pl.BrandId equals b.Id
-                             where sd.ShopId == shopId && (sd.SalesPeriodId ==  66 || sd.SalesPeriodId == 67 ) 
+                             where sd.ShopId == shopId && (sd.SalesPeriodId == 66 || sd.SalesPeriodId == 67)
                              select new BrandDto
                              {
                                  Id = b.Id,
