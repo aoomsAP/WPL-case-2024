@@ -20,7 +20,7 @@ namespace FCentricProspections.Server.ViewModels
 
         public long ShopId { get; set; }
 
-        public long UserId { get; set; }
+        public long UserCreatedId { get; set; }
 
         public long EmployeeId { get; set; }
 
@@ -60,7 +60,7 @@ namespace FCentricProspections.Server.ViewModels
     {
         public long ShopId { get; set; }
 
-        public long UserId { get; set; }
+        public long UserCreatedId { get; set; }
 
         public long EmployeeId { get; set; }
 
@@ -99,7 +99,7 @@ namespace FCentricProspections.Server.ViewModels
     {
         public long ShopId { get; set; }
 
-        public long UserId { get; set; }
+        public long UserCreatedId { get; set; }
 
         public long EmployeeId { get; set; }
 

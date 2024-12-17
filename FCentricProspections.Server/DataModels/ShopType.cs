@@ -10,6 +10,7 @@ namespace FCentricProspections.Server.DataModels
 
         public long UserCreatedId { get; set; }
 
+        
         public DateTime DateCreated { get; set; }
 
         [Timestamp]

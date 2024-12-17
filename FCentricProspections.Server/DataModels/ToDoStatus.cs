@@ -8,6 +8,7 @@ namespace FCentricProspections.Server.DataModels;
 
 public partial class ToDoStatus
 {
+    [Key]
     public long Id { get; set; }
 
     public string Name { get; set; }

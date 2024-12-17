@@ -8,6 +8,7 @@ namespace FCentricProspections.Server.DataModels;
 
 public partial class ToDo
 {
+    [Key]
     public long Id { get; set; }
 
     public string Name { get; set; }
@@ -22,7 +23,7 @@ public partial class ToDo
 
     public virtual ToDoStatus ToDoStatus { get; set; }
 
-    public ICollection<ToDoEmployee> Employees { get; set; } = new List<ToDoEmployee>();
+    public ICollection<ToDoEmployee> ToDoEmployees { get; set; } = new List<ToDoEmployee>();
 
     public ICollection<ProspectionToDo> ProspectionToDos { get; set; } = new List<ProspectionToDo>();
 

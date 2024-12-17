@@ -13,9 +13,9 @@ namespace FCentricProspections.Server.DataModels
 
         public virtual Shop Shop { get; set; }
 
-        public long UserId { get; set; }
+        public long UserCreatedId { get; set; }
 
-        public User User { get; set; }
+        public User UserCreated { get; set; }
 
         public long EmployeeId { get; set; }
 

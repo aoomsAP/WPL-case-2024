@@ -424,7 +424,7 @@ namespace FCentricProspections.Server.Controllers
 
             viewModel.Id = prospection.Id;
             viewModel.ShopId = prospection.ShopId;
-            viewModel.UserId = prospection.UserId;
+            viewModel.UserCreatedId = prospection.UserCreatedId;
             viewModel.EmployeeId = prospection.EmployeeId;
             viewModel.VisitDate = prospection.VisitDate;
             viewModel.DateLastUpdated = prospection.DateLastUpdated;
@@ -616,8 +616,8 @@ namespace FCentricProspections.Server.Controllers
                 // EF creates Id
                 ShopId = viewModel.ShopId,
                 Shop = this.data.GetShop(viewModel.ShopId),
-                UserId = viewModel.UserId,
-                User = this.data.GetUser(viewModel.UserId),
+                UserCreatedId = viewModel.UserCreatedId,
+                UserCreated = this.data.GetUser(viewModel.UserCreatedId),
                 EmployeeId = viewModel.EmployeeId,
                 Employee = employee,
                 VisitDate = viewModel.VisitDate,
@@ -653,7 +653,7 @@ namespace FCentricProspections.Server.Controllers
                 {
                     Id = newProspection.Id,
                     ShopId = newProspection.ShopId,
-                    UserId = newProspection.UserId,
+                    UserCreatedId = newProspection.UserCreatedId,
                     EmployeeId = newProspection.EmployeeId,
                     VisitDate = newProspection.VisitDate,
                     DateLastUpdated = newProspection.DateLastUpdated,
@@ -707,8 +707,8 @@ namespace FCentricProspections.Server.Controllers
             // update prospection fields 
             existingProspection.ShopId = viewModel.ShopId;
             existingProspection.Shop = this.data.GetShop(viewModel.ShopId);
-            existingProspection.UserId = viewModel.UserId;
-            existingProspection.User = this.data.GetUser(viewModel.UserId);
+            existingProspection.UserCreatedId = viewModel.UserCreatedId;
+            existingProspection.UserCreated = this.data.GetUser(viewModel.UserCreatedId);
             existingProspection.EmployeeId = viewModel.EmployeeId;
             existingProspection.Employee = employee;
             existingProspection.VisitDate = viewModel.VisitDate;
@@ -1037,6 +1037,8 @@ namespace FCentricProspections.Server.Controllers
                 {
                     Id = newToDo.Id,
                     Remarks = newToDo.Remarks,
+                    ToDoTypeId = newToDo.ToDoType.Id,
+                    ToDoStatusId = newToDo.ToDoStatus.Id,
                     ToDoType = newToDo.ToDoType.Name,
                     ToDoStatus = newToDo.ToDoStatus.Name,
                     Name = newToDo.Name,
@@ -1085,7 +1087,7 @@ namespace FCentricProspections.Server.Controllers
             }
 
             // update BrandsInterest relationships list on the prospection
-            existingToDo.Employees = updatedToDoEmployees;
+            existingToDo.ToDoEmployees = updatedToDoEmployees;
 
             // update prospection in database
             this.data.UpdateToDoEmployee(existingToDo);

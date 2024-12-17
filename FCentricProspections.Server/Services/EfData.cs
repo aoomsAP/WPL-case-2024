@@ -275,7 +275,7 @@ namespace FCentricProspections.Server.Services
         public IEnumerable<ProspectionListDto> GetProspectionsByUserId(long userId)
         {
             var prospectionsList = context.Prospections
-                    .Where(p => p.UserId == userId)
+                    .Where(p => p.UserCreatedId == userId)
                     .Select(s => new ProspectionListDto
                     {
                         Id = s.Id,
@@ -293,7 +293,7 @@ namespace FCentricProspections.Server.Services
 
             var prospectionDetail = (from p in this.context.Prospections
                                      join shop in this.context.Shops on p.ShopId equals shop.Id
-                                     join user in this.context.Users on p.UserId equals user.Id
+                                     join user in this.context.Users on p.UserCreatedId equals user.Id
                                      join employee in this.context.Employees on p.EmployeeId equals employee.Id
                                      join contact in this.context.ProspectionContactTypes on p.ContactTypeId equals contact.Id
                                      join visit in this.context.ProspectionVisitTypes on p.VisitTypeId equals visit.Id
@@ -303,8 +303,8 @@ namespace FCentricProspections.Server.Services
                                          Id = p.Id,
                                          ShopId = p.ShopId,
                                          Shop = new ShopListDto { Id = p.ShopId, Name = shop.Name },
-                                         UserId = p.UserId,
-                                         User = new User { Id = p.ShopId, Login = user.Login, Blocked = user.Blocked },
+                                         UserCreatedId = p.UserCreatedId,
+                                         UserCreated = new User { Id = p.ShopId, Login = user.Login, Blocked = user.Blocked },
                                          EmployeeId = p.EmployeeId,
                                          Employee = new Employee { Id = p.EmployeeId, Name = employee.Name, FirstName = employee.FirstName, UserId = employee.UserId },
                                          VisitDate = p.VisitDate,
@@ -333,7 +333,7 @@ namespace FCentricProspections.Server.Services
         {
             return this.context.Prospections
                  .Include(p => p.Shop)
-                 .Include(p => p.User)
+                 .Include(p => p.UserCreated)
                  .Include(p => p.Employee)
                  .Include(p => p.ContactType)
                  .Include(p => p.VisitType)
@@ -401,7 +401,7 @@ namespace FCentricProspections.Server.Services
         {
             var toUpdate = GetProspectionDetail(prospection.Id);
             toUpdate.ShopId = prospection.ShopId;
-            toUpdate.UserId = prospection.UserId;
+            toUpdate.UserCreatedId = prospection.UserCreatedId;
             toUpdate.EmployeeId = prospection.EmployeeId;
             toUpdate.VisitDate = prospection.VisitDate;
             toUpdate.DateCreated = prospection.DateCreated;
@@ -457,25 +457,25 @@ namespace FCentricProspections.Server.Services
 
         public IEnumerable<ToDo> GetToDos()
         {
-            return this.context.ToDoes
+            return this.context.ToDos
                 .Include(t => t.ToDoStatus)
                 .Include(t => t.ToDoType)
-                .Include(t => t.Employees)
+                .Include(t => t.ToDoEmployees)
                 .ToList();
         }
 
         public ToDo GetToDo(long id)
         {
-            return this.context.ToDoes
+            return this.context.ToDos
                 .Include(t => t.ToDoStatus)
                 .Include(t => t.ToDoType)
-                .Include(t => t.Employees)
+                .Include(t => t.ToDoEmployees)
                 .FirstOrDefault(x => x.Id == id);
         }
 
         public ToDoStatus GetToDoStatus(long id)
         {
-            return this.context.ToDoStatus
+            return this.context.ToDoStatuses
                 .FirstOrDefault(x => x.Id == id);
         }
 
@@ -496,14 +496,14 @@ namespace FCentricProspections.Server.Services
 
         public void AddToDo(ToDo toDo)
         {
-            this.context.ToDoes.Add(toDo);
+            this.context.ToDos.Add(toDo);
             this.context.SaveChanges();
         }
 
         public void UpdateToDoEmployee(ToDo toDo)
         {
             var updateToDo = GetToDo(toDo.Id);
-            updateToDo.Employees = toDo.Employees;
+            updateToDo.ToDoEmployees = toDo.ToDoEmployees;
             this.context.SaveChanges();
         }
 
