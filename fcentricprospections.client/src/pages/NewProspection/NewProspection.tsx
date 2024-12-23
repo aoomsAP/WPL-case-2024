@@ -78,6 +78,7 @@ export const NewProspection = () => {
 
   // Input fields / states --------------------------------------------------------------------------------------------------------------------
 
+  // prospection fields
   const [visitDate, setVisitDate] = useState<Date>(new Date());
   const [contactType, setContactType] = useState<number>(4);
   const [contactName, setContactName] = useState<string>("");
@@ -92,8 +93,15 @@ export const NewProspection = () => {
   const [trends, setTrends] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
 
+  // contact info
   const [contactInfo, setContactInfo] = useState<IContactInfo>();
 
+  // validation
+  const [nameChecked, setNameChecked] = useState<boolean>(true);
+  const [emailChecked, setEmailChecked] = useState<boolean>(true);
+  const [phoneChecked, setPhoneChecked] = useState<boolean>(true);
+
+  // window size
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
 
   // Window width ----------------------------------------------------------------------------------------------------------
@@ -122,10 +130,22 @@ export const NewProspection = () => {
     let contactTypeCast: number = 0;
 
     switch (contactType) {
-      case 1: contactTypeCast = 5; break; // Owner
-      case 2: contactTypeCast = 6; break; // Buyer
-      case 3: contactTypeCast = 7; break; // SalesPerson / ShopManager
-      default: setContactInfo(undefined); break;
+      case 1:
+        contactTypeCast = 5; // Owner
+        setNameChecked(false); setEmailChecked(false); setPhoneChecked(false);
+        break;
+      case 2:
+        contactTypeCast = 6; // Buyer
+        setNameChecked(false); setEmailChecked(false); setPhoneChecked(false);
+        break;
+      case 3:
+        contactTypeCast = 7; // SalesPerson / ShopManager
+        setNameChecked(true); setEmailChecked(true); setPhoneChecked(true);
+        break;
+      default:
+        setNameChecked(true); setEmailChecked(true); setPhoneChecked(true);
+        setContactInfo(undefined);
+        break;
     }
 
     if (shopId && contactTypeCast != 0) {
@@ -138,8 +158,6 @@ export const NewProspection = () => {
 
   // Contact info todos 
   useEffect(() => {
-    console.log("Todos at contact useffect", toDos);
-
     if (contactName != "" || contactEmail != "" || contactPhone != "") {
 
       const newContactName = `${contactName.length > 1 ? `Contact naam: ${contactName}` : ""}`
@@ -166,8 +184,6 @@ export const NewProspection = () => {
 
   // NewBrands todos 
   useEffect(() => {
-    console.log("Todos at new brands useffect", toDos);
-
     // Update newBrands toDo item
     let newBrandsToDo = {
       id: uuidv4(), // generate temporary unique id
@@ -185,8 +201,6 @@ export const NewProspection = () => {
 
   // Prospection brand interest todos 
   useEffect(() => {
-    console.log("Todos at brand interest useffect", toDos);
-
     let brandInterestsNames = prospectionBrandInterests.map(i => `Merk: ${i.brandName}${i.remark ? `\nOpmerking: ${i.remark}` : ""}\n`).join('\n');
 
     // Create one todo for all brand interests
@@ -250,17 +264,29 @@ export const NewProspection = () => {
 
   // Form wizard validation ------------------------------------------------------------------------------------------------------------------------------------
 
-  // check validate tab
-  const checkValidateTab = () => {
+  // Validate contact info tab
+  const checkValidateContactTab = () => {
+    if (!nameChecked || !emailChecked || !phoneChecked) {
+      return false;
+    }
+    return true;
+  };
+
+  // Contact info tab error message
+  const contactTabError = () => {
+    alert("Gelieve de nodige contact informatie af te vinken.");
+  };
+
+  // Validate trends & feedback tab
+  const checkValidateFeedbackTab = () => {
     if (trends === "" || feedback === "") {
       return false;
     }
     return true;
   };
 
-  // error messages
-  const errorMessages = () => {
-    // add alert if trends or feedback are empty
+  // Trends & feedback tab error messages
+  const feedbackError = () => {
     alert("Gelieve de verplichte velden in te vullen.");
   };
 
@@ -438,11 +464,32 @@ export const NewProspection = () => {
               type='text'
               placeholder='Update naam'
               value={contactName}
-              onChange={(e) => setContactName(e.target.value)}></input>
+              onChange={(e) => {
+                setContactName(e.target.value);
+                // If contact name has any value, consider automatically checked
+                if (e.target.value != "") setNameChecked(true);
+                else setNameChecked(false);
+              }} />
+
+            {/* Checkbox validation */}
+            {/* Only show if contact type is owner or buyer */}
+            {(contactType == 1 || contactType == 2) && !nameChecked &&
+              <div className={styles.checkbox}>
+                <label htmlFor="nameValidation">
+                  Geen informatie ontvangen&nbsp;
+                  <input
+                    type="checkbox"
+                    name="nameValidation"
+                    onChange={(e) => setNameChecked(e.target.checked)}
+                    checked={nameChecked}
+                  />
+                </label>
+              </div>
+            }
           </fieldset>
 
-          {/* Toon email en telefoonnummer als het geen verkoper of overig is*/}
-          {contactType !== 3 && contactType !== 4 && (
+          {/* Only show email and phone if contact type is owener or buyer */}
+          {(contactType == 1 || contactType == 2) &&
             <>
               <fieldset>
                 <legend>Contact email</legend>
@@ -451,7 +498,28 @@ export const NewProspection = () => {
                   type='text'
                   placeholder='Update email'
                   value={contactEmail}
-                  onChange={(e) => setContactEmail(e.target.value)}></input>
+                  onChange={(e) => {
+                    setContactEmail(e.target.value);
+                    // If contact email has any value, consider automatically checked
+                    if (e.target.value != "") setEmailChecked(true);
+                    else setEmailChecked(false);
+                  }}>
+                </input>
+
+                {/* Checkbox validation */}
+                {!emailChecked &&
+                  <div className={styles.checkbox}>
+                    <label htmlFor="emailValidation">
+                      Geen informatie ontvangen&nbsp;
+                      <input
+                        type="checkbox"
+                        name="emailValidation"
+                        onChange={(e) => setEmailChecked(e.target.checked)}
+                        checked={emailChecked}
+                      />
+                    </label>
+                  </div>
+                }
               </fieldset>
 
               <fieldset>
@@ -461,10 +529,31 @@ export const NewProspection = () => {
                   type='text'
                   placeholder='Update telefoonnummer'
                   value={contactPhone}
-                  onChange={(e) => setContactPhone(e.target.value)}></input>
+                  onChange={(e) => {
+                    setContactPhone(e.target.value);
+                    // If contact phone has any value, consider automatically checked
+                    if (e.target.value != "") setPhoneChecked(true);
+                    else setPhoneChecked(false);
+
+                  }} />
+
+                {/* Checkbox validation */}
+                {!phoneChecked &&
+                  <div className={styles.checkbox}>
+                    <label htmlFor="phoneValidation">
+                      Geen informatie ontvangen&nbsp;
+                      <input
+                        type="checkbox"
+                        name="phoneValidation"
+                        onChange={(e) => setPhoneChecked(e.target.checked)}
+                        checked={phoneChecked}
+                      />
+                    </label>
+                  </div>
+                }
               </fieldset>
             </>
-          )}
+          }
 
           <fieldset>
             <legend>Bezoek type</legend>
@@ -513,7 +602,9 @@ export const NewProspection = () => {
 
         <FormWizard.TabContent
           title={windowWidth < 700 ? "" : "Brandmix"}
-          icon={<AiOutlineCheck color="#D4AF37" />}>
+          icon={<AiOutlineCheck color="#D4AF37" />}
+          isValid={checkValidateContactTab()}
+          validationError={contactTabError}>
 
           {/* FC70 BRANDS */}
           <h3>FC70 merken</h3>
@@ -695,8 +786,8 @@ export const NewProspection = () => {
         <FormWizard.TabContent
           title={windowWidth < 700 ? " " : "Opvolging"}
           icon={<AiOutlineCheck color="#D4AF37" />}
-          isValid={checkValidateTab()}
-          validationError={errorMessages}>
+          isValid={checkValidateFeedbackTab()}
+          validationError={feedbackError}>
 
           <h3>Takenlijst voor opvolging</h3>
           <p>Hier kan u items toevoegen die op basis van dit verslag moeten opgevolgd worden.</p>
