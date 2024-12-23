@@ -1,18 +1,28 @@
 import { useContext, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { FaAngleRight } from "react-icons/fa";
 import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCard';
 import styles from './ShopDetail.module.css';
 import { ShopDetailContext } from '../../contexts/ShopDetailContext';
 
 export const ShopDetail = () => {
+
+  const navigate = useNavigate();
+
   const { shopId } = useParams<{ shopId: string }>();
 
   const { setShopId, shopProspections, shopDetail } = useContext(ShopDetailContext);
 
+  // Set shop id
   useEffect(() => {
     if (shopId) {
-      setShopId(shopId);
+      if (Number.isNaN(parseInt(shopId))) {
+        // If shopId cannot be set (e.g. undefined), navigate to NotFound page
+        navigate("/404");
+      }
+      else {
+        setShopId(parseInt(shopId));
+      }
     }
   }, [])
 

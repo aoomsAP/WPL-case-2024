@@ -367,6 +367,7 @@ namespace FCentricProspections.Server.Controllers
             var contactinfo = this.data.GetContactInfo(shopId, contactTypeId);
             if (contactinfo == null)
             {
+                // TO DO: ContactInfo often not found, is it wise to have this return value?
                 return NotFound("ContactInfo not found.");
             }
 
@@ -985,6 +986,36 @@ namespace FCentricProspections.Server.Controllers
 
             // return list of viewmodel brand
             return Ok(viewModel);
+        }
+
+        [HttpGet()]
+        [Route("todos/{id}/employees")]
+        public IActionResult GetToDoEmployees(long id)
+        {
+            var toDo = this.data.GetToDo(id);
+            if (toDo == null)
+            {
+                return NotFound("ToDo not found.");
+            }
+
+            var employees = new List<EmployeeGetAllViewModel>();
+            foreach (var toDoEmployee in toDo.ToDoEmployees)
+            {
+                var employee = this.data.GetEmployee(toDoEmployee.EmployeeId);
+                if (employee != null)
+                {
+                    employees.Add(new EmployeeGetAllViewModel
+                    {
+                        Id = employee.Id,
+                        FirstName = employee.FirstName,
+                        Name = employee.Name,
+                        UserId = employee.UserId,
+                    });
+                }
+            }
+
+            // return list of employees
+            return Ok(employees);
         }
 
         // POST

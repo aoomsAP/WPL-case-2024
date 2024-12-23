@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { IBrand, IProspection, IShopDetail } from "../types";
 
 interface ShopDetailContext {
-    setShopId: (id: string) => void;
+    setShopId: (id: number) => void;
     shopDetail: IShopDetail | undefined,
     shopProspections: IProspection[],
     shopBrands: IBrand[],
@@ -17,12 +17,12 @@ export const ShopDetailContext = React.createContext<ShopDetailContext>({
 
 export const ShopDetailProvider = ({ children }: { children: React.ReactNode }) => {
 
-    const [shopId, setShopId] = useState<string>();
+    const [shopId, setShopId] = useState<number>();
     const [shopDetail, setShopDetail] = useState<IShopDetail | undefined>();
     const [shopProspections, setShopProspections] = useState<IProspection[]>([]);
     const [shopBrands, setShopBrands] = useState<IBrand[]>([]);
 
-    async function loadShopDetail(shopId: string) {
+    async function loadShopDetail(shopId: number) {
         try {
             const response = await fetch(`/api/shops/${shopId}`, {
                 method: 'GET',
@@ -32,18 +32,19 @@ export const ShopDetailProvider = ({ children }: { children: React.ReactNode }) 
             const json: IShopDetail | undefined = await response.json();
             setShopDetail(json);
 
+            console.log("shop detail loaded", json)
+
         } catch (error) {
             console.error('Error fetching shops data:', error);
         }
     }
 
-    const loadShopProspections = async (id: string) => {
+    const loadShopProspections = async (id: number) => {
       try {
-        // load list of Shop Prospections
         const responseProspection = await fetch(`/api/shops/${id}/prospections`, {
-          method: 'GET',  // Specify the method if it's not 'GET' by default
+          method: 'GET', 
           headers: {
-            'Content-Type': 'application/json',  // Define the expected content type                   
+            'Content-Type': 'application/json',              
           },
         })
   
@@ -51,15 +52,15 @@ export const ShopDetailProvider = ({ children }: { children: React.ReactNode }) 
           throw new Error('Failed to fetch prospections data')
         }
   
-        const json2: IProspection[] = await responseProspection.json();
-        setShopProspections(json2)
+        const json: IProspection[] = await responseProspection.json();
+        setShopProspections(json)
   
       } catch (error) {
         console.error('Error fetching prospections data:', error);
       }
     }
 
-    async function loadShopBrands(shopId: string) {
+    async function loadShopBrands(shopId: number) {
       try {
           const response = await fetch(`/api/shops/${shopId}/brands`, {
               method: 'GET',

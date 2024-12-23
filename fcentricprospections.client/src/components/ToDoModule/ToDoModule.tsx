@@ -2,11 +2,11 @@ import { FormEvent, useContext, useEffect, useState } from "react";
 import { IEmployee, IToDo, OptionType } from "../../types";
 import styles from "./ToDoModule.module.css"
 import { UserContext } from "../../contexts/UserContext";
-import Select, { createFilter } from 'react-select';
+import Select, { createFilter, MultiValue } from 'react-select';
 import ToDoEditable from "./ToDoEditable";
 import { v4 as uuidv4 } from 'uuid';
 import Option from "./Option/Option";
-import MenuList from "./MenuList/MenuListSingle";
+import MenuList from "./MenuList/MenuList";
 
 interface ToDoModuleProps {
     toDos: IToDo[];
@@ -19,21 +19,29 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
 
     const [title, setTitle] = useState<string>(""); // "Name" in db
     const [description, setDescription] = useState<string>("");
-    const [selectedEmployee, setSelectedEmployee] = useState<OptionType>();
+    const [selectedEmployees, setSelectedEmployees] = useState<OptionType[]>([]);
     const [employeesOptions, setEmployeesOptions] = useState<OptionType[]>([]);
 
     function onSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         console.log("Submit handler");
-        console.log("employee", selectedEmployee);
-        if (selectedEmployee && description.length > 0) {
+        console.log("Employees", selectedEmployees);
+        if (selectedEmployees && description.length > 0) {
+
+            const employees: IEmployee[] = selectedEmployees.map(e => {
+                return ({
+                    id: +e.value,
+                    name: e.label,
+                })
+            });
+
             const newToDo: IToDo = {
                 id: uuidv4(), // generate temporary unique id
                 name: title,
                 remarks: description,
-                employeeId: +selectedEmployee.value,
-                employeeName: selectedEmployee.label,
-                toDoStatusId: 1, // DEFAULT
+                employees: employees,
+                toDoStatusId: 1, // HARDCODED = "Ongoing"
+                toDoTypeId: 4, // HARDCODED = "Other"
             }
             const newToDos = [...toDos, newToDo];
             console.log(newToDos);
@@ -44,13 +52,9 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
     }
 
     // Create new list without the automatic todo's
-    
-    const userAddedToDos: IToDo[] = toDos.filter(toDo =>
-        toDo.name !== "Nieuwe brands" &&
-        toDo.name !== "Nieuwe contact info" &&
-        toDo.name !== "FC70 brand interesses"
-    );
-    
+
+    const userAddedToDos: IToDo[] = toDos.filter(toDo => toDo.toDoTypeId === 4); ///HARDCODED = "Other"
+
     // Map employees to options for react-select
     useEffect(() => {
         const isValidEmployee = (employee: IEmployee) =>
@@ -68,7 +72,13 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
     return (
         <>
             {/* TO DO INPUT */}
-            <form onSubmit={(e) => onSubmit(e)}>
+            <form onSubmit={(e) => {
+                onSubmit(e);
+                // Clear "new todo"
+                setTitle("");
+                setDescription("");
+                setSelectedEmployees([]);
+            }}>
                 <fieldset>
                     <legend>Nieuwe taak</legend>
 
@@ -84,25 +94,24 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
 
                     {/* Employee */}
                     <label htmlFor="employee">Aan wie is de taak gericht?</label>
-                    {employeesOptions && <Select
-                        className="basic-single"
+                    {employeesOptions && <Select<OptionType, true>
+                        className="basic-multi-select"
                         classNamePrefix="select"
-                        defaultValue={selectedEmployee}
-                        placeholder={"Kies een persoon"}
+                        isMulti
                         isClearable={true}
                         isSearchable={true}
-                        name="employee"
-                        options={employeesOptions}
-                        components={{ // Custom components to make use of react-window to improve rendering    
-                            Option,
-                            MenuList, // Custom menu list rendering
-                        }}
-                        maxMenuHeight={200} // Limit height to improve rendering
+                        name="employees"
                         filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
-                        onChange={(e) => {
-                            if (e) {
-                                setSelectedEmployee(e);
-                            }
+                        maxMenuHeight={200} // Limit height to improve rendering
+                        value={selectedEmployees}
+                        options={employeesOptions}
+                        components={{ // Custom components to make use of react-window to improve rendering
+                            MenuList,
+                            Option,
+                        }}
+                        onChange={(selectedOptions: MultiValue<OptionType>) => {
+                            let newSelectedOptions = selectedOptions.map(x => x);
+                            setSelectedEmployees(newSelectedOptions);
                         }}
                     />}
 
@@ -115,7 +124,9 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
                 {
                     userAddedToDos
                         .map((toDo, i) =>
-                            <ToDoEditable index={i} toDo={toDo} toDos={userAddedToDos} setToDos={setToDos} employeesOptions={employeesOptions} />
+                            <div key={i}>
+                                <ToDoEditable index={i} toDo={toDo} toDos={userAddedToDos} setToDos={setToDos} employeesOptions={employeesOptions} />
+                            </div>
                         )
                 }
             </div>

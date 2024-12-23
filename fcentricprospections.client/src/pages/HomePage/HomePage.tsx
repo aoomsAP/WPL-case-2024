@@ -10,13 +10,11 @@ import MenuList from "../../components/ToDoModule/MenuList/MenuListSingle";
 
 export const Homepage = () => {
 
-
     const navigate = useNavigate();
 
     const { user, employee } = useContext(UserContext);
 
     const [shopNames, setShopNames] = useState<IShop[]>([]); //Sate with list of shops
-
     const [shopListOptions, setShopListOptions] = useState<OptionType[]>([]);
 
     useEffect(() => {
@@ -42,7 +40,6 @@ export const Homepage = () => {
             });
         setShopListOptions(shopOptionOptions);
     }, [shopNames])
-
 
     const loadShops = async () => {
         try {
@@ -93,8 +90,6 @@ export const Homepage = () => {
                     if(e?.value != undefined){
                         navigate(`/shop/${e?.value}`);
                     }
-
-                    
                 }}
             />}
 

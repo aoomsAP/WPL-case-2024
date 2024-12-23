@@ -6,7 +6,7 @@ interface EditableInputProps {
     type: "textarea" | "input";
     value: string;
     onChange: (value: string) => void;
-    disabled: boolean,
+    disabled?: boolean,
 }
 
 const EditableInput = ({ type, value, onChange, disabled }: EditableInputProps) => {

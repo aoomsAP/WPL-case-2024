@@ -1,16 +1,14 @@
 import { useContext } from "react";
 import { UserContext } from "../../contexts/UserContext";
 
-
 const ErrorPage = () => {
 
-    const {}= useContext(UserContext);
-   
+    const { } = useContext(UserContext);
 
-    return(
+    return (
         <main>
-        <section>Oeps iets ging mis</section>
-        
+            <section>Oeps, er ging iets mis.</section>
+
         </main>
     );
 }

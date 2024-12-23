@@ -33,7 +33,7 @@ const BrandCardInput = ({ brand }: BrandCardInputProps) => {
     }, [sellout, selloutRemark])
 
     return (
-        <fieldset className={styles.brand_fieldset} key={brand.brandId}>
+        <fieldset className={styles.brand_fieldset}>
             <legend className={styles.brand_legend}>{brand.brandName}</legend>
 
             <label>Sellout (%)</label><br />

@@ -32,9 +32,7 @@ const BrandTag = ({ brandId, brandName, type }: BrandTagProps) => {
     }
 
     return (
-        <div key={brandId}>
-            {brandName} <span className={styles.close} onClick={handleClick}>{type === "brand" ? "" : "X"}</span>
-        </div>
+        <>{brandName} <span className={styles.close} onClick={handleClick}>{type === "brand" ? "" : "X"}</span></>
     );
 }
 

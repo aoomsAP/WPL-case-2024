@@ -1,19 +1,19 @@
 export interface IShop {
-  id: string; // Example property, replace with real ones
-  name: string; // Example property
+  id: number;
+  name: string;
   city: string;
 }
 
 export interface IShopDetail {
   id: number;
   name: string;
-  address: Address;
+  address: IAddress;
   customer: string;
   owner: string;
   shopTypeId: number,
 }
 
-export interface Address {
+export interface IAddress {
   id: number;
   street1: string;
   street2: string;
@@ -40,7 +40,7 @@ export interface IAddressCreate {
   street2?: string;
   postalCode: string;
   cityId: number;
-  userCreatedId: string,
+  userCreatedId: number,
   dateCreated: Date,
 }
 
@@ -48,14 +48,14 @@ export interface IContactCreate {
   id?: number;
   addressId: number,
   name?: string,
-  userCreatedId: string,
+  userCreatedId: number,
   dateCreated: Date,
 }
 
 export interface IShopCreate {
   id?: number;
   name?: string,
-  userCreatedId: string,
+  userCreatedId: number,
   dateCreated: Date,
   isParallelSales: boolean,
   contactId: number,
@@ -131,22 +131,22 @@ export interface IProspectionBrandInterest {
 }
 
 export interface IUser {
-  id: string,
+  id: number,
   login: string,
   blocked: boolean,
 }
 
 export interface IEmployee {
-  id: string,
-  firstName: string,
-  userId?: string,
-  hideForAgenda: boolean,
+  id: number,
+  firstName?: string,
+  userId?: number,
+  hideForAgenda?: boolean,
   name: string,
-  dateCreated: Date,
+  dateCreated?: Date,
 }
 
 export interface IAppointment {
-  id: string,
+  id: number,
   startDate: Date,
   endDate: Date,
   appointmentState: string,
@@ -158,23 +158,32 @@ export interface IAppointment {
 export interface IToDo {
   id?: number | string,
   remarks?: string,
-  employeeId?: number,
-  employeeName?: string,
+  employees?: IEmployee[],
   toDoStatusId?: number,
   toDoStatus?: string,
+  toDoTypeId?: number,
+  toDoType?: string,
   name?: string,
   dateCreated?: Date,
   userCreatedId?: number,
 }
 
-export interface IProspectionToDo {
+export interface IToDoEmployee {
   id?: number,
+  toDoId: number | string,
+  employeeId: number,
+  name?: string,
+}
+
+export interface IProspectionToDo {
+  id?: number | string,
   prospectionId: number,
-  toDoId: number,
+  toDoId: number | string,
   remarks?: string,
-  employeeId?: number,
   toDoStatusId?: number,
   toDoStatus?: string,
+  toDoTypeId?: number,
+  toDoType?: string,
   name?: string,
 }
 

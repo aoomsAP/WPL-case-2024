@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import styles from './ProspectionOverview.module.css'
 import { ShopDetailCard } from "../../components/ShopDetailCard/ShopDetailCard";
 import { FaAngleRight } from "react-icons/fa";
@@ -7,19 +7,28 @@ import { ShopDetailContext } from "../../contexts/ShopDetailContext";
 
 export const ProspectionOverview = () => {
 
+    const navigate = useNavigate();
+
     const { shopId } = useParams<{ shopId: string }>();
 
     const { setShopId, shopProspections, shopDetail } = useContext(ShopDetailContext);
 
+    // Set shop id
     useEffect(() => {
         if (shopId) {
-          setShopId(shopId);
+            if (Number.isNaN(parseInt(shopId))) {
+                // If shopId cannot be set (e.g. undefined), navigate to NotFound page
+                navigate("/404");
+            }
+            else {
+                setShopId(parseInt(shopId));
+            }
         }
-      }, [])
+    }, [])
 
     return (
         <main className={styles.main}>
-          {shopDetail && <ShopDetailCard shop={shopDetail} />}
+            {shopDetail && <ShopDetailCard shop={shopDetail} />}
 
             <h2>Voorgaande prospecties</h2>
 

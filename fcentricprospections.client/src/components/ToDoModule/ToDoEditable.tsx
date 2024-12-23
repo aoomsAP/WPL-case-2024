@@ -1,9 +1,9 @@
-import Select, { createFilter } from "react-select";
+import Select, { createFilter, MultiValue } from "react-select";
 import { IToDo, OptionType } from "../../types";
 import styles from "./ToDoEditable.module.css"
 import EditableInput from "./EditableInput";
 import Option from "./Option/Option";
-import MenuList from "./MenuList/MenuListSingle";
+import MenuList from "./MenuList/MenuList";
 
 interface ToDoEditableProps {
     index: number,
@@ -14,10 +14,6 @@ interface ToDoEditableProps {
 }
 
 export default function ToDoEditable({ index, toDo, toDos, setToDos, employeesOptions }: ToDoEditableProps) {
-
-    const isDisabled = (toDo.name === "Nieuwe brands") ||
-        (toDo.name === "Nieuwe contact info") ||
-        (toDo.name === "FC70 brand interesses")
 
     // Update a specific todo
     const updateToDo = (updatedFields: Partial<IToDo>) => {
@@ -38,16 +34,17 @@ export default function ToDoEditable({ index, toDo, toDos, setToDos, employeesOp
         setToDos(updatedToDos);
     };
 
+    // Previously set employees
+    const defaultEmployees = toDo.employees?.map(e => ({value: e.id.toString(), label: e.name}));
+
     return (
-        <div className={styles.toDo} key={toDo.id}>
+        <div className={styles.toDo}>
             {/* Header with delete button */}
             <div className={styles.editableinput_container}>
                 <strong>#{index + 1}</strong>
-                {!isDisabled && (
-                    <button className={styles.close} onClick={handleDelete}>
-                        X
-                    </button>
-                )}
+                <button className={styles.close} onClick={handleDelete}>
+                    X
+                </button>
             </div>
 
             {/* Title */}
@@ -59,7 +56,6 @@ export default function ToDoEditable({ index, toDo, toDos, setToDos, employeesOp
                         onChange={(newTitle) => {
                             updateToDo({ name: newTitle });
                         }}
-                        disabled={isDisabled}
                     />
                 </strong>
             </div>
@@ -73,33 +69,29 @@ export default function ToDoEditable({ index, toDo, toDos, setToDos, employeesOp
                     onChange={(newDescription) => {
                         updateToDo({ remarks: newDescription });
                     }}
-                    disabled={isDisabled}
                 />
             </div>
 
+            {/* Employees select */}
             <label htmlFor="employee">Toegewezen aan: </label>
-            <Select
-                className="basic-single"
+            <Select<OptionType, true>
+                className="basic-multi-select"
                 classNamePrefix="select"
-                value={employeesOptions.find((x) => x.value === toDo.employeeId?.toString())}
-                placeholder={"Kies een persoon"}
+                isMulti
                 isClearable={true}
                 isSearchable={true}
-                name="employee"
-                maxMenuHeight={200} // Limit height to improve rendering
-                options={employeesOptions}
-                components={{ // Custom components to make use of react-window to improve rendering    
-                    Option,
-                    MenuList, // Custom menu list rendering
-                }}
+                name="employees"
                 filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
-                onChange={(e) => {
-                    if (e) {
-                        updateToDo({
-                            employeeId: parseInt(e?.value ?? ""),
-                            employeeName: e?.label,
-                        });
-                    }
+                maxMenuHeight={200} // Limit height to improve rendering
+                defaultValue={defaultEmployees}
+                options={employeesOptions}
+                components={{ // Custom components to make use of react-window to improve rendering
+                    MenuList,
+                    Option,
+                }}
+                onChange={(selectedOptions: MultiValue<OptionType>) => {
+                    let newSelectedEmployees = selectedOptions.map(x => ({ id: +x.value, name: x.label }));
+                    updateToDo({ employees: newSelectedEmployees });
                 }}
             />
         </div>

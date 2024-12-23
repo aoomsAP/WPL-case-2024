@@ -601,11 +601,8 @@ namespace FCentricProspections.Server.Services
             return UserList;
         }
 
-
         public Employee GetEmployee(long id)
         {
-
-
             return this.context.Employees
                 .FirstOrDefault(x => x.Id == id);
         }

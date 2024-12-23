@@ -4,8 +4,8 @@ import { IAppointment, IEmployee, IUser } from "../types";
 
 interface UserContext {
     // states
-    userId: string,
-    setUserId: (userId: string) => void,
+    userId: number | undefined,
+    setUserId: (userId: number) => void,
     user: IUser | undefined,
     setUser: (user: IUser) => void,
     users: IUser[],
@@ -20,17 +20,17 @@ interface UserContext {
     setShownAppointments: (shownAppointments: IAppointment[]) => void,
 
     // loading functions
-    loadUser: (userId: string) => void;
+    loadUser: (userId: number) => void;
     loadUsers: () => void;
-    loadEmployee: (userId: string) => void;
+    loadEmployee: (userId: number) => void;
     loadEmployees: () => void;
-    loadAppointments: (id: string) => void;
-    loadAppointmentShown: (id: string) => Promise<IAppointment[]>;
+    loadAppointments: (id: number) => void;
+    loadAppointmentShown: (id: number) => Promise<IAppointment[]>;
 }
 
 export const UserContext = React.createContext<UserContext>({
     // states
-    userId: "",
+    userId: 0,
     setUserId: () => { },
     user: {} as IUser,
     setUser: () => { },
@@ -56,7 +56,7 @@ export const UserContext = React.createContext<UserContext>({
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
-    const [userId, setUserId] = useState<string>("");
+    const [userId, setUserId] = useState<number>();
     const [user, setUser] = useState<IUser>();
     const [users, setUsers] = useState<IUser[]>([]);
     const [employee, setEmployee] = useState<IEmployee>();
@@ -80,7 +80,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
-    async function loadUser(userId: string) {
+    async function loadUser(userId: number) {
         try {
             const response = await fetch(`/api/users/${userId}`, {
                 method: 'GET',
@@ -90,8 +90,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             const json: IUser | undefined = await response.json();
             setUser(json);
 
-            //temp
-            console.log(json, 'functie userData wat zit erin');
+            console.log("user loaded", json);
 
         } catch (error) {
             console.error('Error fetching userdata data:', error);
@@ -112,7 +111,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
-    async function loadEmployee(userId: string) {
+    async function loadEmployee(userId: number) {
         try {
             console.log("start loading employee")
 
@@ -133,7 +132,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     // Loads, sets & returns appointments of current user
-    async function loadAppointments(employeeId: string) {
+    async function loadAppointments(employeeId: number) {
         try {
             console.log(`loading appointments for user-employee ${employeeId}`);
 
@@ -153,7 +152,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     // Loads & returns appointments for a specific user
-    async function loadAppointmentShown(employeeId: string): Promise<IAppointment[]> {
+    async function loadAppointmentShown(employeeId: number): Promise<IAppointment[]> {
         try {
             console.log(`loading appointments for employee ${employeeId}`);
 
@@ -174,7 +173,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     // Loads data based on a specific userId
-    async function loadUserData(userId: string) {
+    async function loadUserData(userId: number) {
         await loadUser(userId);
         const loadedEmployee = await loadEmployee(userId);
 
@@ -190,8 +189,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     // Load user specific data upon receiving userId
     useEffect(() => {
         if (userId) {
-            loadUserData(userId)
-            console.log("user id ", userId, ' is ingeladen')
+            loadUserData(userId);
         }
     }, [userId]);
 
