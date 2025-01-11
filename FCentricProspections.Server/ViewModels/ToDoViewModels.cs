@@ -8,7 +8,9 @@ namespace FCentricProspections.Server.ViewModels
 
         public string Remarks { get; set; }
 
-        public long? EmployeeId { get; set; }
+        public long? ToDoTypeId {  get; set; }
+
+        public string? ToDoType { get; set; }
 
         public long? ToDoStatusId { get; set; }
 
@@ -21,7 +23,7 @@ namespace FCentricProspections.Server.ViewModels
     {
         public string Remarks { get; set; }
 
-        public long? EmployeeId { get; set; }
+        public long ToDoTypeId { get; set; }
 
         public long ToDoStatusId { get; set; }
 

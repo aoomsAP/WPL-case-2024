@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace FCentricProspections.Server.DataModels;
 
@@ -17,6 +18,7 @@ public partial class ContactChannel
 
     public DateTime DateCreated { get; set; }
 
+    [Timestamp]
     public byte[] Timestamp { get; set; }
 
     public long? Contact_Id { get; set; }

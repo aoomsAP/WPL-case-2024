@@ -49,13 +49,11 @@ const UserPage = () => {
           }}
             onChange={(e) => {
                 if (e?.value){
-                    setUserId(e.value)
+                    setUserId(+e.value);
                     navigate(`/home`);
                 }               
             }}/>}
 
-            
-            
         </main>
     );
 }

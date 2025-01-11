@@ -8,8 +8,6 @@ interface CompetitorBrandListProps {
 
 export const CompetitorBrandList: React.FC<CompetitorBrandListProps> = ({ prospectionCompetitorBrands }) => {
 
-  console.log(prospectionCompetitorBrands);
-
   return (
     <section className={styles.competitorBrandList}>
       <h2>Referentiemerken</h2>

@@ -50,5 +50,7 @@ public partial class User
 
     public virtual ICollection<ToDoStatus> ToDoStatuses { get; set; } = new List<ToDoStatus>();
 
+    public virtual ICollection<ToDoType> ToDoTypes { get; set; } = new List<ToDoType>();
+
     public virtual ICollection<ToDo> ToDos { get; set; } = new List<ToDo>();
 }

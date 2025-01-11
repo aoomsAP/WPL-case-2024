@@ -76,17 +76,44 @@ public partial class FCentricContext : DbContext
 
     public virtual DbSet<ShopType> ShopTypes { get; set; }
 
-    public virtual DbSet<ToDo> ToDoes { get; set; }
+    public virtual DbSet<ToDo> ToDos { get; set; }
 
-    public virtual DbSet<ToDoStatus> ToDoStatus { get; set; }
+    public virtual DbSet<ToDoEmployee> ToDoEmployees { get; set; }
+
+    public virtual DbSet<ToDoStatus> ToDoStatuses { get; set; }
+
+    public virtual DbSet<ToDoType> ToDoTypes { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
-    public virtual DbSet<ShopDetailsView> ShopDetailsView { get; set; }
-
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //modelBuilder.Ignore<Address>();
+        //modelBuilder.Ignore<Appointment>();
+        //modelBuilder.Ignore<AppointmentState>();
+        //modelBuilder.Ignore<Brand>();
+        //modelBuilder.Ignore<City>();
+        //modelBuilder.Ignore<CompetitorBrand>();
+        //modelBuilder.Ignore<Contact>();
+        //modelBuilder.Ignore<ContactChannel>();
+        //modelBuilder.Ignore<ContactChannelDescription>();
+        //modelBuilder.Ignore<ContactType>();
+        //modelBuilder.Ignore<Country>();
+        //modelBuilder.Ignore<Customer>();
+        //modelBuilder.Ignore<CustomerShop>();
+        //modelBuilder.Ignore<Employee>();
+        //modelBuilder.Ignore<FashionDocument>();
+        //modelBuilder.Ignore<FashionDocumentShop>();
+        //modelBuilder.Ignore<ProductLine>();
+        //modelBuilder.Ignore<ProductLineDelivery>();
+        //modelBuilder.Ignore<SalesPeriod>();
+        //modelBuilder.Ignore<Shop>();
+        //modelBuilder.Ignore<ShopContact>();
+        //modelBuilder.Ignore<ShopDelivery>();
+        //modelBuilder.Ignore<ShopDetailsView>();
+        //modelBuilder.Ignore<ShopType>();
+        //modelBuilder.Ignore<User>();
+
         modelBuilder.Entity<ProspectionContactType>().HasData(
             new ProspectionContactType { Id = 1, Name = "Owner" },
             new ProspectionContactType { Id = 2, Name = "Buyer" },
@@ -101,16 +128,23 @@ public partial class FCentricContext : DbContext
             new ProspectionVisitType { Id = 4, Name = "Other" }
         );
 
-        modelBuilder.Entity<Prospection>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.HasOne(d => d.Shop).WithMany(p => p.Prospections)
-                .HasForeignKey(d => d.ShopId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_dbo.Prospections_dbo.Shops_ShopId");
-        });
+        modelBuilder.Entity<ToDoType>().HasData(
+        new ToDoType { Id = 1, Name = "New contact info", UserCreatedId = 103, DateCreated = DateTime.Now },
+        new ToDoType { Id = 2, Name = "New brands", UserCreatedId = 103, DateCreated = DateTime.Now },
+        new ToDoType { Id = 3, Name = "Brand interests", UserCreatedId = 103, DateCreated = DateTime.Now },
+        new ToDoType { Id = 4, Name = "Other", UserCreatedId = 103, DateCreated = DateTime.Now }
+    );
 
-        // to implement ?
+        modelBuilder.Entity<ToDoStatus>().HasData(
+        new ToDoStatus { Id = 1, Name = "Ongoing", UserCreatedId = 103, DateCreated = DateTime.Now }
+        );
+
+        modelBuilder.Entity<ShopType>().Property(x => x.DateCreated).HasColumnType("datetime");
+
+        modelBuilder.Entity<ShopType>().HasData(
+        new ShopType { Id = 6, Name = "Prospection", UserCreatedId = 103, DateCreated = DateTime.Now }
+        );
+
 
         OnModelCreatingPartial(modelBuilder);
     }

@@ -35,7 +35,7 @@ export const EmployeeSelect = ({ setEvents }: EmployeeSelectProps) => {
         // Add appointments for every currently selected employee
         setAppLoading(true);
         for (let [index, id] of selectedEmployees.entries()) {
-            const newAppointments: IAppointment[] = await loadAppointmentShown(id);
+            const newAppointments: IAppointment[] = await loadAppointmentShown(+id);
             const newEvents = newAppointments.map((appointment) => ({
                 title: appointment.name ? appointment.name : (appointment.remarks ? appointment.remarks : "Geen details"),
                 start: appointment.startDate,
@@ -61,7 +61,7 @@ export const EmployeeSelect = ({ setEvents }: EmployeeSelectProps) => {
         let employeesOptions: OptionType[] = employees
             .filter(isValidEmployee)
             .map((employee) => ({
-                value: employee.id,
+                value: employee.id.toString(),
                 label: employee.name
             }));
         setEmployeesOptions(employeesOptions);

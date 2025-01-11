@@ -1,21 +1,30 @@
-import styles from "./NewProspection.module.css";
-import FormWizard from "react-form-wizard-component";
-import "react-form-wizard-component/dist/style.css";
+// react utilities
 import { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import BrandTag from '../../components/BrandTag/BrandTag';
-import { NewProspectionContext } from '../../contexts/NewProspectionContext';
+// styles
+import styles from "./NewProspection.module.css";
+// types
 import { ICompetitorBrand, IContactInfo, IProspectionBrand, IProspectionCompetitorBrand, IProspectionDetail, IProspectionToDo, IToDo, OptionType } from '../../types';
+// components
+import BrandTag from '../../components/BrandTag/BrandTag';
 import BrandCardInput from '../../components/BrandCardInput/BrandCardInput';
 import BrandInterestCard from '../../components/BrandCardInput/BrandInterestCard';
-import { AiOutlineCheck } from "react-icons/ai";
-import { ShopDetailContext } from '../../contexts/ShopDetailContext';
 import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCard';
 import ToDoModule from '../../components/ToDoModule/ToDoModule';
+// contexts
+import { ShopDetailContext } from '../../contexts/ShopDetailContext';
 import { UserContext } from '../../contexts/UserContext';
+import { NewProspectionContext } from '../../contexts/NewProspectionContext';
+// react-select
 import Select, { createFilter, MultiValue } from 'react-select';
 import MenuList from "../../components/ToDoModule/MenuList/MenuList"; // Custom MenuList
 import Option from "../../components/ToDoModule/Option/Option"; // Custom Option
+// form-wizard
+import FormWizard from "react-form-wizard-component";
+import "react-form-wizard-component/dist/style.css";
+// icons
+import { AiOutlineCheck } from "react-icons/ai";
+// uuid
 import { v4 as uuidv4 } from 'uuid';
 
 export const NewProspection = () => {
@@ -33,9 +42,16 @@ export const NewProspection = () => {
     shopBrands
   } = useContext(ShopDetailContext);
 
+  // Set shop id
   useEffect(() => {
     if (shopId) {
-      setShopId(shopId);
+      if (Number.isNaN(parseInt(shopId))) {
+        // If shopId cannot be set (e.g. undefined), navigate to NotFound page
+        navigate("/404");
+      }
+      else {
+        setShopId(parseInt(shopId));
+      }
     }
   }, [])
 
@@ -57,10 +73,12 @@ export const NewProspection = () => {
     updateProspectionCompetitorBrands,
     updateProspectionBrandInterests,
     updateProspectionToDos,
+    updateToDoEmployees,
   } = useContext(NewProspectionContext);
 
   // Input fields / states --------------------------------------------------------------------------------------------------------------------
 
+  // prospection fields
   const [visitDate, setVisitDate] = useState<Date>(new Date());
   const [contactType, setContactType] = useState<number>(4);
   const [contactName, setContactName] = useState<string>("");
@@ -75,11 +93,19 @@ export const NewProspection = () => {
   const [trends, setTrends] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
 
+  // contact info
   const [contactInfo, setContactInfo] = useState<IContactInfo>();
 
+  // validation
+  const [nameChecked, setNameChecked] = useState<boolean>(true);
+  const [emailChecked, setEmailChecked] = useState<boolean>(true);
+  const [phoneChecked, setPhoneChecked] = useState<boolean>(true);
+
+  // window size
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
 
-  // Window Width UseEffect-------------------------------------------------------------------------------------------------
+  // Window width ----------------------------------------------------------------------------------------------------------
+
   useEffect(() => {
     const updateWidth = () => {
       setWindowWidth(window.innerWidth);
@@ -92,52 +118,65 @@ export const NewProspection = () => {
     return () => clearInterval(interval);
   }, []);
 
+
   // Contact info -----------------------------------------------------------------------------------------------------------
 
-  async function loadContactInfoFromDb(shopId: string, contactTypeId: number) {
+  async function loadContactInfoFromDb(shopId: number, contactTypeId: number) {
     const loadedContactInfo = await loadContactInfo(shopId, contactTypeId);
     setContactInfo(loadedContactInfo);
   }
 
   useEffect(() => {
-
     let contactTypeCast: number = 0;
 
     switch (contactType) {
-      case 1: contactTypeCast = 5; break; // Owner
-      case 2: contactTypeCast = 6; break; // Buyer
-      case 3: contactTypeCast = 7; break; // SalesPerson / ShopManager
-      default: setContactInfo(undefined); break;
+      case 1:
+        contactTypeCast = 5; // Owner
+        setNameChecked(false); setEmailChecked(false); setPhoneChecked(false);
+        break;
+      case 2:
+        contactTypeCast = 6; // Buyer
+        setNameChecked(false); setEmailChecked(false); setPhoneChecked(false);
+        break;
+      case 3:
+        contactTypeCast = 7; // SalesPerson / ShopManager
+        setNameChecked(true); setEmailChecked(true); setPhoneChecked(true);
+        break;
+      default:
+        setNameChecked(true); setEmailChecked(true); setPhoneChecked(true);
+        setContactInfo(undefined);
+        break;
     }
 
     if (shopId && contactTypeCast != 0) {
-      loadContactInfoFromDb(shopId, contactTypeCast);
+      loadContactInfoFromDb(+shopId, contactTypeCast);
     }
   }, [contactType])
+
 
   // Todos --------------------------------------------------------------------------------------------------------------------
 
   // Contact info todos 
   useEffect(() => {
-    console.log("todos at contact useffect", toDos);
-
     if (contactName != "" || contactEmail != "" || contactPhone != "") {
 
       const newContactName = `${contactName.length > 1 ? `Contact naam: ${contactName}` : ""}`
       const newContactEmail = `${contactEmail.length > 1 ? `Contact email: ${contactEmail}` : ""}`
       const newContactPhone = `${contactPhone.length > 1 ? `Contact telefoon: ${contactPhone}` : ""}`
+      const newContactInfo = `${newContactName != "" ? `${newContactName}\n` : ""}${newContactEmail != "" ? `${newContactEmail}\n` : ""}${newContactPhone != "" ? `${newContactPhone}` : ""}`;
 
       // Create todo for each interest
       let contactInfoToDo = {
         id: uuidv4(), // generate temporary unique id
         name: "Nieuwe contact info",
-        remarks: newContactName + (newContactName ? " - " : "") + newContactEmail + (newContactEmail ? " - " : "") + newContactPhone,
-        employeeId: 3, // TEMPORARY DEFAULT
-        toDoStatusId: 1, // DEFAULT
+        remarks: newContactInfo,
+        employees: [], // Initialize as empty until query assigns group of employees
+        toDoStatusId: 1, // HARDCODED = "Ongoing"
+        toDoTypeId: 1, // HARDCODED = "New contact info"
       };
 
       // Filter out contact info todo, as to only replace that one
-      const toDosWithoutContact = toDos.filter(x => x.name !== "Nieuwe contact info");
+      const toDosWithoutContact = toDos.filter(x => x.toDoTypeId !== 1);
       const newToDos = [...toDosWithoutContact, contactInfoToDo];
       setToDos(newToDos);
     }
@@ -145,26 +184,23 @@ export const NewProspection = () => {
 
   // NewBrands todos 
   useEffect(() => {
-    console.log("todos at new brands useffect", toDos);
-
     // Update newBrands toDo item
     let newBrandsToDo = {
       id: uuidv4(), // generate temporary unique id
       name: "Nieuwe brands",
       remarks: newBrands,
-      employeeId: 3, // TEMPORARY DEFAULT
-      toDoStatusId: 1, // DEFAULT
+      employees: [], // Initialize as empty until query assigns group of employees
+      toDoStatusId: 1, // HARDCODED = "Ongoing"
+      toDoTypeId: 2, // HARDCODED = "New brands"
     };
     // Filter out newBrands todos, as to only replace that one
-    const toDosWithoutNewBrands = toDos.filter(x => x.name !== "Nieuwe brands");
+    const toDosWithoutNewBrands = toDos.filter(x => x.toDoTypeId !== 2);
     const newToDos = [...toDosWithoutNewBrands, newBrandsToDo];
     setToDos(newToDos);
   }, [newBrands])
 
   // Prospection brand interest todos 
   useEffect(() => {
-    console.log("todos at brand interest useffect", toDos);
-    
     let brandInterestsNames = prospectionBrandInterests.map(i => `Merk: ${i.brandName}${i.remark ? `\nOpmerking: ${i.remark}` : ""}\n`).join('\n');
 
     // Create one todo for all brand interests
@@ -172,15 +208,17 @@ export const NewProspection = () => {
       id: uuidv4(), // generate temporary unique id
       name: "FC70 brand interesses",
       remarks: brandInterestsNames,
-      employeeId: 3, // TEMPORARY DEFAULT
-      toDoStatusId: 1, // DEFAULT
+      employees: [], // Initialize as empty until query assigns group of employees
+      toDoStatusId: 1, // HARDCODED = "Ongoing"
+      toDoTypeId: 3, // HARDCODED = "Brand interests"
     };
-    
+
     // Filter out FC70 brand interest todos, as to only replace those
-    const toDosWithoutBrandInterests = toDos.filter(x => x.name !== "FC70 brand interesses");
+    const toDosWithoutBrandInterests = toDos.filter(x => x.toDoTypeId !== 3);
     const newToDos = [...toDosWithoutBrandInterests, brandInterestToDo];
     setToDos(newToDos);
   }, [prospectionBrandInterests])
+
 
   // Select -------------------------------------------------------------------------------------------------------------------
 
@@ -213,22 +251,51 @@ export const NewProspection = () => {
   });
 
 
-  // Setting default ProspectionBrands based on shopBrands list --------------------------------------------------------------------------------------------------------------------
+  // Default prospectionBrands --------------------------------------------------------------------------------------------------------------------
 
   useEffect(() => {
-    console.log("setting default prospection brands")
+    console.log("Setting default prospection brands")
     const defaultProspectionBrands: IProspectionBrand[] = shopBrands.map(x => ({ brandId: x.id, brandName: x.name }));
     setProspectionBrands(defaultProspectionBrands);
-    console.log("set default prospection brands")
+    console.log("Set default prospection brands")
     console.log(defaultProspectionBrands)
   }, [shopBrands])
+
+
+  // Form wizard validation ------------------------------------------------------------------------------------------------------------------------------------
+
+  // Validate contact info tab
+  const checkValidateContactTab = () => {
+    if (!nameChecked || !emailChecked || !phoneChecked) {
+      return false;
+    }
+    return true;
+  };
+
+  // Contact info tab error message
+  const contactTabError = () => {
+    alert("Gelieve de nodige contact informatie af te vinken.");
+  };
+
+  // Validate trends & feedback tab
+  const checkValidateFeedbackTab = () => {
+    if (trends === "" || feedback === "") {
+      return false;
+    }
+    return true;
+  };
+
+  // Trends & feedback tab error messages
+  const feedbackError = () => {
+    alert("Gelieve de verplichte velden in te vullen.");
+  };
 
 
   // Submit function ------------------------------------------------------------------------------------------------------------------------------------
 
   async function handleComplete() {
     try {
-      console.log("start handleComplete");
+      console.log("Start newProspection handleComplete");
 
       if (!user?.id) {
         alert("Geen geldige gebruiker. Probeer opnieuw in the loggen.");
@@ -265,30 +332,32 @@ export const NewProspection = () => {
       const addedToDos: IToDo[] = [];
       for (let toDo of toDos) {
 
-        if (toDo.employeeId === 0 || toDo.employeeId == undefined) {
-          alert("Selecteer een geldige persoon voor elke taak.");
-          return;
-        }
-
         const addedToDo = await addToDo({
           remarks: toDo.remarks,
-          employeeId: toDo.employeeId,
           toDoStatusId: toDo.toDoStatusId,
+          toDoTypeId: toDo.toDoTypeId,
           name: toDo.name,
           dateCreated: new Date(),
-          userCreatedId: user ? +user.id : 0,
+          userCreatedId: user.id,
         });
+
+        // If new toDo is successfully added, proceed
         if (addedToDo) {
           addedToDos.push(addedToDo);
+
+          // Update todo-employees relationship 
+          if (toDo.employees && addedToDo.id) {
+            await updateToDoEmployees(+addedToDo.id, toDo.employees);
+          }
         }
       }
-      console.log("todos added to db", addedToDos);
+      console.log("Todos added to db", addedToDos);
 
       // Add new prospection and await response
       const createdProspection = await addProspection(newProspection);
-      console.log("new prospection added")
+      console.log("New prospection added")
 
-      // Only proceed if response was successful
+      // If prospection was successfully added, proceed
       if (createdProspection && createdProspection.id) {
 
         // Get id from new prospection
@@ -313,7 +382,7 @@ export const NewProspection = () => {
         await updateProspectionToDos(prospectionId, newProspectionToDos);
         console.log("Prospection todos updates completed successfully.");
 
-        console.log("end handleComplete");
+        console.log("End newProspection handleComplete");
 
         navigate(`/shop/${shopId}`);
 
@@ -322,26 +391,10 @@ export const NewProspection = () => {
       }
 
     } catch (error) {
-      console.error("Error in handleComplete: ", error);
+      console.error("Error in newProspection handleComplete: ", error);
     }
   };
 
-
-  // check validate tab
-  const checkValidateTab = () => {
-    console.log(trends);
-    console.log(feedback);
-    if (trends === "" || feedback === "") {
-      return false;
-    }
-    return true;
-  };
-
-  // error messages
-  const errorMessages = () => {
-    // add alert if trends or feedback are empty
-    alert("Gelieve de verplichte velden in te vullen.");
-  };
 
   return (
     <main className={styles.main}>
@@ -350,20 +403,18 @@ export const NewProspection = () => {
         color="black"
         title="Nieuwe prospectie"
         nextButtonText="Volgende"
-        
         backButtonText="Vorige"
         finishButtonText="Verzenden"
         layout="horizontal"
         stepSize="sm"
-
-        
-        
-       
         onComplete={handleComplete}>
 
-        {/* CONTACT DETAILS ----------------------------------------------------------- */}
 
-        <FormWizard.TabContent title={windowWidth < 700 ? "" : "Info"} icon={<AiOutlineCheck color="#D4AF37" width={50} />}   >
+        {/* CONTACT INFO ------------------------------------------------------------------------------------------------------------------------- */}
+
+        <FormWizard.TabContent
+          title={windowWidth < 700 ? "" : "Info"}
+          icon={<AiOutlineCheck color="#D4AF37" width={50} />}   >
 
           {/* Shop info */}
           {shopDetail && <ShopDetailCard shop={shopDetail} />}
@@ -413,11 +464,32 @@ export const NewProspection = () => {
               type='text'
               placeholder='Update naam'
               value={contactName}
-              onChange={(e) => setContactName(e.target.value)}></input>
+              onChange={(e) => {
+                setContactName(e.target.value);
+                // If contact name has any value, consider automatically checked
+                if (e.target.value != "") setNameChecked(true);
+                else setNameChecked(false);
+              }} />
+
+            {/* Checkbox validation */}
+            {/* Only show if contact type is owner or buyer */}
+            {(contactType == 1 || contactType == 2) && !nameChecked &&
+              <div className={styles.checkbox}>
+                <label htmlFor="nameValidation">
+                  Huidige informatie is correct&nbsp;
+                  <input
+                    type="checkbox"
+                    name="nameValidation"
+                    onChange={(e) => setNameChecked(e.target.checked)}
+                    checked={nameChecked}
+                  />
+                </label>
+              </div>
+            }
           </fieldset>
 
-          {/* Toon email en telefoonnummer als het geen verkoper of overig is*/}
-          {contactType !== 3 && contactType !== 4 && (
+          {/* Only show email and phone if contact type is owener or buyer */}
+          {(contactType == 1 || contactType == 2) &&
             <>
               <fieldset>
                 <legend>Contact email</legend>
@@ -426,7 +498,28 @@ export const NewProspection = () => {
                   type='text'
                   placeholder='Update email'
                   value={contactEmail}
-                  onChange={(e) => setContactEmail(e.target.value)}></input>
+                  onChange={(e) => {
+                    setContactEmail(e.target.value);
+                    // If contact email has any value, consider automatically checked
+                    if (e.target.value != "") setEmailChecked(true);
+                    else setEmailChecked(false);
+                  }}>
+                </input>
+
+                {/* Checkbox validation */}
+                {!emailChecked &&
+                  <div className={styles.checkbox}>
+                    <label htmlFor="emailValidation">
+                    Huidige informatie is correct&nbsp;
+                    <input
+                        type="checkbox"
+                        name="emailValidation"
+                        onChange={(e) => setEmailChecked(e.target.checked)}
+                        checked={emailChecked}
+                      />
+                    </label>
+                  </div>
+                }
               </fieldset>
 
               <fieldset>
@@ -436,27 +529,56 @@ export const NewProspection = () => {
                   type='text'
                   placeholder='Update telefoonnummer'
                   value={contactPhone}
-                  onChange={(e) => setContactPhone(e.target.value)}></input>
+                  onChange={(e) => {
+                    setContactPhone(e.target.value);
+                    // If contact phone has any value, consider automatically checked
+                    if (e.target.value != "") setPhoneChecked(true);
+                    else setPhoneChecked(false);
+
+                  }} />
+
+                {/* Checkbox validation */}
+                {!phoneChecked &&
+                  <div className={styles.checkbox}>
+                    <label htmlFor="phoneValidation">
+                    Huidige informatie is correct&nbsp;
+                    <input
+                        type="checkbox"
+                        name="phoneValidation"
+                        onChange={(e) => setPhoneChecked(e.target.checked)}
+                        checked={phoneChecked}
+                      />
+                    </label>
+                  </div>
+                }
               </fieldset>
             </>
-          )}
+          }
 
           <fieldset>
             <legend>Bezoek type</legend>
             <label>
-              <input type="radio" name="visit" value="1" onChange={(e) => setVisitType(+e.target.value)} checked={visitType === 1} />
+              <input type="radio" name="visit" value="1"
+                onChange={(e) => setVisitType(+e.target.value)}
+                checked={visitType === 1} />
               Prospectie
             </label>
             <label>
-              <input type="radio" name="visit" value="2" onChange={(e) => setVisitType(+e.target.value)} checked={visitType === 2} />
+              <input type="radio" name="visit" value="2"
+                onChange={(e) => setVisitType(+e.target.value)}
+                checked={visitType === 2} />
               Swap
             </label>
             <label>
-              <input type="radio" name="visit" value="3" onChange={(e) => setVisitType(+e.target.value)} checked={visitType === 3} />
+              <input type="radio" name="visit" value="3"
+                onChange={(e) => setVisitType(+e.target.value)}
+                checked={visitType === 3} />
               Key account meeting
             </label>
             <label>
-              <input type="radio" name="visit" value="4" onChange={(e) => setVisitType(+e.target.value)} checked={visitType === 4} />
+              <input type="radio" name="visit" value="4"
+                onChange={(e) => setVisitType(+e.target.value)}
+                checked={visitType === 4} />
               Overig
             </label>
           </fieldset>
@@ -475,16 +597,23 @@ export const NewProspection = () => {
 
         </FormWizard.TabContent>
 
-        {/* BRANDMIX ---------------------------------------------------------------------------------------------------------------------- */}
 
-        <FormWizard.TabContent title={windowWidth < 700 ? "" : "Brandmix"} icon={<AiOutlineCheck color="#D4AF37" />}>
+        {/* BRANDMIX --------------------------------------------------------------------------------------------------------------------------- */}
+
+        <FormWizard.TabContent
+          title={windowWidth < 700 ? "" : "Brandmix"}
+          icon={<AiOutlineCheck color="#D4AF37" />}
+          isValid={checkValidateContactTab()}
+          validationError={contactTabError}>
 
           {/* FC70 BRANDS */}
           <h3>FC70 merken</h3>
           <div>
             {prospectionBrands.length > 0
-              ? prospectionBrands.map(brand => (
-                <BrandTag brandId={brand.brandId} brandName={brand.brandName} type="brand" />
+              ? prospectionBrands.map((brand, i) => (
+                <div key={i}>
+                  <BrandTag brandId={brand.brandId} brandName={brand.brandName} type="brand" />
+                </div>
               ))
               : "Geen Fashion Club 70 merken beschikbaar."}
           </div>
@@ -519,49 +648,69 @@ export const NewProspection = () => {
           {/* NEW BRANDS */}
           <h3>Nieuwe merken</h3>
           <legend>Merken die u niet terugvond in de lijst hierboven:</legend>
-          <textarea value={newBrands} placeholder='Nieuwe merk met collectie voor dames/heren/kinderen'
+          <textarea
+            value={newBrands}
+            placeholder='Nieuwe merk met collectie voor dames/heren/kinderen'
             onChange={(e) => {
               setNewBrands(e.target.value);
             }} />
 
         </FormWizard.TabContent>
 
-        {/* BEST BRANDS, WORST BRANDS, TERMINATED BRANDS ----------------------------------------------------------------------------------------- */}
 
-        <FormWizard.TabContent title={windowWidth < 700 ? " " : "Algemeen"} icon={<AiOutlineCheck color="#D4AF37"/>}>
+        {/* BEST / WORST / TERMINATED BRANDS ------------------------------------------------------------------------------------------------------------ */}
+
+        <FormWizard.TabContent
+          title={windowWidth < 700 ? " " : "Algemeen"}
+          icon={<AiOutlineCheck color="#D4AF37" />}>
+
           <h3>Algemene situatie</h3>
 
           <fieldset>
             <legend>Beste merken</legend>
-            <textarea value={bestBrands} placeholder='De beste merken dit seizoen waren...'
+            <textarea
+              value={bestBrands}
+              placeholder='De beste merken dit seizoen waren...'
               onChange={(e) => setBestBrands(e.target.value)} />
           </fieldset>
 
           <fieldset>
             <legend>Slechtste merken</legend>
-            <textarea value={worstBrands} placeholder='De slechtste merken dit seizoen waren...'
+            <textarea
+              value={worstBrands}
+              placeholder='De slechtste merken dit seizoen waren...'
               onChange={(e) => setWorstBrands(e.target.value)} />
           </fieldset>
 
           <fieldset>
             <legend>Merken die niet meer ingekocht worden</legend>
-            <textarea value={terminatedBrands} placeholder='Deze merken worden niet meer ingekocht volgend seizoen...'
+            <textarea
+              value={terminatedBrands}
+              placeholder='Deze merken worden niet meer ingekocht volgend seizoen...'
               onChange={(e) => setTerminatedBrands(e.target.value)} />
           </fieldset>
+
         </FormWizard.TabContent>
 
-        {/* FC70 BRANDS SELLOUT --------------------------------------------------------------------------------------------- */}
 
-        <FormWizard.TabContent title={windowWidth < 700 ? " " : "FC70"} icon={<AiOutlineCheck color="#D4AF37"  />}>
+        {/* FC70 BRANDS SELLOUT ------------------------------------------------------------------------------------------------------------------------- */}
+
+        <FormWizard.TabContent
+          title={windowWidth < 700 ? " " : "FC70"}
+          icon={<AiOutlineCheck color="#D4AF37" />}>
 
           <h3>FC70 overzicht</h3>
 
-          {prospectionBrands.map(brand => <BrandCardInput brand={{ brandId: brand.brandId, brandName: brand.brandName }} />)}
+          {prospectionBrands.map((brand, i) => <div key={i}>
+            <BrandCardInput brand={{ brandId: brand.brandId, brandName: brand.brandName }} />
+          </div>)}
           {prospectionBrands.length === 0 && <p>Geen FC70 merken beschikbaar.</p>}
 
         </FormWizard.TabContent>
 
-        <FormWizard.TabContent title={windowWidth < 700 ? "" : "Interesses"} icon={<AiOutlineCheck color="#D4AF37" />}>
+        <FormWizard.TabContent
+          title={windowWidth < 700 ? "" : "Interesses"}
+          icon={<AiOutlineCheck color="#D4AF37" />}>
 
           <h3>Interesse FC70 merken</h3>
 
@@ -596,14 +745,20 @@ export const NewProspection = () => {
           </ul>
 
           <div className={styles.cardsContainer}>
-            {prospectionBrandInterests.map(brand => <BrandInterestCard brand={brand} />)}
+            {prospectionBrandInterests.map((brand, i) => <div key={i}>
+              <BrandInterestCard brand={brand} />
+            </div>
+            )}
           </div>
 
         </FormWizard.TabContent>
 
-        {/* FEEDBACK ---------------------------------------------------------------------------------------------- */}
 
-        <FormWizard.TabContent title={windowWidth < 700 ? " " : "Feedback"} icon={<AiOutlineCheck color="#D4AF37" />}>
+        {/* FEEDBACK -------------------------------------------------------------------------------------------------------------------------------- */}
+
+        <FormWizard.TabContent
+          title={windowWidth < 700 ? " " : "Feedback"}
+          icon={<AiOutlineCheck color="#D4AF37" />}>
 
           <h3>Feedback</h3>
 
@@ -625,18 +780,25 @@ export const NewProspection = () => {
 
         </FormWizard.TabContent>
 
-        {/* TO DOS -------------------------------------------------------------------------------------------------- */}
 
-        <FormWizard.TabContent title={windowWidth < 700 ? " " : "Opvolging"} icon={<AiOutlineCheck  color="#D4AF37" />} isValid={checkValidateTab()} validationError={errorMessages}>
+        {/* TO DOS ------------------------------------------------------------------------------------------------------------------------------------ */}
+
+        <FormWizard.TabContent
+          title={windowWidth < 700 ? " " : "Opvolging"}
+          icon={<AiOutlineCheck color="#D4AF37" />}
+          isValid={checkValidateFeedbackTab()}
+          validationError={feedbackError}>
 
           <h3>Takenlijst voor opvolging</h3>
           <p>Hier kan u items toevoegen die op basis van dit verslag moeten opgevolgd worden.</p>
-          <p>Worden automatisch toegevoegd:</p>
-          <ul>
-            <li>Nieuwe contact info</li>
-            <li>Nieuwe brands</li>
-            <li>Brands interesses</li>
-          </ul>
+          <small>
+            <p>Worden automatisch toegevoegd:</p>
+            <ul>
+              <li>Nieuwe contact info</li>
+              <li>Nieuwe brands</li>
+              <li>Brands interesses</li>
+            </ul>
+          </small>
 
           <ToDoModule toDos={toDos} setToDos={setToDos} />
 

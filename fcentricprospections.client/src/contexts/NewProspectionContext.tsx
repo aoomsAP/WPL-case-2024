@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-import { IBrand, ICompetitorBrand, IContactType, IProspectionDetail, IProspectionBrand, IProspectionBrandInterest, IProspectionCompetitorBrand, IVisitType, IToDo, IProspectionToDo, IContactInfo } from '../types';
+import { IBrand, ICompetitorBrand, IContactType, IProspectionDetail, IProspectionBrand, IProspectionBrandInterest, IProspectionCompetitorBrand, IVisitType, IToDo, IProspectionToDo, IContactInfo, IEmployee } from '../types';
 
 export interface NewProspectionContext {
     // data states
@@ -31,7 +31,7 @@ export interface NewProspectionContext {
     loadCompetitorBrands: () => Promise<ICompetitorBrand[]>;
     loadContactTypes: () => Promise<void>;
     loadVisitTypes: () => Promise<void>;
-    loadContactInfo: (shopId: string, contactTypeId: number) => Promise<IContactInfo|undefined>;
+    loadContactInfo: (shopId: number, contactTypeId: number) => Promise<IContactInfo|undefined>;
 
     addProspection: (newProspection: IProspectionDetail) => Promise<IProspectionDetail | undefined>;
     addToDo: (newToDo: IToDo) => Promise<IToDo | undefined>;
@@ -39,6 +39,7 @@ export interface NewProspectionContext {
     updateProspectionCompetitorBrands: (prospectionId: number, prospectionCompetitorBrands: IProspectionCompetitorBrand[]) => Promise<void>;
     updateProspectionBrandInterests: (prospectionId: number, prospectionBrandInterests: IProspectionBrandInterest[]) => Promise<void>;
     updateProspectionToDos: (prospectionId: number, prospectionToDos: IProspectionToDo[]) => Promise<void>;
+    updateToDoEmployees: (toDoId: number, employees: IEmployee[]) => Promise<void>;
 }
 
 export const NewProspectionContext = createContext<NewProspectionContext>({
@@ -79,6 +80,7 @@ export const NewProspectionContext = createContext<NewProspectionContext>({
     updateProspectionCompetitorBrands: () => Promise.resolve(),
     updateProspectionBrandInterests: () => Promise.resolve(),
     updateProspectionToDos: () => Promise.resolve(),
+    updateToDoEmployees: () => Promise.resolve(),
 });
 
 export function NewProspectionProvider({ children }: { children: React.ReactNode }) {
@@ -170,7 +172,7 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
         }
     }
 
-    async function loadContactInfo(shopId: string, contactTypeId: number) {
+    async function loadContactInfo(shopId: number, contactTypeId: number) {
         try {
             const response = await fetch(`/api/contactinfo/${shopId}/${contactTypeId}`, {
                 method: 'GET',
@@ -272,8 +274,6 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
                 body: JSON.stringify(payload),
             });
 
-            //const json = await response.json();
-
             console.log("Succesful PUT prospection competitor brands.")
 
         } catch (error) {
@@ -283,7 +283,7 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
 
     async function updateProspectionToDos(prospectionId: number, prospectionToDos: IProspectionToDo[]) {
         try {
-            const ids: number[] = prospectionToDos.map(x => x.toDoId);
+            const ids: number[] = prospectionToDos.map(x => +x.toDoId);
 
             const payload = { ToDoIds: ids };
 
@@ -297,6 +297,26 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
 
         } catch (error) {
             console.error('Error PUT prospection todos:', error);
+        }
+    }
+
+    async function updateToDoEmployees(toDoId: number, employees: IEmployee[]) {
+        try {
+            const ids: number[] = employees.map(x => x.id);
+            console.log("Employee ids", ids)
+
+            const payload = { EmployeeIds: ids };
+
+            await fetch(`/api/todos/${toDoId}/employees`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+
+            console.log("Succesful PUT todo employees.")
+
+        } catch (error) {
+            console.error('Error PUT todo employees:', error);
         }
     }
 
@@ -348,6 +368,7 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
             updateProspectionCompetitorBrands: updateProspectionCompetitorBrands,
             updateProspectionBrandInterests: updateProspectionBrandInterests,
             updateProspectionToDos: updateProspectionToDos,
+            updateToDoEmployees: updateToDoEmployees,
         }}>
             {children}
         </NewProspectionContext.Provider>

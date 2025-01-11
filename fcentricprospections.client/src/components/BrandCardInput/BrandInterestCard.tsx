@@ -42,7 +42,7 @@ const BrandInterestCard = ({ brand }: BrandInterestCardProps) => {
     }, [remark])
 
     return (
-        <fieldset className={styles.brand_fieldset} key={brand.brandId}>
+        <fieldset className={styles.brand_fieldset}>
             <button className={styles.close} onClick={handleClick}>X</button>
             <legend className={styles.brand_legend}>{brand.brandName}</legend>
             <label>Opmerking:</label>

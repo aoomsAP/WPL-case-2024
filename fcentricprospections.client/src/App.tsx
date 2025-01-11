@@ -1,22 +1,27 @@
+// react utilities
+import { useContext } from 'react';
 import { createBrowserRouter, Link, Outlet, RouterProvider, useLocation, useNavigate } from 'react-router-dom';
+// styles
+import styles from './App.module.css'
+// contexts
+import { ShopDetailProvider } from './contexts/ShopDetailContext';
+import { ProspectionDetailProvider } from './contexts/ProspectionDetailContext';
+import { UserContext, UserProvider } from './contexts/UserContext';
+import { NewShopProvider } from './contexts/NewShopContext';
+import { NewProspectionProvider } from './contexts/NewProspectionContext';
+// pages
+import UserPage from './pages/UserPage/UserPage';
 import { Homepage } from './pages/HomePage/HomePage';
 import { NewProspection } from './pages/NewProspection/NewProspection';
 import { ProspectionOverview } from './pages/ProspectionOverview/ProspectionOverview'
 import { ProspectionDetail } from './pages/ProspectionDetail/ProspectionDetail';
-import { AiFillHome, AiOutlineArrowLeft } from "react-icons/ai";
-import { NewProspectionProvider } from './contexts/NewProspectionContext';
-import styles from './App.module.css'
 import { ShopDetail } from './pages/ShopDetail/ShopDetail';
-import { ShopDetailProvider } from './contexts/ShopDetailContext';
-import { ProspectionDetailProvider } from './contexts/ProspectionDetailContext';
-import { UserContext, UserProvider } from './contexts/UserContext';
-import UserPage from './pages/UserPage/UserPage';
 import { CalendarPage } from './pages/CalendarPage/CalendarPage';
-import { TfiAgenda } from "react-icons/tfi";
-import { useContext } from 'react';
 import NewShop from './pages/NewShop/NewShop';
-import { NewShopProvider } from './contexts/NewShopContext';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
+// icons
+import { TfiAgenda } from "react-icons/tfi";
+import { AiFillHome, AiOutlineArrowLeft } from "react-icons/ai";
 
 const Root = () => {
 
@@ -24,7 +29,6 @@ const Root = () => {
     const navigate = useNavigate();
 
     const { user } = useContext(UserContext);
-
 
     return (
         <>
@@ -152,7 +156,7 @@ const App = () => {
                 },
                 {
                     path: "*",
-                    element: <ErrorPage/>
+                    element: <ErrorPage />
                 }
             ]
         }

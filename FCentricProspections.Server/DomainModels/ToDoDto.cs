@@ -8,7 +8,7 @@ namespace FCentricProspections.Server.DomainModels
 
         public string Remarks { get; set; }
 
-        public long? EmployeeId { get; set; }
+        public long ToDoTypeId { get; set; }
 
         public long ToDoStatusId { get; set; }
 
@@ -16,11 +16,13 @@ namespace FCentricProspections.Server.DomainModels
 
         public long UserCreatedId { get; set; }
 
-        public virtual Employee Employee { get; set; }
+        public virtual ToDoType ToDoType { get; set; }
 
         public virtual ToDoStatus ToDoStatus { get; set; }
 
         public virtual User UserCreated { get; set; }
+
+        public ICollection<ToDoEmployee> AssignedEmployees { get; set; }
 
         public ICollection<ProspectionToDo> ProspectionToDos { get; set; }
     }

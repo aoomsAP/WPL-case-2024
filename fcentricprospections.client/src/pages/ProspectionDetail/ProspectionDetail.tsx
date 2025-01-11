@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useContext } from "react";
 import { ShopDetailCard } from "../../components/ShopDetailCard/ShopDetailCard";
 import { ContactTypeCard } from "../../components/ContactTypeCard/ContactTypeCard";
@@ -14,9 +14,9 @@ import { ShopDetailContext } from "../../contexts/ShopDetailContext";
 import { ProspectionDetailContext } from "../../contexts/ProspectionDetailContext";
 import { ToDoContainer } from "../../components/ToDo/ToDoContainer";
 
-
-
 export const ProspectionDetail = () => {
+
+  const navigate = useNavigate();
 
   const { shopId, prospectionId } = useParams();
 
@@ -39,12 +39,17 @@ export const ProspectionDetail = () => {
     prospectionToDos
   } = useContext(ProspectionDetailContext);
 
+  // Set shop id & prospection id
   useEffect(() => {
-    if (shopId) {
-      setShopId(shopId);
-    }
-    if (prospectionId) {
-      setProspectionId(prospectionId);
+    if (shopId && prospectionId) {
+      if (Number.isNaN(parseInt(shopId)) || Number.isNaN(parseInt(prospectionId))) {
+        // If shop/prospection ids cannot be set (e.g. undefined), navigate to NotFound page
+        navigate("/404");
+      }
+      else {
+        setShopId(+shopId);
+        setProspectionId(+prospectionId);
+      }
     }
   }, [shopId, prospectionId])
 
@@ -74,7 +79,7 @@ export const ProspectionDetail = () => {
 
           <CompetitorBrandList prospectionCompetitorBrands={prospectionCompetitorBrands} />
 
-          <TextSection title="Nieuwe Merken" text={prospectionDetail.newBrands}/>
+          <TextSection title="Nieuwe Merken" text={prospectionDetail.newBrands} />
 
           {prospectionDetail && <GeneralSituation detail={prospectionDetail} />}
 
@@ -82,7 +87,7 @@ export const ProspectionDetail = () => {
 
           <TextSection title="Trends en noden in de markt" text={prospectionDetail?.trends} />
           <TextSection title="Extra opmerkingen en feedback" text={prospectionDetail?.extra} />
-          <ToDoContainer todos={prospectionToDos}/>
+          <ToDoContainer todos={prospectionToDos} />
         </>
       }
       {!prospectionDetail && <Oval />}

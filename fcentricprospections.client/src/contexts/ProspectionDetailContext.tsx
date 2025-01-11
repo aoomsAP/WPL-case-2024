@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react"
-import { IBrand, ICompetitorBrand, IContactType, IProspectionBrand, IProspectionBrandInterest, IProspectionCompetitorBrand, IProspectionDetail, IProspectionToDo, IVisitType } from "../types";
+import { IBrand, ICompetitorBrand, IContactType, IEmployee, IProspectionBrand, IProspectionBrandInterest, IProspectionCompetitorBrand, IProspectionDetail, IProspectionToDo, IVisitType } from "../types";
 
 interface ProspectionDetailContext {
-  prospectionId: string | undefined,
-  setProspectionId: (prospectionId: string) => void,
+  prospectionId: number | undefined,
+  setProspectionId: (prospectionId: number) => void,
   prospectionDetail: IProspectionDetail | undefined,
   setProspectionDetail: (prospectionDetail: IProspectionDetail) => void,
   brands: IBrand[];
@@ -22,10 +22,11 @@ interface ProspectionDetailContext {
   setProspectionBrandInterests: (prospectionBrandInterests: IProspectionBrandInterest[]) => void,
   prospectionToDos: IProspectionToDo[],
   setProspectionToDos: (prospectionToDos: IProspectionToDo[]) => void,
+  loadToDoEmployees: (toDoId: number) => Promise<IEmployee[]|undefined>,
 }
 
 export const ProspectionDetailContext = React.createContext<ProspectionDetailContext>({
-  prospectionId: "",
+  prospectionId: 0,
   setProspectionId: () => { },
   prospectionDetail: {} as IProspectionDetail | undefined,
   setProspectionDetail: () => { },
@@ -45,13 +46,14 @@ export const ProspectionDetailContext = React.createContext<ProspectionDetailCon
   setProspectionBrandInterests: () => { },
   prospectionToDos: [],
   setProspectionToDos: () => { },
+  loadToDoEmployees: () => Promise.resolve([]),
 });
 
 export const ProspectionDetailProvider = ({ children }: { children: React.ReactNode }) => {
 
   // states
 
-  const [prospectionId, setProspectionId] = useState<string>();
+  const [prospectionId, setProspectionId] = useState<number>();
   const [prospectionDetail, setProspectionDetail] = useState<IProspectionDetail | undefined>();
   const [contactType, setContactType] = useState<IContactType>();
   const [visitType, setVisitType] = useState<IVisitType>();
@@ -64,7 +66,7 @@ export const ProspectionDetailProvider = ({ children }: { children: React.ReactN
 
   // functions
 
-  async function loadProspection(prospectionId: string): Promise<IProspectionDetail> {
+  async function loadProspection(prospectionId: number): Promise<IProspectionDetail> {
     let result: IProspectionDetail = {} as IProspectionDetail;
     try {
       const response = await fetch(`/api/prospections/${prospectionId}`, {
@@ -114,7 +116,7 @@ export const ProspectionDetailProvider = ({ children }: { children: React.ReactN
     }
   }
 
-  async function loadProspectionBrands(prospectionId: string) {
+  async function loadProspectionBrands(prospectionId: number) {
     try {
       const response = await fetch(
         `/api/prospections/${prospectionId}/brands`,
@@ -146,7 +148,7 @@ export const ProspectionDetailProvider = ({ children }: { children: React.ReactN
     }
   }
 
-  async function loadProspectionCompetitorBrands(prospectionId: string) {
+  async function loadProspectionCompetitorBrands(prospectionId: number) {
     try {
       const response = await fetch(
         `/api/prospections/${prospectionId}/competitorbrands`,
@@ -181,7 +183,7 @@ export const ProspectionDetailProvider = ({ children }: { children: React.ReactN
     }
   }
 
-  async function loadProspectionBrandInterests(prospectionId: string) {
+  async function loadProspectionBrandInterests(prospectionId: number) {
     let result: IProspectionBrandInterest[] = [];
 
     try {
@@ -203,7 +205,7 @@ export const ProspectionDetailProvider = ({ children }: { children: React.ReactN
     }
   }
 
-  async function loadProspectionToDos(prospectionId: string) {
+  async function loadProspectionToDos(prospectionId: number) {
     try {
       const response = await fetch(
         `/api/prospections/${prospectionId}/todos`,
@@ -216,6 +218,25 @@ export const ProspectionDetailProvider = ({ children }: { children: React.ReactN
       const json: IProspectionToDo[] = await response.json();
 
       setProspectionToDos(json);
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function loadToDoEmployees(toDoId: number) {
+    try {
+      const response = await fetch(
+        `/api/todos/${toDoId}/employees`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      const json: IEmployee[] = await response.json();
+
+      return json;
 
     } catch (error) {
       console.log(error);
@@ -267,6 +288,7 @@ export const ProspectionDetailProvider = ({ children }: { children: React.ReactN
       setProspectionBrandInterests: setProspectionBrandInterests,
       prospectionToDos: prospectionToDos,
       setProspectionToDos: setProspectionToDos,
+      loadToDoEmployees: loadToDoEmployees,
     }}>
       {children}
     </ProspectionDetailContext.Provider>

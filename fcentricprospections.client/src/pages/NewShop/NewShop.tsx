@@ -79,6 +79,10 @@ export default function NewShop() {
     async function handleComplete() {
 
         try {
+            if (!userId) {
+                throw Error("No valid user");
+            }
+
             if (!city || !postalCode) {
                 throw Error("No valid city selected");
             }
@@ -113,7 +117,7 @@ export default function NewShop() {
             const newShop = {
                 name: name.toUpperCase(), // All caps like in db?
                 shopTypeId: 6, // Hardcoded, = "Prospect"
-                userCreatedId: userId.toString(),
+                userCreatedId: userId,
                 dateCreated: new Date(),
                 isParallelSales: false, // Hardcoded
                 contactId: addedContact.id,
