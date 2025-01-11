@@ -24,18 +24,18 @@ export const Homepage = () => {
         let shopOptionOptions: OptionType[] = shopNames
             .filter(isValidShopOption)
             .map((shopOption) => {
-                if(shopOption.name.includes(shopOption.city)){
-                    return({
+                if (shopOption.name.includes(shopOption.city)) {
+                    return ({
                         value: shopOption.id.toString(),
-                        
-                         label: `${shopOption.name}`
+
+                        label: `${shopOption.name}`
                     })
-                } 
-                return({
+                }
+                return ({
                     value: shopOption.id.toString(),
-                    
-                     label: `${shopOption.name} - ${shopOption.city}`
-    
+
+                    label: `${shopOption.name} - ${shopOption.city}`
+
                 })
             });
         setShopListOptions(shopOptionOptions);
@@ -65,13 +65,11 @@ export const Homepage = () => {
     }, []);
 
     return (
-        <main className={`${styles.main} ${styles.homepage}`}>
-            <div>
-                <h1>Hallo, {employee ? employee?.firstName : user?.login}</h1>
-            </div>
+        <main>
+            <h2>Hallo, {employee ? employee?.firstName : user?.login}</h2>
 
             {/* SELECTEER WINKEL */}
-            <h2>Selecteer een winkel</h2>
+            <h1>Selecteer een winkel</h1>
 
             {shopNames && <Select<OptionType>
                 className="basic-single"
@@ -79,6 +77,7 @@ export const Homepage = () => {
                 isClearable={true}
                 isSearchable={true}
                 name="shopSelect"
+                placeholder={"Selecteer..."}
                 filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
                 maxMenuHeight={200} // Limit height to improve rendering
                 options={shopListOptions}
@@ -87,18 +86,22 @@ export const Homepage = () => {
                     MenuList, // Custom menu list rendering
                 }}
                 onChange={(e) => {
-                    if(e?.value != undefined){
+                    if (e?.value != undefined) {
                         navigate(`/shop/${e?.value}`);
                     }
                 }}
             />}
 
-            {/* NIEUWE WINKEL */}
-            <button className={styles.button}>
+            <div className={styles.newShop}>
+                <p>Winkel niet gevonden?</p>
+
+                {/* NIEUWE WINKEL */}
                 <Link className={styles.a} to={`/newshop`}>
-                    Maak een nieuwe winkel aan
+                    <button className={styles.button}>
+                        Maak een nieuwe winkel aan
+                    </button>
                 </Link>
-            </button>
+            </div>
 
         </main>
     );

@@ -429,10 +429,10 @@ export const NewProspection = () => {
             />
           </fieldset>
 
-          <h3>Informatie</h3>
+          <h3 className={styles.h3}>Informatie</h3>
 
           {/* Contact type */}
-          <fieldset>
+          <fieldset className={styles.radioContainer}>
             <legend>Contact type</legend>
             <label>
               <input type="radio" name="role" value="1"
@@ -473,7 +473,7 @@ export const NewProspection = () => {
 
             {/* Checkbox validation */}
             {/* Only show if contact type is owner or buyer */}
-            {(contactType == 1 || contactType == 2) && !nameChecked &&
+            {(contactType == 1 || contactType == 2) &&
               <div className={styles.checkbox}>
                 <label htmlFor="nameValidation">
                   Huidige informatie is correct&nbsp;
@@ -507,19 +507,17 @@ export const NewProspection = () => {
                 </input>
 
                 {/* Checkbox validation */}
-                {!emailChecked &&
-                  <div className={styles.checkbox}>
-                    <label htmlFor="emailValidation">
+                <div className={styles.checkbox}>
+                  <label htmlFor="emailValidation">
                     Huidige informatie is correct&nbsp;
                     <input
-                        type="checkbox"
-                        name="emailValidation"
-                        onChange={(e) => setEmailChecked(e.target.checked)}
-                        checked={emailChecked}
-                      />
-                    </label>
-                  </div>
-                }
+                      type="checkbox"
+                      name="emailValidation"
+                      onChange={(e) => setEmailChecked(e.target.checked)}
+                      checked={emailChecked}
+                    />
+                  </label>
+                </div>
               </fieldset>
 
               <fieldset>
@@ -538,19 +536,17 @@ export const NewProspection = () => {
                   }} />
 
                 {/* Checkbox validation */}
-                {!phoneChecked &&
-                  <div className={styles.checkbox}>
-                    <label htmlFor="phoneValidation">
+                <div className={styles.checkbox}>
+                  <label htmlFor="phoneValidation">
                     Huidige informatie is correct&nbsp;
                     <input
-                        type="checkbox"
-                        name="phoneValidation"
-                        onChange={(e) => setPhoneChecked(e.target.checked)}
-                        checked={phoneChecked}
-                      />
-                    </label>
-                  </div>
-                }
+                      type="checkbox"
+                      name="phoneValidation"
+                      onChange={(e) => setPhoneChecked(e.target.checked)}
+                      checked={phoneChecked}
+                    />
+                  </label>
+                </div>
               </fieldset>
             </>
           }

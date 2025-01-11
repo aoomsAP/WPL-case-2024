@@ -33,35 +33,29 @@ const Root = () => {
     return (
         <>
             <header className={styles.header}>
-                <Link to={"/"}>
-                    <button className={styles.button}>
-                        {<AiFillHome className={styles.homeIcon} />}
-                    </button>
-                </Link>
+                <button className={styles.header__button} onClick={() => navigate("/")}>
+                    {<AiFillHome className={styles.header__icon} />}
+                </button>
 
                 {/* Show Agenda button only if user is set */}
                 {(user && location.pathname !== "/") && (
-                    <Link to={"/agenda"}>
-                        <button className={styles.button}>
-                            <TfiAgenda className={styles.homeIcon} />
-                        </button>
-                    </Link>
+                    <button className={styles.header__button} onClick={() => navigate("/agenda")}>
+                        <TfiAgenda className={styles.header__icon} />
+                    </button>
                 )}
 
                 {/* If location isn't "Home", show "Back" button */}
                 {location.pathname !== "/" &&
-                    <button title="Back" className={styles.button} onClick={() => navigate(-1)}>
-                        {<AiOutlineArrowLeft className={styles.homeIcon} />}
+                    <button className={styles.header__button} title="Back" onClick={() => navigate(-1)}>
+                        {<AiOutlineArrowLeft className={styles.header__icon} />}
                     </button>
                 }
             </header>
 
             <Outlet></Outlet>
 
-            <footer className={styles.footer}>
-
+            <footer>
                 {/* Footer content can go here */}
-
             </footer>
         </>
     );

@@ -1,33 +1,13 @@
-.li1{
-    list-style-type: none;
-    
-}
-
-.basic-single {
-width: 100%;
-}
-
-.button {
-    margin-top: 2rem;
-    border: 1px solid var(--secondary-color);
-    background-color: var(--secondary-color);
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-    cursor: pointer;
-}
-
-.button:hover {
-    background-color: var(--primary-color);
-}
-
-.button:hover * {
-    color: var(--secondary-color);
+.newShop {
+    width: 100%;
 }
 
 .a {
-    color: var(--primary-color);
+    width: 100%;
+    max-width: 400px;
 }
 
-.a:hover {
-    color: var(--secondary-color);
+.button {
+    width: 100%;
+    max-width: 400px;
 }

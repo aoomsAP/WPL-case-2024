@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import styles from '../HomePage/HomePage.module.css'
 import { IUser, OptionType } from "../../types";
 import Select from "react-select";
 import { createFilter } from "react-select";
@@ -29,9 +28,8 @@ const UserPage = () => {
         setUserOptions(userOptions)
       }, [users])
     
-
     return (
-        <main className={styles.main}>
+        <main>
             <h1>Selecteer een Gebruiker</h1>
 
             {users && <Select<OptionType>
@@ -39,6 +37,7 @@ const UserPage = () => {
             classNamePrefix="select"
             isClearable={true}
             isSearchable={true}
+            placeholder={"Selecteer..."}
             name="shopSelect"
             filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
             maxMenuHeight={200} // Limit height to improve rendering

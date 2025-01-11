@@ -1,66 +1,12 @@
-﻿.header {
-    display: flex;
-    justify-content: flex-start;
-    padding: 0.5rem;
-    background-color: var(--primary-color);
-    width: 100%;
-    height: auto;
-    margin-bottom: 1rem;
-}
-
-.main {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.footer {
-    width: 100%;
-    background-color: var(--primary-color);
-    height: auto;
-}
-
-.inputField {
-    height: 2.5rem;
-    width: 12.5rem;
-    padding: 0.5rem;
-    font-size: 1rem;
-    border: 0.0625rem solid #ccc;
-    border-radius: 0.25rem;
-    margin-top: 2rem;
-}
-
-.prospectionform {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-}
-
-.button {
-    background-color: var(--primary-color);
-    border: 1px solid black;
-    border-radius: 0.5rem;
+﻿.header__button {
     width: 3rem;
-    height: 2.5rem;
+    padding: .5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.button:hover {
-    background-color: var(--secondary-color);
-    cursor: pointer;
-}
-
-.button:hover * {
-    color:  #D4AF37;
-}
-
-.homeIcon {
-    color: var(--secondary-color);
-    font-size: x-large;
-}
-
-.homeIcon:hover {
+.header__icon {
     color: var(--primary-color);
+    font-size: x-large;
 }
