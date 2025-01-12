@@ -1,8 +1,10 @@
 .input_container {
     position: relative;
     width: 100%;
-    border: 1px lightgrey solid;
-    border-radius: 5px;
+    border: 1px solid transparent;
+    border-radius: 0px;
+    background-color: var(--primary-darkest);
+    transition: .2s border;
 }
 
 .edit_cursor {
@@ -12,11 +14,12 @@
 .input_container p {
     margin: 0;
     width: 100%;
-    padding: 0.5rem;
+    padding: 0.7rem;
+    font-weight: inherit;
 }
 
-.input_container input {
-    padding: 0.5rem;
+.input_container:hover {
+    border: 1px solid black;
 }
 
 .edit_icon {
@@ -24,5 +27,10 @@
     bottom: 10px;
     right: 10px;
     font-size: 20px;
-    color: lightgrey;
+    color: silver;
+    transition: .2s color;
+}
+
+.input_container:hover .edit_icon {
+    color: black;
 }

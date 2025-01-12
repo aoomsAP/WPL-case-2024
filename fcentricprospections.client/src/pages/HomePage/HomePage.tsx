@@ -5,7 +5,7 @@ import { UserContext } from "../../contexts/UserContext";
 import Select from "react-select";
 import { createFilter } from "react-select";
 import styles from './HomePage.module.css'
-import Option from "../../components/ToDoModule/Option/Option";
+import Option, { customTheme } from "../../components/ToDoModule/Option/Option";
 import MenuList from "../../components/ToDoModule/MenuList/MenuListSingle";
 
 export const Homepage = () => {
@@ -72,6 +72,7 @@ export const Homepage = () => {
             <h1>Selecteer een winkel</h1>
 
             {shopNames && <Select<OptionType>
+                theme={customTheme}
                 className="basic-single"
                 classNamePrefix="select"
                 isClearable={true}

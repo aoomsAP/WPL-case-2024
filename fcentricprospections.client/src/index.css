@@ -83,6 +83,7 @@ header {
 }
 
 footer {
+  padding: 1rem;
   grid-area: footer;
   width: 100%;
 }
@@ -95,7 +96,7 @@ h1 {
   margin-bottom: 0.25rem;
   text-transform: uppercase;
   font-weight: 300;
-  font-size: 2.75rem;
+  font-size: 2.5rem;
   line-height: 1;
 }
 
@@ -115,12 +116,15 @@ h3 {
   line-height: 1.4rem;
 }
 
-p {
-  font-weight: 300;
-  font-size: 0.875rem;
+h4 {
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: .9rem;
+  line-height: 1.4rem;
 }
 
-label {
+p {
   font-weight: 300;
   font-size: 0.875rem;
 }
@@ -133,22 +137,33 @@ section {
 }
 
 a {
-  color: var(--primary-color);
+  color: var(--secondary-color);
+  background-color: inherit;
   text-decoration: none;
-  font-weight: 400;
-  font-size: large;
+  font-weight: 300;
+  font-size: inherit;
+  border-radius: 0px;
 }
 
 a:hover {
-  color: var(--secondary-color);
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
 }
 
 ul {
-  background-color: var(--primary-color);
+  background-color: inherit;
   overflow-y: auto;
   /* Enables vertical scrolling */
   max-height: 50rem;
   /* Set a height limit for the scroll to appear */
+}
+
+li {
+  border-radius: 0px;
+}
+
+li a {
+  display: block;
 }
 
 button {
@@ -161,6 +176,7 @@ button {
   border: none;
   padding: 0.5rem 1rem;
   cursor: pointer;
+  text-align: left;
 }
 
 button a {
@@ -183,7 +199,7 @@ textarea,
 input[type="date"],
 input[type="checkbox"] {
   font-family: inherit;
-  padding: 0.5rem;
+  padding: 0.7rem;
   font-weight: 300;
   font-size: 0.875rem;
   border: none;
@@ -192,10 +208,21 @@ input[type="checkbox"] {
   color: var(--secondary-color);
 }
 
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+input[type="date"]:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 1px black;
+  border-color: 1px solid black;
+}
+
 input[type="text"],
 textarea {
   width: 100%;
 }
+
+/* radio buttons */
 
 input[type='radio'] {
   appearance: none;
@@ -209,6 +236,7 @@ input[type='radio'] {
 }
 
 input[type='radio']:hover {
+  border-radius: 0px;
   box-shadow: 0 0 5px 0px yellow inset;
   cursor: pointer;
 }
@@ -224,6 +252,44 @@ input[type='radio']:before {
 
 input[type='radio']:checked:before {
   background: black;
+}
+
+/* checkbox */
+
+input[type="checkbox"] {
+  box-sizing: border-box;
+  width: 1rem;
+  height: 1rem;
+  padding: 0;
+  border: 1px solid black;
+  appearance: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-size: cover;
+  padding: 2px;
+}
+
+input[type="checkbox"]:not(:disabled):checked {
+  border-color: black;
+  background-image: url('https://www.svgrepo.com/show/535263/checkmark.svg');
+}
+
+@media (hover: hover) {
+  input[type="checkbox"]:not(:disabled):hover {
+    background-color: var(--gold-default);
+  }
+}
+
+label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-weight: 300;
+  font-size: 0.875rem;
 }
 
 fieldset {
@@ -279,15 +345,20 @@ legend {
   font-size: small;
 }
 
+.wizard-footer-right,
+.wizard-footer-left {
+  border-radius: 0px !important;
+}
+
 .wizard-btn {
-  color: #D4AF37 !important;
+  border-radius: 0px !important;
+  color: var(--primary-color) !important;
 }
 
 .wizard-btn:hover {
-  color: black !important;
-  background-color: #D4AF37;
+  color: var(--secondary-color) !important;
+  background-color: var(--gold-default);
 }
-
 
 @media (max-width: 700px) {
   .smooth-border-left-to-right {
@@ -301,10 +372,29 @@ legend {
   width: 100%;
 }
 
+.basic-multi-select input[type="text"]:focus {
+  border: none !important;
+  box-shadow: 0 0 0 0px transparent !important;
+}
+
+.select__control {
+  border-radius: 0px !important;
+}
+
+.select__control--is-focused,
+.select__control--menu-is-open {
+  border-color: var(--secondary-color) !important;
+  box-shadow: 0 0 0 1px transparent !important;
+}
+
 /* select menu has to appear on top of calendar */
 .select__menu {
   background-color: white !important;
   z-index: 3 !important;
+}
+
+.react-select__option *:hover {
+  background-color: yellow !important;
 }
 
 .react-select__option {

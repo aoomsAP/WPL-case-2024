@@ -18,7 +18,7 @@ import { NewProspectionContext } from '../../contexts/NewProspectionContext';
 // react-select
 import Select, { createFilter, MultiValue } from 'react-select';
 import MenuList from "../../components/ToDoModule/MenuList/MenuList"; // Custom MenuList
-import Option from "../../components/ToDoModule/Option/Option"; // Custom Option
+import Option, { customTheme } from "../../components/ToDoModule/Option/Option"; // Custom Option
 // form-wizard
 import FormWizard from "react-form-wizard-component";
 import "react-form-wizard-component/dist/style.css";
@@ -458,7 +458,9 @@ export const NewProspection = () => {
 
           {/* Contact type */}
           <fieldset>
-            <legend>Contact naam</legend>
+            <legend>Contact naam
+              {(contactType == 1 || contactType == 2) && <span className={styles.required}> *</span>}
+            </legend>
             <p style={{ marginTop: 0 }}>Huidige naam: {contactInfo?.name ?? "Geen naam gevonden"}</p>
             <input
               type='text'
@@ -492,7 +494,9 @@ export const NewProspection = () => {
           {(contactType == 1 || contactType == 2) &&
             <>
               <fieldset>
-                <legend>Contact email</legend>
+                <legend>Contact email
+                  {(contactType == 1 || contactType == 2) && <span className={styles.required}> *</span>}
+                </legend>
                 <p style={{ marginTop: 0 }}>Huidige email: {contactInfo?.email ?? "Geen email gevonden"}</p>
                 <input
                   type='text'
@@ -521,7 +525,9 @@ export const NewProspection = () => {
               </fieldset>
 
               <fieldset>
-                <legend>Contact phone</legend>
+                <legend>Contact phone
+                  {(contactType == 1 || contactType == 2) && <span className={styles.required}> *</span>}
+                </legend>
                 <p style={{ marginTop: 0 }}>Huidge telefoonnummer: {contactInfo?.phoneNumber ?? "Geen telefoonnummer gevonden"}</p>
                 <input
                   type='text'
@@ -551,7 +557,7 @@ export const NewProspection = () => {
             </>
           }
 
-          <fieldset>
+          <fieldset className={styles.radioContainer}>
             <legend>Bezoek type</legend>
             <label>
               <input type="radio" name="visit" value="1"
@@ -602,54 +608,65 @@ export const NewProspection = () => {
           isValid={checkValidateContactTab()}
           validationError={contactTabError}>
 
-          {/* FC70 BRANDS */}
-          <h3>FC70 merken</h3>
-          <div>
-            {prospectionBrands.length > 0
-              ? prospectionBrands.map((brand, i) => (
-                <div key={i}>
-                  <BrandTag brandId={brand.brandId} brandName={brand.brandName} type="brand" />
-                </div>
-              ))
-              : "Geen Fashion Club 70 merken beschikbaar."}
-          </div>
+          <h3 className={styles.h3}>Brandmix</h3>
 
-          {/* COMPETITOR BRANDS */}
-          <h3>Referentiemerken</h3>
+          <fieldset>
+            {/* FC70 BRANDS */}
+            <h4 className={styles.h4}>FC70 Brands</h4>
+            <div>
+              {prospectionBrands.length > 0
+                ? prospectionBrands.map((brand, i) => (
+                  <div key={i}>
+                    <BrandTag brandId={brand.brandId} brandName={brand.brandName} type="brand" />
+                  </div>
+                ))
+                : "Geen Fashion Club 70 merken beschikbaar."}
+            </div>
+          </fieldset>
 
-          {competitorBrands && <Select<OptionType, true>
-            className="basic-multi-select"
-            classNamePrefix="select"
-            isMulti
-            isClearable={true}
-            isSearchable={true}
-            name="competitorBrand"
-            filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
-            maxMenuHeight={200} // Limit height to improve rendering
-            options={competitorBrandsOptions}
-            components={{ // Custom components to make use of react-window to improve rendering
-              MenuList,
-              Option,
-            }}
-            onChange={(selectedOptions: MultiValue<OptionType>) => {
-              const newProspectionCompetitorBrands: IProspectionCompetitorBrand[] = selectedOptions
-                .map((x: OptionType) => ({
-                  competitorBrandId: +x.value,
-                  competitorBrandName: x.label,
-                }));
-              setProspectionCompetitorBrands(newProspectionCompetitorBrands);
-            }}
-          />}
 
-          {/* NEW BRANDS */}
-          <h3>Nieuwe merken</h3>
-          <legend>Merken die u niet terugvond in de lijst hierboven:</legend>
-          <textarea
-            value={newBrands}
-            placeholder='Nieuwe merk met collectie voor dames/heren/kinderen'
-            onChange={(e) => {
-              setNewBrands(e.target.value);
-            }} />
+          <fieldset>
+            {/* COMPETITOR BRANDS */}
+            <h4 className={styles.h4}>Referentiemerken</h4>
+
+            {competitorBrands && <Select<OptionType, true>
+              theme={customTheme}
+              className="basic-multi-select"
+              classNamePrefix="select"
+              isMulti
+              placeholder={"Selecteer..."}
+              isClearable={true}
+              isSearchable={true}
+              name="competitorBrand"
+              filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
+              maxMenuHeight={200} // Limit height to improve rendering
+              options={competitorBrandsOptions}
+              components={{ // Custom components to make use of react-window to improve rendering
+                MenuList,
+                Option,
+              }}
+              onChange={(selectedOptions: MultiValue<OptionType>) => {
+                const newProspectionCompetitorBrands: IProspectionCompetitorBrand[] = selectedOptions
+                  .map((x: OptionType) => ({
+                    competitorBrandId: +x.value,
+                    competitorBrandName: x.label,
+                  }));
+                setProspectionCompetitorBrands(newProspectionCompetitorBrands);
+              }}
+            />}
+          </fieldset>
+
+          <fieldset>
+            {/* NEW BRANDS */}
+            <h4 className={styles.h4}>Nieuwe merken</h4>
+            <label>Merken die u niet terugvond in de lijst hierboven:</label>
+            <textarea
+              value={newBrands}
+              placeholder="Nieuw merk met collectie voor dames/heren/kinderen..."
+              onChange={(e) => {
+                setNewBrands(e.target.value);
+              }} />
+          </fieldset>
 
         </FormWizard.TabContent>
 
@@ -660,7 +677,7 @@ export const NewProspection = () => {
           title={windowWidth < 700 ? " " : "Algemeen"}
           icon={<AiOutlineCheck color="#D4AF37" />}>
 
-          <h3>Algemene situatie</h3>
+          <h3 className={styles.h3}>Algemene situatie</h3>
 
           <fieldset>
             <legend>Beste merken</legend>
@@ -695,7 +712,7 @@ export const NewProspection = () => {
           title={windowWidth < 700 ? " " : "FC70"}
           icon={<AiOutlineCheck color="#D4AF37" />}>
 
-          <h3>FC70 overzicht</h3>
+          <h3 className={styles.h3}>FC70 overzicht</h3>
 
           {prospectionBrands.map((brand, i) => <div key={i}>
             <BrandCardInput brand={{ brandId: brand.brandId, brandName: brand.brandName }} />
@@ -708,44 +725,47 @@ export const NewProspection = () => {
           title={windowWidth < 700 ? "" : "Interesses"}
           icon={<AiOutlineCheck color="#D4AF37" />}>
 
-          <h3>Interesse FC70 merken</h3>
+          <h3 className={styles.h3}>Interesse FC70 merken</h3>
 
-          <input
-            type="text"
-            placeholder="Zoek..."
-            value={brandInterestSearch}
-            onChange={(e) => setBrandInterestSearch(e.target.value)} // Update state on input change
-          />
+          <fieldset>
+            <p>Indien er interesse was in bepaalde FC70 merken, gelieve deze te selecteren.</p>
+            <input
+              type="text"
+              placeholder="Zoek..."
+              value={brandInterestSearch}
+              onChange={(e) => setBrandInterestSearch(e.target.value)} // Update state on input change
+            />
 
-          <ul className={styles.ul}>
-            {brandInterestSearchFunc.length > 0 ? (
-              brandInterestSearchFunc.map(brand => (
-                <li key={brand.id} className={styles.li}
-                  onClick={() => {
-                    // set prospection brand interests
-                    setProspectionBrandInterests([...prospectionBrandInterests, { brandId: brand.id, brandName: brand.name }]);
+            <ul className={styles.ul}>
+              {brandInterestSearchFunc.length > 0 ? (
+                brandInterestSearchFunc.map(brand => (
+                  <li key={brand.id} className={styles.li}
+                    onClick={() => {
+                      // set prospection brand interests
+                      setProspectionBrandInterests([...prospectionBrandInterests, { brandId: brand.id, brandName: brand.name }]);
 
-                    // clear search
-                    setBrandInterestSearch("");
-                  }}>
-                  {brand.name}
-                </li>
-              ))
-            ) : (
-              brandInterestSearch.length < 3 ? (
-                <p>Typ minstens 3 letters.</p>
+                      // clear search
+                      setBrandInterestSearch("");
+                    }}>
+                    {brand.name}
+                  </li>
+                ))
               ) : (
-                <p>Geen merken gevonden</p>
-              )
-            )}
-          </ul>
+                brandInterestSearch.length < 3 ? (
+                  <p>Typ minstens 3 letters.</p>
+                ) : (
+                  <p>Geen merken gevonden</p>
+                )
+              )}
+            </ul>
 
-          <div className={styles.cardsContainer}>
-            {prospectionBrandInterests.map((brand, i) => <div key={i}>
-              <BrandInterestCard brand={brand} />
+            <div className={styles.cardsContainer}>
+              {prospectionBrandInterests.map((brand, i) => <div key={i}>
+                <BrandInterestCard brand={brand} />
+              </div>
+              )}
             </div>
-            )}
-          </div>
+          </fieldset>
 
         </FormWizard.TabContent>
 
@@ -756,11 +776,11 @@ export const NewProspection = () => {
           title={windowWidth < 700 ? " " : "Feedback"}
           icon={<AiOutlineCheck color="#D4AF37" />}>
 
-          <h3>Feedback</h3>
+          <h3 className={styles.h3}>Feedback</h3>
 
           <fieldset>
             <legend>Trends en noden in de markt
-              <span style={{ color: "red", fontSize: "20px", fontWeight: "bold" }}> *</span>
+              <span className={styles.required}> *</span>
             </legend>
             <textarea rows={4} value={trends} placeholder='Trends en noden in de markt...'
               onChange={(e) => setTrends(e.target.value)} />
@@ -768,7 +788,7 @@ export const NewProspection = () => {
 
           <fieldset>
             <legend>Extra opmerkingen/feedback
-              <span style={{ color: "red", fontSize: "20px", fontWeight: "bold" }}> *</span>
+              <span className={styles.required}> *</span>
             </legend>
             <textarea rows={4} value={feedback} placeholder='Er kwam nog extra feedback met betrekking tot...'
               onChange={(e) => setFeedback(e.target.value)} />
@@ -786,7 +806,7 @@ export const NewProspection = () => {
           validationError={feedbackError}>
 
           <h3>Takenlijst voor opvolging</h3>
-          <p>Hier kan u items toevoegen die op basis van dit verslag moeten opgevolgd worden.</p>
+          <p>Hier kan u items toevoegen die op basis van uw verslag moeten opgevolgd worden.</p>
           <small>
             <p>Worden automatisch toegevoegd:</p>
             <ul>

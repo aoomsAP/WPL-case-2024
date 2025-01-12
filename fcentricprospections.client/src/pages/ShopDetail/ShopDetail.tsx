@@ -4,6 +4,7 @@ import { FaAngleRight } from "react-icons/fa";
 import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCard';
 import styles from './ShopDetail.module.css';
 import { ShopDetailContext } from '../../contexts/ShopDetailContext';
+import { Oval } from 'react-loader-spinner'
 
 export const ShopDetail = () => {
 
@@ -28,37 +29,41 @@ export const ShopDetail = () => {
 
   return (
     <>
-      <main className={styles.main}>
+      <main>
 
-        {shopDetail && <ShopDetailCard shop={shopDetail} />}
+        {!shopDetail
+          ? <Oval />
+          : <>
+          
+            <ShopDetailCard shop={shopDetail} />
 
-        <section className={styles.prospectionSection}>
+            <section>
 
-          <button className={styles.button}>
-            <Link className={styles.a} to={`/shop/${shopId}/prospections/new`}>
-              Nieuwe Prospectie
-            </Link>
-          </button>
+              <button onClick={() => navigate(`/shop/${shopId}/prospections/new`)}>
+                Nieuwe Prospectie
+              </button>
 
-          <ul className={styles.ul}>
-            {shopProspections
-              // sort on date in descending order
-              .sort((a, b) => (new Date(b.visitDate).getTime()) - (new Date(a.visitDate).getTime()))
-              // get three latest prospections
-              .slice(0, 3)
-              .map(prospection => (<li className={styles.li} key={prospection.id}>
-                <Link className={styles.prospectionA} to={`/shop/${shopId}/prospections/${prospection.id}`}>
-                  Prospectie {new Date(prospection.visitDate).toLocaleDateString()}<FaAngleRight className={styles.icon} />
-                </Link></li>))}
-          </ul>
+              <ul className={styles.ul}>
+                {shopProspections
+                  // sort on date in descending order
+                  .sort((a, b) => (new Date(b.visitDate).getTime()) - (new Date(a.visitDate).getTime()))
+                  // get three latest prospections
+                  .slice(0, 3)
+                  .map(prospection => (<li className={styles.li} key={prospection.id}>
+                    <Link
+                      className={styles.prospectionA}
+                      to={`/shop/${shopId}/prospections/${prospection.id}`}>
+                      Prospectie {new Date(prospection.visitDate).toLocaleDateString()}<FaAngleRight className={styles.icon} />
+                    </Link></li>))}
+              </ul>
 
-          <button className={styles.button}>
-            <Link className={styles.a} to={`/shop/${shopId}/prospections`}>
-              Overzicht van alle Prospecties
-            </Link>
-          </button>
+              <button onClick={() => navigate(`/shop/${shopId}/prospections`)}>
+                Overzicht van alle Prospecties
+              </button>
 
-        </section>
+            </section>
+          </>
+        }
 
       </main>
     </>

@@ -34,15 +34,19 @@ const BrandCardInput = ({ brand }: BrandCardInputProps) => {
 
     return (
         <fieldset className={styles.brand_fieldset}>
-            <legend className={styles.brand_legend}>{brand.brandName}</legend>
+            <h3>{brand.brandName}</h3>
 
-            <label>Sellout (%)</label><br />
-            <input type="number" max={100} defaultValue={sellout} placeholder="[0-100]"
-            onChange={(e) => setSellout(+e.target.value)} /><br />
+            <div>
+                <label>Sellout (%)</label>
+                <input type="number" max={100} defaultValue={sellout} placeholder="[0-100]"
+                    onChange={(e) => setSellout(+e.target.value)} /><br />
+            </div>
 
-            <label>Sellout opmerking</label><br />
-            <textarea value={selloutRemark} placeholder="Sellout omschrijving..."
-            onChange={(e) => setSelloutRemark(e.target.value)} />
+            <div>
+                <label>Sellout opmerking</label>
+                <textarea value={selloutRemark} placeholder="Sellout omschrijving..."
+                    onChange={(e) => setSelloutRemark(e.target.value)} />
+            </div>
         </fieldset>
     )
 }

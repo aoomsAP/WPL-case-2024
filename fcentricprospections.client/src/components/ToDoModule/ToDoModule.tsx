@@ -79,41 +79,47 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
                 setDescription("");
                 setSelectedEmployees([]);
             }}>
-                <fieldset>
-                    <legend>Nieuwe taak</legend>
+                <fieldset className={styles.newToDo}>
+                    <h4>Nieuwe taak</h4>
 
                     {/* Title */}
-                    <label htmlFor="title">Naam van taak:</label>
-                    <input type="text" name="title" value={title} placeholder="Titel..."
-                        onChange={(e) => setTitle(e.target.value)} />
+                    <div>
+                        <label htmlFor="title">Naam van taak:</label>
+                        <input type="text" name="title" value={title} placeholder="Titel..."
+                            onChange={(e) => setTitle(e.target.value)} />
+                    </div>
 
                     {/* Description */}
-                    <label htmlFor="description">Omschrijving van de taak:</label>
-                    <textarea name="description" value={description} placeholder="Omschrijving..."
-                        onChange={(e) => setDescription(e.target.value)} />
+                    <div>
+                        <label htmlFor="description">Omschrijving van de taak:</label>
+                        <textarea name="description" value={description} placeholder="Omschrijving..."
+                            onChange={(e) => setDescription(e.target.value)} />
+                    </div>
 
                     {/* Employee */}
-                    <label htmlFor="employee">Aan wie is de taak gericht?</label>
-                    {employeesOptions && <Select<OptionType, true>
-                        className="basic-multi-select"
-                        classNamePrefix="select"
-                        isMulti
-                        isClearable={true}
-                        isSearchable={true}
-                        name="employees"
-                        filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
-                        maxMenuHeight={200} // Limit height to improve rendering
-                        value={selectedEmployees}
-                        options={employeesOptions}
-                        components={{ // Custom components to make use of react-window to improve rendering
-                            MenuList,
-                            Option,
-                        }}
-                        onChange={(selectedOptions: MultiValue<OptionType>) => {
-                            let newSelectedOptions = selectedOptions.map(x => x);
-                            setSelectedEmployees(newSelectedOptions);
-                        }}
-                    />}
+                    <div>
+                        <label htmlFor="employee">Aan wie is de taak gericht?</label>
+                        {employeesOptions && <Select<OptionType, true>
+                            className="basic-multi-select"
+                            classNamePrefix="select"
+                            isMulti
+                            isClearable={true}
+                            isSearchable={true}
+                            name="employees"
+                            filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
+                            maxMenuHeight={200} // Limit height to improve rendering
+                            value={selectedEmployees}
+                            options={employeesOptions}
+                            components={{ // Custom components to make use of react-window to improve rendering
+                                MenuList,
+                                Option,
+                            }}
+                            onChange={(selectedOptions: MultiValue<OptionType>) => {
+                                let newSelectedOptions = selectedOptions.map(x => x);
+                                setSelectedEmployees(newSelectedOptions);
+                            }}
+                        />}
+                    </div>
 
                     <button type="submit">Voeg toe</button>
                 </fieldset>

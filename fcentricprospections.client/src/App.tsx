@@ -33,20 +33,20 @@ const Root = () => {
     return (
         <>
             <header className={styles.header}>
-                <button className={styles.header__button} onClick={() => navigate("/")}>
+                <button title="Home" className={styles.header__button} onClick={() => navigate("/")}>
                     {<AiFillHome className={styles.header__icon} />}
                 </button>
 
                 {/* Show Agenda button only if user is set */}
                 {(user && location.pathname !== "/") && (
-                    <button className={styles.header__button} onClick={() => navigate("/agenda")}>
+                    <button title="Agenda" className={styles.header__button} onClick={() => navigate("/agenda")}>
                         <TfiAgenda className={styles.header__icon} />
                     </button>
                 )}
 
                 {/* If location isn't "Home", show "Back" button */}
                 {location.pathname !== "/" &&
-                    <button className={styles.header__button} title="Back" onClick={() => navigate(-1)}>
+                    <button title="Terug" className={styles.header__button} onClick={() => navigate(-1)}>
                         {<AiOutlineArrowLeft className={styles.header__icon} />}
                     </button>
                 }
@@ -56,6 +56,7 @@ const Root = () => {
 
             <footer>
                 {/* Footer content can go here */}
+                <div></div>
             </footer>
         </>
     );

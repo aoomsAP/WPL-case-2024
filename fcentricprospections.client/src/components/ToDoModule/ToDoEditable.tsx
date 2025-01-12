@@ -2,7 +2,7 @@ import Select, { createFilter, MultiValue } from "react-select";
 import { IToDo, OptionType } from "../../types";
 import styles from "./ToDoEditable.module.css"
 import EditableInput from "./EditableInput";
-import Option from "./Option/Option";
+import Option, {customTheme} from "./Option/Option";
 import MenuList from "./MenuList/MenuList";
 
 interface ToDoEditableProps {
@@ -62,7 +62,7 @@ export default function ToDoEditable({ index, toDo, toDos, setToDos, employeesOp
 
             {/* Description */}
             <div className={styles.editableinput_container}>
-                <label htmlFor="description">Taak:</label><br />
+                <label htmlFor="description">Taak:</label>
                 <EditableInput
                     type={"textarea"}
                     value={toDo.remarks ?? ""}
@@ -75,6 +75,7 @@ export default function ToDoEditable({ index, toDo, toDos, setToDos, employeesOp
             {/* Employees select */}
             <label htmlFor="employee">Toegewezen aan: </label>
             <Select<OptionType, true>
+                theme={customTheme}
                 className="basic-multi-select"
                 classNamePrefix="select"
                 isMulti

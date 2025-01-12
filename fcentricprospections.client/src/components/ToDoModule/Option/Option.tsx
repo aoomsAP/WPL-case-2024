@@ -4,6 +4,17 @@ import { useState } from "react";
 import { OptionProps } from "react-select";
 import { OptionType } from "../../../types";
 
+// Custom theme/styling for React-Select https://www.metered.ca/blog/react-select-the-complete-guide/
+export const customTheme = (theme: any) => ({
+  ...theme,
+  borderRadius: 0,
+  colors: {
+    ...theme.colors,
+    primary25: 'rgba(247, 247, 247)', // change Background color of options on hover
+    primary: 'lightgray', // change the Background color of the selected option
+  },
+});
+
 const Option = (props: OptionProps<OptionType>) => {
     const { children, innerProps, getStyles, isSelected } = props
     delete props.innerProps.onMouseMove
@@ -16,7 +27,7 @@ const Option = (props: OptionProps<OptionType>) => {
         ...getStyles('option', props),
         ...(isSelected || isHovered || isPressed
             ? {
-                backgroundColor: isSelected ? '#abbde9' : isPressed ? '#B2D4FF' : '#DDEBFF',
+                backgroundColor: isSelected ? 'yellow' : isPressed ? 'rgb(235, 235, 235)' : 'rgba(247, 247, 247)',
             }
             : {}),
         color: isSelected ? 'white' : undefined,

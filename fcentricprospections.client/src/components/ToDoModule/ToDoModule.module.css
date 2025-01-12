@@ -1,17 +1,20 @@
+.newToDo {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: .5rem;
+    border: 1px solid black;
+}
+
+.newToDo button {
+    margin-top: 1rem;
+}
+
 .toDo {
     position: relative;
     margin-top: 1rem;
     border: 1px solid black;
     padding: 1rem;
-}
-
-.employeeSearch {
-    max-height: 125px;
-}
-
-.employeeSearch li {
-    text-align: left;
-    cursor: pointer;
 }
 
 .close {

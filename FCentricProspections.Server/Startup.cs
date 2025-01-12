@@ -21,7 +21,7 @@ namespace FCentricProspections
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins("https://localhost:5173") // Your frontend URL
+                    builder => builder.WithOrigins("https://localhost:5173") // Frontend URL
                                       .AllowAnyMethod()
                                       .AllowAnyHeader());
             });
