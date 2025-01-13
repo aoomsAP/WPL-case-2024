@@ -1,0 +1,12 @@
+.list {
+  list-style-type: square;
+  padding-left: 1rem;
+}
+
+.list li {
+  padding-left: .5rem;
+}
+
+.card h3 {
+  font-weight: 500;
+}

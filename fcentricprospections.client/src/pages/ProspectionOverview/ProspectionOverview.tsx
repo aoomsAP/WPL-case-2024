@@ -21,30 +21,30 @@ export const ProspectionOverview = () => {
                 navigate("/404");
             }
             else {
-                setShopId(parseInt(shopId));
+                if (!shopDetail) {
+                    setShopId(parseInt(shopId));
+                }
             }
         }
     }, [])
 
     return (
         <main className={styles.main}>
+
+            <h1>Overzicht prospecties</h1>
+
             {shopDetail && <ShopDetailCard shop={shopDetail} />}
 
-            <h2>Voorgaande prospecties</h2>
-
-            <section className={styles.section}>
+            <ul className={styles.ul}>
                 {shopProspections
                     // sort on date in descending order
                     .sort((a, b) => (new Date(b.visitDate).getTime()) - (new Date(a.visitDate).getTime()))
                     // get three latest prospections
-                    .map((prospection) => (
-                        <button className={styles.button} key={prospection.id}>
-                            <Link to={`/shop/${shopId}/prospections/${prospection.id}`}>
-                                Prospectie {new Date(prospection.visitDate).toLocaleDateString()}<FaAngleRight className={styles.icon} />
-                            </Link>
-                        </button>
-                    ))}
-            </section>
+                    .map(prospection => (<li className={styles.li} key={prospection.id}>
+                        <Link to={`/shop/${shopId}/prospections/${prospection.id}`}>
+                            Prospectie {new Date(prospection.visitDate).toLocaleDateString()}<FaAngleRight className={styles.icon} />
+                        </Link></li>))}
+            </ul>
 
 
         </main>

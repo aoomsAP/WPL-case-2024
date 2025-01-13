@@ -5,8 +5,8 @@ import { UserContext } from "../../contexts/UserContext";
 import Select from "react-select";
 import { createFilter } from "react-select";
 import styles from './HomePage.module.css'
-import Option, { customTheme } from "../../components/ToDoModule/Option/Option";
-import MenuList from "../../components/ToDoModule/MenuList/MenuListSingle";
+import Option, { customTheme } from "../../components/CustomReactSelect/Option/Option";
+import MenuList from "../../components/CustomReactSelect/MenuList/MenuListSingle";
 
 export const Homepage = () => {
 

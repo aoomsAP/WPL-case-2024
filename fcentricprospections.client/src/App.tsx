@@ -1,6 +1,6 @@
 // react utilities
 import { useContext } from 'react';
-import { createBrowserRouter, Link, Outlet, RouterProvider, useLocation, useNavigate } from 'react-router-dom';
+import { createBrowserRouter, Outlet, RouterProvider, useLocation, useNavigate } from 'react-router-dom';
 // styles
 import styles from './App.module.css'
 // contexts

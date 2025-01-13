@@ -1,0 +1,17 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.card p {
+    margin: 0;
+}
+
+.card strong {
+    font-weight: 500;
+}
+
+.card h3 {
+    font-weight: 500;
+}

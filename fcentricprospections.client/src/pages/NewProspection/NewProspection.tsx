@@ -4,22 +4,22 @@ import { useParams, useNavigate } from 'react-router-dom';
 // styles
 import styles from "./NewProspection.module.css";
 // types
-import { ICompetitorBrand, IContactInfo, IProspectionBrand, IProspectionCompetitorBrand, IProspectionDetail, IProspectionToDo, IToDo, OptionType } from '../../types';
+import { IBrand, ICompetitorBrand, IContactInfo, IProspectionBrand, IProspectionBrandInterest, IProspectionCompetitorBrand, IProspectionDetail, IProspectionToDo, IToDo, OptionType } from '../../types';
 // components
-import BrandTag from '../../components/BrandTag/BrandTag';
-import BrandCardInput from '../../components/BrandCardInput/BrandCardInput';
-import BrandInterestCard from '../../components/BrandCardInput/BrandInterestCard';
+import BrandInput from '../../components/NewProspection/BrandInput/BrandInput';
+import BrandInterestCard from '../../components/NewProspection/BrandInterestInput/BrandInterestInput';
 import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCard';
-import ToDoModule from '../../components/ToDoModule/ToDoModule';
+import ToDoModule from '../../components/NewProspection/ToDoModule/ToDoModule';
 // contexts
 import { ShopDetailContext } from '../../contexts/ShopDetailContext';
 import { UserContext } from '../../contexts/UserContext';
 import { NewProspectionContext } from '../../contexts/NewProspectionContext';
 // react-select
 import Select, { createFilter, MultiValue } from 'react-select';
-import MenuList from "../../components/ToDoModule/MenuList/MenuList"; // Custom MenuList
-import Option, { customTheme } from "../../components/ToDoModule/Option/Option"; // Custom Option
+import MenuList from "../../components/CustomReactSelect/MenuList/MenuList"; // Custom MenuList
+import Option, { customTheme } from "../../components/CustomReactSelect/Option/Option"; // Custom Option
 // form-wizard
+// import FormWizard from "react-form-wizard-component";
 import FormWizard from "react-form-wizard-component";
 import "react-form-wizard-component/dist/style.css";
 // icons
@@ -50,7 +50,9 @@ export const NewProspection = () => {
         navigate("/404");
       }
       else {
-        setShopId(parseInt(shopId));
+        if (!shopDetail) {
+          setShopId(parseInt(shopId));
+        }
       }
     }
   }, [])
@@ -158,12 +160,12 @@ export const NewProspection = () => {
 
   // Contact info todos 
   useEffect(() => {
-    if (contactName != "" || contactEmail != "" || contactPhone != "") {
+    if (contactName.trim() != "" || contactEmail.trim() != "" || contactPhone.trim() != "") {
 
       const newContactName = `${contactName.length > 1 ? `Contact naam: ${contactName}` : ""}`
       const newContactEmail = `${contactEmail.length > 1 ? `Contact email: ${contactEmail}` : ""}`
       const newContactPhone = `${contactPhone.length > 1 ? `Contact telefoon: ${contactPhone}` : ""}`
-      const newContactInfo = `${newContactName != "" ? `${newContactName}\n` : ""}${newContactEmail != "" ? `${newContactEmail}\n` : ""}${newContactPhone != "" ? `${newContactPhone}` : ""}`;
+      const newContactInfo = `${newContactName.trim() != "" ? `${newContactName}\n` : ""}${newContactEmail.trim() != "" ? `${newContactEmail}\n` : ""}${newContactPhone.trim() != "" ? `${newContactPhone}` : ""}`;
 
       // Create todo for each interest
       let contactInfoToDo = {
@@ -220,10 +222,13 @@ export const NewProspection = () => {
   }, [prospectionBrandInterests])
 
 
-  // Select -------------------------------------------------------------------------------------------------------------------
+  // React-Select -------------------------------------------------------------------------------------------------------------------
 
-  // Creating competitor brand options for react-select
+  // Competitor brand options for react-select
+
   const [competitorBrandsOptions, setCompetitorBrandsOptions] = useState<OptionType[]>([]);
+  const [selectedCompetitorBrands, setSelectedCompetitorBrands] = useState<OptionType[]>([]);
+
   useEffect(() => {
     const isValidCompetitorBrand = (competitorBrand: ICompetitorBrand) =>
       !!competitorBrand && !!competitorBrand.id && !!competitorBrand.name;
@@ -237,18 +242,23 @@ export const NewProspection = () => {
     setCompetitorBrandsOptions(competitorBrandOptions);
   }, [competitorBrands])
 
-  // Search fields - react-select not (yet) implemented for brand interest seardch
-  const [brandInterestSearch, setBrandInterestSearch] = useState<string>("");
+  // Brand interest options for react-select
 
-  // Filter for interest search brands
-  const brandInterestSearchFunc = allBrands.filter(brand => {
+  const [brandInterestOptions, setBrandInterestOptions] = useState<OptionType[]>([]);
+  const [selectedBrandInterests, setSelectedBrandInterests] = useState<OptionType[]>([]);
 
-    if (prospectionBrandInterests.map(x => x.brandId).find(x => x === brand.id)) return false;
+  useEffect(() => {
+    const isValidBrand = (brand: IBrand) =>
+      !!brand && !!brand.id && !!brand.name;
 
-    if (brandInterestSearch.length < 3) return false;
-
-    return brand.name.toLowerCase().includes(brandInterestSearch.toLowerCase());
-  });
+    let brandOptions: OptionType[] = allBrands
+      .filter(isValidBrand)
+      .map((brand) => ({
+        value: brand.id.toString(),
+        label: brand.name
+      }));
+    setBrandInterestOptions(brandOptions);
+  }, [allBrands])
 
 
   // Default prospectionBrands --------------------------------------------------------------------------------------------------------------------
@@ -279,7 +289,7 @@ export const NewProspection = () => {
 
   // Validate trends & feedback tab
   const checkValidateFeedbackTab = () => {
-    if (trends === "" || feedback === "") {
+    if (trends.trim() === "" || feedback.trim() === "") {
       return false;
     }
     return true;
@@ -414,24 +424,25 @@ export const NewProspection = () => {
 
         <FormWizard.TabContent
           title={windowWidth < 700 ? "" : "Info"}
-          icon={<AiOutlineCheck color="#D4AF37" width={50} />}   >
+          icon={<AiOutlineCheck color="lightgrey" />}   >
 
-          {/* Shop info */}
+          {/* SHOP DETAIL INFO */}
           {shopDetail && <ShopDetailCard shop={shopDetail} />}
 
-          {/* Visit Date */}
+          {/* VISIT DATE */}
           <fieldset>
             <legend>Datum van prospectie</legend>
             <input
               type="date"
               value={visitDate ? visitDate.toISOString().substring(0, 10) : ''}
               onChange={(e) => setVisitDate(new Date(e.target.value))}
+              onClick={(e) => e.currentTarget.showPicker()}
             />
           </fieldset>
 
-          <h3 className={styles.h3}>Informatie</h3>
+          <h3 className={styles.h3}>Contact</h3>
 
-          {/* Contact type */}
+          {/* CONTACT TYPE */}
           <fieldset className={styles.radioContainer}>
             <legend>Contact type</legend>
             <label>
@@ -456,29 +467,29 @@ export const NewProspection = () => {
             </label>
           </fieldset>
 
-          {/* Contact type */}
+          {/* CONTACT NAME */}
           <fieldset>
             <legend>Contact naam
+              {/* Required if owner or buyer */}
               {(contactType == 1 || contactType == 2) && <span className={styles.required}> *</span>}
             </legend>
-            <p style={{ marginTop: 0 }}>Huidige naam: {contactInfo?.name ?? "Geen naam gevonden"}</p>
+            <p>Naam: {contactInfo?.name ?? "geen naam gevonden"}</p>
             <input
               type='text'
-              placeholder='Update naam'
+              placeholder='Update naam...'
               value={contactName}
               onChange={(e) => {
                 setContactName(e.target.value);
                 // If contact name has any value, consider automatically checked
-                if (e.target.value != "") setNameChecked(true);
+                if (e.target.value.trim() != "") setNameChecked(true);
                 else setNameChecked(false);
               }} />
-
-            {/* Checkbox validation */}
-            {/* Only show if contact type is owner or buyer */}
+            {/* Checkbox validation (only if contact type is owner or buyer) */}
             {(contactType == 1 || contactType == 2) &&
               <div className={styles.checkbox}>
                 <label htmlFor="nameValidation">
-                  Huidige informatie is correct&nbsp;
+                  {/* If new name is set, checkbox will be automatically validated */}
+                  {contactName.trim() != "" ? "Nieuwe" : "Huidige"} informatie is correct&nbsp;
                   <input
                     type="checkbox"
                     name="nameValidation"
@@ -493,27 +504,29 @@ export const NewProspection = () => {
           {/* Only show email and phone if contact type is owener or buyer */}
           {(contactType == 1 || contactType == 2) &&
             <>
+              {/* CONTACT EMAIL */}
               <fieldset>
                 <legend>Contact email
+                  {/* Required if owner or buyer */}
                   {(contactType == 1 || contactType == 2) && <span className={styles.required}> *</span>}
                 </legend>
-                <p style={{ marginTop: 0 }}>Huidige email: {contactInfo?.email ?? "Geen email gevonden"}</p>
+                <p>Email: {contactInfo?.email ?? "geen email gevonden"}</p>
                 <input
                   type='text'
-                  placeholder='Update email'
+                  placeholder='Update email...'
                   value={contactEmail}
                   onChange={(e) => {
                     setContactEmail(e.target.value);
                     // If contact email has any value, consider automatically checked
-                    if (e.target.value != "") setEmailChecked(true);
+                    if (e.target.value.trim() != "") setEmailChecked(true);
                     else setEmailChecked(false);
                   }}>
                 </input>
-
                 {/* Checkbox validation */}
                 <div className={styles.checkbox}>
                   <label htmlFor="emailValidation">
-                    Huidige informatie is correct&nbsp;
+                    {/* If new email is set, checkbox will be automatically validated */}
+                    {contactEmail.trim() != "" ? "Nieuwe" : "Huidige"} informatie is correct&nbsp;
                     <input
                       type="checkbox"
                       name="emailValidation"
@@ -524,27 +537,28 @@ export const NewProspection = () => {
                 </div>
               </fieldset>
 
+              {/* CONTACT PHONE */}
               <fieldset>
                 <legend>Contact phone
+                  {/* Required if owner or buyer */}
                   {(contactType == 1 || contactType == 2) && <span className={styles.required}> *</span>}
                 </legend>
-                <p style={{ marginTop: 0 }}>Huidge telefoonnummer: {contactInfo?.phoneNumber ?? "Geen telefoonnummer gevonden"}</p>
+                <p>Telefoonnummer: {contactInfo?.phoneNumber ?? "geen telefoonnummer gevonden"}</p>
                 <input
                   type='text'
-                  placeholder='Update telefoonnummer'
+                  placeholder='Update telefoonnummer...'
                   value={contactPhone}
                   onChange={(e) => {
                     setContactPhone(e.target.value);
                     // If contact phone has any value, consider automatically checked
-                    if (e.target.value != "") setPhoneChecked(true);
+                    if (e.target.value.trim() != "") setPhoneChecked(true);
                     else setPhoneChecked(false);
-
                   }} />
-
                 {/* Checkbox validation */}
                 <div className={styles.checkbox}>
                   <label htmlFor="phoneValidation">
-                    Huidige informatie is correct&nbsp;
+                    {/* If new phone number is set, checkbox will be automatically validated */}
+                    {contactPhone.trim() != "" ? "Nieuwe" : "Huidige"} informatie is correct&nbsp;
                     <input
                       type="checkbox"
                       name="phoneValidation"
@@ -557,6 +571,9 @@ export const NewProspection = () => {
             </>
           }
 
+          <h3 className={styles.h3}>Bezoek</h3>
+
+          {/* VISIT TYPE */}
           <fieldset className={styles.radioContainer}>
             <legend>Bezoek type</legend>
             <label>
@@ -585,16 +602,15 @@ export const NewProspection = () => {
             </label>
           </fieldset>
 
+          {/* VISIT CONTEXT */}
           <fieldset>
             <legend>Reden van bezoek</legend>
-
             <textarea
               maxLength={500}
               rows={3}
               value={visitContext}
               placeholder='Dit bezoek werd gepland ter gelegenheid van...'
               onChange={(e) => setVisitContext(e.target.value)} />
-
           </fieldset>
 
         </FormWizard.TabContent>
@@ -604,7 +620,7 @@ export const NewProspection = () => {
 
         <FormWizard.TabContent
           title={windowWidth < 700 ? "" : "Brandmix"}
-          icon={<AiOutlineCheck color="#D4AF37" />}
+          icon={<AiOutlineCheck color="lightgrey" />}
           isValid={checkValidateContactTab()}
           validationError={contactTabError}>
 
@@ -613,21 +629,28 @@ export const NewProspection = () => {
           <fieldset>
             {/* FC70 BRANDS */}
             <h4 className={styles.h4}>FC70 Brands</h4>
-            <div>
-              {prospectionBrands.length > 0
-                ? prospectionBrands.map((brand, i) => (
-                  <div key={i}>
-                    <BrandTag brandId={brand.brandId} brandName={brand.brandName} type="brand" />
-                  </div>
-                ))
-                : "Geen Fashion Club 70 merken beschikbaar."}
-            </div>
-          </fieldset>
+            {
+              prospectionBrands.length > 0
+                ? <ul className={styles.bulletPoints}>
+                  {prospectionBrands.map((brand, i) => (
+                    <li key={i}>
+                      {brand.brandName}
+                    </li>
+                  ))
+                  }
+                </ul>
+                : <p>
+                  Geen Fashion Club 70 brands beschikbaar.
+                </p>
+            }
 
+
+          </fieldset>
 
           <fieldset>
             {/* COMPETITOR BRANDS */}
             <h4 className={styles.h4}>Referentiemerken</h4>
+            <p className={styles.normalLineHeight}>Niet-FC70 merken die de winkel momenteel aanbiedt:</p>
 
             {competitorBrands && <Select<OptionType, true>
               theme={customTheme}
@@ -635,6 +658,7 @@ export const NewProspection = () => {
               classNamePrefix="select"
               isMulti
               placeholder={"Selecteer..."}
+              value={selectedCompetitorBrands}
               isClearable={true}
               isSearchable={true}
               name="competitorBrand"
@@ -646,6 +670,7 @@ export const NewProspection = () => {
                 Option,
               }}
               onChange={(selectedOptions: MultiValue<OptionType>) => {
+                setSelectedCompetitorBrands([...selectedOptions]);
                 const newProspectionCompetitorBrands: IProspectionCompetitorBrand[] = selectedOptions
                   .map((x: OptionType) => ({
                     competitorBrandId: +x.value,
@@ -659,7 +684,7 @@ export const NewProspection = () => {
           <fieldset>
             {/* NEW BRANDS */}
             <h4 className={styles.h4}>Nieuwe merken</h4>
-            <label>Merken die u niet terugvond in de lijst hierboven:</label>
+            <p className={styles.normalLineHeight}>Merken die u niet terugvond in de lijst hierboven:</p>
             <textarea
               value={newBrands}
               placeholder="Nieuw merk met collectie voor dames/heren/kinderen..."
@@ -675,7 +700,7 @@ export const NewProspection = () => {
 
         <FormWizard.TabContent
           title={windowWidth < 700 ? " " : "Algemeen"}
-          icon={<AiOutlineCheck color="#D4AF37" />}>
+          icon={<AiOutlineCheck color="lightgrey" />}>
 
           <h3 className={styles.h3}>Algemene situatie</h3>
 
@@ -710,62 +735,67 @@ export const NewProspection = () => {
 
         <FormWizard.TabContent
           title={windowWidth < 700 ? " " : "FC70"}
-          icon={<AiOutlineCheck color="#D4AF37" />}>
+          icon={<AiOutlineCheck color="lightgrey" />}>
 
           <h3 className={styles.h3}>FC70 overzicht</h3>
 
           {prospectionBrands.map((brand, i) => <div key={i}>
-            <BrandCardInput brand={{ brandId: brand.brandId, brandName: brand.brandName }} />
+            <BrandInput brand={{ brandId: brand.brandId, brandName: brand.brandName }} />
           </div>)}
-          {prospectionBrands.length === 0 && <p>Geen FC70 merken beschikbaar.</p>}
+
+          {prospectionBrands.length === 0 &&
+            <p className={styles.marginLeft}>Geen FC70 merken beschikbaar.</p>}
 
         </FormWizard.TabContent>
 
+
+        {/* BRANDS INTERESTS ------------------------------------------------------------------------------------------------------------------------- */}
+
         <FormWizard.TabContent
           title={windowWidth < 700 ? "" : "Interesses"}
-          icon={<AiOutlineCheck color="#D4AF37" />}>
+          icon={<AiOutlineCheck color="lightgrey" />}>
 
-          <h3 className={styles.h3}>Interesse FC70 merken</h3>
+          <fieldset className={styles.interestSelect}>
+            <h3>Interesse FC70 merken</h3>
 
-          <fieldset>
-            <p>Indien er interesse was in bepaalde FC70 merken, gelieve deze te selecteren.</p>
-            <input
-              type="text"
-              placeholder="Zoek..."
-              value={brandInterestSearch}
-              onChange={(e) => setBrandInterestSearch(e.target.value)} // Update state on input change
+            <p className={styles.normalLineHeight}>Indien er interesse was in bepaalde FC70 merken, gelieve deze te selecteren met de nodige opmerkingen.</p>
+
+            <Select<OptionType, true>
+              theme={customTheme}
+              className="basic-multi-select"
+              classNamePrefix="select"
+              isMulti
+              placeholder={"Selecteer..."}
+              value={selectedBrandInterests}
+              isClearable={true}
+              isSearchable={true}
+              name="brandInterest"
+              filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
+              maxMenuHeight={200} // Limit height to improve rendering
+              options={brandInterestOptions}
+              components={{ // Custom components to make use of react-window to improve rendering
+                MenuList,
+                Option,
+              }}
+              onChange={(selectedOptions: MultiValue<OptionType>) => {
+                setSelectedBrandInterests([...selectedOptions]);
+                const newBrandInterests: IProspectionBrandInterest[] = selectedOptions
+                  .map((x: OptionType) => ({
+                    brandId: +x.value,
+                    brandName: x.label,
+                  }));
+                // set prospection brand interests
+                setProspectionBrandInterests(newBrandInterests);
+              }}
             />
-
-            <ul className={styles.ul}>
-              {brandInterestSearchFunc.length > 0 ? (
-                brandInterestSearchFunc.map(brand => (
-                  <li key={brand.id} className={styles.li}
-                    onClick={() => {
-                      // set prospection brand interests
-                      setProspectionBrandInterests([...prospectionBrandInterests, { brandId: brand.id, brandName: brand.name }]);
-
-                      // clear search
-                      setBrandInterestSearch("");
-                    }}>
-                    {brand.name}
-                  </li>
-                ))
-              ) : (
-                brandInterestSearch.length < 3 ? (
-                  <p>Typ minstens 3 letters.</p>
-                ) : (
-                  <p>Geen merken gevonden</p>
-                )
-              )}
-            </ul>
-
-            <div className={styles.cardsContainer}>
-              {prospectionBrandInterests.map((brand, i) => <div key={i}>
-                <BrandInterestCard brand={brand} />
-              </div>
-              )}
-            </div>
           </fieldset>
+
+          <div>
+            {prospectionBrandInterests.map((brand, i) => <div key={i}>
+              <BrandInterestCard brand={brand} selected={selectedBrandInterests} setSelected={setSelectedBrandInterests} />
+            </div>
+            )}
+          </div>
 
         </FormWizard.TabContent>
 
@@ -774,7 +804,7 @@ export const NewProspection = () => {
 
         <FormWizard.TabContent
           title={windowWidth < 700 ? " " : "Feedback"}
-          icon={<AiOutlineCheck color="#D4AF37" />}>
+          icon={<AiOutlineCheck color="lightgrey" />}>
 
           <h3 className={styles.h3}>Feedback</h3>
 
@@ -801,20 +831,22 @@ export const NewProspection = () => {
 
         <FormWizard.TabContent
           title={windowWidth < 700 ? " " : "Opvolging"}
-          icon={<AiOutlineCheck color="#D4AF37" />}
+          icon={<AiOutlineCheck color="lightgrey" />}
           isValid={checkValidateFeedbackTab()}
           validationError={feedbackError}>
 
           <h3>Takenlijst voor opvolging</h3>
-          <p>Hier kan u items toevoegen die op basis van uw verslag moeten opgevolgd worden.</p>
-          <small>
-            <p>Worden automatisch toegevoegd:</p>
-            <ul>
-              <li>Nieuwe contact info</li>
-              <li>Nieuwe brands</li>
-              <li>Brands interesses</li>
-            </ul>
-          </small>
+          <div>
+            <p className={styles.normalLineHeight}>Hier kan u items toevoegen die op basis van uw verslag moeten opgevolgd worden.</p>
+            <small className={styles.automaticallyAdded}>
+              <p className={styles.normalLineHeight}>Worden automatisch opgevolgd:</p>
+              <ul className={styles.bulletPoints}>
+                <li>Nieuwe contact info</li>
+                <li>Nieuwe brands</li>
+                <li>Brands interesses</li>
+              </ul>
+            </small>
+          </div>
 
           <ToDoModule toDos={toDos} setToDos={setToDos} />
 

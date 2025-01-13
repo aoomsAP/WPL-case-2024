@@ -1,18 +1,19 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useContext } from "react";
 import { ShopDetailCard } from "../../components/ShopDetailCard/ShopDetailCard";
-import { ContactTypeCard } from "../../components/ContactTypeCard/ContactTypeCard";
-import { VisitTypeCard } from "../../components/VisitTypeCard/VisitTypeCard";
-import { GeneralSituation } from "../../components/GeneralSituationCard/GeneralSituationCard";
-import { BrandList } from "../../components/BrandList/BrandList";
-import { TextSection } from "../../components/TextSection/TextSection";
-import { CompetitorBrandList } from "../../components/CompetitorBrandList/CompetitorBrandList";
-import { BrandInterestList } from "../../components/BrandInterestList/BrandInterestList";
+import { ContactTypeCard } from "../../components/ProspectionDetail/ContactTypeCard/ContactTypeCard";
+import { VisitTypeCard } from "../../components/ProspectionDetail/VisitTypeCard/VisitTypeCard";
+import { GeneralSituation } from "../../components/ProspectionDetail/GeneralSituationCard/GeneralSituationCard";
+import { BrandList } from "../../components/ProspectionDetail/BrandList/BrandList";
+import { TextSection } from "../../components/ProspectionDetail/TextSection/TextSection";
+import { CompetitorBrandList } from "../../components/ProspectionDetail/CompetitorBrandList/CompetitorBrandList";
+import { BrandInterestCard } from "../../components/ProspectionDetail/BrandInterestCard/BrandInterestCard";
 import styles from "./ProspectionDetail.module.css";
 import { Oval } from 'react-loader-spinner'
 import { ShopDetailContext } from "../../contexts/ShopDetailContext";
 import { ProspectionDetailContext } from "../../contexts/ProspectionDetailContext";
-import { ToDoContainer } from "../../components/ToDo/ToDoContainer";
+import { ToDoItem } from "../../components/ProspectionDetail/ToDo/ToDoItem";
+import { BrandCard } from "../../components/ProspectionDetail/BrandCard/BrandCard";
 
 export const ProspectionDetail = () => {
 
@@ -47,7 +48,9 @@ export const ProspectionDetail = () => {
         navigate("/404");
       }
       else {
-        setShopId(+shopId);
+        if (!shopDetail) {
+          setShopId(+shopId);
+        }
         setProspectionId(+prospectionId);
       }
     }
@@ -64,30 +67,99 @@ export const ProspectionDetail = () => {
 
           {shopDetail && <ShopDetailCard shop={shopDetail} />}
 
-          <section className={styles.contactVisitCard}>
-            <h2>Bezoek informatie</h2>
-            <div>
-              {contactType && prospectionDetail && (
-                <ContactTypeCard contactType={contactType} contactPersonName={prospectionDetail.contactName} contactEmail={prospectionDetail.contactEmail} contactPhone={prospectionDetail.contactPhone} />
-              )}
+          {/* Info contact & visit */}
 
-              {visitType && prospectionDetail && <VisitTypeCard visitType={visitType} visitContext={prospectionDetail?.visitContext} />}
-            </div>
+          <h2 className={styles.sectionTitle}>Info</h2>
+
+          <section className={styles.section}>
+            {contactType && prospectionDetail && (
+              <ContactTypeCard contactType={contactType} contactPersonName={prospectionDetail.contactName} contactEmail={prospectionDetail.contactEmail} contactPhone={prospectionDetail.contactPhone} />
+            )}
+            {visitType && prospectionDetail && <VisitTypeCard visitType={visitType} visitContext={prospectionDetail?.visitContext} />}
           </section>
 
-          <BrandList prospectionBrands={prospectionBrands} brands={brands} />
+          {/* FC70 Brands */}
 
-          <CompetitorBrandList prospectionCompetitorBrands={prospectionCompetitorBrands} />
+          <h2 className={styles.sectionTitle}>FC70 Brands</h2>
 
-          <TextSection title="Nieuwe Merken" text={prospectionDetail.newBrands} />
+          {prospectionBrands.length > 0 &&
+            <section className={styles.sectionList}>
+              {prospectionBrands.map((brand, index) => {
+                const matchingBrand = brands.find(b => b.id === brand.brandId);
+                return (
+                  <article key={index}>
+                    {matchingBrand ? <BrandCard prospectionBrand={brand} brandName={matchingBrand?.name} /> : <p className={styles.brandNotFound}>Merk niet gevonden</p>}
+                  </article>
+                );
+              })}
+            </section>}
 
-          {prospectionDetail && <GeneralSituation detail={prospectionDetail} />}
+          {prospectionBrands.length < 1 &&
+            <section className={styles.section}>
+              <p className={styles.marginZero}>Geen FC70 brands.</p>
+            </section>}
 
-          <BrandInterestList prospectionBrandInterests={prospectionBrandInterests} />
+          {/* Andere merken */}
 
-          <TextSection title="Trends en noden in de markt" text={prospectionDetail?.trends} />
-          <TextSection title="Extra opmerkingen en feedback" text={prospectionDetail?.extra} />
-          <ToDoContainer todos={prospectionToDos} />
+          <h2 className={styles.sectionTitle}>Andere merken</h2>
+
+          <section className={styles.section}>
+            <CompetitorBrandList prospectionCompetitorBrands={prospectionCompetitorBrands} />
+
+            <TextSection title="Nieuwe Merken" text={prospectionDetail.newBrands} />
+          </section>
+
+          {/* General situation */}
+
+          <h2 className={styles.sectionTitle}>Algemene situatie</h2>
+
+          <section className={styles.section}>
+            {prospectionDetail && <GeneralSituation detail={prospectionDetail} />}
+          </section>
+
+          {/* Brand interests */}
+
+          <h2 className={styles.sectionTitle}>FC70 interesses</h2>
+
+          {prospectionBrandInterests.length > 0 &&
+            <section className={styles.sectionList}>
+              {prospectionBrandInterests.map((brand, index) =>
+                <article key={index}>
+                  <BrandInterestCard brand={brand} index={index} />
+                </article>
+              )}
+            </section>
+          }
+
+          {prospectionBrandInterests.length < 1 &&
+            <section className={styles.section}>
+              <p className={styles.marginZero}>Geen interesses.</p>
+            </section>}
+
+          {/* Feedback */}
+
+          <h2 className={styles.sectionTitle}>Feedback</h2>
+
+          <section className={styles.section}>
+            <TextSection title="Trends en noden in de markt" text={prospectionDetail?.trends} />
+            <TextSection title="Extra opmerkingen en feedback" text={prospectionDetail?.extra} />
+          </section>
+
+          {/* ToDos */}
+
+          <h2 className={styles.sectionTitle}>Opvolging</h2>
+
+          {prospectionToDos.length > 0 &&
+            <section className={styles.sectionList}>
+              {prospectionToDos.map((x, index) => (
+                <ToDoItem key={index} todo={x} />
+              ))}
+            </section>}
+
+          {prospectionToDos.length < 1 &&
+            <section className={styles.section}>
+              <p className={styles.marginZero}>Geen taken voor opvolging.</p>
+            </section>}
         </>
       }
       {!prospectionDetail && <Oval />}

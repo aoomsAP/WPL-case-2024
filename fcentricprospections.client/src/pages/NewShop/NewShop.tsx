@@ -8,8 +8,8 @@ import { ICity, OptionType } from "../../types";
 import { NewShopContext } from "../../contexts/NewShopContext";
 import { createFilter } from "react-select";
 import Select from "react-select";
-import Option from "../../components/ToDoModule/Option/Option";
-import MenuList from "../../components/ToDoModule/MenuList/MenuListSingle";
+import Option from "../../components/CustomReactSelect/Option/Option";
+import MenuList from "../../components/CustomReactSelect/MenuList/MenuListSingle";
 
 export default function NewShop() {
 

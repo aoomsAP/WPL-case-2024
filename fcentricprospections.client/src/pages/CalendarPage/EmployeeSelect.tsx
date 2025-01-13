@@ -2,8 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { IAppointment, IEmployee, OptionType } from "../../types";
 import Select, { createFilter, MultiValue } from 'react-select';
-import MenuList from "../../components/ToDoModule/MenuList/MenuList";
-import Option from "../../components/ToDoModule/Option/Option";
+import MenuList from "../../components/CustomReactSelect/MenuList/MenuList";
+import Option from "../../components/CustomReactSelect/Option/Option";
 import { EventInput } from '@fullcalendar/core';
 import { Oval } from "react-loader-spinner";
 import style from './CalenderPage.module.css'

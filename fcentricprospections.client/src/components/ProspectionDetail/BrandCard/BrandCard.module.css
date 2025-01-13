@@ -1,0 +1,16 @@
+.card {
+  background-color: var(--primary-color);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  white-space: pre-wrap;
+}
+
+.card p {
+  margin: 0;
+}
+
+.card h3 {
+  font-weight: 500;
+  margin-bottom: .5rem;
+}

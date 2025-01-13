@@ -129,11 +129,15 @@ p {
   font-size: 0.875rem;
 }
 
+strong {
+  font-weight: 600;
+}
+
 section {
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: flex-start;
 }
 
 a {
@@ -146,11 +150,11 @@ a {
 }
 
 a:hover {
-  background-color: var(--secondary-color);
-  color: var(--primary-color);
+  background-color: var(--primary-darkest);
 }
 
 ul {
+  font-size: .875rem;
   background-color: inherit;
   overflow-y: auto;
   /* Enables vertical scrolling */
@@ -211,15 +215,24 @@ input[type="checkbox"] {
 input[type="text"]:focus,
 input[type="number"]:focus,
 textarea:focus,
-input[type="date"]:focus {
+input[type="date"]:focus,
+input[type="checkbox"]:focus,
+input[type="radio"]:focus {
   outline: none !important;
-  box-shadow: 0 0 0 1px black;
-  border-color: 1px solid black;
+  box-shadow: 0 0 0 2px yellow;
 }
 
 input[type="text"],
 textarea {
   width: 100%;
+}
+
+input[type="number"] {
+  min-width: 6rem;
+}
+
+input[type="date"]:hover {
+  cursor: pointer;
 }
 
 /* radio buttons */
@@ -237,7 +250,7 @@ input[type='radio'] {
 
 input[type='radio']:hover {
   border-radius: 0px;
-  box-shadow: 0 0 5px 0px yellow inset;
+  background-color: var(--primary-darker);
   cursor: pointer;
 }
 
@@ -280,7 +293,7 @@ input[type="checkbox"]:not(:disabled):checked {
 
 @media (hover: hover) {
   input[type="checkbox"]:not(:disabled):hover {
-    background-color: var(--gold-default);
+    background-color: var(--primary-darker);
   }
 }
 
@@ -307,6 +320,13 @@ legend {
   width: 100%;
   margin-bottom: .5rem;
   letter-spacing: .07rem;
+}
+
+hr {
+  width: 90%;
+  height: 1px;
+  background: var(--primary-darkest);
+  border: none;
 }
 
 /* FORM WIZARD ----------------------------------------------- */
@@ -360,6 +380,10 @@ legend {
   background-color: var(--gold-default);
 }
 
+.react-form-wizard .wizard-card-footer {
+  padding: 0 1rem;
+}
+
 @media (max-width: 700px) {
   .smooth-border-left-to-right {
     margin-top: 0.5em;
@@ -368,23 +392,28 @@ legend {
 
 /* REACT SELECT  ----------------------------------------------- */
 
-.basic-single {
+.basic-single,
+.basic-multi-select {
   width: 100%;
-}
-
-.basic-multi-select input[type="text"]:focus {
-  border: none !important;
-  box-shadow: 0 0 0 0px transparent !important;
+  font-family: inherit;
+  font-weight: 300;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+  margin-bottom: .5rem;
 }
 
 .select__control {
   border-radius: 0px !important;
 }
 
-.select__control--is-focused,
-.select__control--menu-is-open {
-  border-color: var(--secondary-color) !important;
-  box-shadow: 0 0 0 1px transparent !important;
+.basic-multi-select .select__value-container {
+  padding: .4rem !important;
+}
+
+.basic-single input[type="text"]:focus,
+.basic-multi-select input[type="text"]:focus {
+  border: none !important;
+  box-shadow: 0 0 0 0px transparent !important;
 }
 
 /* select menu has to appear on top of calendar */
@@ -420,7 +449,6 @@ legend {
 .react-select__option--is-selected:hover {
   background-color: #ffffff !important;
 }
-
 
 
 /* FULL CALENDAR */

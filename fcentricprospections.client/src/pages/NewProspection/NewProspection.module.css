@@ -1,10 +1,18 @@
 .h3 {
-    margin-top: 2rem;
+    margin-top: 1rem;
     margin-left: 1rem;
 }
 
 .h4 {
     margin-bottom: .5rem;
+}
+
+.marginLeft {
+    margin-left: 1rem;
+}
+
+.normalLineHeight {
+    line-height: normal;
 }
 
 .radioContainer {
@@ -23,22 +31,13 @@
     padding-left: 0;
 }
 
-.li {
-    list-style-type: none;
-    text-align: left;
-    margin-top: 0.5rem;
-    border-width: 1px;
-    border-color: var(--primary-color);
-    border-style: solid;
-    border-radius: 0.5rem;
+.bulletPoints {
+    list-style-type: square;
 }
 
-.li:hover {
-    border-color: var(--secondairy-color);
-}
-
-.cardsContainer {
-    margin-top: 2rem;
+.interestSelect {
+    background-color: inherit;
+    margin-bottom: 0;
 }
 
 .checkbox {
@@ -48,4 +47,10 @@
 .checkbox label {
     display: flex;
     align-items: center;
+}
+
+.automaticallyAdded > * {
+    margin: 0;
+    padding: 0 auto;
+    line-height: 1.7;
 }

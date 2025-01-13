@@ -22,7 +22,9 @@ export const ShopDetail = () => {
         navigate("/404");
       }
       else {
-        setShopId(parseInt(shopId));
+        if (!shopDetail) {
+          setShopId(parseInt(shopId));
+        }
       }
     }
   }, [])
@@ -34,37 +36,41 @@ export const ShopDetail = () => {
         {!shopDetail
           ? <Oval />
           : <>
-          
+
+            <h1>{shopDetail.name}</h1>
+
             <ShopDetailCard shop={shopDetail} />
 
             <section>
-
+              <p>Voeg een nieuwe prospectie toe:</p>
               <button onClick={() => navigate(`/shop/${shopId}/prospections/new`)}>
                 Nieuwe Prospectie
               </button>
+            </section>
 
-              <ul className={styles.ul}>
-                {shopProspections
-                  // sort on date in descending order
-                  .sort((a, b) => (new Date(b.visitDate).getTime()) - (new Date(a.visitDate).getTime()))
-                  // get three latest prospections
-                  .slice(0, 3)
-                  .map(prospection => (<li className={styles.li} key={prospection.id}>
-                    <Link
-                      className={styles.prospectionA}
-                      to={`/shop/${shopId}/prospections/${prospection.id}`}>
-                      Prospectie {new Date(prospection.visitDate).toLocaleDateString()}<FaAngleRight className={styles.icon} />
-                    </Link></li>))}
-              </ul>
-
-              <button onClick={() => navigate(`/shop/${shopId}/prospections`)}>
-                Overzicht van alle Prospecties
-              </button>
-
+            <section className={styles.overview}>
+              <h2>Voorgaande prospecties</h2>
+              {shopProspections.length > 0 &&
+                <>
+                  <ul className={styles.ul}>
+                    {shopProspections
+                      // sort on date in descending order
+                      .sort((a, b) => (new Date(b.visitDate).getTime()) - (new Date(a.visitDate).getTime()))
+                      // get three latest prospections
+                      .slice(0, 3)
+                      .map(prospection => (<li className={styles.li} key={prospection.id}>
+                        <Link to={`/shop/${shopId}/prospections/${prospection.id}`}>
+                          Prospectie {new Date(prospection.visitDate).toLocaleDateString()}<FaAngleRight className={styles.icon} />
+                        </Link></li>))}
+                  </ul>
+                  <button onClick={() => navigate(`/shop/${shopId}/prospections`)}>
+                    Overzicht van alle Prospecties
+                  </button>
+                </>
+              }
             </section>
           </>
         }
-
       </main>
     </>
   );

@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { IUser, OptionType } from "../../types";
 import Select from "react-select";
 import { createFilter } from "react-select";
-import Option, { customTheme } from "../../components/ToDoModule/Option/Option";
-import MenuList from "../../components/ToDoModule/MenuList/MenuListSingle";
+import Option, { customTheme } from "../../components/CustomReactSelect/Option/Option";
+import MenuList from "../../components/CustomReactSelect/MenuList/MenuListSingle";
 import styles from "./UserPage.module.css"
 
 const UserPage = () => {
