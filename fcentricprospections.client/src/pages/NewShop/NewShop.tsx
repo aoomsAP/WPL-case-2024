@@ -8,7 +8,7 @@ import { ICity, OptionType } from "../../types";
 import { NewShopContext } from "../../contexts/NewShopContext";
 import { createFilter } from "react-select";
 import Select from "react-select";
-import Option from "../../components/CustomReactSelect/Option/Option";
+import Option, { customTheme } from "../../components/CustomReactSelect/Option/Option";
 import MenuList from "../../components/CustomReactSelect/MenuList/MenuListSingle";
 
 export default function NewShop() {
@@ -137,8 +137,9 @@ export default function NewShop() {
     }
 
     return (
-        <>
+        <main>
             <FormWizard
+                color="black"
                 title="Nieuwe winkel"
                 nextButtonText="Volgende"
                 backButtonText="Vorige"
@@ -147,23 +148,31 @@ export default function NewShop() {
                 stepSize="sm"
                 onComplete={handleComplete}>
 
-                <FormWizard.TabContent title="Info" icon={<AiOutlineCheck />} >
+                <FormWizard.TabContent
+                    title="Info"
+                    icon={<AiOutlineCheck color="lightgrey" />}>
 
-                    <h3>Winkel informatie</h3>
+                    <h3 className={styles.h3}>Winkel informatie</h3>
 
                     <fieldset>
-                        <legend>Naam</legend>
+                        <legend><strong>Naam</strong></legend>
                         <label htmlFor="name">Geef naam van de winkel:</label>
-                        <input type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} />
+                        <input
+                            type="text"
+                            name="name"
+                            value={name}
+                            placeholder="Naam..."
+                            onChange={(e) => setName(e.target.value)} />
                     </fieldset>
 
                     <fieldset className={styles.address}>
-                        <legend>Adres</legend>
+                        <legend><strong>Adres</strong></legend>
 
                         {/* Country select */}
                         <div style={{ marginBottom: "1rem" }}>
                             <label htmlFor="country">Selecteer het land:</label>
                             {countryOptions && <Select
+                                theme={customTheme}
                                 className="basic-single"
                                 classNamePrefix="select"
                                 defaultValue={country}
@@ -189,28 +198,44 @@ export default function NewShop() {
                         {country && <>
 
                             {/* Street, street number & postbox/extra info */}
-                            <div style={{ display: "flex", flexDirection: "row", margin: "1rem 0" }}>
-                                <label style={{ flexBasis: "50%" }}>
+                            <div className={styles.streetContainer}>
+                                <label className={styles.street}>
                                     Straat
-                                    <input type="text" value={street} onChange={(e) => setStreet(e.target.value)} />
+                                    <input
+                                        type="text"
+                                        placeholder="Straat..."
+                                        value={street}
+                                        onChange={(e) => setStreet(e.target.value)} />
                                 </label>
-                                <label style={{ flexBasis: "25%" }}>
-                                    Nummer
-                                    <input type="number" defaultValue={streetNumber} onChange={(e) => setStreetNumber(+e.target.value)} />
-                                </label>
-                                <label style={{ flexBasis: "25%" }}>
-                                    Toevoeging
-                                    <input type="text" value={postbox} onChange={(e) => setPostbox(e.target.value)} />
-                                </label>
+                                <div className={styles.numberContainer}>
+                                    <label className={styles.number}>
+                                        Nummer
+                                        <input
+                                            type="number"
+                                            min={0}
+                                            value={streetNumber}
+                                            placeholder="0"
+                                            onChange={(e) => setStreetNumber(+e.target.value)} />
+                                    </label>
+                                    <label className={styles.addition}>
+                                        Toevoeging
+                                        <input
+                                            placeholder="Bus A..."
+                                            type="text"
+                                            value={postbox}
+                                            onChange={(e) => setPostbox(e.target.value)} />
+                                    </label>
+                                </div>
                             </div>
 
                             {/* Postal code & city */}
-                            <div style={{ display: "flex", flexDirection: "row", margin: "1rem 0" }}>
+                            <div className={styles.cityContainer}>
 
                                 {/* PostalCode select */}
-                                <div style={{ flexBasis: "25%" }}>
+                                <div className={styles.postalCode}>
                                     <label htmlFor="postalCode">Postcode:</label>
                                     {countryOptions && <Select
+                                        theme={customTheme}
                                         isDisabled={country ? false : true}
                                         className="basic-single"
                                         classNamePrefix="select"
@@ -239,9 +264,10 @@ export default function NewShop() {
                                 </div>
 
                                 {/* City select */}
-                                <div style={{ flexBasis: "75%" }}>
+                                <div className={styles.city}>
                                     <label htmlFor="city">Woonplaats:</label>
                                     {countryOptions && <Select
+                                        theme={customTheme}
                                         isDisabled={country ? false : true}
                                         className="basic-single"
                                         classNamePrefix="select"
@@ -277,6 +303,6 @@ export default function NewShop() {
 
             </FormWizard >
 
-        </>
+        </main>
     )
 }

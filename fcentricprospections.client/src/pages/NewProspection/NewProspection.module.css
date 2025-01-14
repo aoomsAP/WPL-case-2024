@@ -35,6 +35,10 @@
     list-style-type: square;
 }
 
+.brandList ul {
+    padding-left: 1rem;
+}
+
 .interestSelect {
     background-color: inherit;
     margin-bottom: 0;
@@ -53,4 +57,8 @@
     margin: 0;
     padding: 0 auto;
     line-height: 1.7;
+}
+
+.padding {
+    padding: 1rem;
 }

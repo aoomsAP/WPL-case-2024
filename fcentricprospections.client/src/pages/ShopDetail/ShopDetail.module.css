@@ -1,3 +1,15 @@
+.add_button__icon {
+    vertical-align:text-top;
+    margin-left: .7rem;
+    font-size: medium;
+    font-weight: bold;
+    transition: all .3s ease-in-out;
+}
+
+.add_button:hover .add_button__icon {
+    transform: rotate(90deg);
+}
+
 .ul {
     list-style: none;
     padding: 0;
@@ -11,13 +23,29 @@
     background-color: var(--primary-color);
 }
 
-.icon {
-    vertical-align: text-top;
-    margin-left: 0.2rem;
-    font-size: x-large;
+.li__icon, .link_button__icon {
+    vertical-align: text-bottom;
+    margin: auto 0.5rem;
+    font-size: medium;
+    font-weight: bold;
+    transition: all .3s ease-in-out;
+}
+
+.li:hover .li__icon,
+.link_button:hover .link_button__icon {
+    transform: rotate(45deg);
 }
 
 .overview {
     margin-top: 2rem;
     align-items: stretch;
 }
+
+.li__icon {
+    vertical-align: text-bottom;
+    margin: auto 0.5rem;
+    font-size: medium;
+    font-weight: bold;
+    transition: all .3s ease-in-out;
+}
+

@@ -8,7 +8,6 @@ const ErrorPage = () => {
     return (
         <main>
             <section>Oeps, er ging iets mis.</section>
-
         </main>
     );
 }

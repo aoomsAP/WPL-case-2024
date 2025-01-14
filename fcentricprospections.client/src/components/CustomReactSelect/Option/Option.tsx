@@ -30,7 +30,7 @@ const Option = (props: OptionProps<OptionType>) => {
                 backgroundColor: isSelected ? 'yellow' : isPressed ? 'rgb(235, 235, 235)' : 'rgba(247, 247, 247)',
             }
             : {}),
-        color: isSelected ? 'white' : undefined,
+        color: isSelected ? 'black' : undefined,
     }
 
     return (

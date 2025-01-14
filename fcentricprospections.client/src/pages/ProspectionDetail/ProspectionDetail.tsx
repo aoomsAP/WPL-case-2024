@@ -4,7 +4,6 @@ import { ShopDetailCard } from "../../components/ShopDetailCard/ShopDetailCard";
 import { ContactTypeCard } from "../../components/ProspectionDetail/ContactTypeCard/ContactTypeCard";
 import { VisitTypeCard } from "../../components/ProspectionDetail/VisitTypeCard/VisitTypeCard";
 import { GeneralSituation } from "../../components/ProspectionDetail/GeneralSituationCard/GeneralSituationCard";
-import { BrandList } from "../../components/ProspectionDetail/BrandList/BrandList";
 import { TextSection } from "../../components/ProspectionDetail/TextSection/TextSection";
 import { CompetitorBrandList } from "../../components/ProspectionDetail/CompetitorBrandList/CompetitorBrandList";
 import { BrandInterestCard } from "../../components/ProspectionDetail/BrandInterestCard/BrandInterestCard";

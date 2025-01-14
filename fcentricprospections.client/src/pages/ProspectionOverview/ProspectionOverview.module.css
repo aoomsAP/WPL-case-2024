@@ -11,8 +11,14 @@
     background-color: var(--primary-color);
 }
 
-.icon {
-    vertical-align: text-top;
-    margin-left: 0.2rem;
-    font-size: x-large;
+.li__icon {
+    vertical-align: text-bottom;
+    margin: auto 0.5rem;
+    font-size: medium;
+    font-weight: bold;
+    transition: all .3s ease-in-out;
+}
+
+.li:hover .li__icon {
+    transform: rotate(45deg);
 }

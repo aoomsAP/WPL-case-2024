@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { FaAngleRight } from "react-icons/fa";
+import { TfiArrowTopRight, TfiPlus } from "react-icons/tfi";
 import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCard';
 import styles from './ShopDetail.module.css';
 import { ShopDetailContext } from '../../contexts/ShopDetailContext';
@@ -43,8 +43,12 @@ export const ShopDetail = () => {
 
             <section>
               <p>Voeg een nieuwe prospectie toe:</p>
-              <button onClick={() => navigate(`/shop/${shopId}/prospections/new`)}>
+              <button
+                title='Nieuwe prospectie'
+                className={styles.add_button}
+                onClick={() => navigate(`/shop/${shopId}/prospections/new`)}>
                 Nieuwe Prospectie
+                <TfiPlus className={styles.add_button__icon} />
               </button>
             </section>
 
@@ -60,11 +64,13 @@ export const ShopDetail = () => {
                       .slice(0, 3)
                       .map(prospection => (<li className={styles.li} key={prospection.id}>
                         <Link to={`/shop/${shopId}/prospections/${prospection.id}`}>
-                          Prospectie {new Date(prospection.visitDate).toLocaleDateString()}<FaAngleRight className={styles.icon} />
+                          Prospectie {new Date(prospection.visitDate).toLocaleDateString()}
+                          <TfiArrowTopRight className={styles.li__icon} />
                         </Link></li>))}
                   </ul>
-                  <button onClick={() => navigate(`/shop/${shopId}/prospections`)}>
+                  <button className={styles.link_button} onClick={() => navigate(`/shop/${shopId}/prospections`)}>
                     Overzicht van alle Prospecties
+                    <TfiArrowTopRight className={styles.link_button__icon} />
                   </button>
                 </>
               }

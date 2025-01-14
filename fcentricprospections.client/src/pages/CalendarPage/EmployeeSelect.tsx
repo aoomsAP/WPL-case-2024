@@ -3,7 +3,7 @@ import { UserContext } from "../../contexts/UserContext";
 import { IAppointment, IEmployee, OptionType } from "../../types";
 import Select, { createFilter, MultiValue } from 'react-select';
 import MenuList from "../../components/CustomReactSelect/MenuList/MenuList";
-import Option from "../../components/CustomReactSelect/Option/Option";
+import Option, {customTheme} from "../../components/CustomReactSelect/Option/Option";
 import { EventInput } from '@fullcalendar/core';
 import { Oval } from "react-loader-spinner";
 import style from './CalenderPage.module.css'
@@ -27,7 +27,7 @@ export const EmployeeSelect = ({ setEvents }: EmployeeSelectProps) => {
             title: appointment.name ? appointment.name : (appointment.remarks ? appointment.remarks : "Geen details"),
             start: appointment.startDate,
             end: appointment.endDate,
-            color: "steelblue",
+            color: "yellow",
         }));
 
         const colors = ["crimson", "purple", "mediumvioletred", "orangered", "indigo", "darkred"];
@@ -72,6 +72,7 @@ export const EmployeeSelect = ({ setEvents }: EmployeeSelectProps) => {
             <label  htmlFor="employee">Vergelijk met de kalender van een collega:</label>
 
             {employeesOptions && <Select<OptionType, true>
+                theme={customTheme}
                 className="basic-multi-select"
                 classNamePrefix="select"
                 isMulti

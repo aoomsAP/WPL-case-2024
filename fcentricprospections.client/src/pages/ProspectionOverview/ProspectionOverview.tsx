@@ -2,8 +2,8 @@ import { useContext, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import styles from './ProspectionOverview.module.css'
 import { ShopDetailCard } from "../../components/ShopDetailCard/ShopDetailCard";
-import { FaAngleRight } from "react-icons/fa";
 import { ShopDetailContext } from "../../contexts/ShopDetailContext";
+import { TfiArrowTopRight } from "react-icons/tfi";
 
 export const ProspectionOverview = () => {
 
@@ -42,7 +42,8 @@ export const ProspectionOverview = () => {
                     // get three latest prospections
                     .map(prospection => (<li className={styles.li} key={prospection.id}>
                         <Link to={`/shop/${shopId}/prospections/${prospection.id}`}>
-                            Prospectie {new Date(prospection.visitDate).toLocaleDateString()}<FaAngleRight className={styles.icon} />
+                            Prospectie {new Date(prospection.visitDate).toLocaleDateString()}
+                            <TfiArrowTopRight className={styles.li__icon} />
                         </Link></li>))}
             </ul>
 

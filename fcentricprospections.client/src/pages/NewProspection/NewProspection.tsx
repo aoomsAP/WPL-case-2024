@@ -626,25 +626,20 @@ export const NewProspection = () => {
 
           <h3 className={styles.h3}>Brandmix</h3>
 
-          <fieldset>
+          <fieldset className={styles.brandList}>
             {/* FC70 BRANDS */}
             <h4 className={styles.h4}>FC70 Brands</h4>
-            {
-              prospectionBrands.length > 0
-                ? <ul className={styles.bulletPoints}>
-                  {prospectionBrands.map((brand, i) => (
-                    <li key={i}>
-                      {brand.brandName}
-                    </li>
-                  ))
-                  }
-                </ul>
-                : <p>
-                  Geen Fashion Club 70 brands beschikbaar.
-                </p>
+            {prospectionBrands.length > 0
+              ? <ul className={styles.bulletPoints}>
+                {prospectionBrands.map((brand, i) => (
+                  <li key={i}>
+                    {brand.brandName}
+                  </li>
+                ))
+                }
+              </ul>
+              : <p>Geen Fashion Club 70 brands beschikbaar.</p>
             }
-
-
           </fieldset>
 
           <fieldset>
@@ -835,18 +830,20 @@ export const NewProspection = () => {
           isValid={checkValidateFeedbackTab()}
           validationError={feedbackError}>
 
-          <h3>Takenlijst voor opvolging</h3>
-          <div>
-            <p className={styles.normalLineHeight}>Hier kan u items toevoegen die op basis van uw verslag moeten opgevolgd worden.</p>
-            <small className={styles.automaticallyAdded}>
-              <p className={styles.normalLineHeight}>Worden automatisch opgevolgd:</p>
-              <ul className={styles.bulletPoints}>
-                <li>Nieuwe contact info</li>
-                <li>Nieuwe brands</li>
-                <li>Brands interesses</li>
-              </ul>
-            </small>
-          </div>
+          <section className={styles.padding}>
+            <h3>Takenlijst voor opvolging</h3>
+            <div>
+              <p className={styles.normalLineHeight}>Hier kan u items toevoegen die op basis van uw verslag moeten opgevolgd worden.</p>
+              <small className={styles.automaticallyAdded}>
+                <p className={styles.normalLineHeight}>Worden automatisch opgevolgd:</p>
+                <ul className={styles.bulletPoints}>
+                  <li>Nieuwe contact info</li>
+                  <li>Nieuwe brands</li>
+                  <li>Brands interesses</li>
+                </ul>
+              </small>
+            </div>
+          </section>
 
           <ToDoModule toDos={toDos} setToDos={setToDos} />
 

@@ -1,12 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 import { IShop, OptionType } from "../../types";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import Select from "react-select";
 import { createFilter } from "react-select";
 import styles from './HomePage.module.css'
 import Option, { customTheme } from "../../components/CustomReactSelect/Option/Option";
 import MenuList from "../../components/CustomReactSelect/MenuList/MenuListSingle";
+import { TfiPlus } from "react-icons/tfi";
 
 export const Homepage = () => {
 
@@ -93,16 +94,18 @@ export const Homepage = () => {
                 }}
             />}
 
-            <div className={styles.newShop}>
+            <section>
                 <p>Winkel niet gevonden?</p>
 
                 {/* NIEUWE WINKEL */}
-                <Link className={styles.a} to={`/newshop`}>
-                    <button className={styles.button}>
-                        Maak een nieuwe winkel aan
-                    </button>
-                </Link>
-            </div>
+                <button
+                    title="Nieuwe winkel"
+                    className={styles.add_button}
+                    onClick={() => navigate(`/newshop`)}>
+                    Maak een nieuwe winkel aan
+                    <TfiPlus className={styles.add_button__icon} />
+                </button>
+            </section>
 
         </main>
     );

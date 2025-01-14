@@ -20,8 +20,7 @@ import { CalendarPage } from './pages/CalendarPage/CalendarPage';
 import NewShop from './pages/NewShop/NewShop';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
 // icons
-import { TfiAgenda } from "react-icons/tfi";
-import { AiFillHome, AiOutlineArrowLeft } from "react-icons/ai";
+import { TfiAgenda, TfiArrowLeft, TfiHome } from "react-icons/tfi";
 
 const Root = () => {
 
@@ -34,7 +33,7 @@ const Root = () => {
         <>
             <header className={styles.header}>
                 <button title="Home" className={styles.header__button} onClick={() => navigate("/")}>
-                    {<AiFillHome className={styles.header__icon} />}
+                    {<TfiHome  className={styles.header__icon} />}
                 </button>
 
                 {/* Show Agenda button only if user is set */}
@@ -47,7 +46,7 @@ const Root = () => {
                 {/* If location isn't "Home", show "Back" button */}
                 {location.pathname !== "/" &&
                     <button title="Terug" className={styles.header__button} onClick={() => navigate(-1)}>
-                        {<AiOutlineArrowLeft className={styles.header__icon} />}
+                        {<TfiArrowLeft  className={styles.header__icon} />}
                     </button>
                 }
             </header>
@@ -55,7 +54,6 @@ const Root = () => {
             <Outlet></Outlet>
 
             <footer>
-                {/* Footer content can go here */}
                 <div></div>
             </footer>
         </>

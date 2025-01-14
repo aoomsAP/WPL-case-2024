@@ -1,13 +1,11 @@
-.newShop {
-    width: 100%;
+.add_button__icon {
+    vertical-align:text-top;
+    margin-left: .7rem;
+    font-size: medium;
+    font-weight: bold;
+    transition: all .3s ease-in-out;
 }
 
-.a {
-    width: 100%;
-    max-width: 400px;
-}
-
-.button {
-    width: 100%;
-    max-width: 400px;
+.add_button:hover .add_button__icon {
+    transform: rotate(90deg);
 }

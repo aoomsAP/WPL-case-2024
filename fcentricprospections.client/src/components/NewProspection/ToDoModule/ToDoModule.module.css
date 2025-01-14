@@ -1,17 +1,30 @@
 .newToDo {
     display: flex;
-    justify-content: flex-start;
     flex-direction: column;
+    justify-content: flex-start;
     gap: .5rem;
     border: 1px solid black;
 }
 
-.newToDo button {
+.newToDo div {
+    margin-top: 0;
+}
+
+.submit_button {
+    align-self: flex-start;
     margin-top: 1rem;
 }
 
-.newToDo div {
-    margin-top: 0;
+.submit_button__icon {
+    vertical-align:text-top;
+    margin-left: .7rem;
+    font-size: medium;
+    font-weight: bold;
+    transition: all .3s ease-in-out;
+}
+
+.submit_button:hover .submit_button__icon {
+    transform: rotate(90deg);
 }
 
 .toDo {

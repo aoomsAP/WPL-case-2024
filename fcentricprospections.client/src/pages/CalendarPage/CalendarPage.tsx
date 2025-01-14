@@ -33,7 +33,7 @@ export const CalendarPage = () => {
             title: appointment.name ? appointment.name : (appointment.remarks ? appointment.remarks : "Geen details"),
             start: appointment.startDate,
             end: appointment.endDate,
-            color: "steelblue",
+            color: "yellow",
             allDay: isAllDay(new Date(appointment.startDate), new Date(appointment.endDate))
         }));
         setEvents(userEvents);
@@ -44,7 +44,7 @@ export const CalendarPage = () => {
     };
 
     return (
-        <div className={styles.container}>
+        <main className={styles.main}>
             {events.length > 1 ? (
                 <>
                     <div className={styles.employeeSelect}>
@@ -76,7 +76,7 @@ export const CalendarPage = () => {
             ) : (
                 <Oval />
             )}
-        </div>
+        </main>
     );
 };
 

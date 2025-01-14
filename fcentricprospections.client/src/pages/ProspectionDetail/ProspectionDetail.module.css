@@ -6,6 +6,7 @@
 
 .sectionList {
     gap: .5rem;
+    align-items: stretch;
 }
 
 .sectionTitle {

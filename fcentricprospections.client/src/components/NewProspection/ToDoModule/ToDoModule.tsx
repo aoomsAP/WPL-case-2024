@@ -5,8 +5,9 @@ import { UserContext } from "../../../contexts/UserContext";
 import Select, { createFilter, MultiValue } from 'react-select';
 import ToDoEditable from "./ToDoEditable";
 import { v4 as uuidv4 } from 'uuid';
-import Option, {customTheme} from "../../CustomReactSelect/Option/Option";
+import Option, { customTheme } from "../../CustomReactSelect/Option/Option";
 import MenuList from "../../CustomReactSelect/MenuList/MenuList";
+import { TfiPlus } from "react-icons/tfi";
 
 interface ToDoModuleProps {
     toDos: IToDo[];
@@ -76,7 +77,7 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
                 onSubmit(e);
                 setTitle(""); // Clear "new todo"
                 setDescription("");
-                setSelectedEmployees([]); 
+                setSelectedEmployees([]);
             }}>
                 <fieldset className={styles.newToDo}>
                     <h4>Nieuwe taak</h4>
@@ -106,6 +107,7 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
                             isClearable={true}
                             isSearchable={true}
                             name="employees"
+                            placeholder={"Selecteer..."}
                             filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
                             maxMenuHeight={200} // Limit height to improve rendering
                             value={selectedEmployees}
@@ -121,7 +123,10 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
                         />}
                     </div>
 
-                    <button type="submit">Voeg toe</button>
+                    <button className={styles.submit_button} title="Voeg taak toe" type="submit">
+                        Voeg toe
+                        <TfiPlus className={styles.submit_button__icon} />
+                        </button>
                 </fieldset>
             </form>
 

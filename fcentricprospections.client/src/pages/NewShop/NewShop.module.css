@@ -1,0 +1,36 @@
+.h3 {
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+
+.streetContainer {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0;
+    gap: 1rem;
+}
+
+.streetContainer label {
+    display: block;
+}
+
+.numberContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.number input {
+    width: 100% !important;
+}
+
+.cityContainer {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0;
+    gap: .5rem;
+}
+
+.postalCode {
+    width: calc(50% - 1rem);
+}

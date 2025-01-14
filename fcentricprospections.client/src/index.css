@@ -147,6 +147,7 @@ a {
   font-weight: 300;
   font-size: inherit;
   border-radius: 0px;
+  transition: all .2s ease-in-out;
 }
 
 a:hover {
@@ -171,6 +172,9 @@ li a {
 }
 
 button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   text-transform: uppercase;
   font-family: inherit;
   font-size: inherit;
@@ -181,6 +185,8 @@ button {
   padding: 0.5rem 1rem;
   cursor: pointer;
   text-align: left;
+  width: auto !important;
+  transition: all .2s ease-in-out;
 }
 
 button a {
@@ -373,6 +379,7 @@ hr {
 .wizard-btn {
   border-radius: 0px !important;
   color: var(--primary-color) !important;
+  transition: .2s all ease-in-out;
 }
 
 .wizard-btn:hover {
@@ -398,7 +405,6 @@ hr {
   font-family: inherit;
   font-weight: 300;
   font-size: 0.875rem;
-  margin-top: 1rem;
   margin-bottom: .5rem;
 }
 
@@ -423,7 +429,7 @@ hr {
 }
 
 .react-select__option *:hover {
-  background-color: yellow !important;
+  background-color: black !important;
 }
 
 .react-select__option {
@@ -434,7 +440,6 @@ hr {
   user-select: none;
   box-sizing: border-box;
   border-radius: 0;
-
 }
 
 .react-select__option:hover {
@@ -453,6 +458,101 @@ hr {
 
 /* FULL CALENDAR */
 
+:root {
+  --fc-button-text-color: var(--primary-color);
+  --fc-button-bg-color: var(--secondary-color);
+  --fc-button-border-color: var(--secondary-color);
+  --fc-button-hover-bg-color: rgba(0, 0, 0, 0.8);
+  --fc-button-hover-border-color: rgba(0, 0, 0, 0.75);
+  --fc-button-active-bg-color: rgba(0, 0, 0, 0.75);
+  --fc-button-active-border-color: rgba(0, 0, 0, 0.65);
+
+  --fc-event-bg-color: var(--gold-default);
+  --fc-event-border-color: var(--gold-default);
+  --fc-event-text-color: var(--secondary-color);
+  --fc-event-selected-overlay-color: rgba(0, 0, 0, 0.25);
+
+  --fc-more-link-bg-color: var(--primary-darker);
+  --fc-more-link-text-color: inherit;
+
+  --fc-non-business-color: var(--primary-darker);
+  --fc-bg-event-color: var(--primary-darkest);
+  --fc-bg-event-opacity: 0.3;
+  --fc-highlight-color: var(--gold-default);
+  --fc-today-bg-color: rgba(246, 255, 0, 0.15);
+  --fc-now-indicator-color: var(--secondary-color);
+}
+
+.fc * {
+  border-radius: 0px !important;
+}
+
+.fc-view {
+  background-color: var(--primary-color);
+}
+
+.fc-event {
+  background-color: var(--gold-default);
+  color: var(--secondary-color);
+  transition: .2s all ease-in-out;
+}
+
+.fc-event:hover {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  border-color: var(--primary-darkest);
+  cursor: pointer;
+}
+
+.fc-list-event * {
+  color: var(--secondary-color);
+  background-color: var(--primary-color);
+  transition: all .2s ease-in-out;
+}
+
+.fc-list-event:hover *,
+.fc-list-event:hover .fc-list-event a {
+  color: var(--primary-color);
+  background-color: var(--secondary-color) !important;
+}
+
+.fc-event.fc-selected {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: var(--primary-color);
+  border-color: rgba(0, 0, 0, 0.8);
+}
+
+.fc-event-time {
+  color: var(--secondary-color);
+  transition: all .2s ease-in-out;
+}
+
+.fc-event:hover .fc-event-time {
+  color: var(--primary-color),
+}
+
+.fc-daygrid-event {
+  background-color: var(--primary-darkest);
+  color: var(--secondary-color);
+  border-color: var(--primary-darkest);
+}
+
+.fc-event.fc-dragging {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  opacity: 0.8;
+  border-color: var(--secondary-color);
+}
+
+.fc-theme-standard th * {
+  background-color: var(--primary-darkest) !important;
+}
+
+.fc-dayGridMonth-view .fc-event-title {
+  font-size: .700rem !important;
+  font-weight: normal !important;
+}
+
 /* attempt to not have "day/month/week" button show on top of select */
 .fc .fc-button-group>.fc-button.fc-button-active {
   z-index: 0 !important;
@@ -466,6 +566,7 @@ hr {
   .fc-toolbar {
     flex-direction: row;
     flex-wrap: wrap;
+    gap: .5rem;
   }
 
   .fc-toolbar-chunk {
