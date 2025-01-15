@@ -5,9 +5,10 @@ import { UserContext } from "../../../contexts/UserContext";
 import Select, { createFilter, MultiValue } from 'react-select';
 import ToDoEditable from "./ToDoEditable";
 import { v4 as uuidv4 } from 'uuid';
-import Option, { customTheme } from "../../CustomReactSelect/Option/Option";
-import MenuList from "../../CustomReactSelect/MenuList/MenuList";
+import Option, { customTheme } from "../../ReactSelect/Option/Option";
+import MenuList from "../../ReactSelect/MenuList/MenuList";
 import { TfiPlus } from "react-icons/tfi";
+import CustomLoader from "../../LoaderSpinner/CustomLoader";
 
 interface ToDoModuleProps {
     toDos: IToDo[];
@@ -107,7 +108,8 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
                             isClearable={true}
                             isSearchable={true}
                             name="employees"
-                            placeholder={"Selecteer..."}
+                            isDisabled={employeesOptions.length > 0 ? false : true}
+                            placeholder={employeesOptions.length > 0 ? "Selecteer..." : <CustomLoader />}
                             filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
                             maxMenuHeight={200} // Limit height to improve rendering
                             value={selectedEmployees}
@@ -126,7 +128,7 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
                     <button className={styles.submit_button} title="Voeg taak toe" type="submit">
                         Voeg toe
                         <TfiPlus className={styles.submit_button__icon} />
-                        </button>
+                    </button>
                 </fieldset>
             </form>
 

@@ -49,3 +49,9 @@
     transition: all .3s ease-in-out;
 }
 
+.loading {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}

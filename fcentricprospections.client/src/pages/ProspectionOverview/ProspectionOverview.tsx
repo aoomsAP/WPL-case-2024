@@ -4,6 +4,7 @@ import styles from './ProspectionOverview.module.css'
 import { ShopDetailCard } from "../../components/ShopDetailCard/ShopDetailCard";
 import { ShopDetailContext } from "../../contexts/ShopDetailContext";
 import { TfiArrowTopRight } from "react-icons/tfi";
+import CustomLoader from "../../components/LoaderSpinner/CustomLoader";
 
 export const ProspectionOverview = () => {
 
@@ -47,7 +48,11 @@ export const ProspectionOverview = () => {
                         </Link></li>))}
             </ul>
 
-
+            {!shopProspections &&
+                <div className={styles.loading}>
+                    <p>Prospecties worden geladen...</p>
+                    <CustomLoader />
+                </div>}
         </main>
     );
 }

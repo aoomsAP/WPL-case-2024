@@ -5,24 +5,26 @@ import { UserContext } from "../../contexts/UserContext";
 import Select from "react-select";
 import { createFilter } from "react-select";
 import styles from './HomePage.module.css'
-import Option, { customTheme } from "../../components/CustomReactSelect/Option/Option";
-import MenuList from "../../components/CustomReactSelect/MenuList/MenuListSingle";
+import Option, { customTheme } from "../../components/ReactSelect/Option/Option";
+import MenuList from "../../components/ReactSelect/MenuList/MenuListSingle";
 import { TfiPlus } from "react-icons/tfi";
+import CustomLoader from "../../components/LoaderSpinner/CustomLoader";
+import { ShopListContext } from "../../contexts/ShopListContext";
 
 export const Homepage = () => {
 
     const navigate = useNavigate();
 
     const { user, employee } = useContext(UserContext);
+    const { shops } = useContext(ShopListContext);
 
-    const [shopNames, setShopNames] = useState<IShop[]>([]); //Sate with list of shops
     const [shopListOptions, setShopListOptions] = useState<OptionType[]>([]);
 
     useEffect(() => {
         const isValidShopOption = (shopOption: IShop) =>
             !!shopOption && !!shopOption.id && !!shopOption.name;
 
-        let shopOptionOptions: OptionType[] = shopNames
+        let shopOptionOptions: OptionType[] = shops
             .filter(isValidShopOption)
             .map((shopOption) => {
                 if (shopOption.name.includes(shopOption.city)) {
@@ -40,59 +42,43 @@ export const Homepage = () => {
                 })
             });
         setShopListOptions(shopOptionOptions);
-    }, [shopNames])
-
-    const loadShops = async () => {
-        try {
-            console.log("start loading shops")
-            const response = await fetch('/api/shops', {
-                method: 'GET',  // Specify the method if it's not 'GET' by default
-                headers: {
-                    'Content-Type': 'application/json',  // Define the expected content type                   
-                },
-            });
-            const json: IShop[] = await response.json();
-            console.log("shops loaded", json)
-            console.log("amount of shops", json.length)
-            setShopNames(json);
-        }
-        catch (error) {
-            console.log(error)
-        }
-    };
-
-    useEffect(() => {
-        loadShops();
-    }, []);
+    }, [shops])
 
     return (
         <main>
-            <h2>Hallo, {employee ? employee?.firstName : user?.login}</h2>
+            <section>
+                <h2>Hallo, {employee ? employee?.firstName : user?.login}</h2>
+            </section>
 
             {/* SELECTEER WINKEL */}
-            <h1>Selecteer een winkel</h1>
+            <section>
+                <h1>Selecteer een winkel</h1>
 
-            {shopNames && <Select<OptionType>
-                theme={customTheme}
-                className="basic-single"
-                classNamePrefix="select"
-                isClearable={true}
-                isSearchable={true}
-                name="shopSelect"
-                placeholder={"Selecteer..."}
-                filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
-                maxMenuHeight={200} // Limit height to improve rendering
-                options={shopListOptions}
-                components={{ // Custom components to make use of react-window to improve rendering    
-                    Option,
-                    MenuList, // Custom menu list rendering
-                }}
-                onChange={(e) => {
-                    if (e?.value != undefined) {
-                        navigate(`/shop/${e?.value}`);
-                    }
-                }}
-            />}
+                <p>Zoek een winkel in de lijst om naar de detailpagina te navigeren.</p>
+
+                <Select<OptionType>
+                    className="basic-single"
+                    classNamePrefix="select"
+                    theme={customTheme}
+                    isClearable={true}
+                    isSearchable={true}
+                    name="shopSelect"
+                    isDisabled={shopListOptions.length > 0 ? false : true}
+                    placeholder={shopListOptions.length > 0 ? "Selecteer..." : <CustomLoader />}
+                    filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
+                    maxMenuHeight={200} // Limit height to improve rendering
+                    options={shopListOptions}
+                    components={{ // Custom components to make use of react-window to improve rendering    
+                        Option,
+                        MenuList, // Custom menu list rendering
+                    }}
+                    onChange={(e) => {
+                        if (e?.value != undefined) {
+                            navigate(`/shop/${e?.value}`);
+                        }
+                    }}
+                />
+            </section>
 
             <section>
                 <p>Winkel niet gevonden?</p>
@@ -106,7 +92,6 @@ export const Homepage = () => {
                     <TfiPlus className={styles.add_button__icon} />
                 </button>
             </section>
-
         </main>
     );
 };

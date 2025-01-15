@@ -5,13 +5,13 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { EmployeeSelect } from './EmployeeSelect';
 import { EventInput } from '@fullcalendar/core';
-import { Oval } from 'react-loader-spinner';
 import styles from './CalenderPage.module.css';
 import listPlugin from '@fullcalendar/list';
 import nlLocale from '@fullcalendar/core/locales/nl';
+import CustomLoader from '../../components/LoaderSpinner/CustomLoader';
 
 export const CalendarPage = () => {
-    const { appointments } = useContext(UserContext);
+    const { appointments, userCalendarLoading } = useContext(UserContext);
 
     const [events, setEvents] = useState<EventInput[]>([]);
     const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
@@ -43,41 +43,45 @@ export const CalendarPage = () => {
         setWindowWidth(window.innerWidth);
     };
 
-    return (
-        <main className={styles.main}>
-            {events.length > 1 ? (
-                <>
-                    <div className={styles.employeeSelect}>
-                        <EmployeeSelect setEvents={setEvents} />
-                    </div>
-
-                    <FullCalendar
-                        ref={calendarRef}
-                        plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
-                        initialView={windowWidth > 700 ? "dayGridMonth" : "listMonth"}
-                        weekends={false}
-                        navLinks={true}
-                        locale={nlLocale} // NL localization (date & time formatting)
-                        headerToolbar={{
-                            left: "prev,next today",
-                            center: "title",
-                            right: `${windowWidth > 700 ? 'dayGridMonth,timeGridWeek,timeGridDay' : 'dayGridMonth,listMonth,timeGridDay'}`
-                        }}
-                        slotMinTime="07:00:00" // Start timegrid from 7am
-                        slotDuration="00:30:00"
-                        progressiveEventRendering
-                        events={events}
-                        aspectRatio={1.5}
-                        contentHeight="auto"
-                        handleWindowResize={true} // Enable automatic resize
-                        windowResize={handleWindowResize} // Callback on resize
-                    />
-                </>
-            ) : (
-                <Oval />
-            )}
+    if (userCalendarLoading) {
+        <main>
+            <section className={styles.loading}>
+                <p>Agenda wordt geladen...</p>
+                <CustomLoader />
+            </section>
         </main>
-    );
+    }
+    else {
+        return (
+            <main className={styles.main}>
+                <div className={styles.employeeSelect}>
+                    <EmployeeSelect setEvents={setEvents} />
+                </div>
+
+                <FullCalendar
+                    ref={calendarRef}
+                    plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
+                    initialView={windowWidth > 700 ? "dayGridMonth" : "listMonth"}
+                    weekends={false}
+                    navLinks={true}
+                    locale={nlLocale} // NL localization (date & time formatting)
+                    headerToolbar={{
+                        left: "prev,next today",
+                        center: "title",
+                        right: `${windowWidth > 700 ? 'dayGridMonth,timeGridWeek,timeGridDay' : 'dayGridMonth,listMonth,timeGridDay'}`
+                    }}
+                    slotMinTime="07:00:00" // Start timegrid from 7am
+                    slotDuration="00:30:00"
+                    progressiveEventRendering
+                    events={events}
+                    aspectRatio={1.5}
+                    contentHeight="auto"
+                    handleWindowResize={true} // Enable automatic resize
+                    windowResize={handleWindowResize} // Callback on resize
+                />
+            </main>
+        );
+    }
 };
 
 

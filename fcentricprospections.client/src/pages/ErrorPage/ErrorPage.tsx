@@ -7,7 +7,10 @@ const ErrorPage = () => {
 
     return (
         <main>
-            <section>Oeps, er ging iets mis.</section>
+            <h1>Fout</h1>
+            <section>
+                <p>Oeps, er ging iets mis. Probeer opnieuw in te loggen of probeer het later opnieuw.</p>
+            </section>
         </main>
     );
 }

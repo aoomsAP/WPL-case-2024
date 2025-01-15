@@ -13,6 +13,7 @@ import { ShopDetailContext } from "../../contexts/ShopDetailContext";
 import { ProspectionDetailContext } from "../../contexts/ProspectionDetailContext";
 import { ToDoItem } from "../../components/ProspectionDetail/ToDo/ToDoItem";
 import { BrandCard } from "../../components/ProspectionDetail/BrandCard/BrandCard";
+import CustomLoader from "../../components/LoaderSpinner/CustomLoader";
 
 export const ProspectionDetail = () => {
 
@@ -57,8 +58,8 @@ export const ProspectionDetail = () => {
 
   return (
     <main className={styles.main}>
-      {
-        prospectionDetail &&
+      
+      {prospectionDetail &&
         <>
           <h1 className={styles.h1}>
             Prospectie ({new Date(prospectionDetail!.visitDate).toLocaleDateString()})
@@ -161,7 +162,12 @@ export const ProspectionDetail = () => {
             </section>}
         </>
       }
-      {!prospectionDetail && <Oval />}
+
+      {!prospectionDetail &&
+        <div className={styles.loading}>
+          <p>Prospectie wordt geladen...</p>
+          <CustomLoader />
+        </div>}
     </main>
   );
 };

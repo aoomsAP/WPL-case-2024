@@ -15,6 +15,7 @@ export const ShopListProvider = ({ children }: { children: React.ReactNode }) =>
         try {
             const response = await fetch('/api/shops')
             const json: IShop[] = await response.json();
+            console.log(`Shops loaded (${json.length}): `, json)
             setShops(json);
         }
         catch (error) {

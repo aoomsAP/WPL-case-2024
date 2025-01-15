@@ -93,6 +93,7 @@ footer {
 h1 {
   font-size: 2em;
   margin: 0;
+  margin-top: 1rem;
   margin-bottom: 0.25rem;
   text-transform: uppercase;
   font-weight: 300;
@@ -189,14 +190,17 @@ button {
   transition: all .2s ease-in-out;
 }
 
+button * {
+  transition: all .2s ease-in-out;
+}
+
 button a {
   display: block;
 }
 
 button:hover {
-  border: none;
-  color: var(--secondary-color);
   background-color: var(--gold-default);
+  color: var(--secondary-color);
 }
 
 button:hover * {
@@ -391,9 +395,14 @@ hr {
   padding: 0 1rem;
 }
 
+.smooth-border-left-to-right {
+  top: 35%;
+}
+
 @media (max-width: 700px) {
-  .smooth-border-left-to-right {
-    margin-top: 0.5em;
+  .stepTitle {
+    visibility: hidden;
+    width: 1px;
   }
 }
 

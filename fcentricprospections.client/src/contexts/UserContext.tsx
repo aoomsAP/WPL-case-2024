@@ -18,6 +18,7 @@ interface UserContext {
     setAppointments: (appointments: IAppointment[]) => void,
     shownAppointments: IAppointment[],
     setShownAppointments: (shownAppointments: IAppointment[]) => void,
+    userCalendarLoading: boolean,
 
     // loading functions
     loadUser: (userId: number) => void;
@@ -44,6 +45,7 @@ export const UserContext = React.createContext<UserContext>({
     setAppointments: () => { },
     shownAppointments: [],
     setShownAppointments: () => { },
+    userCalendarLoading: false,
 
     // loading functions
     loadUser: async () => { },
@@ -62,7 +64,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const [employee, setEmployee] = useState<IEmployee>();
     const [employees, setEmployees] = useState<IEmployee[]>([]);
     const [appointments, setAppointments] = useState<IAppointment[]>([]);
+    const [userCalendarLoading,setUserCalendarLoading] = useState<boolean>(false);
 
+    // TO DO: unused?
     // Voor de agenda, dit zijn de afspraken die getoond worden
     const [shownAppointments, setShownAppointments] = useState<IAppointment[]>([]);
 
@@ -134,6 +138,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     // Loads, sets & returns appointments of current user
     async function loadAppointments(employeeId: number) {
         try {
+            setUserCalendarLoading(true);
+            
             console.log(`loading appointments for user-employee ${employeeId}`);
 
             const response = await fetch(`/api/employees/${employeeId}/appointments`, {
@@ -148,6 +154,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             return json;
         } catch (error) {
             console.error('Error fetching appointments data:', error);
+        } finally {
+            setUserCalendarLoading(false);
         }
     }
 
@@ -215,6 +223,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             setAppointments: setAppointments,
             shownAppointments: shownAppointments,
             setShownAppointments: setShownAppointments,
+            userCalendarLoading: userCalendarLoading,
 
             // loading functions
             loadUser: loadUser,

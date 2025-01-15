@@ -22,3 +22,10 @@
 .li:hover .li__icon {
     transform: rotate(45deg);
 }
+
+.loading {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}

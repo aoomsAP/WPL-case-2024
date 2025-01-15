@@ -8,8 +8,9 @@ import { ICity, OptionType } from "../../types";
 import { NewShopContext } from "../../contexts/NewShopContext";
 import { createFilter } from "react-select";
 import Select from "react-select";
-import Option, { customTheme } from "../../components/CustomReactSelect/Option/Option";
-import MenuList from "../../components/CustomReactSelect/MenuList/MenuListSingle";
+import Option, { customTheme } from "../../components/ReactSelect/Option/Option";
+import MenuList from "../../components/ReactSelect/MenuList/MenuListSingle";
+import CustomLoader from "../../components/LoaderSpinner/CustomLoader";
 
 export default function NewShop() {
 
@@ -149,7 +150,7 @@ export default function NewShop() {
                 onComplete={handleComplete}>
 
                 <FormWizard.TabContent
-                    title="Info"
+                    title={"Info"}
                     icon={<AiOutlineCheck color="lightgrey" />}>
 
                     <h3 className={styles.h3}>Winkel informatie</h3>
@@ -176,7 +177,8 @@ export default function NewShop() {
                                 className="basic-single"
                                 classNamePrefix="select"
                                 defaultValue={country}
-                                placeholder={"Kies een land"}
+                                isDisabled={countryOptions.length > 0 ? false : true}
+                                placeholder={countryOptions.length > 0 ? "Kies een land..." : <CustomLoader />}
                                 isSearchable={true}
                                 name="country"
                                 options={countryOptions}
@@ -236,11 +238,11 @@ export default function NewShop() {
                                     <label htmlFor="postalCode">Postcode:</label>
                                     {countryOptions && <Select
                                         theme={customTheme}
+                                        placeholder={postalCodeOptions.length > 0 ? "0000..." : <CustomLoader />}
                                         isDisabled={country ? false : true}
                                         className="basic-single"
                                         classNamePrefix="select"
                                         value={postalCode}
-                                        placeholder={"0000"}
                                         isSearchable={true}
                                         name="postalCode"
                                         options={postalCodeOptions}
@@ -268,11 +270,11 @@ export default function NewShop() {
                                     <label htmlFor="city">Woonplaats:</label>
                                     {countryOptions && <Select
                                         theme={customTheme}
+                                        placeholder={cityOptions.length > 0 ? "Kies een woonplaats..." : <CustomLoader />}
                                         isDisabled={country ? false : true}
                                         className="basic-single"
                                         classNamePrefix="select"
                                         value={city}
-                                        placeholder={"Kies een woonplaats"}
                                         isClearable={true}
                                         isSearchable={true}
                                         name="city"

@@ -19,3 +19,10 @@
 .marginZero {
     margin: 0;
 }
+
+.loading {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}

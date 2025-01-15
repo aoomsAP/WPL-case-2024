@@ -2,8 +2,9 @@ import Select, { createFilter, MultiValue } from "react-select";
 import { IToDo, OptionType } from "../../../types";
 import styles from "./ToDoEditable.module.css"
 import EditableInput from "./EditableInput";
-import Option, { customTheme } from "../../CustomReactSelect/Option/Option";
-import MenuList from "../../CustomReactSelect/MenuList/MenuList";
+import Option, { customTheme } from "../../ReactSelect/Option/Option";
+import MenuList from "../../ReactSelect/MenuList/MenuList";
+import CustomLoader from "../../LoaderSpinner/CustomLoader";
 
 interface ToDoEditableProps {
     index: number,
@@ -76,6 +77,8 @@ export default function ToDoEditable({ toDo, toDos, setToDos, employeesOptions }
                 isClearable={true}
                 isSearchable={true}
                 name="employees"
+                isDisabled={employeesOptions.length > 0 ? false : true}
+                placeholder={employeesOptions.length > 0 ? "Selecteer..." : <CustomLoader />}
                 filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
                 maxMenuHeight={200} // Limit height to improve rendering
                 defaultValue={defaultEmployees}

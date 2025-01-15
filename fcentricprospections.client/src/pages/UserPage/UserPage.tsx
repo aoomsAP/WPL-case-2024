@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { IUser, OptionType } from "../../types";
 import Select from "react-select";
 import { createFilter } from "react-select";
-import Option, { customTheme } from "../../components/CustomReactSelect/Option/Option";
-import MenuList from "../../components/CustomReactSelect/MenuList/MenuListSingle";
+import Option, { customTheme } from "../../components/ReactSelect/Option/Option";
+import MenuList from "../../components/ReactSelect/MenuList/MenuListSingle";
 import styles from "./UserPage.module.css"
+import CustomLoader from "../../components/LoaderSpinner/CustomLoader";
 
 const UserPage = () => {
 
@@ -33,13 +34,16 @@ const UserPage = () => {
     <main className={styles.main}>
       <h1>Selecteer een Gebruiker</h1>
 
+      <p>Dit scherm zal in de toekomst vervangen worden door een aanmeldscherm, maar voorlopig kunnen gebruikers in de lijst hieronder geselecteerd worden.</p>
+
       {users && <Select<OptionType>
         theme={customTheme}
         className="basic-single"
         classNamePrefix="select"
         isClearable={true}
         isSearchable={true}
-        placeholder={"Selecteer..."}
+        isDisabled={userOptions.length > 0 ? false : true}
+        placeholder={userOptions.length > 0 ? "Selecteer..." : <CustomLoader />}
         name="shopSelect"
         filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
         maxMenuHeight={200} // Limit height to improve rendering

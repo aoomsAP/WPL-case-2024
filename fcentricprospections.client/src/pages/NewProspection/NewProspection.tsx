@@ -16,8 +16,8 @@ import { UserContext } from '../../contexts/UserContext';
 import { NewProspectionContext } from '../../contexts/NewProspectionContext';
 // react-select
 import Select, { createFilter, MultiValue } from 'react-select';
-import MenuList from "../../components/CustomReactSelect/MenuList/MenuList"; // Custom MenuList
-import Option, { customTheme } from "../../components/CustomReactSelect/Option/Option"; // Custom Option
+import MenuList from "../../components/ReactSelect/MenuList/MenuList"; // Custom MenuList
+import Option, { customTheme } from "../../components/ReactSelect/Option/Option"; // Custom Option
 // form-wizard
 // import FormWizard from "react-form-wizard-component";
 import FormWizard from "react-form-wizard-component";
@@ -26,6 +26,7 @@ import "react-form-wizard-component/dist/style.css";
 import { AiOutlineCheck } from "react-icons/ai";
 // uuid
 import { v4 as uuidv4 } from 'uuid';
+import CustomLoader from '../../components/LoaderSpinner/CustomLoader';
 
 export const NewProspection = () => {
 
@@ -102,23 +103,6 @@ export const NewProspection = () => {
   const [nameChecked, setNameChecked] = useState<boolean>(true);
   const [emailChecked, setEmailChecked] = useState<boolean>(true);
   const [phoneChecked, setPhoneChecked] = useState<boolean>(true);
-
-  // window size
-  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
-
-  // Window width ----------------------------------------------------------------------------------------------------------
-
-  useEffect(() => {
-    const updateWidth = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    const interval = setInterval(updateWidth, 500);
-
-    updateWidth();
-
-    return () => clearInterval(interval);
-  }, []);
 
 
   // Contact info -----------------------------------------------------------------------------------------------------------
@@ -423,7 +407,7 @@ export const NewProspection = () => {
         {/* CONTACT INFO ------------------------------------------------------------------------------------------------------------------------- */}
 
         <FormWizard.TabContent
-          title={windowWidth < 700 ? "" : "Info"}
+          title={"Info"}
           icon={<AiOutlineCheck color="lightgrey" />}   >
 
           {/* SHOP DETAIL INFO */}
@@ -619,7 +603,7 @@ export const NewProspection = () => {
         {/* BRANDMIX --------------------------------------------------------------------------------------------------------------------------- */}
 
         <FormWizard.TabContent
-          title={windowWidth < 700 ? "" : "Brandmix"}
+          title={"Brandmix"}
           icon={<AiOutlineCheck color="lightgrey" />}
           isValid={checkValidateContactTab()}
           validationError={contactTabError}>
@@ -652,7 +636,8 @@ export const NewProspection = () => {
               className="basic-multi-select"
               classNamePrefix="select"
               isMulti
-              placeholder={"Selecteer..."}
+              isDisabled={competitorBrandsOptions.length > 0 ? false : true}
+              placeholder={competitorBrandsOptions.length > 0 ? "Selecteer..." : <CustomLoader />}
               value={selectedCompetitorBrands}
               isClearable={true}
               isSearchable={true}
@@ -694,7 +679,7 @@ export const NewProspection = () => {
         {/* BEST / WORST / TERMINATED BRANDS ------------------------------------------------------------------------------------------------------------ */}
 
         <FormWizard.TabContent
-          title={windowWidth < 700 ? " " : "Algemeen"}
+          title={"Algemeen"}
           icon={<AiOutlineCheck color="lightgrey" />}>
 
           <h3 className={styles.h3}>Algemene situatie</h3>
@@ -729,7 +714,7 @@ export const NewProspection = () => {
         {/* FC70 BRANDS SELLOUT ------------------------------------------------------------------------------------------------------------------------- */}
 
         <FormWizard.TabContent
-          title={windowWidth < 700 ? " " : "FC70"}
+          title={"FC70"}
           icon={<AiOutlineCheck color="lightgrey" />}>
 
           <h3 className={styles.h3}>FC70 overzicht</h3>
@@ -747,7 +732,7 @@ export const NewProspection = () => {
         {/* BRANDS INTERESTS ------------------------------------------------------------------------------------------------------------------------- */}
 
         <FormWizard.TabContent
-          title={windowWidth < 700 ? "" : "Interesses"}
+          title={"Interesses"}
           icon={<AiOutlineCheck color="lightgrey" />}>
 
           <fieldset className={styles.interestSelect}>
@@ -760,7 +745,8 @@ export const NewProspection = () => {
               className="basic-multi-select"
               classNamePrefix="select"
               isMulti
-              placeholder={"Selecteer..."}
+              isDisabled={brandInterestOptions.length > 0 ? false : true}
+              placeholder={brandInterestOptions.length > 0 ? "Selecteer..." : <CustomLoader />}
               value={selectedBrandInterests}
               isClearable={true}
               isSearchable={true}
@@ -798,7 +784,7 @@ export const NewProspection = () => {
         {/* FEEDBACK -------------------------------------------------------------------------------------------------------------------------------- */}
 
         <FormWizard.TabContent
-          title={windowWidth < 700 ? " " : "Feedback"}
+          title={"Feedback"}
           icon={<AiOutlineCheck color="lightgrey" />}>
 
           <h3 className={styles.h3}>Feedback</h3>
@@ -825,7 +811,7 @@ export const NewProspection = () => {
         {/* TO DOS ------------------------------------------------------------------------------------------------------------------------------------ */}
 
         <FormWizard.TabContent
-          title={windowWidth < 700 ? " " : "Opvolging"}
+          title={"Opvolging"}
           icon={<AiOutlineCheck color="lightgrey" />}
           isValid={checkValidateFeedbackTab()}
           validationError={feedbackError}>

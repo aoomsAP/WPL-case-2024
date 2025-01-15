@@ -21,6 +21,7 @@ import NewShop from './pages/NewShop/NewShop';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
 // icons
 import { TfiAgenda, TfiArrowLeft, TfiHome } from "react-icons/tfi";
+import { ShopListProvider } from './contexts/ShopListContext';
 
 const Root = () => {
 
@@ -33,7 +34,7 @@ const Root = () => {
         <>
             <header className={styles.header}>
                 <button title="Home" className={styles.header__button} onClick={() => navigate("/")}>
-                    {<TfiHome  className={styles.header__icon} />}
+                    {<TfiHome className={styles.header__icon} />}
                 </button>
 
                 {/* Show Agenda button only if user is set */}
@@ -46,7 +47,7 @@ const Root = () => {
                 {/* If location isn't "Home", show "Back" button */}
                 {location.pathname !== "/" &&
                     <button title="Terug" className={styles.header__button} onClick={() => navigate(-1)}>
-                        {<TfiArrowLeft  className={styles.header__icon} />}
+                        {<TfiArrowLeft className={styles.header__icon} />}
                     </button>
                 }
             </header>
@@ -156,9 +157,11 @@ const App = () => {
     ]);
 
     return (
-        <UserProvider>
-            <RouterProvider router={router} />
-        </UserProvider>
+        <ShopListProvider>
+            <UserProvider>
+                <RouterProvider router={router} />
+            </UserProvider>
+        </ShopListProvider>
     )
 }
 
