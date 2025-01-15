@@ -1,6 +1,6 @@
 // react utilities
 import { useContext } from 'react';
-import { createBrowserRouter, Link, Outlet, RouterProvider, useLocation, useNavigate } from 'react-router-dom';
+import { createBrowserRouter, Outlet, RouterProvider, useLocation, useNavigate } from 'react-router-dom';
 // styles
 import styles from './App.module.css'
 // contexts
@@ -20,8 +20,8 @@ import { CalendarPage } from './pages/CalendarPage/CalendarPage';
 import NewShop from './pages/NewShop/NewShop';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
 // icons
-import { TfiAgenda } from "react-icons/tfi";
-import { AiFillHome, AiOutlineArrowLeft } from "react-icons/ai";
+import { TfiAgenda, TfiArrowLeft, TfiHome } from "react-icons/tfi";
+import { ShopListProvider } from './contexts/ShopListContext';
 
 const Root = () => {
 
@@ -33,35 +33,29 @@ const Root = () => {
     return (
         <>
             <header className={styles.header}>
-                <Link to={"/"}>
-                    <button className={styles.button}>
-                        {<AiFillHome className={styles.homeIcon} />}
-                    </button>
-                </Link>
+                <button title="Home" className={styles.header__button} onClick={() => navigate("/")}>
+                    {<TfiHome className={styles.header__icon} />}
+                </button>
 
                 {/* Show Agenda button only if user is set */}
                 {(user && location.pathname !== "/") && (
-                    <Link to={"/agenda"}>
-                        <button className={styles.button}>
-                            <TfiAgenda className={styles.homeIcon} />
-                        </button>
-                    </Link>
+                    <button title="Agenda" className={styles.header__button} onClick={() => navigate("/agenda")}>
+                        <TfiAgenda className={styles.header__icon} />
+                    </button>
                 )}
 
                 {/* If location isn't "Home", show "Back" button */}
                 {location.pathname !== "/" &&
-                    <button title="Back" className={styles.button} onClick={() => navigate(-1)}>
-                        {<AiOutlineArrowLeft className={styles.homeIcon} />}
+                    <button title="Terug" className={styles.header__button} onClick={() => navigate(-1)}>
+                        {<TfiArrowLeft className={styles.header__icon} />}
                     </button>
                 }
             </header>
 
             <Outlet></Outlet>
 
-            <footer className={styles.footer}>
-
-                {/* Footer content can go here */}
-
+            <footer>
+                <div></div>
             </footer>
         </>
     );
@@ -163,9 +157,11 @@ const App = () => {
     ]);
 
     return (
-        <UserProvider>
-            <RouterProvider router={router} />
-        </UserProvider>
+        <ShopListProvider>
+            <UserProvider>
+                <RouterProvider router={router} />
+            </UserProvider>
+        </ShopListProvider>
     )
 }
 

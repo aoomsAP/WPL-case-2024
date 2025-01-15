@@ -2,8 +2,9 @@ import { useContext, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import styles from './ProspectionOverview.module.css'
 import { ShopDetailCard } from "../../components/ShopDetailCard/ShopDetailCard";
-import { FaAngleRight } from "react-icons/fa";
 import { ShopDetailContext } from "../../contexts/ShopDetailContext";
+import { TfiArrowTopRight } from "react-icons/tfi";
+import CustomLoader from "../../components/LoaderSpinner/CustomLoader";
 
 export const ProspectionOverview = () => {
 
@@ -21,32 +22,37 @@ export const ProspectionOverview = () => {
                 navigate("/404");
             }
             else {
-                setShopId(parseInt(shopId));
+                if (!shopDetail) {
+                    setShopId(parseInt(shopId));
+                }
             }
         }
     }, [])
 
     return (
         <main className={styles.main}>
+
+            <h1>Overzicht prospecties</h1>
+
             {shopDetail && <ShopDetailCard shop={shopDetail} />}
 
-            <h2>Voorgaande prospecties</h2>
-
-            <section className={styles.section}>
+            <ul className={styles.ul}>
                 {shopProspections
                     // sort on date in descending order
                     .sort((a, b) => (new Date(b.visitDate).getTime()) - (new Date(a.visitDate).getTime()))
                     // get three latest prospections
-                    .map((prospection) => (
-                        <button className={styles.button} key={prospection.id}>
-                            <Link to={`/shop/${shopId}/prospections/${prospection.id}`}>
-                                Prospectie {new Date(prospection.visitDate).toLocaleDateString()}<FaAngleRight className={styles.icon} />
-                            </Link>
-                        </button>
-                    ))}
-            </section>
+                    .map(prospection => (<li className={styles.li} key={prospection.id}>
+                        <Link to={`/shop/${shopId}/prospections/${prospection.id}`}>
+                            Prospectie {new Date(prospection.visitDate).toLocaleDateString()}
+                            <TfiArrowTopRight className={styles.li__icon} />
+                        </Link></li>))}
+            </ul>
 
-
+            {!shopProspections &&
+                <div className={styles.loading}>
+                    <p>Prospecties worden geladen...</p>
+                    <CustomLoader />
+                </div>}
         </main>
     );
 }

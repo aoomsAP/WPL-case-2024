@@ -1,9 +1,10 @@
 import { useContext, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { FaAngleRight } from "react-icons/fa";
+import { TfiArrowTopRight, TfiPlus } from "react-icons/tfi";
 import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCard';
 import styles from './ShopDetail.module.css';
 import { ShopDetailContext } from '../../contexts/ShopDetailContext';
+import CustomLoader from '../../components/LoaderSpinner/CustomLoader';
 
 export const ShopDetail = () => {
 
@@ -21,45 +22,63 @@ export const ShopDetail = () => {
         navigate("/404");
       }
       else {
-        setShopId(parseInt(shopId));
+        if (!shopDetail) {
+          setShopId(parseInt(shopId));
+        }
       }
     }
   }, [])
 
   return (
     <>
-      <main className={styles.main}>
+      <main>
+        {shopDetail && <>
+          <h1>{shopDetail.name}</h1>
 
-        {shopDetail && <ShopDetailCard shop={shopDetail} />}
+          <ShopDetailCard shop={shopDetail} />
 
-        <section className={styles.prospectionSection}>
-
-          <button className={styles.button}>
-            <Link className={styles.a} to={`/shop/${shopId}/prospections/new`}>
+          <section>
+            <p>Voeg een nieuwe prospectie toe:</p>
+            <button
+              title='Nieuwe prospectie'
+              className={styles.add_button}
+              onClick={() => navigate(`/shop/${shopId}/prospections/new`)}>
               Nieuwe Prospectie
-            </Link>
-          </button>
+              <TfiPlus className={styles.add_button__icon} />
+            </button>
+          </section>
 
-          <ul className={styles.ul}>
-            {shopProspections
-              // sort on date in descending order
-              .sort((a, b) => (new Date(b.visitDate).getTime()) - (new Date(a.visitDate).getTime()))
-              // get three latest prospections
-              .slice(0, 3)
-              .map(prospection => (<li className={styles.li} key={prospection.id}>
-                <Link className={styles.prospectionA} to={`/shop/${shopId}/prospections/${prospection.id}`}>
-                  Prospectie {new Date(prospection.visitDate).toLocaleDateString()}<FaAngleRight className={styles.icon} />
-                </Link></li>))}
-          </ul>
+          <section className={styles.overview}>
+            <h2>Voorgaande prospecties</h2>
+            {shopProspections.length > 0 &&
+              <>
+                <ul className={styles.ul}>
+                  {shopProspections
+                    // sort on date in descending order
+                    .sort((a, b) => (new Date(b.visitDate).getTime()) - (new Date(a.visitDate).getTime()))
+                    // get three latest prospections
+                    .slice(0, 3)
+                    .map(prospection => (<li className={styles.li} key={prospection.id}>
+                      <Link to={`/shop/${shopId}/prospections/${prospection.id}`}>
+                        Prospectie {new Date(prospection.visitDate).toLocaleDateString()}
+                        <TfiArrowTopRight className={styles.li__icon} />
+                      </Link></li>))}
+                </ul>
+                <button className={styles.link_button} onClick={() => navigate(`/shop/${shopId}/prospections`)}>
+                  Overzicht van alle Prospecties
+                  <TfiArrowTopRight className={styles.link_button__icon} />
+                </button>
+              </>
+            }
+          </section>
+        </>
+        }
 
-          <button className={styles.button}>
-            <Link className={styles.a} to={`/shop/${shopId}/prospections`}>
-              Overzicht van alle Prospecties
-            </Link>
-          </button>
-
-        </section>
-
+        {!shopDetail &&
+          <div className={styles.loading}>
+            <p>Winkel wordt geladen...</p>
+            <CustomLoader />
+          </div>}
       </main>
     </>
   );

@@ -1,0 +1,11 @@
+.brand_fieldset {
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: .2rem .6rem;
+    cursor: pointer;
+}

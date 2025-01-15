@@ -1,53 +1,57 @@
-.main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+.add_button__icon {
+    vertical-align:text-top;
+    margin-left: .7rem;
+    font-size: medium;
+    font-weight: bold;
+    transition: all .3s ease-in-out;
 }
 
-.prospectionSection {
-    display: flex;
-    flex-direction: column;
-}
-
-.h1 {
-    margin: 0.1rem;
-}
-
-.h2 {
-    margin: 0.1rem;
-}
-
-.button {
-    border: 1px solid var(--secondary-color);
-    background-color: var(--primary-color);
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-}
-.button:hover a {
-    color: #D4AF37; /* Gold color for the link text */
-  }
-.button:hover{
-    background-color: var(--secondary-color);
+.add_button:hover .add_button__icon {
+    transform: rotate(90deg);
 }
 
 .ul {
-    padding-left: 0;
-    list-style-type: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 1rem;
 }
 
-.li {
-    text-align: center;
-    border: 1px solid var(--secondary-color);
-    border-radius: 0.5rem;
-    margin: 0.5rem;
-    padding: .5rem .7rem
+.li a {
+    margin: .5rem 0;
+    padding: .5rem .7rem;
+    background-color: var(--primary-color);
 }
 
-ul li .icon {
+.li__icon, .link_button__icon {
     vertical-align: text-bottom;
-    /* Align icon with text */
-    margin-left: 0.2rem;
-    /* Add spacing between the icon and the text */
-    font-size: x-large;
+    margin: auto 0.5rem;
+    font-size: medium;
+    font-weight: bold;
+    transition: all .3s ease-in-out;
+}
+
+.li:hover .li__icon,
+.link_button:hover .link_button__icon {
+    transform: rotate(45deg);
+}
+
+.overview {
+    margin-top: 2rem;
+    align-items: stretch;
+}
+
+.li__icon {
+    vertical-align: text-bottom;
+    margin: auto 0.5rem;
+    font-size: medium;
+    font-weight: bold;
+    transition: all .3s ease-in-out;
+}
+
+.loading {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
 }

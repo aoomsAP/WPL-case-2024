@@ -190,6 +190,7 @@ export interface IProspectionToDo {
 export type OptionType = {
   label: string
   value: string
+  color?: string,
 }
 
 export interface IContactInfo {

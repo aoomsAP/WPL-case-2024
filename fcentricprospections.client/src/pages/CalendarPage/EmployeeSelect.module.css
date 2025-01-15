@@ -1,0 +1,10 @@
+.calendarSection {
+    align-items: stretch;
+}
+
+.loading {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}

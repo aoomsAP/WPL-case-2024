@@ -1,0 +1,20 @@
+.card {
+    background-color: var(--primary-color);
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    white-space: pre-wrap;
+}
+
+.card p:last-child {
+    margin-bottom: 0;
+}
+
+.card h3 {
+    margin: 0;
+    font-weight: 500;
+}
+
+.employees {
+    margin-top: 0.5rem;
+}

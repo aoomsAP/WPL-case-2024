@@ -1,0 +1,42 @@
+.textarea {
+    line-height: 2;
+}
+
+.inputContainer {
+    flex-grow: 1;
+    width: 100%;
+}
+
+.input {
+    width: 100%;
+}
+
+.container {
+    border-radius: 0px;
+    font-size: .875rem;
+    font-family: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    border: 2px solid transparent;
+}
+
+.edit_cursor {
+    cursor: text;
+}
+
+.container>span {
+    margin: 0;
+    margin-right: .5rem;
+    font-size: 0.875rem;
+}
+
+.edit_icon {
+    vertical-align: text-bottom;
+    font-size: 1.2rem;
+    color: silver;
+    transition: .2s color;
+}
+
+.container:hover .edit_icon {
+    color: darkgrey;
+}

@@ -1,9 +1,14 @@
 /* ROOT/BODY ----------------------------------------------- */
 
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 /* color variables */
 :root {
   --primary-color: #FFFFFF;
+  --primary-darker: rgba(247, 247, 247);
+  --primary-darkest: rgb(235, 235, 235);
   --secondary-color: #000000;
+  --gold-default: yellow;
 }
 
 *,
@@ -16,7 +21,7 @@
 }
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Noto Sans", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color-scheme: light dark;
@@ -35,47 +40,196 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  letter-spacing: 0.05em;
+  font-weight: 300;
+  line-height: 2rem;
+  background-color: var(--primary-darker);
 }
 
 #root {
   max-width: 750px;
+  display: grid;
+  grid-template-areas:
+    "header"
+    "main"
+    "footer";
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
   width: 100%;
 }
 
-/* STANDARD STYLING */
+/* LAYOUT ------------------------------------------------------------------------------------ */
 
 main {
+  grid-area: main;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
   padding: 1rem;
+  gap: 1rem;
 }
 
+header {
+  grid-area: header;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 1rem;
+  width: 100%;
+  gap: .2rem;
+}
+
+footer {
+  padding: 1rem;
+  grid-area: footer;
+  width: 100%;
+}
+
+/* STANDARD ELEMENTS ------------------------------------------------------------------------------------ */
+
+h1 {
+  font-size: 2em;
+  margin: 0;
+  margin-top: 1rem;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  font-weight: 300;
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+h2 {
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 300;
+  font-size: 1.2rem;
+  line-height: 1.6rem;
+}
+
+h3 {
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.4rem;
+}
+
+h4 {
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: .9rem;
+  line-height: 1.4rem;
+}
+
+p {
+  font-weight: 300;
+  font-size: 0.875rem;
+}
+
+strong {
+  font-weight: 600;
+}
+
+section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 
 a {
-  color: black;
+  color: var(--secondary-color);
+  background-color: inherit;
   text-decoration: none;
-  font-weight: 400;
-  font-size: large;
+  font-weight: 300;
+  font-size: inherit;
+  border-radius: 0px;
+  transition: all .2s ease-in-out;
+}
+
+a:hover {
+  background-color: var(--primary-darkest);
 }
 
 ul {
-  background-color: var(--primary-color);
+  font-size: .875rem;
+  background-color: inherit;
   overflow-y: auto;
   /* Enables vertical scrolling */
   max-height: 50rem;
   /* Set a height limit for the scroll to appear */
 }
 
+li {
+  border-radius: 0px;
+}
+
+li a {
+  display: block;
+}
+
+button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-transform: uppercase;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--primary-color);
+  background-color: var(--secondary-color);
+  border-radius: 0px;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  text-align: left;
+  width: auto !important;
+  transition: all .2s ease-in-out;
+}
+
+button * {
+  transition: all .2s ease-in-out;
+}
+
 button a {
   display: block;
 }
 
+button:hover {
+  background-color: var(--gold-default);
+  color: var(--secondary-color);
+}
+
+button:hover * {
+  color: var(--secondary-color);
+}
+
 input[type="text"],
 input[type="number"],
-textarea {
+textarea,
+input[type="date"],
+input[type="checkbox"] {
   font-family: inherit;
-  padding: 0.5rem;
-  font-size: 1rem;
-  border: 0.0625rem solid #ccc;
-  border-radius: 0.25rem;
+  padding: 0.7rem;
+  font-weight: 300;
+  font-size: 0.875rem;
+  border: none;
+  border-radius: 0px;
+  background-color: var(--primary-darkest);
+  color: var(--secondary-color);
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+input[type="date"]:focus,
+input[type="checkbox"]:focus,
+input[type="radio"]:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px yellow;
 }
 
 input[type="text"],
@@ -83,14 +237,106 @@ textarea {
   width: 100%;
 }
 
-/* Optionally, you can style the input itself */
-input[type="radio"]:checked {
-  accent-color: #D4AF37; }
+input[type="number"] {
+  min-width: 6rem;
+}
+
+input[type="date"]:hover {
+  cursor: pointer;
+}
+
+/* radio buttons */
+
+input[type='radio'] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: .875rem;
+  height: .875rem;
+  border: 1px solid black;
+  border-radius: 0px;
+  outline: none;
+  margin-right: .8rem;
+}
+
+input[type='radio']:hover {
+  border-radius: 0px;
+  background-color: var(--primary-darker);
+  cursor: pointer;
+}
+
+input[type='radio']:before {
+  content: '';
+  display: block;
+  width: 60%;
+  height: 60%;
+  margin: 20% auto;
+  border-radius: 0px;
+}
+
+input[type='radio']:checked:before {
+  background: black;
+}
+
+/* checkbox */
+
+input[type="checkbox"] {
+  box-sizing: border-box;
+  width: 1rem;
+  height: 1rem;
+  padding: 0;
+  border: 1px solid black;
+  appearance: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-size: cover;
+  padding: 2px;
+}
+
+input[type="checkbox"]:not(:disabled):checked {
+  border-color: black;
+  background-image: url('https://www.svgrepo.com/show/535263/checkmark.svg');
+}
+
+@media (hover: hover) {
+  input[type="checkbox"]:not(:disabled):hover {
+    background-color: var(--primary-darker);
+  }
+}
+
+label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-weight: 300;
+  font-size: 0.875rem;
+}
 
 fieldset {
-  background-color: #f9f9f9;
+  background-color: var(--primary-color);
   padding: 1rem;
   margin: 1rem 0;
+  border: none;
+}
+
+legend {
+  font-size: 0.875rem;
+  padding-inline: 0;
+  text-transform: uppercase;
+  float: left;
+  width: 100%;
+  margin-bottom: .5rem;
+  letter-spacing: .07rem;
+}
+
+hr {
+  width: 90%;
+  height: 1px;
+  background: var(--primary-darkest);
+  border: none;
 }
 
 /* FORM WIZARD ----------------------------------------------- */
@@ -99,10 +345,8 @@ fieldset {
   width: 100%;
 }
 
-/* remove upon styling differently */
 .react-form-wizard .wizard-header {
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 0;
 }
 
 .react-form-wizard .wizard-title {
@@ -111,10 +355,12 @@ fieldset {
 
 .react-form-wizard .wizard-tab-content {
   text-align: left;
+  padding: 1rem 0;
 }
 
 .form-wizard-steps {
   overflow: hidden;
+  background-color: inherit;
 }
 
 .react-form-wizard.sm .wizard-icon-circle {
@@ -129,25 +375,61 @@ fieldset {
   font-size: small;
 }
 
-
-.wizard-btn{
-  color:#D4AF37 !important;
-}
-.wizard-btn:hover{
-  color: black!important;
-  background-color: #D4AF37;
+.wizard-footer-right,
+.wizard-footer-left {
+  border-radius: 0px !important;
 }
 
+.wizard-btn {
+  border-radius: 0px !important;
+  color: var(--primary-color) !important;
+  transition: .2s all ease-in-out;
+}
+
+.wizard-btn:hover {
+  color: var(--secondary-color) !important;
+  background-color: var(--gold-default);
+}
+
+.react-form-wizard .wizard-card-footer {
+  padding: 0 1rem;
+}
+
+.smooth-border-left-to-right {
+  top: 35%;
+}
 
 @media (max-width: 700px) {
-  .smooth-border-left-to-right{
-    margin-top: 0.5em;
-  
-    
+  .stepTitle {
+    visibility: hidden;
+    width: 1px;
+  }
+}
 
-  }
-  }
 /* REACT SELECT  ----------------------------------------------- */
+
+.basic-single,
+.basic-multi-select {
+  width: 100%;
+  font-family: inherit;
+  font-weight: 300;
+  font-size: 0.875rem;
+  margin-bottom: .5rem;
+}
+
+.select__control {
+  border-radius: 0px !important;
+}
+
+.basic-multi-select .select__value-container {
+  padding: .4rem !important;
+}
+
+.basic-single input[type="text"]:focus,
+.basic-multi-select input[type="text"]:focus {
+  border: none !important;
+  box-shadow: 0 0 0 0px transparent !important;
+}
 
 /* select menu has to appear on top of calendar */
 .select__menu {
@@ -155,14 +437,18 @@ fieldset {
   z-index: 3 !important;
 }
 
+.react-select__option *:hover {
+  background-color: black !important;
+}
+
 .react-select__option {
   display: block;
   font-size: 16px;
-  color: rgb(36, 36, 36);
   padding: 11px 12px;
   width: 100%;
   user-select: none;
   box-sizing: border-box;
+  border-radius: 0;
 }
 
 .react-select__option:hover {
@@ -170,15 +456,111 @@ fieldset {
 }
 
 .react-select__option--is-selected {
-  background-color: #42526E;
-  color: #FFFFFF;
+  background-color: #cccdcf !important;
+  color: #ffffff;
 }
 
 .react-select__option--is-selected:hover {
-  background-color: #42526E;
+  background-color: #ffffff !important;
 }
 
+
 /* FULL CALENDAR */
+
+:root {
+  --fc-button-text-color: var(--primary-color);
+  --fc-button-bg-color: var(--secondary-color);
+  --fc-button-border-color: var(--secondary-color);
+  --fc-button-hover-bg-color: rgba(0, 0, 0, 0.8);
+  --fc-button-hover-border-color: rgba(0, 0, 0, 0.75);
+  --fc-button-active-bg-color: rgba(0, 0, 0, 0.75);
+  --fc-button-active-border-color: rgba(0, 0, 0, 0.65);
+
+  --fc-event-bg-color: var(--gold-default);
+  --fc-event-border-color: var(--gold-default);
+  --fc-event-text-color: var(--secondary-color);
+  --fc-event-selected-overlay-color: rgba(0, 0, 0, 0.25);
+
+  --fc-more-link-bg-color: var(--primary-darker);
+  --fc-more-link-text-color: inherit;
+
+  --fc-non-business-color: var(--primary-darker);
+  --fc-bg-event-color: var(--primary-darkest);
+  --fc-bg-event-opacity: 0.3;
+  --fc-highlight-color: var(--gold-default);
+  --fc-today-bg-color: rgba(246, 255, 0, 0.15);
+  --fc-now-indicator-color: var(--secondary-color);
+}
+
+.fc * {
+  border-radius: 0px !important;
+}
+
+.fc-view {
+  background-color: var(--primary-color);
+}
+
+.fc-event {
+  background-color: var(--gold-default);
+  color: var(--secondary-color);
+  transition: .2s all ease-in-out;
+}
+
+.fc-event:hover {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  border-color: var(--primary-darkest);
+  cursor: pointer;
+}
+
+.fc-list-event * {
+  color: var(--secondary-color);
+  background-color: var(--primary-color);
+  transition: all .2s ease-in-out;
+}
+
+.fc-list-event:hover *,
+.fc-list-event:hover .fc-list-event a {
+  color: var(--primary-color);
+  background-color: var(--secondary-color) !important;
+}
+
+.fc-event.fc-selected {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: var(--primary-color);
+  border-color: rgba(0, 0, 0, 0.8);
+}
+
+.fc-event-time {
+  color: var(--secondary-color);
+  transition: all .2s ease-in-out;
+}
+
+.fc-event:hover .fc-event-time {
+  color: var(--primary-color),
+}
+
+.fc-daygrid-event {
+  background-color: var(--primary-darkest);
+  color: var(--secondary-color);
+  border-color: var(--primary-darkest);
+}
+
+.fc-event.fc-dragging {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  opacity: 0.8;
+  border-color: var(--secondary-color);
+}
+
+.fc-theme-standard th * {
+  background-color: var(--primary-darkest) !important;
+}
+
+.fc-dayGridMonth-view .fc-event-title {
+  font-size: .700rem !important;
+  font-weight: normal !important;
+}
 
 /* attempt to not have "day/month/week" button show on top of select */
 .fc .fc-button-group>.fc-button.fc-button-active {
@@ -193,6 +575,7 @@ fieldset {
   .fc-toolbar {
     flex-direction: row;
     flex-wrap: wrap;
+    gap: .5rem;
   }
 
   .fc-toolbar-chunk {

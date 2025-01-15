@@ -1,0 +1,43 @@
+.newToDo {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: .5rem;
+    border: 1px solid black;
+}
+
+.newToDo div {
+    margin-top: 0;
+}
+
+.submit_button {
+    align-self: flex-start;
+    margin-top: 1rem;
+}
+
+.submit_button__icon {
+    vertical-align:text-top;
+    margin-left: .7rem;
+    font-size: medium;
+    font-weight: bold;
+    transition: all .3s ease-in-out;
+}
+
+.submit_button:hover .submit_button__icon {
+    transform: rotate(90deg);
+}
+
+.toDo {
+    position: relative;
+    margin-top: 1rem;
+    border: 1px solid black;
+    padding: 1rem;
+}
+
+.close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: .2rem .6rem;
+    cursor: pointer;
+}

@@ -1,33 +1,18 @@
-.li1{
-    list-style-type: none;
-    
+.add_button__icon {
+    vertical-align:text-top;
+    margin-left: .7rem;
+    font-size: medium;
+    font-weight: bold;
+    transition: all .3s ease-in-out;
 }
 
-.basic-single {
-width: 100%;
+.add_button:hover .add_button__icon {
+    transform: rotate(90deg);
 }
 
-.button {
-    margin-top: 2rem;
-    border: 1px solid var(--secondary-color);
-    background-color: var(--secondary-color);
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-    cursor: pointer;
-}
-
-.button:hover {
-    background-color: var(--primary-color);
-}
-
-.button:hover * {
-    color: var(--secondary-color);
-}
-
-.a {
-    color: var(--primary-color);
-}
-
-.a:hover {
-    color: var(--secondary-color);
+.selectLoading {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .5rem;
 }
