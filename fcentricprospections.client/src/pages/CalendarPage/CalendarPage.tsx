@@ -9,9 +9,11 @@ import styles from './CalenderPage.module.css';
 import listPlugin from '@fullcalendar/list';
 import nlLocale from '@fullcalendar/core/locales/nl';
 import CustomLoader from '../../components/LoaderSpinner/CustomLoader';
+import EventDetailsPopup from './EventDetailsPopUp';
 
 export const CalendarPage = () => {
     const { appointments, userCalendarLoading } = useContext(UserContext);
+    const [selectedEvent, setSelectedEvent] = useState(null);
 
     const [events, setEvents] = useState<EventInput[]>([]);
     const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
@@ -38,6 +40,14 @@ export const CalendarPage = () => {
         }));
         setEvents(userEvents);
     }, [appointments]);
+
+    const handleEventClick = (clickInfo) => {
+        setSelectedEvent(clickInfo.event); // Set the clicked event
+    };
+
+    const handleClosePopup = () => {
+        setSelectedEvent(null); // Clear the selected event
+    };
 
     const handleWindowResize = (_: { view: { type: string } }) => {
         setWindowWidth(window.innerWidth);
@@ -78,7 +88,15 @@ export const CalendarPage = () => {
                     contentHeight="auto"
                     handleWindowResize={true} // Enable automatic resize
                     windowResize={handleWindowResize} // Callback on resize
+                    eventClick={handleEventClick} //Handle event clicks
                 />
+                {/* Event Detail Popup */}
+                {selectedEvent && (
+                    <EventDetailsPopup
+                        event={selectedEvent}
+                        onClose={handleClosePopup} // Handle popup close
+                    />
+                )}
             </main>
         );
     }
