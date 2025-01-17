@@ -457,7 +457,7 @@ export const NewProspection = () => {
               {/* Required if owner or buyer */}
               {(contactType == 1 || contactType == 2) && <span className={styles.required}> *</span>}
             </legend>
-            <p>Naam: {contactInfo?.name ?? "geen naam gevonden"}</p>
+            <p>Naam: {contactInfo?.name ?? "N/A"}</p>
             <input
               type='text'
               placeholder='Update naam...'
@@ -494,7 +494,7 @@ export const NewProspection = () => {
                   {/* Required if owner or buyer */}
                   {(contactType == 1 || contactType == 2) && <span className={styles.required}> *</span>}
                 </legend>
-                <p>Email: {contactInfo?.email ?? "geen email gevonden"}</p>
+                <p>Email: {contactInfo?.email ?? "N/A"}</p>
                 <input
                   type='text'
                   placeholder='Update email...'
@@ -527,7 +527,7 @@ export const NewProspection = () => {
                   {/* Required if owner or buyer */}
                   {(contactType == 1 || contactType == 2) && <span className={styles.required}> *</span>}
                 </legend>
-                <p>Telefoonnummer: {contactInfo?.phoneNumber ?? "geen telefoonnummer gevonden"}</p>
+                <p>Telefoonnummer: {contactInfo?.phoneNumber ?? "N/A"}</p>
                 <input
                   type='text'
                   placeholder='Update telefoonnummer...'
