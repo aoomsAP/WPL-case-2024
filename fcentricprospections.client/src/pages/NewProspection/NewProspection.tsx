@@ -287,9 +287,15 @@ export const NewProspection = () => {
 
   // Submit function ------------------------------------------------------------------------------------------------------------------------------------
 
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const delay = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
+
   async function handleComplete() {
     try {
       console.log("Start newProspection handleComplete");
+      setLoading(true);
+      setIsButtonDisabled(true);
 
       if (!user?.id) {
         alert("Geen geldige gebruiker. Probeer opnieuw in the loggen.");
@@ -378,6 +384,9 @@ export const NewProspection = () => {
 
         console.log("End newProspection handleComplete");
 
+        setLoading(false);
+        setIsButtonDisabled(false);
+
         navigate(`/shop/${shopId}`);
 
       } else {
@@ -386,6 +395,8 @@ export const NewProspection = () => {
 
     } catch (error) {
       console.error("Error in newProspection handleComplete: ", error);
+      setLoading(false);
+      setIsButtonDisabled(false);
     }
   };
 
@@ -398,7 +409,16 @@ export const NewProspection = () => {
         title="Nieuwe prospectie"
         nextButtonText="Volgende"
         backButtonText="Vorige"
-        finishButtonText="Verzenden"
+        finishButtonTemplate={(handleComplete) => (
+            <button 
+                className="finish-button" 
+                onClick={handleComplete}
+                disabled={isButtonDisabled}
+            >
+                {loading && <CustomLoader />} {/* Show spinner if loading */}
+                {loading ? " Verzenden..." : "Verzenden"} {/* Show "Verzenden" when not loading */}
+            </button>
+        )}
         layout="horizontal"
         stepSize="sm"
         onComplete={handleComplete}>
