@@ -15,10 +15,11 @@ export const Homepage = () => {
 
     const navigate = useNavigate();
 
-    const { user, employee } = useContext(UserContext);
+    const { user, employee, userDataLoading } = useContext(UserContext);
     const { shops } = useContext(ShopListContext);
 
     const [shopListOptions, setShopListOptions] = useState<OptionType[]>([]);
+    const isDataLoaded = employee && user && !userDataLoading;
 
     useEffect(() => {
         const isValidShopOption = (shopOption: IShop) =>
@@ -44,7 +45,7 @@ export const Homepage = () => {
         setShopListOptions(shopOptionOptions);
     }, [shops])
 
-    return (
+    if (isDataLoaded) return (
         <main>
             <section>
                 <h2>Hallo, {employee ? employee?.firstName : user?.login}</h2>
@@ -94,4 +95,7 @@ export const Homepage = () => {
             </section>
         </main>
     );
+
+    // if the employee or the user is not found or the user/employee data is still loading, only a loading indicator is shown
+    if (!isDataLoaded) return <CustomLoader />
 };
