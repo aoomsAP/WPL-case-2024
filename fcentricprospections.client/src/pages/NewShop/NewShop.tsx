@@ -77,7 +77,7 @@ export default function NewShop() {
         setPostalCodeOptions(postalCodeOptions);
     }, [cities])
 
-// Submit function ------------------------------------------------------------------------------------------------------------------------------------
+    // Submit function ------------------------------------------------------------------------------------------------------------------------------------
 
     const [loading, setLoading] = useState<boolean>(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -85,7 +85,7 @@ export default function NewShop() {
     const delay = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 
     async function handleComplete() {
-        
+
         try {
             setLoading(true);
             setIsButtonDisabled(true);
@@ -142,13 +142,12 @@ export default function NewShop() {
                 throw Error("Error while adding shop");
             }
 
-            setLoading(false);
-            setIsButtonDisabled(false);
-
             navigate(`/shop/${addedShop.id}`)
 
         } catch (error) {
             console.error(error);
+
+        } finally {
             setLoading(false);
             setIsButtonDisabled(false);
         }
@@ -161,19 +160,16 @@ export default function NewShop() {
                 title="Nieuwe winkel"
                 nextButtonText="Volgende"
                 backButtonText="Vorige"
-                // finishButtonTemplate={(handleComplete) => (
-                //     <button className="finish-button" onClick={handleComplete} disabled={isButtonDisabled}>
-                //      {loading ? <CustomLoader /> : "Verzenden"}
-                //     </button>
-                //   )}
                 finishButtonTemplate={(handleComplete) => (
-                    <button 
-                        className="finish-button" 
+                    <button
+                        className="wizard-footer-right"
                         onClick={handleComplete}
                         disabled={isButtonDisabled}
                     >
-                        {loading && <CustomLoader />} {/* Show spinner if loading */}
-                        {loading ? " Verzenden..." : "Verzenden"} {/* Show "Verzenden" when not loading */}
+                        <div className={styles.loading}>
+                            {loading ? <span>Verzenden...</span> : <span>Verzenden</span>} {/* Show "Verzenden" when not loading */}
+                            {loading && <CustomLoader />} {/* Show spinner if loading */}
+                        </div>
                     </button>
                 )}
                 layout="horizontal"

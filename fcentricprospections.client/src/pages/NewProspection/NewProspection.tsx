@@ -289,7 +289,6 @@ export const NewProspection = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const delay = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 
   async function handleComplete() {
     try {
@@ -384,17 +383,17 @@ export const NewProspection = () => {
 
         console.log("End newProspection handleComplete");
 
-        setLoading(false);
-        setIsButtonDisabled(false);
-
         navigate(`/shop/${shopId}`);
 
       } else {
         console.error("Failed to add new prospection. Updates aborted.");
       }
 
-    } catch (error) {
+    }
+    catch (error) {
       console.error("Error in newProspection handleComplete: ", error);
+    }
+    finally {
       setLoading(false);
       setIsButtonDisabled(false);
     }
@@ -410,14 +409,16 @@ export const NewProspection = () => {
         nextButtonText="Volgende"
         backButtonText="Vorige"
         finishButtonTemplate={(handleComplete) => (
-            <button 
-                className="finish-button" 
-                onClick={handleComplete}
-                disabled={isButtonDisabled}
-            >
-                {loading && <CustomLoader />} {/* Show spinner if loading */}
-                {loading ? " Verzenden..." : "Verzenden"} {/* Show "Verzenden" when not loading */}
-            </button>
+          <button
+            className="wizard-footer-right"
+            onClick={handleComplete}
+            disabled={isButtonDisabled}
+          >
+            <div className={styles.loading}>
+              {loading ? <span>Verzenden...</span> : <span>Verzenden</span>} {/* Show "Verzenden" when not loading */}
+              {loading && <CustomLoader />} {/* Show spinner if loading */}
+            </div>
+          </button>
         )}
         layout="horizontal"
         stepSize="sm"

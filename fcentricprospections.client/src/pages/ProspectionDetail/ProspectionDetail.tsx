@@ -8,7 +8,6 @@ import { TextSection } from "../../components/ProspectionDetail/TextSection/Text
 import { CompetitorBrandList } from "../../components/ProspectionDetail/CompetitorBrandList/CompetitorBrandList";
 import { BrandInterestCard } from "../../components/ProspectionDetail/BrandInterestCard/BrandInterestCard";
 import styles from "./ProspectionDetail.module.css";
-import { Oval } from 'react-loader-spinner'
 import { ShopDetailContext } from "../../contexts/ShopDetailContext";
 import { ProspectionDetailContext } from "../../contexts/ProspectionDetailContext";
 import { ToDoItem } from "../../components/ProspectionDetail/ToDo/ToDoItem";

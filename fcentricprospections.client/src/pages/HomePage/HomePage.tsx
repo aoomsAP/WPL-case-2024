@@ -45,10 +45,14 @@ export const Homepage = () => {
         setShopListOptions(shopOptionOptions);
     }, [shops])
 
-    if (isDataLoaded) return (
+    return (
         <main>
             <section>
-                <h2>Hallo, {employee ? employee?.firstName : user?.login}</h2>
+                {isDataLoaded
+                    ? <h2>Hallo, {employee ? employee?.firstName : user?.login}</h2>
+                    : <h2 className={styles.loading}>
+                        <CustomLoader />
+                    </h2>}
             </section>
 
             {/* SELECTEER WINKEL */}
@@ -95,7 +99,4 @@ export const Homepage = () => {
             </section>
         </main>
     );
-
-    // if the employee or the user is not found or the user/employee data is still loading, only a loading indicator is shown
-    if (!isDataLoaded) return <CustomLoader />
 };

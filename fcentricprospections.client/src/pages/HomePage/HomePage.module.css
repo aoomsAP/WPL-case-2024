@@ -16,3 +16,10 @@
     align-items: center;
     gap: .5rem;
 }
+
+.loading {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}
