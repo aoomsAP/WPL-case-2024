@@ -21,6 +21,8 @@ export const NewShopProvider = ({ children }: { children: React.ReactNode }) => 
 
     const [countries, setCountries] = useState<ICountry[]>([]);
 
+    // GET DATA
+
     async function loadCountries() {
         try {
             const response = await fetch(`/api/countries`, {
@@ -51,58 +53,46 @@ export const NewShopProvider = ({ children }: { children: React.ReactNode }) => 
         }
     }
 
+    // POST DATA
+    // (error handling done on top level)
+
     async function addAddress(newAddress: IAddressCreate) {
-        try {
-            const response = await fetch(`/api/addresses`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newAddress),
-            });
+        const response = await fetch(`/api/addresses`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newAddress),
+        });
 
-            const json: IAddressCreate = await response.json();
+        const json: IAddressCreate = await response.json();
 
-            console.log("Succesful POST new address: ", json)
-            return (json);
-
-        } catch (error) {
-            console.error('Error POST new address:', error);
-        }
+        console.log("Succesful POST new address: ", json)
+        return (json);
     }
 
     async function addContact(newContact: IContactCreate) {
-        try {
-            const response = await fetch(`/api/contacts`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newContact),
-            });
+        const response = await fetch(`/api/contacts`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newContact),
+        });
 
-            const json: IContactCreate = await response.json();
+        const json: IContactCreate = await response.json();
 
-            console.log("Succesful POST new contact: ", json)
-            return (json);
-
-        } catch (error) {
-            console.error('Error POST new contact:', error);
-        }
+        console.log("Succesful POST new contact: ", json)
+        return (json);
     }
 
     async function addShop(newShop: IShopCreate) {
-        try {
-            const response = await fetch(`/api/shops`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newShop),
-            });
+        const response = await fetch(`/api/shops`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newShop),
+        });
 
-            const json: IShopCreate = await response.json();
+        const json: IShopCreate = await response.json();
 
-            console.log("Succesful POST new shop: ", json)
-            return (json);
-
-        } catch (error) {
-            console.error('Error POST new shop:', error);
-        }
+        console.log("Succesful POST new shop: ", json)
+        return (json);
     }
 
     useEffect(() => {

@@ -34,3 +34,42 @@
 .postalCode {
     width: calc(50% - 1rem);
 }
+
+.loading {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .5rem;
+}
+
+.required {
+    font-weight: bold;
+    color: red;
+}
+
+.error {
+    width: 100%;
+    padding: 0 1rem;
+    background-color: rgb(254, 217, 207);
+    color: darkred;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.error .close {
+    cursor: pointer;
+    background-color: transparent;
+    color: darkred;
+    padding: 0;
+    padding-right: .5rem;
+}
+
+.error .close:hover {
+    color: black;
+}
+
+.errorBorder {
+    border: 1px solid red !important;
+}

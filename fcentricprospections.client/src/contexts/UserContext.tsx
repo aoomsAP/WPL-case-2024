@@ -19,6 +19,7 @@ interface UserContext {
     shownAppointments: IAppointment[],
     setShownAppointments: (shownAppointments: IAppointment[]) => void,
     userCalendarLoading: boolean,
+    userDataLoading: boolean,
 
     // loading functions
     loadUser: (userId: number) => void;
@@ -46,6 +47,7 @@ export const UserContext = React.createContext<UserContext>({
     shownAppointments: [],
     setShownAppointments: () => { },
     userCalendarLoading: false,
+    userDataLoading: false,
 
     // loading functions
     loadUser: async () => { },
@@ -64,7 +66,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const [employee, setEmployee] = useState<IEmployee>();
     const [employees, setEmployees] = useState<IEmployee[]>([]);
     const [appointments, setAppointments] = useState<IAppointment[]>([]);
-    const [userCalendarLoading,setUserCalendarLoading] = useState<boolean>(false);
+    const [userCalendarLoading, setUserCalendarLoading] = useState<boolean>(false);
+    const [userDataLoading, setUserDataLoading] = useState<boolean>(false);
 
     // TO DO: unused?
     // Voor de agenda, dit zijn de afspraken die getoond worden
@@ -86,6 +89,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
     async function loadUser(userId: number) {
         try {
+            setUserDataLoading(true);
             const response = await fetch(`/api/users/${userId}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
@@ -93,11 +97,13 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
             const json: IUser | undefined = await response.json();
             setUser(json);
+            setUserDataLoading(false);
 
             console.log("user loaded", json);
 
         } catch (error) {
             console.error('Error fetching userdata data:', error);
+            setUserDataLoading(false);
         }
     }
 
@@ -224,6 +230,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
             shownAppointments: shownAppointments,
             setShownAppointments: setShownAppointments,
             userCalendarLoading: userCalendarLoading,
+            userDataLoading: userDataLoading,
 
             // loading functions
             loadUser: loadUser,

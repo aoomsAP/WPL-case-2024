@@ -48,29 +48,27 @@ export const ShopDetail = () => {
             </button>
           </section>
 
-          <section className={styles.overview}>
-            <h2>Voorgaande prospecties</h2>
-            {shopProspections.length > 0 &&
-              <>
-                <ul className={styles.ul}>
-                  {shopProspections
-                    // sort on date in descending order
-                    .sort((a, b) => (new Date(b.visitDate).getTime()) - (new Date(a.visitDate).getTime()))
-                    // get three latest prospections
-                    .slice(0, 3)
-                    .map(prospection => (<li className={styles.li} key={prospection.id}>
-                      <Link to={`/shop/${shopId}/prospections/${prospection.id}`}>
-                        Prospectie {new Date(prospection.visitDate).toLocaleDateString()}
-                        <TfiArrowTopRight className={styles.li__icon} />
-                      </Link></li>))}
-                </ul>
-                <button className={styles.link_button} onClick={() => navigate(`/shop/${shopId}/prospections`)}>
-                  Overzicht van alle Prospecties
-                  <TfiArrowTopRight className={styles.link_button__icon} />
-                </button>
-              </>
-            }
-          </section>
+          {shopProspections.length > 0 &&
+            <section className={styles.overview}>
+              <h2>Voorgaande prospecties</h2>
+              <ul className={styles.ul}>
+                {shopProspections
+                  // sort on date in descending order
+                  .sort((a, b) => (new Date(b.visitDate).getTime()) - (new Date(a.visitDate).getTime()))
+                  // get three latest prospections
+                  .slice(0, 3)
+                  .map(prospection => (<li className={styles.li} key={prospection.id}>
+                    <Link to={`/shop/${shopId}/prospections/${prospection.id}`}>
+                      Prospectie {new Date(prospection.visitDate).toLocaleDateString()}
+                      <TfiArrowTopRight className={styles.li__icon} />
+                    </Link></li>))}
+              </ul>
+              <button className={styles.link_button} onClick={() => navigate(`/shop/${shopId}/prospections`)}>
+                Overzicht van alle Prospecties
+                <TfiArrowTopRight className={styles.link_button__icon} />
+              </button>
+            </section>
+          }
         </>
         }
 

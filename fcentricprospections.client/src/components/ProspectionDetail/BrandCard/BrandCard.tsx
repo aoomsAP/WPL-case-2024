@@ -10,8 +10,8 @@ export const BrandCard = ({ prospectionBrand, brandName }: BrandCardProps) => {
     return (
         <div className={styles.card}>
             <h3>{brandName ? brandName : "Merk onbekend"}</h3>
-            {prospectionBrand.sellout && <p>Sellout: {prospectionBrand.sellout}{prospectionBrand.sellout ? "%" : ""}</p>}
-            {prospectionBrand.selloutRemark && <p>Opmerking: {prospectionBrand.selloutRemark}</p>}
+            {prospectionBrand.sellout && <p><strong>Sellout: </strong>{prospectionBrand.sellout}{prospectionBrand.sellout ? "%" : ""}</p>}
+            {prospectionBrand.selloutRemark && <p><strong>Opmerking: </strong>{prospectionBrand.selloutRemark}</p>}
         </div>
     )
 }

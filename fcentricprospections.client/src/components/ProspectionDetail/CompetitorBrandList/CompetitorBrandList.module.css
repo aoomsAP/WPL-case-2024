@@ -9,4 +9,6 @@
 
 .card h3 {
   font-weight: 500;
+  text-transform: none;
+  font-size: .875rem;
 }
