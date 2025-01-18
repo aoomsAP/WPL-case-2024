@@ -23,6 +23,8 @@ import ErrorPage from './pages/ErrorPage/ErrorPage';
 // icons
 import { TfiAgenda, TfiArrowLeft, TfiHome } from "react-icons/tfi";
 import { RxExit } from "react-icons/rx";
+// components
+import Breadcrumbs from './components/Breadcrumbs/Breadcrumbs';
 
 const Root = () => {
 
@@ -34,16 +36,10 @@ const Root = () => {
     return (
         <>
             <header className={styles.header}>
-                <button title="Home" className={styles.header__button} onClick={() => navigate("/")}>
-                    {<TfiHome className={styles.header__icon} />}
-                </button>
-
-                {/* Show Agenda button only if user is set */}
-                {(user && location.pathname !== "/") && (
-                    <button title="Agenda" className={styles.header__button} onClick={() => navigate("/agenda")}>
-                        <TfiAgenda className={styles.header__icon} />
+                <nav className={styles.nav}>
+                    <button title="Home" className={styles.nav__button} onClick={() => navigate("/home")}>
+                        {<TfiHome className={styles.nav__icon} />}
                     </button>
-                )}
 
                 {/* If location isn't "Home", show "Back" button */}
                 {location.pathname !== "/" &&
@@ -52,6 +48,20 @@ const Root = () => {
                     </button>
                 }
 
+                    {/* Show Agenda button only if user is set */}
+                    {(user && location.pathname !== "/") && (
+                        <button title="Agenda" className={styles.nav__button} onClick={() => navigate("/agenda")}>
+                            <TfiAgenda className={styles.nav__icon} />
+                        </button>
+                    )}
+
+                    {/* If location isn't "Home", show "Back" button */}
+                    {location.pathname !== "/" &&
+                        <button title="Terug" className={styles.nav__button} onClick={() => navigate(-1)}>
+                            {<TfiArrowLeft className={styles.nav__icon} />}
+                        </button>
+                    }
+                          
                 {/* Logout */}
                 {user &&
                     <button
@@ -66,6 +76,9 @@ const Root = () => {
                         {<RxExit className={styles.header__icon} />}
                     </button>
                 }
+                </nav>
+
+                <Breadcrumbs />
             </header>
 
             <Outlet></Outlet>
@@ -77,54 +90,9 @@ const Root = () => {
     );
 }
 
-// Page/Provider wrappers
-
-const NewShopPage = () => {
-    return (
-        <NewProspectionProvider>
-            <NewShopProvider>
-                <NewShop />
-            </NewShopProvider>
-        </NewProspectionProvider >
-    )
-}
-
-const ShopDetailPage = () => {
-    return (
-        <ShopDetailProvider>
-            <ShopDetail />
-        </ShopDetailProvider>
-    )
-}
-
-const ProspectionOverviewPage = () => {
-    return (
-        <ShopDetailProvider>
-            <ProspectionOverview />
-        </ShopDetailProvider>
-    )
-}
-
-const NewProspectionPage = () => {
-    return (
-        <ShopDetailProvider>
-            <NewProspectionProvider>
-                <NewProspection />
-            </NewProspectionProvider>
-        </ShopDetailProvider>
-    )
-}
-
-const ProspectionDetailPage = () => {
-    return (
-        <ShopDetailProvider>
-            <ProspectionDetailProvider>
-                <ProspectionDetail />
-            </ProspectionDetailProvider>
-        </ShopDetailProvider>
-    )
-}
-
+const ShopWrapper = () => {
+    return <Outlet />;
+};
 
 const App = () => {
     const router = createBrowserRouter([
@@ -133,36 +101,69 @@ const App = () => {
             element: <Root />,
             children: [
                 {
-                    path: "",
-                    element: <UserPage />
+                    path: "/",
+                    index: true,
+                    element: <UserPage />,
                 },
                 {
                     path: "/home",
-                    element: <Homepage />
+                    element: <Homepage />,
                 },
                 {
                     path: "/agenda",
-                    element: <CalendarPage />
+                    element: <CalendarPage />,
                 },
                 {
-                    path: "newshop",
-                    element: <NewShopPage />
-                },
-                {
-                    path: "shop/:shopId",
-                    element: <ShopDetailPage />
-                },
-                {
-                    path: "shop/:shopId/prospections/new",
-                    element: <NewProspectionPage />
-                },
-                {
-                    path: "shop/:shopId/prospections",
-                    element: <ProspectionOverviewPage />
-                },
-                {
-                    path: "shop/:shopId/prospections/:prospectionId",
-                    element: <ProspectionDetailPage />
+                    path: "/shop",
+                    element: <ShopWrapper />, // Empty fallback for /shop
+                    children: [
+                        {
+                            path: "new",
+                            element:
+                                <NewProspectionProvider>
+                                    <NewShopProvider>
+                                        <NewShop />
+                                    </NewShopProvider>
+                                </NewProspectionProvider >,
+                        },
+                        {
+                            path: ":shopId",
+                            element:
+                                <ShopDetailProvider>
+                                    <Outlet />
+                                </ShopDetailProvider>,
+                            children: [
+                                {
+                                    index: true,
+                                    element: <ShopDetail />,
+                                },
+                                {
+                                    path: "prospections",
+                                    element: <Outlet />,
+                                    children: [
+                                        {
+                                            index: true,
+                                            element: <ProspectionOverview />
+                                        },
+                                        {
+                                            path: "new",
+                                            element:
+                                                <NewProspectionProvider>
+                                                    <NewProspection />
+                                                </NewProspectionProvider>
+                                        },
+                                        {
+                                            path: ":prospectionId",
+                                            element:
+                                                <ProspectionDetailProvider>
+                                                    <ProspectionDetail />
+                                                </ProspectionDetailProvider>
+                                        },
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
                 },
                 {
                     path: "*",
