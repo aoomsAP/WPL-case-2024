@@ -1,4 +1,4 @@
-import { FormEvent, useContext, useEffect, useState } from "react";
+import { FormEvent, useContext, useEffect, useRef, useState } from "react";
 import { IEmployee, IToDo, OptionType } from "../../../types";
 import styles from "./ToDoModule.module.css"
 import { UserContext } from "../../../contexts/UserContext";
@@ -24,11 +24,23 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
     const [selectedEmployees, setSelectedEmployees] = useState<OptionType[]>([]);
     const [employeesOptions, setEmployeesOptions] = useState<OptionType[]>([]);
 
+    const [errorMessage, setErrorMessage] = useState<string>();
+    const errorRef = useRef<HTMLDivElement | null>(null);
+    const showError = errorMessage && (title.trim() == "" || description.trim() == "" || selectedEmployees.length < 1)
+
+    const [successMsg, setSuccessMsg] = useState<string>();
+    const successRef = useRef<HTMLDivElement | null>(null);
+    const showSuccess = successMsg && setTimeout(() => setSuccessMsg(undefined), 5000);
+
     function onSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         console.log("Submit handler");
-        console.log("Employees", selectedEmployees);
-        if (selectedEmployees && description.length > 0) {
+
+        try {
+            // All fields required
+            if (selectedEmployees.length < 1 || description.trim() == "" || title.trim() == "") {
+                throw Error("Vul alle velden in.");
+            }
 
             const employees: IEmployee[] = selectedEmployees.map(e => {
                 return ({
@@ -48,14 +60,36 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
             const newToDos = [...toDos, newToDo];
             console.log(newToDos);
             setToDos(newToDos);
-        } else {
-            console.log("Invalid task");
+
+            setSuccessMsg(`Nieuwe taak "${newToDo.name}" toegevoegd`);
+            setTimeout(() => {
+                successRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 0);
+
+            // Reset "new todo"
+            setErrorMessage(undefined);
+            setTitle("");
+            setDescription("");
+            setSelectedEmployees([])
+        }
+
+        catch (error) {
+            console.error(error);
+            let message = "Er ging iets mis. Probeer het later opnieuw."
+            if (error instanceof Error) {
+                message = error.message;
+            }
+            setErrorMessage(message);
+            setTimeout(() => {
+                errorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 0);
         }
     }
 
     // Create new list without the automatic todo's
 
-    const userAddedToDos: IToDo[] = toDos.filter(toDo => toDo.toDoTypeId === 4); ///HARDCODED = "Other"
+    const userAddedToDos: IToDo[] = toDos
+        .filter(toDo => toDo.toDoTypeId === 4) ///HARDCODED = "Other"
 
     // Map employees to options for react-select
     useEffect(() => {
@@ -75,31 +109,31 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
         <>
             {/* TO DO INPUT */}
             <form onSubmit={(e) => {
-                onSubmit(e);
-                setTitle(""); // Clear "new todo"
-                setDescription("");
-                setSelectedEmployees([]);
+                onSubmit(e);;
             }}>
-                <fieldset className={styles.newToDo}>
-                    <h4>Nieuwe taak</h4>
+                <fieldset className={`${styles.newToDo} ${showError ? styles.errorBorder : ""}`}>
+                    <h4>Nieuw item</h4>
 
                     {/* Title */}
                     <div>
-                        <label htmlFor="title">Naam van taak:</label>
+                        <label htmlFor="title">Naam van item:&nbsp;
+                            <span className={styles.required}> *</span></label>
                         <input type="text" name="title" value={title} placeholder="Titel..."
                             onChange={(e) => setTitle(e.target.value)} />
                     </div>
 
                     {/* Description */}
                     <div>
-                        <label htmlFor="description">Omschrijving van de taak:</label>
+                        <label htmlFor="description">Omschrijving van taak:&nbsp;
+                            <span className={styles.required}> *</span></label>
                         <textarea name="description" value={description} placeholder="Omschrijving..."
                             onChange={(e) => setDescription(e.target.value)} />
                     </div>
 
                     {/* Employee */}
                     <div>
-                        <label htmlFor="employee">Aan wie is de taak gericht?</label>
+                        <label htmlFor="employee">Aan wie is de taak gericht?&nbsp;
+                            <span className={styles.required}> *</span></label>
                         {employeesOptions && <Select<OptionType, true>
                             theme={customTheme}
                             className="basic-multi-select"
@@ -125,6 +159,19 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
                         />}
                     </div>
 
+                    {showError &&
+                        <div
+                            ref={errorRef}
+                            className={styles.error}
+                        >
+                            <p>{errorMessage}</p>
+                            <button
+                                className={styles.errorClose}
+                                onClick={() => setErrorMessage(undefined)} >
+                                X
+                            </button>
+                        </div>}
+
                     <button className={styles.submit_button} title="Voeg taak toe" type="submit">
                         Voeg toe
                         <TfiPlus className={styles.submit_button__icon} />
@@ -133,13 +180,33 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
             </form>
 
             {/* TO DO CONTAINER */}
-            <div className={styles.toDoContainer}>
-                {userAddedToDos.map((toDo, i) =>
-                    <div key={i}>
-                        <ToDoEditable index={i} toDo={toDo} toDos={userAddedToDos} setToDos={setToDos} employeesOptions={employeesOptions} />
+            {
+                userAddedToDos.length > 0 &&
+                <section className={styles.toDoContainer}>
+                    <h3>ITEMS</h3>
+                    <div>
+                        {userAddedToDos.map((toDo, i) =>
+                            <div key={toDo.id}>
+                                <ToDoEditable index={i} toDo={toDo} toDos={userAddedToDos} setToDos={setToDos} employeesOptions={employeesOptions} />
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
+                </section>
+            }
+
+
+            {showSuccess &&
+                <div
+                    ref={successRef}
+                    className={styles.success}
+                >
+                    <p>{successMsg}</p>
+                    <button
+                        className={styles.successClose}
+                        onClick={() => setSuccessMsg(undefined)} >
+                        X
+                    </button>
+                </div>}
         </>
     )
 }

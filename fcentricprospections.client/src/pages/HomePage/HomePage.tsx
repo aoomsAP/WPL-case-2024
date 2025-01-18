@@ -19,7 +19,7 @@ export const Homepage = () => {
     const { shops } = useContext(ShopListContext);
 
     const [shopListOptions, setShopListOptions] = useState<OptionType[]>([]);
-    const isDataLoaded = employee && user && !userDataLoading;
+    const isDataLoaded = !userDataLoading;
 
     useEffect(() => {
         const isValidShopOption = (shopOption: IShop) =>
@@ -50,9 +50,7 @@ export const Homepage = () => {
             <section>
                 {isDataLoaded
                     ? <h2>Hallo, {employee ? employee?.firstName : user?.login}</h2>
-                    : <h2 className={styles.loading}>
-                        <CustomLoader />
-                    </h2>}
+                    : <CustomLoader />}
             </section>
 
             {/* SELECTEER WINKEL */}

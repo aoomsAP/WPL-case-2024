@@ -13,6 +13,7 @@ import { ProspectionDetailContext } from "../../contexts/ProspectionDetailContex
 import { ToDoItem } from "../../components/ProspectionDetail/ToDo/ToDoItem";
 import { BrandCard } from "../../components/ProspectionDetail/BrandCard/BrandCard";
 import CustomLoader from "../../components/LoaderSpinner/CustomLoader";
+import { TfiArrowTopRight } from "react-icons/tfi";
 
 export const ProspectionDetail = () => {
 
@@ -57,7 +58,7 @@ export const ProspectionDetail = () => {
 
   return (
     <main className={styles.main}>
-      
+
       {prospectionDetail &&
         <>
           <h1 className={styles.h1}>
@@ -159,6 +160,13 @@ export const ProspectionDetail = () => {
             <section className={styles.section}>
               <p className={styles.marginZero}>Geen taken voor opvolging.</p>
             </section>}
+
+          <button
+            className={styles.link_button}
+            onClick={() => navigate(`/shop/${shopId}/prospections`)}>
+            Terug naar overzicht
+            <TfiArrowTopRight className={styles.link_button__icon} />
+          </button>
         </>
       }
 

@@ -27,6 +27,16 @@
     transform: rotate(90deg);
 }
 
+.toDoContainer {
+    margin: 1rem 0;
+    align-items: stretch;
+}
+
+.toDoContainer h3 {
+    margin-top: 1rem;
+    padding: 0 1rem;
+}
+
 .toDo {
     position: relative;
     margin-top: 1rem;
@@ -40,4 +50,71 @@
     right: 1rem;
     padding: .2rem .6rem;
     cursor: pointer;
+}
+
+.loading {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .5rem;
+}
+
+.required {
+    font-weight: bold;
+    color: red;
+}
+
+.error {
+    width: 100%;
+    padding: 0 1rem;
+    background-color: rgb(254, 217, 207);
+    color: darkred;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.error .errorClose {
+    cursor: pointer;
+    background-color: transparent;
+    color: darkred;
+    padding: 0;
+    padding: .5rem;
+}
+
+.error .errorClose:hover {
+    color: black;
+}
+
+.errorBorder {
+    border: 1px solid red !important;
+}
+
+.success {
+    width: 100%;
+    padding: 0 1rem;
+    margin: 1rem 0;
+    background-color: rgb(219, 254, 207);
+    color: darkgreen;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.success .successClose {
+    cursor: pointer;
+    background-color: transparent;
+    color: darkgreen;
+    padding: 0;
+    padding: .5rem;
+}
+
+.success .successClose:hover {
+    color: black;
+}
+
+.successBorder {
+    border: 1px solid green !important;
 }

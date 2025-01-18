@@ -1,5 +1,5 @@
 // react utilities
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 // styles
 import styles from "./NewProspection.module.css";
@@ -10,6 +10,7 @@ import BrandInput from '../../components/NewProspection/BrandInput/BrandInput';
 import BrandInterestCard from '../../components/NewProspection/BrandInterestInput/BrandInterestInput';
 import { ShopDetailCard } from '../../components/ShopDetailCard/ShopDetailCard';
 import ToDoModule from '../../components/NewProspection/ToDoModule/ToDoModule';
+import CustomLoader from '../../components/LoaderSpinner/CustomLoader';
 // contexts
 import { ShopDetailContext } from '../../contexts/ShopDetailContext';
 import { UserContext } from '../../contexts/UserContext';
@@ -26,7 +27,6 @@ import "react-form-wizard-component/dist/style.css";
 import { AiOutlineCheck } from "react-icons/ai";
 // uuid
 import { v4 as uuidv4 } from 'uuid';
-import CustomLoader from '../../components/LoaderSpinner/CustomLoader';
 
 export const NewProspection = () => {
 
@@ -258,6 +258,14 @@ export const NewProspection = () => {
 
   // Form wizard validation ------------------------------------------------------------------------------------------------------------------------------------
 
+  const [contactErrorMsg, setContactErrorMsg] = useState<string>();
+  const contactErrorRef = useRef<HTMLDivElement | null>(null);
+  const showNameBorder = contactErrorMsg && !nameChecked && contactName.trim().length < 1;
+  const showEmailBorder = contactErrorMsg && !emailChecked && contactEmail.trim().length < 1;
+  const showPhoneBorder = contactErrorMsg && !phoneChecked && contactPhone.trim().length < 1;
+  const validContact = (contactType === 3 || contactType === 4) ||
+  (nameChecked && emailChecked && phoneChecked);
+
   // Validate contact info tab
   const checkValidateContactTab = () => {
     if (!nameChecked || !emailChecked || !phoneChecked) {
@@ -268,8 +276,13 @@ export const NewProspection = () => {
 
   // Contact info tab error message
   const contactTabError = () => {
-    alert("Gelieve de nodige contact informatie af te vinken.");
+    setContactErrorMsg("Gelieve de nodige contact informatie af te vinken.");
   };
+
+  const [feedbackErrorMsg, setFeedbackErrorMsg] = useState<string>();
+  const feedbackErrorRef = useRef<HTMLDivElement | null>(null);
+  const showTrendsBorder = feedbackErrorMsg && trends.trim().length < 1;
+  const showFeedbackBorder = feedbackErrorMsg && feedback.trim().length < 1;
 
   // Validate trends & feedback tab
   const checkValidateFeedbackTab = () => {
@@ -281,7 +294,7 @@ export const NewProspection = () => {
 
   // Trends & feedback tab error messages
   const feedbackError = () => {
-    alert("Gelieve de verplichte velden in te vullen.");
+    setFeedbackErrorMsg("Gelieve de verplichte velden in te vullen.");
   };
 
 
@@ -289,27 +302,24 @@ export const NewProspection = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [submitErrorMsg, setSubmitErrorMsg] = useState<string>();
+  const submitErrorRef = useRef<HTMLDivElement | null>(null);
 
   async function handleComplete() {
     try {
       console.log("Start newProspection handleComplete");
       setLoading(true);
       setIsButtonDisabled(true);
+      setSubmitErrorMsg(undefined);
 
-      if (!user?.id) {
-        alert("Geen geldige gebruiker. Probeer opnieuw in the loggen.");
-        throw Error("Invalid user id");
-      }
-
-      if (!employee?.id) {
-        alert("Geen geldige gebruiker. Probeer opnieuw in the loggen.");
-        throw Error("Invalid employee id");
+      if (!user?.id || !employee?.id) {
+        throw Error("Geen geldige gebruiker. Probeer opnieuw in te loggen.");
       }
 
       const newProspection: IProspectionDetail = {
         shopId: Number(shopId),
-        userId: +user.id,
-        employeeId: +employee.id,
+        userId: Number(user.id),
+        employeeId: Number(employee.id),
         visitDate: visitDate,
         dateCreated: new Date(),
         dateLastUpdated: new Date(),
@@ -389,11 +399,18 @@ export const NewProspection = () => {
         console.error("Failed to add new prospection. Updates aborted.");
       }
 
-    }
-    catch (error) {
-      console.error("Error in newProspection handleComplete: ", error);
-    }
-    finally {
+    } catch (error) {
+      console.log(error);
+      let message = "Er ging iets mis. Probeer het later opnieuw."
+      if (error instanceof Error) {
+        if (error.message.includes("gebruiker")) message = error.message
+      }
+      setSubmitErrorMsg(message);
+      setTimeout(() => {
+        submitErrorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 0);
+
+    } finally {
       setLoading(false);
       setIsButtonDisabled(false);
     }
@@ -473,7 +490,7 @@ export const NewProspection = () => {
           </fieldset>
 
           {/* CONTACT NAME */}
-          <fieldset>
+          <fieldset className={showNameBorder ? styles.errorBorder : ""}>
             <legend>Contact naam
               {/* Required if owner or buyer */}
               {(contactType == 1 || contactType == 2) && <span className={styles.required}> *</span>}
@@ -510,7 +527,7 @@ export const NewProspection = () => {
           {(contactType == 1 || contactType == 2) &&
             <>
               {/* CONTACT EMAIL */}
-              <fieldset>
+              <fieldset className={showEmailBorder ? styles.errorBorder : ""}>
                 <legend>Contact email
                   {/* Required if owner or buyer */}
                   {(contactType == 1 || contactType == 2) && <span className={styles.required}> *</span>}
@@ -543,7 +560,7 @@ export const NewProspection = () => {
               </fieldset>
 
               {/* CONTACT PHONE */}
-              <fieldset>
+              <fieldset className={showPhoneBorder ? styles.errorBorder : ""}>
                 <legend>Contact phone
                   {/* Required if owner or buyer */}
                   {(contactType == 1 || contactType == 2) && <span className={styles.required}> *</span>}
@@ -617,6 +634,20 @@ export const NewProspection = () => {
               placeholder='Dit bezoek werd gepland ter gelegenheid van...'
               onChange={(e) => setVisitContext(e.target.value)} />
           </fieldset>
+
+          {/* ERROR MESSAGE */}
+          {contactErrorMsg && (!validContact) &&
+            <div
+              ref={contactErrorRef}
+              className={styles.error}
+            >
+              <p>{contactErrorMsg}</p>
+              <button
+                className={styles.close}
+                onClick={() => setContactErrorMsg(undefined)} >
+                X
+              </button>
+            </div>}
 
         </FormWizard.TabContent>
 
@@ -810,7 +841,7 @@ export const NewProspection = () => {
 
           <h3 className={styles.h3}>Feedback</h3>
 
-          <fieldset>
+          <fieldset className={showTrendsBorder ? styles.errorBorder : ""}>
             <legend>Trends en noden in de markt
               <span className={styles.required}> *</span>
             </legend>
@@ -818,13 +849,26 @@ export const NewProspection = () => {
               onChange={(e) => setTrends(e.target.value)} />
           </fieldset>
 
-          <fieldset>
+          <fieldset className={showFeedbackBorder ? styles.errorBorder : ""}>
             <legend>Extra opmerkingen/feedback
               <span className={styles.required}> *</span>
             </legend>
             <textarea rows={4} value={feedback} placeholder='Er kwam nog extra feedback met betrekking tot...'
               onChange={(e) => setFeedback(e.target.value)} />
           </fieldset>
+
+          {feedbackErrorMsg && (!feedback || !trends) &&
+            <div
+              ref={feedbackErrorRef}
+              className={styles.error}
+            >
+              <p>{feedbackErrorMsg}</p>
+              <button
+                className={styles.close}
+                onClick={() => setFeedbackErrorMsg(undefined)} >
+                X
+              </button>
+            </div>}
 
         </FormWizard.TabContent>
 
@@ -838,7 +882,7 @@ export const NewProspection = () => {
           validationError={feedbackError}>
 
           <section className={styles.padding}>
-            <h3>Takenlijst voor opvolging</h3>
+            <h3>Opvolging</h3>
             <div>
               <p className={styles.normalLineHeight}>Hier kan u items toevoegen die op basis van uw verslag moeten opgevolgd worden.</p>
               <small className={styles.automaticallyAdded}>
@@ -858,6 +902,18 @@ export const NewProspection = () => {
 
       </FormWizard>
 
+      {submitErrorMsg &&
+        <div
+          ref={submitErrorRef}
+          className={styles.error}
+        >
+          <p>{submitErrorMsg}</p>
+          <button
+            className={styles.close}
+            onClick={() => setSubmitErrorMsg(undefined)} >
+            X
+          </button>
+        </div>}
     </main >
   );
 };

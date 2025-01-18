@@ -319,7 +319,7 @@ fieldset {
   background-color: var(--primary-color);
   padding: 1rem;
   margin: 1rem 0;
-  border: none;
+  border: 1px solid transparent;
 }
 
 legend {

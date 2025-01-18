@@ -16,8 +16,8 @@ export interface IShopDetail {
 export interface IAddress {
   id: number;
   street1: string;
-  street2: string;
-  postalcode: string;
+  street2?: string;
+  postalcode?: string;
   city: string;
   country: string;
 }
@@ -38,7 +38,7 @@ export interface IAddressCreate {
   id?: number;
   street1: string;
   street2?: string;
-  postalCode: string;
+  postalCode?: string;
   cityId: number;
   userCreatedId: number,
   dateCreated: Date,
