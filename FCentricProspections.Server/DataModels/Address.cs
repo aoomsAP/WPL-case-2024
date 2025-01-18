@@ -14,13 +14,13 @@ public partial class Address
 
     public string Attention { get; set; }
 
-    public string Street1 { get; set; }
+    public string? Street1 { get; set; }
 
-    public string Street2 { get; set; }
+    public string? Street2 { get; set; }
 
     public long? CityId { get; set; }
 
-    public string PostalCode { get; set; }
+    public string? PostalCode { get; set; }
 
     public long UserCreatedId { get; set; }
 
