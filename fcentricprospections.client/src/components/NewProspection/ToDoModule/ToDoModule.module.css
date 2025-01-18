@@ -1,21 +1,9 @@
-.newToDo {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: .5rem;
-    border: 1px solid black;
-}
-
-.newToDo div {
-    margin-top: 0;
-}
-
-.submit_button {
+.submit_button, .modal_button {
     align-self: flex-start;
     margin-top: 1rem;
 }
 
-.submit_button__icon {
+.submit_button__icon, .modal_button__icon {
     vertical-align:text-top;
     margin-left: .7rem;
     font-size: medium;
@@ -23,8 +11,24 @@
     transition: all .3s ease-in-out;
 }
 
-.submit_button:hover .submit_button__icon {
+.submit_button:hover .submit_button__icon,
+.modal_button:hover .modal_button__icon  {
     transform: rotate(90deg);
+}
+
+.modal_button {
+    background-color: var(--primary-darkest);
+    color: black;
+    margin: 1rem;
+}
+
+.newToDo {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1rem;
+    margin: 0;
+    padding: .5rem;
 }
 
 .toDoContainer {

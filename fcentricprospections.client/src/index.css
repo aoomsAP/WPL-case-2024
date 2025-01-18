@@ -131,7 +131,7 @@ p {
 }
 
 strong {
-  font-weight: 600;
+  font-weight: 500;
 }
 
 section {
@@ -333,10 +333,11 @@ legend {
 }
 
 hr {
-  width: 90%;
+  width: 100%;
   height: 1px;
   background: var(--primary-darkest);
   border: none;
+  margin: .7rem 0;
 }
 
 /* FORM WIZARD ----------------------------------------------- */

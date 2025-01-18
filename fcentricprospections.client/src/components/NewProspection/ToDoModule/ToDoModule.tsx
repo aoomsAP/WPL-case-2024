@@ -9,6 +9,7 @@ import Option, { customTheme } from "../../ReactSelect/Option/Option";
 import MenuList from "../../ReactSelect/MenuList/MenuList";
 import { TfiPlus } from "react-icons/tfi";
 import CustomLoader from "../../LoaderSpinner/CustomLoader";
+import CustomModal from "../../CustomModal/CustomModal";
 
 interface ToDoModuleProps {
     toDos: IToDo[];
@@ -24,13 +25,22 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
     const [selectedEmployees, setSelectedEmployees] = useState<OptionType[]>([]);
     const [employeesOptions, setEmployeesOptions] = useState<OptionType[]>([]);
 
+    const [isModalVisible, setModalVisible] = useState(false);
+
     const [errorMessage, setErrorMessage] = useState<string>();
     const errorRef = useRef<HTMLDivElement | null>(null);
-    const showError = errorMessage && (title.trim() == "" || description.trim() == "" || selectedEmployees.length < 1)
+    const showError = errorMessage != undefined && (title.trim() == "" || description.trim() == "" || selectedEmployees.length < 1)
 
     const [successMsg, setSuccessMsg] = useState<string>();
     const successRef = useRef<HTMLDivElement | null>(null);
     const showSuccess = successMsg && setTimeout(() => setSuccessMsg(undefined), 5000);
+
+    function resetToDo() {
+        setErrorMessage(undefined);
+        setTitle("");
+        setDescription("");
+        setSelectedEmployees([]);
+    }
 
     function onSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -61,16 +71,14 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
             console.log(newToDos);
             setToDos(newToDos);
 
+            setModalVisible(false);
+
             setSuccessMsg(`Nieuwe taak "${newToDo.name}" toegevoegd`);
             setTimeout(() => {
                 successRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
             }, 0);
 
-            // Reset "new todo"
-            setErrorMessage(undefined);
-            setTitle("");
-            setDescription("");
-            setSelectedEmployees([])
+            resetToDo();
         }
 
         catch (error) {
@@ -107,81 +115,8 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
 
     return (
         <>
-            {/* TO DO INPUT */}
-            <form onSubmit={(e) => {
-                onSubmit(e);;
-            }}>
-                <fieldset className={`${styles.newToDo} ${showError ? styles.errorBorder : ""}`}>
-                    <h4>Nieuw item</h4>
-
-                    {/* Title */}
-                    <div>
-                        <label htmlFor="title">Naam van item:&nbsp;
-                            <span className={styles.required}> *</span></label>
-                        <input type="text" name="title" value={title} placeholder="Titel..."
-                            onChange={(e) => setTitle(e.target.value)} />
-                    </div>
-
-                    {/* Description */}
-                    <div>
-                        <label htmlFor="description">Omschrijving van taak:&nbsp;
-                            <span className={styles.required}> *</span></label>
-                        <textarea name="description" value={description} placeholder="Omschrijving..."
-                            onChange={(e) => setDescription(e.target.value)} />
-                    </div>
-
-                    {/* Employee */}
-                    <div>
-                        <label htmlFor="employee">Aan wie is de taak gericht?&nbsp;
-                            <span className={styles.required}> *</span></label>
-                        {employeesOptions && <Select<OptionType, true>
-                            theme={customTheme}
-                            className="basic-multi-select"
-                            classNamePrefix="select"
-                            isMulti
-                            isClearable={true}
-                            isSearchable={true}
-                            name="employees"
-                            isDisabled={employeesOptions.length > 0 ? false : true}
-                            placeholder={employeesOptions.length > 0 ? "Selecteer..." : <CustomLoader />}
-                            filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
-                            maxMenuHeight={200} // Limit height to improve rendering
-                            value={selectedEmployees}
-                            options={employeesOptions}
-                            components={{ // Custom components to make use of react-window to improve rendering
-                                MenuList,
-                                Option,
-                            }}
-                            onChange={(selectedOptions: MultiValue<OptionType>) => {
-                                let newSelectedOptions = selectedOptions.map(x => x);
-                                setSelectedEmployees(newSelectedOptions);
-                            }}
-                        />}
-                    </div>
-
-                    {showError &&
-                        <div
-                            ref={errorRef}
-                            className={styles.error}
-                        >
-                            <p>{errorMessage}</p>
-                            <button
-                                className={styles.errorClose}
-                                onClick={() => setErrorMessage(undefined)} >
-                                X
-                            </button>
-                        </div>}
-
-                    <button className={styles.submit_button} title="Voeg taak toe" type="submit">
-                        Voeg toe
-                        <TfiPlus className={styles.submit_button__icon} />
-                    </button>
-                </fieldset>
-            </form>
-
             {/* TO DO CONTAINER */}
-            {
-                userAddedToDos.length > 0 &&
+            {userAddedToDos.length > 0 &&
                 <section className={styles.toDoContainer}>
                     <h3>ITEMS</h3>
                     <div>
@@ -191,22 +126,101 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
                             </div>
                         )}
                     </div>
+                    {showSuccess &&
+                        <div
+                            ref={successRef}
+                            className={styles.success}
+                        >
+                            <p>{successMsg}</p>
+                            <button
+                                className={styles.successClose}
+                                onClick={() => setSuccessMsg(undefined)} >
+                                X
+                            </button>
+                        </div>}
                 </section>
             }
 
-
-            {showSuccess &&
-                <div
-                    ref={successRef}
-                    className={styles.success}
+            {/* OPEN TO DO MODAL */}
+            {!isModalVisible &&
+                <button
+                    className={styles.modal_button}
+                    title="Voeg taak toe"
+                    onClick={() => setModalVisible(!isModalVisible)}
                 >
-                    <p>{successMsg}</p>
-                    <button
-                        className={styles.successClose}
-                        onClick={() => setSuccessMsg(undefined)} >
-                        X
-                    </button>
-                </div>}
+                    Voeg item toe
+                    <TfiPlus className={styles.modal_button__icon} />
+                </button>
+            }
+
+            {/* TO DO INPUT */}
+            <CustomModal
+                visible={isModalVisible}
+                onRequestClose={() => {
+                    resetToDo();
+                    setModalVisible(false);
+                }}
+                submitTitle="Voeg toe"
+                onSecondButtonPress={() => {
+                    resetToDo();
+                    setModalVisible(false);
+                }}
+                secondButtonTitle="Terug"
+                headerTitle="Voeg item toe"
+                error={showError}
+                errorMsg={errorMessage}
+                formId="todoForm"
+            >
+                <form id="todoForm" onSubmit={onSubmit}>
+                    <fieldset className={styles.newToDo}>
+                        {/* Title */}
+                        <div>
+                            <label htmlFor="title">Naam van item:&nbsp;
+                                <span className={styles.required}> *</span></label>
+                            <input type="text" name="title" value={title} placeholder="Titel..."
+                                onChange={(e) => setTitle(e.target.value)} />
+                        </div>
+
+                        {/* Description */}
+                        <div>
+                            <label htmlFor="description">Omschrijving van taak:&nbsp;
+                                <span className={styles.required}> *</span></label>
+                            <textarea name="description" value={description} placeholder="Omschrijving..."
+                                onChange={(e) => setDescription(e.target.value)} />
+                        </div>
+
+                        {/* Employee */}
+                        <div>
+                            <label htmlFor="employee">Aan wie is de taak gericht?&nbsp;
+                                <span className={styles.required}> *</span></label>
+                            {employeesOptions && <Select<OptionType, true>
+                                theme={customTheme}
+                                className="basic-multi-select"
+                                classNamePrefix="select"
+                                isMulti
+                                isClearable={true}
+                                isSearchable={true}
+                                name="employees"
+                                isDisabled={employeesOptions.length > 0 ? false : true}
+                                placeholder={employeesOptions.length > 0 ? "Selecteer..." : <CustomLoader />}
+                                filterOption={createFilter({ ignoreCase: true, ignoreAccents: true })}
+                                maxMenuHeight={200} // Limit height to improve rendering
+                                value={selectedEmployees}
+                                options={employeesOptions}
+                                components={{ // Custom components to make use of react-window to improve rendering
+                                    MenuList,
+                                    Option,
+                                }}
+                                onChange={(selectedOptions: MultiValue<OptionType>) => {
+                                    let newSelectedOptions = selectedOptions.map(x => x);
+                                    setSelectedEmployees(newSelectedOptions);
+                                }}
+                            />}
+                        </div>
+                    </fieldset>
+                </form>
+            </CustomModal>
+
         </>
     )
 }

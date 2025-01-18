@@ -401,7 +401,7 @@ export const NewProspection = () => {
 
     } catch (error) {
       console.log(error);
-      let message = "Er ging iets mis. Probeer het later opnieuw."
+      let message = "Er ging iets mis bij het verzenden. Probeer het later opnieuw."
       if (error instanceof Error) {
         if (error.message.includes("gebruiker")) message = error.message
       }
@@ -884,7 +884,7 @@ export const NewProspection = () => {
           <section className={styles.padding}>
             <h3>Opvolging</h3>
             <div>
-              <p className={styles.normalLineHeight}>Hier kan u items toevoegen die op basis van uw verslag moeten opgevolgd worden.</p>
+              <p className={styles.normalLineHeight}>Hier kan u vrijblijvend items toevoegen die op basis van uw verslag moeten opgevolgd worden.</p>
               <small className={styles.automaticallyAdded}>
                 <p className={styles.normalLineHeight}>Worden automatisch opgevolgd:</p>
                 <ul className={styles.bulletPoints}>
