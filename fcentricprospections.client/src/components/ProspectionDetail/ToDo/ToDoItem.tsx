@@ -65,9 +65,11 @@ export const ToDoItem = ({ todo }: ToDoItemProps) => {
         <>
             <article key={todo.id} className={styles.card}>
                 <h3>{todo.name}</h3>
-                <p>{todo.remarks && stringToNode(todo.remarks)}</p>
+                <div className={styles.remarksContainer}>
+                    {todo.remarks && stringToNode(todo.remarks)}
+                </div>
                 {employees.length > 0 &&
-                    <p className={styles.toDoLine}><strong>Toegewezen aan:&nbsp;</strong>
+                    <p><strong>Toegewezen aan:&nbsp;</strong>
                         <span className={styles.employees}>
                             {employees.map((x, i) => i != 0 ? `, ${x.name}` : x.name)}
                         </span>

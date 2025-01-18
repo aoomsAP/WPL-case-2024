@@ -74,12 +74,12 @@ main {
 header {
   grid-area: header;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   padding: 1rem;
   width: 100%;
-  gap: .2rem;
+  gap: 1rem;
 }
 
 footer {

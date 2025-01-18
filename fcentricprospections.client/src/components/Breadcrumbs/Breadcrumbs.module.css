@@ -1,0 +1,50 @@
+.breadcrumbs {
+    width: 100%;
+    font-size: .875rem;
+    color: grey;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.breadcrumbs .crumb {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.breadcrumbs .crumb a {
+    color: grey;
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumbs .crumb a:hover {
+    color: black;
+}
+
+.home {
+    color: grey;
+}
+
+.separator {
+    display: inline-block;
+    margin: 0 .5rem;
+    color: #999;
+}
+
+.rootSeparator {
+    display: inline-block;
+    margin: 0 .3rem;
+}
+
+.active {
+    color: black !important;
+}
+
+.inactive {
+    visibility: hidden;
+}

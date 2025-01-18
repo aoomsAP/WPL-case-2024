@@ -90,7 +90,7 @@ export const Homepage = () => {
                 <button
                     title="Nieuwe winkel"
                     className={styles.add_button}
-                    onClick={() => navigate(`/newshop`)}>
+                    onClick={() => navigate(`/shop/new`)}>
                     Maak een nieuwe winkel aan
                     <TfiPlus className={styles.add_button__icon} />
                 </button>
