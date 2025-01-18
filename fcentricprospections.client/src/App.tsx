@@ -9,6 +9,7 @@ import { ProspectionDetailProvider } from './contexts/ProspectionDetailContext';
 import { UserContext, UserProvider } from './contexts/UserContext';
 import { NewShopProvider } from './contexts/NewShopContext';
 import { NewProspectionProvider } from './contexts/NewProspectionContext';
+import { ShopListProvider } from './contexts/ShopListContext';
 // pages
 import UserPage from './pages/UserPage/UserPage';
 import { Homepage } from './pages/HomePage/HomePage';
@@ -21,14 +22,14 @@ import NewShop from './pages/NewShop/NewShop';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
 // icons
 import { TfiAgenda, TfiArrowLeft, TfiHome } from "react-icons/tfi";
-import { ShopListProvider } from './contexts/ShopListContext';
+import { RxExit } from "react-icons/rx";
 
 const Root = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
 
-    const { user } = useContext(UserContext);
+    const { user, setUser, setUserId } = useContext(UserContext);
 
     return (
         <>
@@ -48,6 +49,21 @@ const Root = () => {
                 {location.pathname !== "/" &&
                     <button title="Terug" className={styles.header__button} onClick={() => navigate(-1)}>
                         {<TfiArrowLeft className={styles.header__icon} />}
+                    </button>
+                }
+
+                {/* Logout */}
+                {user &&
+                    <button
+                        title="Logout"
+                        className={`${styles.header__button} ${styles.logout}`}
+                        onClick={() => {
+                            setUserId(undefined);
+                            setUser(undefined);
+                            setTimeout(() => navigate("/"),0);
+                        }}
+                    >
+                        {<RxExit className={styles.header__icon} />}
                     </button>
                 }
             </header>

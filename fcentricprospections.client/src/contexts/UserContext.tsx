@@ -1,13 +1,14 @@
 // Implement UserContext
 import React, { useEffect, useState } from "react";
 import { IAppointment, IEmployee, IUser } from "../types";
+import Cookies from "js-cookie";
 
 interface UserContext {
     // states
     userId: number | undefined,
-    setUserId: (userId: number) => void,
+    setUserId: (userId: number | undefined) => void,
     user: IUser | undefined,
-    setUser: (user: IUser) => void,
+    setUser: (user: IUser | undefined) => void,
     users: IUser[],
     setUsers: (users: IUser[]) => void,
     employee: IEmployee | undefined,
@@ -32,9 +33,9 @@ interface UserContext {
 
 export const UserContext = React.createContext<UserContext>({
     // states
-    userId: 0,
+    userId: undefined,
     setUserId: () => { },
-    user: {} as IUser,
+    user: undefined,
     setUser: () => { },
     users: [],
     setUsers: () => { },
@@ -60,8 +61,8 @@ export const UserContext = React.createContext<UserContext>({
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
-    const [userId, setUserId] = useState<number>();
-    const [user, setUser] = useState<IUser>();
+    const [userId, setUserId] = useState<number | undefined>(undefined);
+    const [user, setUser] = useState<IUser | undefined>(undefined);
     const [users, setUsers] = useState<IUser[]>([]);
     const [employee, setEmployee] = useState<IEmployee>();
     const [employees, setEmployees] = useState<IEmployee[]>([]);
@@ -72,6 +73,27 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     // TO DO: unused?
     // Voor de agenda, dit zijn de afspraken die getoond worden
     const [shownAppointments, setShownAppointments] = useState<IAppointment[]>([]);
+
+    // Wrapper function to set userId alongside
+    function setUserIdState(id: number | undefined) {
+        setUserId(id);
+        if (id) {
+            Cookies.set(
+                "userId",
+                id.toString(),
+                {
+                    expires: 1,  // Expires in 1 day
+                    sameSite: 'None',
+                    secure: true
+                },
+            );
+        }
+        else {
+            // Logout
+            Cookies.remove("userId");
+            console.log("Logged out");
+        }
+    }
 
     async function loadUsers() {
         try {
@@ -145,7 +167,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     async function loadAppointments(employeeId: number) {
         try {
             setUserCalendarLoading(true);
-            
+
             console.log(`loading appointments for user-employee ${employeeId}`);
 
             const response = await fetch(`/api/employees/${employeeId}/appointments`, {
@@ -200,6 +222,14 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
+    // Load userId from cookies on mount
+    useEffect(() => {
+        const savedUserId = Cookies.get("userId");
+        if (savedUserId) {
+            setUserIdState(parseInt(savedUserId, 10));
+        }
+    }, []);
+
     // Load user specific data upon receiving userId
     useEffect(() => {
         if (userId) {
@@ -216,7 +246,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     return (
         <UserContext.Provider value={{
             userId: userId,
-            setUserId: setUserId,
+            setUserId: setUserIdState, /// Use wrapper function to set cookie as well
             user: user,
             setUser: setUser,
             users: users,
