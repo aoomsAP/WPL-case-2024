@@ -18,3 +18,20 @@
     color: var(--primary-color);
     font-size: x-large;
 }
+
+.logout {
+    margin-left: auto;
+    background-color: var(--primary-darker) !important;
+    color: black !important;
+}
+
+.logout * {
+    background-color: var(--primary-darker) !important;
+    color: black !important;
+}
+
+.logout:hover,
+.logout:hover *  {
+    background-color: var(--gold-default) !important;
+    color: black !important;
+}

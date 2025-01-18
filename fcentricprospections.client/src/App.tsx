@@ -9,6 +9,7 @@ import { ProspectionDetailProvider } from './contexts/ProspectionDetailContext';
 import { UserContext, UserProvider } from './contexts/UserContext';
 import { NewShopProvider } from './contexts/NewShopContext';
 import { NewProspectionProvider } from './contexts/NewProspectionContext';
+import { ShopListProvider } from './contexts/ShopListContext';
 // pages
 import UserPage from './pages/UserPage/UserPage';
 import { Homepage } from './pages/HomePage/HomePage';
@@ -21,7 +22,8 @@ import NewShop from './pages/NewShop/NewShop';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
 // icons
 import { TfiAgenda, TfiArrowLeft, TfiHome } from "react-icons/tfi";
-import { ShopListProvider } from './contexts/ShopListContext';
+import { RxExit } from "react-icons/rx";
+// components
 import Breadcrumbs from './components/Breadcrumbs/Breadcrumbs';
 
 const Root = () => {
@@ -29,7 +31,7 @@ const Root = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const { user } = useContext(UserContext);
+    const { user, setUser, setUserId } = useContext(UserContext);
 
     return (
         <>
@@ -38,6 +40,13 @@ const Root = () => {
                     <button title="Home" className={styles.nav__button} onClick={() => navigate("/home")}>
                         {<TfiHome className={styles.nav__icon} />}
                     </button>
+
+                {/* If location isn't "Home", show "Back" button */}
+                {location.pathname !== "/" &&
+                    <button title="Terug" className={styles.header__button} onClick={() => navigate(-1)}>
+                        {<TfiArrowLeft className={styles.header__icon} />}
+                    </button>
+                }
 
                     {/* Show Agenda button only if user is set */}
                     {(user && location.pathname !== "/") && (
@@ -52,6 +61,21 @@ const Root = () => {
                             {<TfiArrowLeft className={styles.nav__icon} />}
                         </button>
                     }
+                          
+                {/* Logout */}
+                {user &&
+                    <button
+                        title="Logout"
+                        className={`${styles.header__button} ${styles.logout}`}
+                        onClick={() => {
+                            setUserId(undefined);
+                            setUser(undefined);
+                            setTimeout(() => navigate("/"),0);
+                        }}
+                    >
+                        {<RxExit className={styles.header__icon} />}
+                    </button>
+                }
                 </nav>
 
                 <Breadcrumbs />
