@@ -1,0 +1,69 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 50;
+}
+
+.modal {
+    background-color: white;
+    color: black;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .5rem 1.5rem;
+    padding-top: 1.5rem;
+}
+
+.close {
+    padding: .2rem .6rem;
+    cursor: pointer;
+}
+
+.body {
+    padding: 0rem 1rem;
+    flex-grow: 1;
+}
+
+.footer {
+    padding: .5rem 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.errorMessage {
+    width: 100%;
+    padding: .5rem 1rem;
+    background-color: rgb(254, 217, 207);
+    color: darkred;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    gap: .5rem;
+}
+
+.secondaryButton {
+    background-color: #aeaeae;
+}
+
+.secondaryButton:hover {
+    background-color: #909090;
+    color: white;
+}

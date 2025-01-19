@@ -19,6 +19,7 @@
     "@types/react-window": "^1.8.8",
     "chroma-js": "^3.1.2",
     "classnames": "^2.5.1",
+    "js-cookie": "^3.0.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-form-wizard-component": "^0.2.7",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@eslint/js": "^9.11.1",
     "@types/chroma-js": "^3.1.0",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20.8.0",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",

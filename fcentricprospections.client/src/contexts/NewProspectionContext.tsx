@@ -31,7 +31,7 @@ export interface NewProspectionContext {
     loadCompetitorBrands: () => Promise<ICompetitorBrand[]>;
     loadContactTypes: () => Promise<void>;
     loadVisitTypes: () => Promise<void>;
-    loadContactInfo: (shopId: number, contactTypeId: number) => Promise<IContactInfo|undefined>;
+    loadContactInfo: (shopId: number, contactTypeId: number) => Promise<IContactInfo | undefined>;
 
     addProspection: (newProspection: IProspectionDetail) => Promise<IProspectionDetail | undefined>;
     addToDo: (newToDo: IToDo) => Promise<IToDo | undefined>;
@@ -65,7 +65,7 @@ export const NewProspectionContext = createContext<NewProspectionContext>({
     prospectionToDos: [],
     setProspectionToDos: () => { },
     toDos: [],
-    setToDos: () => {},
+    setToDos: () => { },
 
     // functions
     loadBrands: () => Promise.resolve(),
@@ -104,7 +104,7 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
 
     // functions -------------------------------------------------------------------------------------------------
 
-    // LOAD DATA
+    // GET DATA
 
     async function loadBrands() {
         try {
@@ -186,138 +186,102 @@ export function NewProspectionProvider({ children }: { children: React.ReactNode
         }
     }
 
-    // ADD PROSPECTION
+    // POST DATA
+    // (error handling done on top level)
 
     async function addProspection(newProspection: IProspectionDetail) {
-        try {
-            const response = await fetch(`/api/prospections`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newProspection),
-            });
+        const response = await fetch(`/api/prospections`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newProspection),
+        });
 
-            const json: IProspectionDetail = await response.json();
+        const json: IProspectionDetail = await response.json();
 
-            console.log("Succesful POST new prospection: ", json)
-            return (json);
-
-        } catch (error) {
-            console.error('Error POST new prospection:', error);
-        }
+        console.log("Succesful POST new prospection: ", json)
+        return (json);
     }
 
     async function addToDo(newToDo: IToDo) {
-        try {
-            const response = await fetch(`/api/todos`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newToDo),
-            });
+        const response = await fetch(`/api/todos`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newToDo),
+        });
 
-            const json: IToDo = await response.json();
+        const json: IToDo = await response.json();
 
-            console.log("Succesful POST new todo: ", json)
-            return (json);
-        } catch (error) {
-            console.error('Error POST new todo:', error);
-        }
+        console.log("Succesful POST new todo: ", json)
+        return (json);
     }
 
     async function updateProspectionBrands(prospectionId: number, prospectionBrands: IProspectionBrand[]) {
+        const payload = { ProspectionBrands: prospectionBrands };
 
-        try {
-            const payload = { ProspectionBrands: prospectionBrands };
+        await fetch(`/api/prospections/${prospectionId}/brands`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
 
-            await fetch(`/api/prospections/${prospectionId}/brands`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
-
-            //const json = await response.json();
-
-            console.log("Succesful PUT prospection brands.")
-
-        } catch (error) {
-            console.error('Error PUT prospection brands:', error);
-        }
+        console.log("Succesful PUT prospection brands.")
     }
 
     async function updateProspectionBrandInterests(prospectionId: number, prospectionBrandInterests: IProspectionBrandInterest[]) {
-        try {
-            const payload = { ProspectionBrandInterests: prospectionBrandInterests };
+        const payload = { ProspectionBrandInterests: prospectionBrandInterests };
 
-            await fetch(`/api/prospections/${prospectionId}/brandinterests`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
+        await fetch(`/api/prospections/${prospectionId}/brandinterests`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
 
-            //const json = await response.json();
+        //const json = await response.json();
 
-            console.log("Succesful PUT prospection brand interests.")
-
-        } catch (error) {
-            console.error('Error PUT prospection brand interests:', error);
-        }
+        console.log("Succesful PUT prospection brand interests.")
     }
 
     async function updateProspectionCompetitorBrands(prospectionId: number, prospectionCompetitorBrands: IProspectionCompetitorBrand[]) {
-        try {
-            const ids: number[] = prospectionCompetitorBrands.map(x => x.competitorBrandId);
+        const ids: number[] = prospectionCompetitorBrands.map(x => x.competitorBrandId);
 
-            const payload = { CompetitorBrandIds: ids };
+        const payload = { CompetitorBrandIds: ids };
 
-            await fetch(`/api/prospections/${prospectionId}/competitorbrands`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
+        await fetch(`/api/prospections/${prospectionId}/competitorbrands`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
 
-            console.log("Succesful PUT prospection competitor brands.")
-
-        } catch (error) {
-            console.error('Error PUT prospection competitor brands:', error);
-        }
+        console.log("Succesful PUT prospection competitor brands.")
     }
 
     async function updateProspectionToDos(prospectionId: number, prospectionToDos: IProspectionToDo[]) {
-        try {
-            const ids: number[] = prospectionToDos.map(x => +x.toDoId);
+        const ids: number[] = prospectionToDos.map(x => +x.toDoId);
 
-            const payload = { ToDoIds: ids };
+        const payload = { ToDoIds: ids };
 
-            await fetch(`/api/prospections/${prospectionId}/todos`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
+        await fetch(`/api/prospections/${prospectionId}/todos`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
 
-            console.log("Succesful PUT prospection todos.")
-
-        } catch (error) {
-            console.error('Error PUT prospection todos:', error);
-        }
+        console.log("Succesful PUT prospection todos.")
     }
 
     async function updateToDoEmployees(toDoId: number, employees: IEmployee[]) {
-        try {
-            const ids: number[] = employees.map(x => x.id);
-            console.log("Employee ids", ids)
+        const ids: number[] = employees.map(x => x.id);
+        console.log("Employee ids", ids)
 
-            const payload = { EmployeeIds: ids };
+        const payload = { EmployeeIds: ids };
 
-            await fetch(`/api/todos/${toDoId}/employees`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
+        await fetch(`/api/todos/${toDoId}/employees`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
 
-            console.log("Succesful PUT todo employees.")
-
-        } catch (error) {
-            console.error('Error PUT todo employees:', error);
-        }
+        console.log("Succesful PUT todo employees.")
     }
 
     // use effect & return ---------------------------------------------------------------------------------------------------------

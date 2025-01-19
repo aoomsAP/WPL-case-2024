@@ -6,8 +6,8 @@ import { MenuListProps } from "react-select";
 import { OptionType } from "../../../types";
 
 const MenuList = (props: MenuListProps<OptionType, true>) => {
-    const itemHeight = 35
-    const { options, children, maxHeight, getValue } = props
+  const itemHeight = 50;
+  const { options, children, maxHeight, getValue } = props
     const [value] = getValue()
     const initialOffset = options.indexOf(value) * itemHeight
   

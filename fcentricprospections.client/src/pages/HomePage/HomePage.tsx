@@ -15,10 +15,11 @@ export const Homepage = () => {
 
     const navigate = useNavigate();
 
-    const { user, employee } = useContext(UserContext);
+    const { user, employee, userDataLoading } = useContext(UserContext);
     const { shops } = useContext(ShopListContext);
 
     const [shopListOptions, setShopListOptions] = useState<OptionType[]>([]);
+    const isDataLoaded = !userDataLoading;
 
     useEffect(() => {
         const isValidShopOption = (shopOption: IShop) =>
@@ -47,7 +48,9 @@ export const Homepage = () => {
     return (
         <main>
             <section>
-                <h2>Hallo, {employee ? employee?.firstName : user?.login}</h2>
+                {isDataLoaded
+                    ? <h2>Hallo, {employee ? employee?.firstName : user?.login}</h2>
+                    : <CustomLoader />}
             </section>
 
             {/* SELECTEER WINKEL */}
@@ -87,7 +90,7 @@ export const Homepage = () => {
                 <button
                     title="Nieuwe winkel"
                     className={styles.add_button}
-                    onClick={() => navigate(`/newshop`)}>
+                    onClick={() => navigate(`/shop/new`)}>
                     Maak een nieuwe winkel aan
                     <TfiPlus className={styles.add_button__icon} />
                 </button>

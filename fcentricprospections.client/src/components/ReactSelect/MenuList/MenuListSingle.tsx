@@ -3,7 +3,7 @@ import { MenuListProps } from "react-select";
 import { OptionType } from "../../../types";
 
 const MenuList = (props: MenuListProps<OptionType, false>) => {
-    const itemHeight = 35; // Define the height of each item
+    const itemHeight = 50; // Define the height of each item
     const { options, children, maxHeight } = props;
 
     // If children is null or undefined, return early to avoid errors

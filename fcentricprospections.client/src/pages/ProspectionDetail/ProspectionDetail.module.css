@@ -1,7 +1,11 @@
+.main {
+    gap: 1rem;
+}
+
 .section {
     background-color: var(--primary-color);
     padding: 1.5rem 1rem;
-    gap: 1.5rem;
+    gap: 2rem;
 }
 
 .sectionList {
@@ -25,4 +29,20 @@
     flex-direction: row;
     gap: 1rem;
     align-items: center;
+}
+
+.link_button {
+    margin-top: 1rem;
+}
+
+.link_button__icon {
+    vertical-align: text-bottom;
+    margin: auto 0.5rem;
+    font-size: medium;
+    font-weight: bold;
+    transition: all .3s ease-in-out;
+}
+
+.link_button:hover .link_button__icon {
+    transform: rotate(45deg);
 }

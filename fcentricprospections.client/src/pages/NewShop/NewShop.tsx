@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import FormWizard from "react-form-wizard-component";
 import { AiOutlineCheck } from "react-icons/ai";
 import styles from "./NewShop.module.css"
@@ -20,15 +20,16 @@ export default function NewShop() {
 
     const navigate = useNavigate();
 
-    const [name, setName] = useState<string>("");
-    const [street, setStreet] = useState<string>("");
-    const [streetNumber, setStreetNumber] = useState<number>(0);
+    const [name, setName] = useState<string>();
+    const [street, setStreet] = useState<string>();
+    const [streetNumber, setStreetNumber] = useState<number>();
     const [postbox, setPostbox] = useState<string>("");
     const [postalCode, setPostalCode] = useState<OptionType>();
     const [city, setCity] = useState<OptionType>();
     const [country, setCountry] = useState<OptionType>();
 
     const [countryOptions, setCountryOptions] = useState<OptionType[]>([]);
+    const [cityLoading, setCityLoading] = useState<boolean>(false);
     const [cities, setCities] = useState<ICity[]>([]);
     const [cityOptions, setCityOptions] = useState<OptionType[]>([]);
     const [postalCodeOptions, setPostalCodeOptions] = useState<OptionType[]>([]);
@@ -42,15 +43,20 @@ export default function NewShop() {
 
     // Load & set cities
     async function setCitiesFunc(countryId: number) {
+        setCityLoading(true);
         const citiesByCountry = await loadCities(countryId);
         if (citiesByCountry) {
             setCities(citiesByCountry);
         }
+        setCityLoading(false);
     }
 
     // Load cities anew when country is selected
     useEffect(() => {
         if (country) {
+            setCity(undefined);
+            setErrorMessage(undefined);
+            setPostalCode(undefined);
             setCitiesFunc(+country.value);
         }
     }, [country]);
@@ -73,7 +79,12 @@ export default function NewShop() {
             .map((city) => ({
                 value: city.id.toString(),
                 label: city.name
-            }));
+            }))
+            .sort((a, b) => {
+                if (a.label < b.label) return -1;
+                if (a.label > b.label) return 1;
+                return 0;
+            });
         setCityOptions(cityOptions);
     }, [cities]);
 
@@ -83,29 +94,46 @@ export default function NewShop() {
             .map((city) => ({
                 value: city.postalCode,
                 label: city.postalCode,
-            }));
+            }))
         setPostalCodeOptions(postalCodeOptions);
     }, [cities])
 
-    // Add new shop to db ----------------------------------------------------------------------------------------------
+
+    // Submit / add new shop to db ----------------------------------------------------------------------------------------------
+  
+    const [loading, setLoading] = useState<boolean>(false);
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string>();
+    const errorRef = useRef<HTMLDivElement | null>(null);
 
     async function handleComplete() {
         // Allow form to be submitted & navigation afterwards
         setPreventLeaving(false);
 
         try {
+            setLoading(true);
+            setIsButtonDisabled(true);
+
             if (!userId) {
-                throw Error("No valid user");
+                throw Error("Geen geldige gebruiker. Probeer opnieuw in te loggen.");
             }
 
-            if (!city || !postalCode) {
-                throw Error("No valid city selected");
+            if (!name || name.trim().length < 1) {
+                throw Error("Geen geldige naam.");
+            }
+
+            if (!country) {
+                throw Error("Geen geldig land geselecteerd.");
+            }
+
+            if (!city) {
+                throw Error("Geen geldige stad geselecteerd.");
             }
 
             const newAddress = {
-                street1: `${street} ${streetNumber}${postbox ? ` / ${postbox}` : ""}`,
+                street1: (`${street ?? ""} ${streetNumber ?? ""}${postbox ? ` / ${postbox}` : ""}`).toUpperCase(), // All caps like in db?
                 cityId: +city.value,
-                postalCode: postalCode.label,
+                postalCode: postalCode?.label ?? undefined,
                 userCreatedId: userId,
                 dateCreated: new Date(),
             }
@@ -148,6 +176,19 @@ export default function NewShop() {
 
         } catch (error) {
             console.error(error);
+            let message = "Er ging iets mis. Probeer het later opnieuw."
+            if (error instanceof Error) {
+                message = error.message;
+                if (error.message.includes("Geen")) message = error.message
+            }
+            setErrorMessage(message);
+            setTimeout(() => {
+                errorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 0);
+
+        } finally {
+            setLoading(false);
+            setIsButtonDisabled(false);
         }
     }
 
@@ -158,7 +199,18 @@ export default function NewShop() {
                 title="Nieuwe winkel"
                 nextButtonText="Volgende"
                 backButtonText="Vorige"
-                finishButtonText="Verzenden"
+                finishButtonTemplate={(handleComplete) => (
+                    <button
+                        className="wizard-footer-right"
+                        onClick={handleComplete}
+                        disabled={isButtonDisabled}
+                    >
+                        <div className={styles.loading}>
+                            {loading ? <span>Verzenden...</span> : <span>Verzenden</span>} {/* Show "Verzenden" when not loading */}
+                            {loading && <CustomLoader />} {/* Show spinner if loading */}
+                        </div>
+                    </button>
+                )}
                 layout="horizontal"
                 stepSize="sm"
                 onComplete={handleComplete}>
@@ -169,10 +221,15 @@ export default function NewShop() {
 
                     <h3 className={styles.h3}>Winkel informatie</h3>
 
-                    <fieldset>
-                        <legend><strong>Naam</strong></legend>
-                        <label htmlFor="name">Geef naam van de winkel:</label>
-                        <input
+                    <fieldset className={(errorMessage && (!name || name.trim() === "")) ? styles.errorBorder : ""}>
+                        <legend>
+                            <strong>Naam</strong>
+                        </legend>
+                        <label htmlFor="name">
+                            Geef naam van de winkel:&nbsp;
+                            <span className={styles.required}> *</span>
+                        </label>
+                        <input                           
                             type="text"
                             name="name"
                             value={name}
@@ -180,17 +237,20 @@ export default function NewShop() {
                             onChange={(e) => setName(e.target.value)} />
                     </fieldset>
 
-                    <fieldset className={styles.address}>
+                    <fieldset className={`${styles.address} ${(errorMessage && !city) ? styles.errorBorder : ""}`}>
                         <legend><strong>Adres</strong></legend>
 
                         {/* Country select */}
-                        <div style={{ marginBottom: "1rem" }}>
-                            <label htmlFor="country">Selecteer het land:</label>
+                        <div>
+                            <label htmlFor="country">
+                                Selecteer het land:&nbsp;
+                                <span className={styles.required}> *</span>
+                            </label>
                             {countryOptions && <Select
                                 theme={customTheme}
-                                className="basic-single"
+                                className={`basic-single`}
                                 classNamePrefix="select"
-                                defaultValue={country}
+                                value={country}
                                 isDisabled={countryOptions.length > 0 ? false : true}
                                 placeholder={countryOptions.length > 0 ? "Kies een land..." : <CustomLoader />}
                                 isSearchable={true}
@@ -210,13 +270,17 @@ export default function NewShop() {
                             />}
                         </div>
 
-                        {/* Only show full address form when country is selected */}
-                        {country && <>
+                        {cityLoading && <p>
+                            <CustomLoader />
+                        </p>}
+
+                        {/* Only show full address form when country is selected AND country has valid cities to add address */}
+                        {country && (!cityLoading && cityOptions.length > 0) && <>
 
                             {/* Street, street number & postbox/extra info */}
                             <div className={styles.streetContainer}>
                                 <label className={styles.street}>
-                                    Straat
+                                    Straat:
                                     <input
                                         type="text"
                                         placeholder="Straat..."
@@ -225,16 +289,16 @@ export default function NewShop() {
                                 </label>
                                 <div className={styles.numberContainer}>
                                     <label className={styles.number}>
-                                        Nummer
+                                        Nummer:
                                         <input
                                             type="number"
-                                            min={0}
+                                            min={1}
                                             value={streetNumber}
-                                            placeholder="0"
+                                            placeholder="1"
                                             onChange={(e) => setStreetNumber(+e.target.value)} />
                                     </label>
                                     <label className={styles.addition}>
-                                        Toevoeging
+                                        Toevoeging:
                                         <input
                                             placeholder="Bus A..."
                                             type="text"
@@ -281,12 +345,13 @@ export default function NewShop() {
 
                                 {/* City select */}
                                 <div className={styles.city}>
-                                    <label htmlFor="city">Woonplaats:</label>
+                                    <label htmlFor="city">Woonplaats:&nbsp;
+                                        <span className={styles.required}> *</span></label>
                                     {countryOptions && <Select
                                         theme={customTheme}
                                         placeholder={cityOptions.length > 0 ? "Kies een woonplaats..." : <CustomLoader />}
                                         isDisabled={country ? false : true}
-                                        className="basic-single"
+                                        className={`basic-single`}
                                         classNamePrefix="select"
                                         value={city}
                                         isClearable={true}
@@ -310,15 +375,33 @@ export default function NewShop() {
                                             }
                                         }}
                                     />}
+
                                 </div>
                             </div>
                         </>}
+
+                        {/* If cities have loaded and there are none, it's not possible to add an address to db without adding a city */}
+                        {/* Check with db admin to request permission to add cities & postal codes */}
+                        {(country && !cityLoading && cityOptions.length === 0) &&
+                            <p>Het is momenteel niet mogelijk om een winkel toe te voegen voor dit land. Contacteer IT.</p>}
                     </fieldset>
 
                 </FormWizard.TabContent>
 
             </FormWizard >
 
+            {errorMessage && (!name || !city || !country) && 
+                <div
+                    ref={errorRef}
+                    className={styles.error}
+                >
+                    <p>{errorMessage}</p>
+                    <button
+                        className={styles.close}
+                        onClick={() => setErrorMessage(undefined)} >
+                        X
+                    </button>
+                </div>}
         </main>
     )
 }

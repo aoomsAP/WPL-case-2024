@@ -1,4 +1,12 @@
-﻿.header__button {
+﻿.nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: .2rem;
+}
+
+.nav__button {
     width: 3rem;
     padding: .5rem;
     display: flex;
@@ -6,7 +14,24 @@
     align-items: center;
 }
 
-.header__icon {
+.nav__icon {
     color: var(--primary-color);
     font-size: x-large;
+}
+
+.logout {
+    margin-left: auto;
+    background-color: var(--primary-darker) !important;
+    color: black !important;
+}
+
+.logout * {
+    background-color: var(--primary-darker) !important;
+    color: black !important;
+}
+
+.logout:hover,
+.logout:hover *  {
+    background-color: var(--gold-default) !important;
+    color: black !important;
 }

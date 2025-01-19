@@ -53,6 +53,13 @@ export const ProspectionOverview = () => {
                     <p>Prospecties worden geladen...</p>
                     <CustomLoader />
                 </div>}
+
+            <button
+                className={styles.link_button}
+                onClick={() => navigate(`/shop/${shopId}`)}>
+                Terug naar winkel
+                <TfiArrowTopRight className={styles.link_button__icon} />
+            </button>
         </main>
     );
 }
