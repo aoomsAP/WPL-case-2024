@@ -255,6 +255,22 @@ export const NewProspection = () => {
     console.log(defaultProspectionBrands)
   }, [shopBrands])
 
+  // Warning leaving page --------------------------------------------------------------------------------------------------------------------
+
+  const [isDirty, setIsDirty] = useState(false); // Track unsaved changes
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = ""; // Standardized for cross-browser support
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [isDirty]);
 
   // Form wizard validation ------------------------------------------------------------------------------------------------------------------------------------
 
@@ -268,7 +284,7 @@ export const NewProspection = () => {
 
   // Contact info tab error message
   const contactTabError = () => {
-    alert("Gelieve de nodige contact informatie af te vinken.");
+    alert("Gelieve de nodige contact informatie af ate vinken.");
   };
 
   // Validate trends & feedback tab
@@ -387,6 +403,10 @@ export const NewProspection = () => {
     } catch (error) {
       console.error("Error in newProspection handleComplete: ", error);
     }
+  };
+
+  const handleInputChange = () => {
+    setIsDirty(true); // Mark form as dirty when any field changes
   };
 
 
