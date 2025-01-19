@@ -41,13 +41,6 @@ const Root = () => {
                         {<TfiHome className={styles.nav__icon} />}
                     </button>
 
-                {/* If location isn't "Home", show "Back" button */}
-                {location.pathname !== "/" &&
-                    <button title="Terug" className={styles.header__button} onClick={() => navigate(-1)}>
-                        {<TfiArrowLeft className={styles.header__icon} />}
-                    </button>
-                }
-
                     {/* Show Agenda button only if user is set */}
                     {(user && location.pathname !== "/") && (
                         <button title="Agenda" className={styles.nav__button} onClick={() => navigate("/agenda")}>
@@ -61,21 +54,20 @@ const Root = () => {
                             {<TfiArrowLeft className={styles.nav__icon} />}
                         </button>
                     }
-                          
-                {/* Logout */}
-                {user &&
-                    <button
-                        title="Logout"
-                        className={`${styles.header__button} ${styles.logout}`}
-                        onClick={() => {
-                            setUserId(undefined);
-                            setUser(undefined);
-                            setTimeout(() => navigate("/"),0);
-                        }}
-                    >
-                        {<RxExit className={styles.header__icon} />}
-                    </button>
-                }
+
+                    {/* Logout */}
+                    {user &&
+                        <button
+                            title="Logout"
+                            className={`${styles.nav__icon} ${styles.logout}`}
+                            onClick={() => {
+                                setUserId(undefined);
+                                setTimeout(() => navigate("/"), 0);
+                            }}
+                        >
+                            {<RxExit className={styles.nav__icon} />}
+                        </button>
+                    }
                 </nav>
 
                 <Breadcrumbs />

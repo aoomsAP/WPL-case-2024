@@ -32,7 +32,7 @@ const UserPage = () => {
 
   return (
     <main className={styles.main}>
-      <h1>Selecteer een Gebruiker</h1>
+      <h1>Aanmelden</h1>
 
       <p>Dit scherm zal in de toekomst vervangen worden door een aanmeldscherm, maar voorlopig kunnen gebruikers in de lijst hieronder geselecteerd worden.</p>
 

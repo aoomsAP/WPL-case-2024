@@ -91,6 +91,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         else {
             // Logout
             Cookies.remove("userId");
+            setUser(undefined);
+            setEmployee(undefined);
             console.log("Logged out");
         }
     }
@@ -233,6 +235,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     // Load user specific data upon receiving userId
     useEffect(() => {
         if (userId) {
+            setEmployee(undefined);
             loadUserData(userId);
         }
     }, [userId]);
