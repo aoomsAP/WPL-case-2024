@@ -44,22 +44,6 @@ export const Homepage = () => {
         setShopListOptions(shopOptionOptions);
     }, [shops])
 
-    // Warning leaving page --------------------------------------------------------------------------------------------------------------------
-
-    useEffect(() => {
-        const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-        event.preventDefault();
-        event.returnValue = "!"; // Noodzakelijk voor sommige browsers om de prompt te tonen
-        };
-
-        window.addEventListener("beforeunload", handleBeforeUnload);
-
-        // Opruimen van de listener bij ontkoppeling van de component
-        return () => {
-        window.removeEventListener("beforeunload", handleBeforeUnload);
-        };
-    }, []);
-
     return (
         <main>
             <section>

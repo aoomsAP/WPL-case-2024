@@ -11,6 +11,7 @@ import Select from "react-select";
 import Option, { customTheme } from "../../components/ReactSelect/Option/Option";
 import MenuList from "../../components/ReactSelect/MenuList/MenuListSingle";
 import CustomLoader from "../../components/LoaderSpinner/CustomLoader";
+import { useLeaveWarning } from "../../hooks/useLeaveWarning";
 
 export default function NewShop() {
 
@@ -32,29 +33,12 @@ export default function NewShop() {
     const [cityOptions, setCityOptions] = useState<OptionType[]>([]);
     const [postalCodeOptions, setPostalCodeOptions] = useState<OptionType[]>([]);
 
-    // Map countries to options for react-select
-    useEffect(() => {
-        let countryOptions: OptionType[] = countries
-            .map((country) => ({
-                value: country.id.toString(),
-                label: country.name
-            }));
-        setCountryOptions(countryOptions);
-    }, [countries])
+    // Warning before leaving page that form data will be lost ------------------------------------------------------------------
 
-    useEffect(() => {
-        const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-        event.preventDefault();
-        event.returnValue = "!"; // Noodzakelijk voor sommige browsers om de prompt te tonen
-        };
+    const [preventLeaving, setPreventLeaving] = useState<boolean>(true);
+    useLeaveWarning(preventLeaving, "Niet-opgeslagen wijzigingen zullen verloren gaan. Toch verdergaan?")
 
-        window.addEventListener("beforeunload", handleBeforeUnload);
-
-        // Opruimen van de listener bij ontkoppeling van de component
-        return () => {
-        window.removeEventListener("beforeunload", handleBeforeUnload);
-        };
-    }, []);
+    // Load cities by country id ----------------------------------------------------------------------------------------------
 
     // Load & set cities
     async function setCitiesFunc(countryId: number) {
@@ -64,12 +48,24 @@ export default function NewShop() {
         }
     }
 
-    // Load cities when country is selected
+    // Load cities anew when country is selected
     useEffect(() => {
         if (country) {
             setCitiesFunc(+country.value);
         }
     }, [country]);
+
+    // Mapping options for react-select ----------------------------------------------------------------------------------------------
+
+    // Map countries to options for react-select
+    useEffect(() => {
+        let countryOptions: OptionType[] = countries
+            .map((country) => ({
+                value: country.id.toString(),
+                label: country.name
+            }));
+        setCountryOptions(countryOptions);
+    }, [countries])
 
     // Map cities to options for react-select
     useEffect(() => {
@@ -91,7 +87,11 @@ export default function NewShop() {
         setPostalCodeOptions(postalCodeOptions);
     }, [cities])
 
+    // Add new shop to db ----------------------------------------------------------------------------------------------
+
     async function handleComplete() {
+        // Allow form to be submitted & navigation afterwards
+        setPreventLeaving(false);
 
         try {
             if (!userId) {

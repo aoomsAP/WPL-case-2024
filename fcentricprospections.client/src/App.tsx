@@ -22,6 +22,7 @@ import ErrorPage from './pages/ErrorPage/ErrorPage';
 // icons
 import { TfiAgenda, TfiArrowLeft, TfiHome } from "react-icons/tfi";
 import { ShopListProvider } from './contexts/ShopListContext';
+import { useLeaveWarning } from './hooks/useLeaveWarning';
 
 const Root = () => {
 
@@ -30,23 +31,39 @@ const Root = () => {
 
     const { user } = useContext(UserContext);
 
+    // If we're on the NewProspection or NewShop page, trigger warning before navigating away
+    const blockNavigation = useLeaveWarning(
+        true && (location.pathname.includes('new')),
+        "Niet-opgeslagen wijzigingen zullen verloren gaan. Toch verdergaan?",
+    );
+
+    // Handler to navigate with block logic
+    const handleNavigation = (to: any) => {
+        // If we're on on the NewProspection or NewShop page, block navigation
+        if (location.pathname.includes('new')) {
+            blockNavigation({ pathname: to });
+        } else {
+            navigate(to);  // Proceed with navigation
+        }
+    };
+
     return (
         <>
             <header className={styles.header}>
-                <button title="Home" className={styles.header__button} onClick={() => navigate("/")}>
+                <button title="Home" className={styles.header__button} onClick={() => handleNavigation("/")}>
                     {<TfiHome className={styles.header__icon} />}
                 </button>
 
                 {/* Show Agenda button only if user is set */}
                 {(user && location.pathname !== "/") && (
-                    <button title="Agenda" className={styles.header__button} onClick={() => navigate("/agenda")}>
+                    <button title="Agenda" className={styles.header__button} onClick={() => handleNavigation("/agenda")}>
                         <TfiAgenda className={styles.header__icon} />
                     </button>
                 )}
 
                 {/* If location isn't "Home", show "Back" button */}
                 {location.pathname !== "/" &&
-                    <button title="Terug" className={styles.header__button} onClick={() => navigate(-1)}>
+                    <button title="Terug" className={styles.header__button} onClick={() => handleNavigation(-1)}>
                         {<TfiArrowLeft className={styles.header__icon} />}
                     </button>
                 }

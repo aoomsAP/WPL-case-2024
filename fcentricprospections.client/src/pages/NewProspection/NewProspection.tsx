@@ -27,6 +27,7 @@ import { AiOutlineCheck } from "react-icons/ai";
 // uuid
 import { v4 as uuidv4 } from 'uuid';
 import CustomLoader from '../../components/LoaderSpinner/CustomLoader';
+import { useLeaveWarning } from '../../hooks/useLeaveWarning';
 
 export const NewProspection = () => {
 
@@ -104,6 +105,10 @@ export const NewProspection = () => {
   const [emailChecked, setEmailChecked] = useState<boolean>(true);
   const [phoneChecked, setPhoneChecked] = useState<boolean>(true);
 
+  // Warning before leaving page that form data will be lost ------------------------------------------------------------------
+
+  const [preventLeaving, setPreventLeaving] = useState<boolean>(true);
+  useLeaveWarning(preventLeaving, "Niet-opgeslagen wijzigingen zullen verloren gaan. Toch verdergaan?")
 
   // Contact info -----------------------------------------------------------------------------------------------------------
 
@@ -255,23 +260,6 @@ export const NewProspection = () => {
     console.log(defaultProspectionBrands)
   }, [shopBrands])
 
-  // Warning leaving page --------------------------------------------------------------------------------------------------------------------
-
-  const [isDirty, setIsDirty] = useState(false); // Track unsaved changes
-
-  useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      event.returnValue = ""; // Standardized for cross-browser support
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [isDirty]);
-
   // Form wizard validation ------------------------------------------------------------------------------------------------------------------------------------
 
   // Validate contact info tab
@@ -301,9 +289,12 @@ export const NewProspection = () => {
   };
 
 
-  // Submit function ------------------------------------------------------------------------------------------------------------------------------------
+  // Add prospection to db ---------------------------------------------------------------------------------------------------------------------------------------
 
   async function handleComplete() {
+    // Allow form to be submitted & navigation afterwards
+    setPreventLeaving(false);
+
     try {
       console.log("Start newProspection handleComplete");
 
@@ -404,11 +395,6 @@ export const NewProspection = () => {
       console.error("Error in newProspection handleComplete: ", error);
     }
   };
-
-  const handleInputChange = () => {
-    setIsDirty(true); // Mark form as dirty when any field changes
-  };
-
 
   return (
     <main className={styles.main}>
