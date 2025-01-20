@@ -90,7 +90,7 @@ export interface IProspection {
 export interface IProspectionDetail {
   id?: number,
   shopId: number,
-  userId?: number,
+  userCreatedId?: number,
   employeeId?: number,
   visitDate: Date,
   dateCreated?: Date,

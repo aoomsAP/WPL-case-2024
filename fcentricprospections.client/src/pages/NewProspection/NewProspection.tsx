@@ -40,7 +40,8 @@ export const NewProspection = () => {
   const {
     setShopId,
     shopDetail,
-    shopBrands
+    shopBrands,
+    loadShopProspections
   } = useContext(ShopDetailContext);
 
   // Set shop id
@@ -143,32 +144,37 @@ export const NewProspection = () => {
   // Todos --------------------------------------------------------------------------------------------------------------------
 
   // Contact info todos 
+
   useEffect(() => {
+    const newContactName = `${contactName.length > 1 ? `Contact naam: ${contactName}` : ""}`
+    const newContactEmail = `${contactEmail.length > 1 ? `Contact email: ${contactEmail}` : ""}`
+    const newContactPhone = `${contactPhone.length > 1 ? `Contact telefoon: ${contactPhone}` : ""}`
+    const newContactInfo = `${newContactName.trim() != "" ? `${newContactName}\n` : ""}${newContactEmail.trim() != "" ? `${newContactEmail}\n` : ""}${newContactPhone.trim() != "" ? `${newContactPhone}` : ""}`;
+
+    // Create todo for each interest
+    let contactInfoToDo = {
+      id: uuidv4(), // generate temporary unique id
+      name: "Nieuwe contact info",
+      remarks: newContactInfo,
+      employees: [], // Initialize as empty until query assigns group of employees
+      toDoStatusId: 1, // HARDCODED = "Ongoing"
+      toDoTypeId: 1, // HARDCODED = "New contact info"
+    };
+
+    // Filter out contact info, as to only replace that todo item
+    const toDosWithoutContact = toDos.filter(x => x.toDoTypeId !== 1);
+
+    // Only add contact info, if there are new contact info values
+    let newToDos = [...toDosWithoutContact];
     if (contactName.trim() != "" || contactEmail.trim() != "" || contactPhone.trim() != "") {
-
-      const newContactName = `${contactName.length > 1 ? `Contact naam: ${contactName}` : ""}`
-      const newContactEmail = `${contactEmail.length > 1 ? `Contact email: ${contactEmail}` : ""}`
-      const newContactPhone = `${contactPhone.length > 1 ? `Contact telefoon: ${contactPhone}` : ""}`
-      const newContactInfo = `${newContactName.trim() != "" ? `${newContactName}\n` : ""}${newContactEmail.trim() != "" ? `${newContactEmail}\n` : ""}${newContactPhone.trim() != "" ? `${newContactPhone}` : ""}`;
-
-      // Create todo for each interest
-      let contactInfoToDo = {
-        id: uuidv4(), // generate temporary unique id
-        name: "Nieuwe contact info",
-        remarks: newContactInfo,
-        employees: [], // Initialize as empty until query assigns group of employees
-        toDoStatusId: 1, // HARDCODED = "Ongoing"
-        toDoTypeId: 1, // HARDCODED = "New contact info"
-      };
-
-      // Filter out contact info todo, as to only replace that one
-      const toDosWithoutContact = toDos.filter(x => x.toDoTypeId !== 1);
-      const newToDos = [...toDosWithoutContact, contactInfoToDo];
-      setToDos(newToDos);
+      newToDos = [...toDosWithoutContact, contactInfoToDo];
     }
+
+    setToDos(newToDos);
   }, [contactName, contactEmail, contactPhone, contactType])
 
   // NewBrands todos 
+
   useEffect(() => {
     // Update newBrands toDo item
     let newBrandsToDo = {
@@ -179,13 +185,21 @@ export const NewProspection = () => {
       toDoStatusId: 1, // HARDCODED = "Ongoing"
       toDoTypeId: 2, // HARDCODED = "New brands"
     };
-    // Filter out newBrands todos, as to only replace that one
+
+    // Filter out newBrands, as to only replace that todo item
     const toDosWithoutNewBrands = toDos.filter(x => x.toDoTypeId !== 2);
-    const newToDos = [...toDosWithoutNewBrands, newBrandsToDo];
+
+    // Only add newBrandsToDo if newBrands is not empty
+    let newToDos = [...toDosWithoutNewBrands];
+    if (newBrands && newBrands.trim() != "") {
+      newToDos = [...toDosWithoutNewBrands, newBrandsToDo]
+    }
+
     setToDos(newToDos);
   }, [newBrands])
 
   // Prospection brand interest todos 
+
   useEffect(() => {
     let brandInterestsNames = prospectionBrandInterests.map(i => `Merk: ${i.brandName}${i.remark ? `\nOpmerking: ${i.remark}` : ""}\n`).join('\n');
 
@@ -199,9 +213,15 @@ export const NewProspection = () => {
       toDoTypeId: 3, // HARDCODED = "Brand interests"
     };
 
-    // Filter out FC70 brand interest todos, as to only replace those
+    // Filter out brand interests, as to only replace that todo item
     const toDosWithoutBrandInterests = toDos.filter(x => x.toDoTypeId !== 3);
-    const newToDos = [...toDosWithoutBrandInterests, brandInterestToDo];
+
+    // Only add brand interests, if there are any
+    let newToDos = [...toDosWithoutBrandInterests];
+    if (prospectionBrandInterests.length > 0) {
+      newToDos = [...toDosWithoutBrandInterests, brandInterestToDo];
+    }
+
     setToDos(newToDos);
   }, [prospectionBrandInterests])
 
@@ -264,7 +284,7 @@ export const NewProspection = () => {
   const showEmailBorder = contactErrorMsg && !emailChecked && contactEmail.trim().length < 1;
   const showPhoneBorder = contactErrorMsg && !phoneChecked && contactPhone.trim().length < 1;
   const validContact = (contactType === 3 || contactType === 4) ||
-  (nameChecked && emailChecked && phoneChecked);
+    (nameChecked && emailChecked && phoneChecked);
 
   // Validate contact info tab
   const checkValidateContactTab = () => {
@@ -316,9 +336,13 @@ export const NewProspection = () => {
         throw Error("Geen geldige gebruiker. Probeer opnieuw in te loggen.");
       }
 
+      if (!shopId) {
+        throw Error;
+      }
+
       const newProspection: IProspectionDetail = {
         shopId: Number(shopId),
-        userId: Number(user.id),
+        userCreatedId: Number(user.id),
         employeeId: Number(employee.id),
         visitDate: visitDate,
         dateCreated: new Date(),
@@ -390,6 +414,9 @@ export const NewProspection = () => {
         };
         await updateProspectionToDos(prospectionId, newProspectionToDos);
         console.log("Prospection todos updates completed successfully.");
+
+        // Reload shopProspections for newly added prospection
+        await loadShopProspections(Number(shopId));
 
         console.log("End newProspection handleComplete");
 
