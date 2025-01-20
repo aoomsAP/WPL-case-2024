@@ -1,6 +1,5 @@
-import { EventInput } from "@fullcalendar/core/index.js";
-import React, { memo } from "react";
-import "./EventDetailsPopup.css"; // Add a CSS file for styling
+import { memo } from "react";
+import styles from "./EventDetailsPopup.module.css";
 
 export const EventDetailsPopup = memo(
   ({ event, onClose }: { event: any; onClose: () => void }) => {
@@ -9,10 +8,10 @@ export const EventDetailsPopup = memo(
     return (
       <>
         {/* Overlay */}
-        <div className="event-popup-overlay" onClick={onClose}></div>
+        <div className={styles.event_popup_overlay} onClick={onClose}></div>
         
         {/* Popup Content */}
-        <div className="event-popup" role="dialog" aria-modal="true" aria-labelledby="event-title">
+        <div className={styles.event_popup} role="dialog" aria-modal="true" aria-labelledby="event-title">
           <h3 id="event-title">{event.title || "Geen details"}</h3>
           <p>
             <strong>Start:</strong>{" "}

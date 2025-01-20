@@ -8,10 +8,11 @@ import Option, { customTheme } from "../../components/ReactSelect/Option/Option"
 import MenuList from "../../components/ReactSelect/MenuList/MenuListSingle";
 import styles from "./UserPage.module.css"
 import CustomLoader from "../../components/LoaderSpinner/CustomLoader";
+import { GoPerson } from "react-icons/go";
 
 const UserPage = () => {
 
-  const { setUserId, users } = useContext(UserContext);
+  const { setUserId, users, user, employee } = useContext(UserContext);
   const navigate = useNavigate();
 
   const [userOptions, setUserOptions] = useState<OptionType[]>([]);
@@ -22,6 +23,7 @@ const UserPage = () => {
 
     let userOptions: OptionType[] = users
       .filter(isValidUserOption)
+      .sort((a, b) => a.login.localeCompare(b.login))
       .map((userOption) => ({
         value: userOption.id.toString(),
         label: `${userOption.login} `
@@ -33,6 +35,11 @@ const UserPage = () => {
   return (
     <main className={styles.main}>
       <h1>Aanmelden</h1>
+
+      {user && <div className={styles.logged_in}>
+        <GoPerson />
+        <p>Ingelogd als <strong>{employee ? employee?.firstName : user?.login}</strong></p>
+      </div>}
 
       <p>Dit scherm zal in de toekomst vervangen worden door een aanmeldscherm, maar voorlopig kunnen gebruikers in de lijst hieronder geselecteerd worden.</p>
 

@@ -31,7 +31,7 @@ const Root = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const { user, setUser, setUserId } = useContext(UserContext);
+    const { user, setUserId } = useContext(UserContext);
 
     return (
         <>

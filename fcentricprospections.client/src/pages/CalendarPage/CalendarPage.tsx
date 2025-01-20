@@ -3,13 +3,13 @@ import { UserContext } from '../../contexts/UserContext';
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { EmployeeSelect } from './EmployeeSelect';
+import { EmployeeSelect } from '../../components/Calendar/EmployeeSelect/EmployeeSelect';
 import { EventInput } from '@fullcalendar/core';
 import styles from './CalenderPage.module.css';
 import listPlugin from '@fullcalendar/list';
 import nlLocale from '@fullcalendar/core/locales/nl';
 import CustomLoader from '../../components/LoaderSpinner/CustomLoader';
-import EventDetailsPopup from './EventDetailsPopUp';
+import EventDetailsPopup from '../../components/Calendar/EventDetailsPopup/EventDetailsPopUp';
 
 export const CalendarPage = () => {
     const { appointments, userCalendarLoading } = useContext(UserContext);
@@ -41,7 +41,7 @@ export const CalendarPage = () => {
         setEvents(userEvents);
     }, [appointments]);
 
-    const handleEventClick = (clickInfo) => {
+    const handleEventClick = (clickInfo: any) => {
         setSelectedEvent(clickInfo.event); // Set the clicked event
     };
 

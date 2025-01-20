@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../contexts/UserContext";
-import { IAppointment, IEmployee, OptionType } from "../../types";
+import { UserContext } from "../../../contexts/UserContext";
+import { IAppointment, IEmployee, OptionType } from "../../../types";
 import Select, { createFilter, MultiValue, StylesConfig } from 'react-select';
-import MenuList from "../../components/ReactSelect/MenuList/MenuList";
-import Option, { customTheme } from "../../components/ReactSelect/Option/Option";
+import MenuList from "../../ReactSelect/MenuList/MenuList";
+import Option, { customTheme } from "../../ReactSelect/Option/Option";
 import { EventInput } from '@fullcalendar/core';
-import CustomLoader from "../../components/LoaderSpinner/CustomLoader";
+import CustomLoader from "../../LoaderSpinner/CustomLoader";
 import styles from "./EmployeeSelect.module.css";
 import chroma from 'chroma-js'
 
@@ -68,7 +68,8 @@ export const EmployeeSelect = ({ setEvents }: EmployeeSelectProps) => {
 
         let employeesOptions: OptionType[] = employees
             .filter(isValidEmployee)
-            .map((employee, i) => ({
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((employee) => ({
                 value: employee.id.toString(),
                 label: employee.name,
             }));

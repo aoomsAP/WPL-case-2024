@@ -7,9 +7,10 @@ import { createFilter } from "react-select";
 import styles from './HomePage.module.css'
 import Option, { customTheme } from "../../components/ReactSelect/Option/Option";
 import MenuList from "../../components/ReactSelect/MenuList/MenuListSingle";
-import { TfiPlus } from "react-icons/tfi";
+import { TfiPlus, TfiAlert } from "react-icons/tfi";
 import CustomLoader from "../../components/LoaderSpinner/CustomLoader";
 import { ShopListContext } from "../../contexts/ShopListContext";
+import { GoPerson } from "react-icons/go";
 
 export const Homepage = () => {
 
@@ -48,9 +49,22 @@ export const Homepage = () => {
     return (
         <main>
             <section>
-                {isDataLoaded
-                    ? <h2>Hallo, {employee ? employee?.firstName : user?.login}</h2>
-                    : <CustomLoader />}
+                {/* If user data has finished loading */}
+                {isDataLoaded && (
+                    user
+                        // If user is found, show employee name or user name
+                        ? <div className={styles.logged_in}>
+                            <GoPerson />
+                            <h2>Hallo, {employee ? employee?.firstName : user?.login}</h2>
+                        </div>
+                        // If user is not found, show error
+                        : <div className={styles.not_logged_in}>
+                            <TfiAlert />
+                            <p>Gebruiker niet gevonden. Probeer opnieuw aan te melden.</p>
+                        </div>
+                )}
+                {/* If user data has not finished loading, show loading indicator */}
+                {!isDataLoaded && <CustomLoader />}
             </section>
 
             {/* SELECTEER WINKEL */}
@@ -95,6 +109,6 @@ export const Homepage = () => {
                     <TfiPlus className={styles.add_button__icon} />
                 </button>
             </section>
-        </main>
+        </main >
     );
 };

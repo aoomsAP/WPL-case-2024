@@ -239,7 +239,7 @@ export default function NewShop() {
                                 classNamePrefix="select"
                                 value={country}
                                 isDisabled={countryOptions.length > 0 ? false : true}
-                                placeholder={countryOptions.length > 0 ? "Kies een land..." : <CustomLoader />}
+                                placeholder={countryOptions.length > 0 ? "Kies een land..." : <div className={styles.loading}>Landen laden... <CustomLoader /></div>}
                                 isSearchable={true}
                                 name="country"
                                 options={countryOptions}
