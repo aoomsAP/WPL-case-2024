@@ -26,11 +26,18 @@ import "react-form-wizard-component/dist/style.css";
 import { AiOutlineCheck } from "react-icons/ai";
 // uuid
 import { v4 as uuidv4 } from 'uuid';
+// custom hook
+import { useLeaveWarning } from '../../hooks/useLeaveWarning';
 
 export const NewProspection = () => {
 
   const { shopId } = useParams<{ shopId: string }>();
   const navigate = useNavigate();
+  
+  // Warning before leaving page that form data will be lost ------------------------------------------------------------------
+
+  const [preventLeaving, setPreventLeaving] = useState<boolean>(true);
+  useLeaveWarning(preventLeaving, "Niet-opgeslagen wijzigingen zullen verloren gaan. Toch verdergaan?")
 
   // CONTEXTS --------------------------------------------------------------------------------------------------------------------
 
@@ -280,8 +287,6 @@ export const NewProspection = () => {
 
   // FORM WIZARD VALIDATION ------------------------------------------------------------------------------------------------------------------------------------
 
-  // Contact info validation
-
   const [contactErrorMsg, setContactErrorMsg] = useState<string>();
   const contactErrorRef = useRef<HTMLDivElement | null>(null);
   const showNameBorder = contactErrorMsg && !nameChecked && contactName.trim().length < 1;
@@ -320,7 +325,7 @@ export const NewProspection = () => {
   };
 
 
-  // SUBMIT / ADD PROSPECTION ------------------------------------------------------------------------------------------------------------------------------------
+  // SUBMIT / ADD PROSPECTION TO DB ------------------------------------------------------------------------------------------------------------------------------------
 
   const [loading, setLoading] = useState<boolean>(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -328,6 +333,9 @@ export const NewProspection = () => {
   const submitErrorRef = useRef<HTMLDivElement | null>(null);
 
   async function handleComplete() {
+    // Allow form to be submitted & navigation afterwards
+    setPreventLeaving(false);
+
     try {
       console.log("Start newProspection handleComplete");
       setLoading(true);
@@ -440,7 +448,6 @@ export const NewProspection = () => {
       setIsButtonDisabled(false);
     }
   };
-
 
   return (
     <main className={styles.main}>

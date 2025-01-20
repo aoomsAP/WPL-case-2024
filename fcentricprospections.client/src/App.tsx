@@ -23,8 +23,11 @@ import ErrorPage from './pages/ErrorPage/ErrorPage';
 // icons
 import { TfiAgenda, TfiArrowLeft, TfiHome } from "react-icons/tfi";
 import { RxExit } from "react-icons/rx";
+// custom hooks
+import { useLeaveWarning } from './hooks/useLeaveWarning';
 // components
 import Breadcrumbs from './components/Breadcrumbs/Breadcrumbs';
+
 
 const Root = () => {
 
@@ -33,25 +36,41 @@ const Root = () => {
 
     const { user, setUserId } = useContext(UserContext);
 
+    // If we're on the NewProspection or NewShop page, trigger warning before navigating away
+    const blockNavigation = useLeaveWarning(
+        true && (location.pathname.includes('new')),
+        "Niet-opgeslagen wijzigingen zullen verloren gaan. Toch verdergaan?",
+    );
+
+    // Handler to navigate with block logic
+    const handleNavigation = (to: any) => {
+        // If we're on on the NewProspection or NewShop page, block navigation
+        if (location.pathname.includes('new')) {
+            blockNavigation({ pathname: to });
+        } else {
+            navigate(to);  // Proceed with navigation
+        }
+    };
+
     return (
         <>
             <header className={styles.header}>
                 <nav className={styles.nav}>
                     {/* Home button */}
-                    <button title="Home" className={styles.nav__button} onClick={() => navigate("/home")}>
+                    <button title="Home" className={styles.nav__button} onClick={() => handleNavigation("/home")}>
                         {<TfiHome className={styles.nav__icon} />}
                     </button>
 
                     {/* Agenda button (if user is set) */}
                     {(user && location.pathname !== "/") && (
-                        <button title="Agenda" className={styles.nav__button} onClick={() => navigate("/agenda")}>
+                        <button title="Agenda" className={styles.nav__button} onClick={() => handleNavigation("/agenda")}>
                             <TfiAgenda className={styles.nav__icon} />
                         </button>
                     )}
 
                     {/* Back button (if location isn't root) */}
                     {location.pathname !== "/" &&
-                        <button title="Terug" className={styles.nav__button} onClick={() => navigate(-1)}>
+                        <button title="Terug" className={styles.nav__button} onClick={() => handleNavigation(-1)}>
                             {<TfiArrowLeft className={styles.nav__icon} />}
                         </button>
                     }
