@@ -59,9 +59,9 @@ export default function NewShop() {
     // Load cities anew when country is selected
     useEffect(() => {
         if (country) {
-            setCity(null);
+            setCity(undefined);
             setErrorMessage(undefined);
-            setPostalCode(null);
+            setPostalCode(undefined);
             setCitiesFunc(+country.value);
         }
     }, [country]);
