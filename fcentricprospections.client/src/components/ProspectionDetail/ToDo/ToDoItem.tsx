@@ -21,7 +21,9 @@ export const ToDoItem = ({ todo }: ToDoItemProps) => {
         }
     }
 
+    // Todo description is saved as one long string in database, the below function adds HTML formatting to it
     const stringToNode = (text: string) => {
+        
         // Split the input text by double newlines and then by single newlines
         const sections = text.split(/\n\n/);
 

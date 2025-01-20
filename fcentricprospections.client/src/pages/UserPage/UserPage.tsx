@@ -12,11 +12,13 @@ import { GoPerson } from "react-icons/go";
 
 const UserPage = () => {
 
-  const { setUserId, users, user, employee } = useContext(UserContext);
   const navigate = useNavigate();
+
+  const { setUserId, users, user, employee } = useContext(UserContext);
 
   const [userOptions, setUserOptions] = useState<OptionType[]>([]);
 
+  // Map users to options for react-select
   useEffect(() => {
     const isValidUserOption = (userOption: IUser) =>
       !!userOption && !!userOption.id && !!userOption.login;

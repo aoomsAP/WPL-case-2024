@@ -47,6 +47,7 @@ export const EmployeeSelect = ({ setEvents }: EmployeeSelectProps) => {
                 title: appointment.name ? appointment.name : (appointment.remarks ? appointment.remarks : "Geen details"),
                 start: appointment.startDate,
                 end: appointment.endDate,
+                // Set event to color of the respective selected employee index
                 color: index < colors.length ? colors[index] : "rgb(128,128,128)",
             }));
             allEvents = [...allEvents, ...newEvents];
@@ -55,7 +56,7 @@ export const EmployeeSelect = ({ setEvents }: EmployeeSelectProps) => {
         setEvents(allEvents);
     }
 
-    // For every selected employee, update events
+    // For every change in selected employees, update events
     useEffect(() => {
         updateEvents();
     }, [selectedEmployees])
@@ -76,7 +77,9 @@ export const EmployeeSelect = ({ setEvents }: EmployeeSelectProps) => {
         setEmployeesOptions(employeesOptions);
     }, [employees])
 
+
     // Styling
+    // https://react-select.com/styles
 
     function rgbToArray(rgbString: string): [number, number, number] | null {
         const regex = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/;
@@ -87,22 +90,26 @@ export const EmployeeSelect = ({ setEvents }: EmployeeSelectProps) => {
         return null;
     }
 
-    // https://react-select.com/styles
     const colourStyles: StylesConfig<OptionType, true> = {
         multiValue: (styles, { data }) => {
+            // Turn rgb value into array of numbers, so the chroma library can make use of it
             const rgbArray = rgbToArray(data.color ?? "rgb(128,128,128)") ?? [0, 0, 0];
             const color = chroma(rgbArray);
             return {
                 ...styles,
+
+                // Lighter color for background color of selected option
                 backgroundColor: color.alpha(0.1).css(),
             };
         },
         multiValueLabel: (styles, { data }) => {
-            // Darker text color for better legibility
+            // Turn rgb value into array of numbers, so the chroma library can make use of it
             const rgbArray = rgbToArray(data.color ?? "rgb(128,128,128)") ?? [0, 0, 0];
             const darkColor = chroma(rgbArray).darken(2).css();
             return {
                 ...styles,
+
+                // Darker text color for better legibility
                 color: darkColor,
             };
         },

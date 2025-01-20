@@ -12,8 +12,13 @@ export const ShopDetailCard = ({ shop }: ShopDetailProps) => {
     const allowedProperties = ["street1", "city", "country"];
   
     return allowedProperties
-      .map((key) => obj[key as keyof IAddress]) // Get values
-      .filter((value) => value?.toString().trim() !== "") // Filter out empty values
+      // Get only allowed properties from address object
+      .map((key) => obj[key as keyof IAddress])
+
+      // Filter out the empty values
+      .filter((value) => value?.toString().trim() !== "")
+
+      // Join with comma and white space
       .join(", ");
   };
 

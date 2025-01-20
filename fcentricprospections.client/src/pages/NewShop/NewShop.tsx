@@ -177,9 +177,6 @@ export default function NewShop() {
                 if (error.message.includes("Geen")) message = error.message
             }
             setErrorMessage(message);
-            setTimeout(() => {
-                errorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-            }, 0);
 
         } finally {
             setLoading(false);

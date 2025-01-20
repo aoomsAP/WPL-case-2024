@@ -13,8 +13,8 @@ import EventDetailsPopup from '../../components/Calendar/EventDetailsPopup/Event
 
 export const CalendarPage = () => {
     const { appointments, userCalendarLoading } = useContext(UserContext);
-    const [selectedEvent, setSelectedEvent] = useState(null);
 
+    const [selectedEvent, setSelectedEvent] = useState(null);
     const [events, setEvents] = useState<EventInput[]>([]);
     const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
 
@@ -30,6 +30,7 @@ export const CalendarPage = () => {
         );
     }
 
+    // Map user appointments to Event type for FullCalendar
     useEffect(() => {
         const userEvents = appointments.map((appointment) => ({
             title: appointment.name ? appointment.name : (appointment.remarks ? appointment.remarks : "Geen details"),
@@ -41,12 +42,14 @@ export const CalendarPage = () => {
         setEvents(userEvents);
     }, [appointments]);
 
+    // Set the clicked event
     const handleEventClick = (clickInfo: any) => {
-        setSelectedEvent(clickInfo.event); // Set the clicked event
+        setSelectedEvent(clickInfo.event);
     };
 
+    // Clear the selected event
     const handleClosePopup = () => {
-        setSelectedEvent(null); // Clear the selected event
+        setSelectedEvent(null);
     };
 
     const handleWindowResize = (_: { view: { type: string } }) => {
@@ -64,10 +67,12 @@ export const CalendarPage = () => {
     else {
         return (
             <main className={styles.main}>
+                {/* Employee select container */}
                 <div className={styles.employeeSelect}>
                     <EmployeeSelect setEvents={setEvents} />
                 </div>
 
+                {/* Event calendar */}
                 <FullCalendar
                     ref={calendarRef}
                     plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
@@ -90,6 +95,7 @@ export const CalendarPage = () => {
                     windowResize={handleWindowResize} // Callback on resize
                     eventClick={handleEventClick} //Handle event clicks
                 />
+
                 {/* Event Detail Popup */}
                 {selectedEvent && (
                     <EventDetailsPopup
@@ -97,6 +103,7 @@ export const CalendarPage = () => {
                         onClose={handleClosePopup} // Handle popup close
                     />
                 )}
+
             </main>
         );
     }

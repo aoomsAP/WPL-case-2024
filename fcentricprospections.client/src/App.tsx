@@ -37,25 +37,26 @@ const Root = () => {
         <>
             <header className={styles.header}>
                 <nav className={styles.nav}>
+                    {/* Home button */}
                     <button title="Home" className={styles.nav__button} onClick={() => navigate("/home")}>
                         {<TfiHome className={styles.nav__icon} />}
                     </button>
 
-                    {/* Show Agenda button only if user is set */}
+                    {/* Agenda button (if user is set) */}
                     {(user && location.pathname !== "/") && (
                         <button title="Agenda" className={styles.nav__button} onClick={() => navigate("/agenda")}>
                             <TfiAgenda className={styles.nav__icon} />
                         </button>
                     )}
 
-                    {/* If location isn't "Home", show "Back" button */}
+                    {/* Back button (if location isn't root) */}
                     {location.pathname !== "/" &&
                         <button title="Terug" className={styles.nav__button} onClick={() => navigate(-1)}>
                             {<TfiArrowLeft className={styles.nav__icon} />}
                         </button>
                     }
 
-                    {/* Logout */}
+                    {/* Logout button (if user is logged in) */}
                     {user &&
                         <button
                             title="Logout"

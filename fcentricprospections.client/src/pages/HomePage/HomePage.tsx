@@ -22,6 +22,7 @@ export const Homepage = () => {
     const [shopListOptions, setShopListOptions] = useState<OptionType[]>([]);
     const isDataLoaded = !userDataLoading;
 
+    // Map list of shops to shop options for react-select
     useEffect(() => {
         const isValidShopOption = (shopOption: IShop) =>
             !!shopOption && !!shopOption.id && !!shopOption.name;
@@ -32,13 +33,11 @@ export const Homepage = () => {
                 if (shopOption.name.includes(shopOption.city)) {
                     return ({
                         value: shopOption.id.toString(),
-
                         label: `${shopOption.name}`
                     })
                 }
                 return ({
                     value: shopOption.id.toString(),
-
                     label: `${shopOption.name} - ${shopOption.city}`
 
                 })
@@ -49,21 +48,22 @@ export const Homepage = () => {
     return (
         <main>
             <section>
-                {/* If user data has finished loading */}
-                {isDataLoaded && (
-                    user
-                        // If user is found, show employee name or user name
+                {/* User greeting (if user has finished loading) */}
+                {isDataLoaded && (user
+                
+                        // Employee name or user name (if user is found)
                         ? <div className={styles.logged_in}>
                             <GoPerson />
                             <h2>Hallo, {employee ? employee?.firstName : user?.login}</h2>
                         </div>
-                        // If user is not found, show error
+
+                        // Error (if user is not found)
                         : <div className={styles.not_logged_in}>
                             <TfiAlert />
                             <p>Gebruiker niet gevonden. Probeer opnieuw aan te melden.</p>
                         </div>
                 )}
-                {/* If user data has not finished loading, show loading indicator */}
+                {/* Loading indicator (if user is still loading) */}
                 {!isDataLoaded && <CustomLoader />}
             </section>
 

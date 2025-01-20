@@ -37,6 +37,7 @@ export const ShopDetail = () => {
 
           <ShopDetailCard shop={shopDetail} />
 
+          {/* ADD NEW PROSPECTION */}
           <section>
             <p>Voeg een nieuwe prospectie toe:</p>
             <button
@@ -48,6 +49,7 @@ export const ShopDetail = () => {
             </button>
           </section>
 
+          {/* PREVIOUS PROSPECTIONS (if exist) */}
           {shopProspections.length > 0 &&
             <section className={styles.overview}>
               <h2>Voorgaande prospecties</h2>
