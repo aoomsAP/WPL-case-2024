@@ -62,7 +62,7 @@ export const ProspectionDetail = () => {
       {prospectionDetail &&
         <>
           <h1 className={styles.h1}>
-            Prospectie ({new Date(prospectionDetail!.visitDate).toLocaleDateString()})
+            Prospectie<wbr></wbr> ({new Date(prospectionDetail!.visitDate).toLocaleDateString()})
           </h1>
 
           {shopDetail && <ShopDetailCard shop={shopDetail} />}

@@ -48,6 +48,9 @@ export const ProspectionOverview = () => {
                         </Link></li>))}
             </ul>
 
+            {shopProspections.length < 1 &&
+                <p>Geen prospecties beschikbaar.</p>}
+
             {!shopProspections &&
                 <div className={styles.loading}>
                     <p>Prospecties worden geladen...</p>

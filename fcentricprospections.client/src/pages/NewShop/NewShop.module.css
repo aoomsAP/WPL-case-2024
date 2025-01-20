@@ -47,6 +47,10 @@
     color: red;
 }
 
+.container {
+    margin: 1rem 0;
+}
+
 .error {
     width: 100%;
     padding: 0 1rem;

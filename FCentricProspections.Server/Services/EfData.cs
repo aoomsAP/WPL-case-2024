@@ -72,7 +72,8 @@ namespace FCentricProspections.Server.Services
                               join address in this.context.Addresses on contact.AddressId equals address.Id
                               join city in this.context.Cities on address.CityId equals city.Id
                               join country in this.context.Countries on city.CountryId equals country.Id
-                              join customerShop in this.context.CustomerShops on s.Id equals customerShop.ShopId into customerShopGroup
+                              join customerShop in this.context.CustomerShops.Where(cs => cs.IsActive == true)
+                                    on s.Id equals customerShop.ShopId into customerShopGroup
                               from customerShop in customerShopGroup.DefaultIfEmpty() // Left join for customerShop, so it's allowed to be empty
                               join customer in this.context.Customers on customerShop.CustomerId equals customer.Id into customerGroup
                               from customer in customerGroup.DefaultIfEmpty() // Left join for customer, so it's allowed if customer does not exist

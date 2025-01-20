@@ -1,3 +1,7 @@
+// Custom menu list for React-Select BASIC-SINGLE for improved efficiency and styling
+// inspired by https://gist.github.com/lucassshanks/078d458b189dabbc2da8fb22167dc1e1
+// react-window virtualizes lists and only renders the data visible in the viewport
+
 import { FixedSizeList as List, ListChildComponentProps } from "react-window";
 import { MenuListProps } from "react-select";
 import { OptionType } from "../../../types";

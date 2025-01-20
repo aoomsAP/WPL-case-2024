@@ -36,10 +36,14 @@ export default function Breadcrumbs() {
     const breadcrumbs = pathSegments.map((segment, index) => {
         const path = `/${pathSegments.slice(0, index + 1).join('/')}`;
         let label = routeLabels[segment] || decodeURIComponent(segment);
+
+        // Get shop name instead of shop id
         if (segment === shopId) {
             label = getShopNameById(segment);
         }
-        // shopProspections not loaded yet, does not work
+
+        // Get prospection date instead of prospection id
+        // (BUG / TO DO: since shopProspections is not loaded yet, does not work)
         if (segment === prospectionId) {
             label = getProspectionNameById(segment);
         }
@@ -47,6 +51,7 @@ export default function Breadcrumbs() {
         const isActive = location.pathname === path;
         const isLast = index === pathSegments.length - 1;
 
+        // If segment is shop, remove Link, because /shop is no valid route
         if (segment === "shop") {
             return (
                 <span key={path} className={`${styles.crumb} ${isActive ? styles.active : ''}`}>
@@ -57,6 +62,7 @@ export default function Breadcrumbs() {
                 </span>
             )
         }
+        // Otherwise, return segment as Link
         else {
             return (
                 <span key={path} className={`${styles.crumb} ${isActive ? styles.active : ''}`}>
@@ -71,12 +77,25 @@ export default function Breadcrumbs() {
 
     return (
         <nav className={styles.breadcrumbs}>
-            <span className={`${styles.crumb} ${styles.home} ${location.pathname === "/" ? styles.inactive : ""}`}>
-                <Link to="/">
-                    Index
-                </Link>
-                {breadcrumbs.length > 0 && <span className={styles.separator}> / </span>}
-            </span>
+            {/* Manually add index link (except on index page), because / is filtered out of path segments */}
+            {location.pathname != "/" &&
+                <span className={`${styles.crumb} ${styles.home}`}>
+                    <Link to="/">
+                        Index
+                    </Link>
+                    {breadcrumbs.length > 0 && <span className={styles.separator}> / </span>}
+                </span>
+            }
+            {/* Manually add homepage link, because /home is not part of path in current router state */}
+            {/* Do not add on "/home" to avoid duplicate, and do not add on index */}
+            {(location.pathname != "/home" && location.pathname != "/") &&
+                <span className={`${styles.crumb} ${styles.home}`}>
+                    <Link to="/home">
+                        Home
+                    </Link>
+                    {breadcrumbs.length > 0 && <span className={styles.separator}> / </span>}
+                </span>
+            }
             {breadcrumbs}
         </nav>
     );

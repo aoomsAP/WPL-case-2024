@@ -34,7 +34,7 @@ const Root = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const { user, setUser, setUserId } = useContext(UserContext);
+    const { user, setUserId } = useContext(UserContext);
 
     // If we're on the NewProspection or NewShop page, trigger warning before navigating away
     const blockNavigation = useLeaveWarning(
@@ -56,38 +56,38 @@ const Root = () => {
         <>
             <header className={styles.header}>
                 <nav className={styles.nav}>
+                    {/* Home button */}
                     <button title="Home" className={styles.nav__button} onClick={() => handleNavigation("/home")}>
                         {<TfiHome className={styles.nav__icon} />}
                     </button>
 
-                    {/* Show Agenda button only if user is set */}
+                    {/* Agenda button (if user is set) */}
                     {(user && location.pathname !== "/") && (
                         <button title="Agenda" className={styles.nav__button} onClick={() => handleNavigation("/agenda")}>
                             <TfiAgenda className={styles.nav__icon} />
                         </button>
                     )}
 
-                    {/* If location isn't "Home", show "Back" button */}
+                    {/* Back button (if location isn't root) */}
                     {location.pathname !== "/" &&
                         <button title="Terug" className={styles.nav__button} onClick={() => handleNavigation(-1)}>
                             {<TfiArrowLeft className={styles.nav__icon} />}
                         </button>
                     }
-                          
-                {/* Logout */}
-                {user &&
-                    <button
-                        title="Logout"
-                        className={`${styles.header__button} ${styles.logout}`}
-                        onClick={() => {
-                            setUserId(undefined);
-                            setUser(undefined);
-                            setTimeout(() => handleNavigation("/"),0);
-                        }}
-                    >
-                        {<RxExit className={styles.header__icon} />}
-                    </button>
-                }
+
+                    {/* Logout button (if user is logged in) */}
+                    {user &&
+                        <button
+                            title="Logout"
+                            className={`${styles.nav__icon} ${styles.logout}`}
+                            onClick={() => {
+                                setUserId(undefined);
+                                setTimeout(() => navigate("/"), 0);
+                            }}
+                        >
+                            {<RxExit className={styles.nav__icon} />}
+                        </button>
+                    }
                 </nav>
 
                 <Breadcrumbs />

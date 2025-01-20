@@ -44,7 +44,11 @@ function CustomModal({
             >
                 {/* Header */}
                 <div className={`${styles.header} ${headerTitleClassName}`}>
+
+                    {/* Title */}
                     {headerTitle && <h3 className={styles.title}>{headerTitle}</h3>}
+
+                    {/* Close button */}
                     <button
                         className={styles.close}
                         onClick={onRequestClose}
@@ -59,19 +63,26 @@ function CustomModal({
 
                 {/* Footer */}
                 <div className={`${styles.footer} ${footerClassName}`}>
+
+                    {/* Error message */}
                     {error && errorMsg && (
                         <p className={styles.errorMessage}>{errorMsg}</p>
                     )}
+
+                    {/* Buttons */}
                     <div className={styles.buttonContainer}>
+
+                        {/* Optional secondary button */}
                         {secondButtonTitle && onSecondButtonPress && (
                             <button
-
                                 onClick={onSecondButtonPress}
                                 className={`${styles.button} ${styles.secondaryButton}`}
                             >
                                 {secondButtonTitle}
                             </button>
                         )}
+
+                        {/* Submit button */}
                         <button
                             form={formId}
                             type="submit"

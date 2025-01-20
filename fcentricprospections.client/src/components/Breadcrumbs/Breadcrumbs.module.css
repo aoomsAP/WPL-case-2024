@@ -44,7 +44,3 @@
 .active {
     color: black !important;
 }
-
-.inactive {
-    visibility: hidden;
-}

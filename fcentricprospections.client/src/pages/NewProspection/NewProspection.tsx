@@ -20,7 +20,6 @@ import Select, { createFilter, MultiValue } from 'react-select';
 import MenuList from "../../components/ReactSelect/MenuList/MenuList"; // Custom MenuList
 import Option, { customTheme } from "../../components/ReactSelect/Option/Option"; // Custom Option
 // form-wizard
-// import FormWizard from "react-form-wizard-component";
 import FormWizard from "react-form-wizard-component";
 import "react-form-wizard-component/dist/style.css";
 // icons
@@ -34,15 +33,21 @@ export const NewProspection = () => {
 
   const { shopId } = useParams<{ shopId: string }>();
   const navigate = useNavigate();
+  
+  // Warning before leaving page that form data will be lost ------------------------------------------------------------------
 
-  // Contexts --------------------------------------------------------------------------------------------------------------------
+  const [preventLeaving, setPreventLeaving] = useState<boolean>(true);
+  useLeaveWarning(preventLeaving, "Niet-opgeslagen wijzigingen zullen verloren gaan. Toch verdergaan?")
+
+  // CONTEXTS --------------------------------------------------------------------------------------------------------------------
 
   const { user, employee } = useContext(UserContext);
 
   const {
     setShopId,
     shopDetail,
-    shopBrands
+    shopBrands,
+    loadShopProspections
   } = useContext(ShopDetailContext);
 
   // Set shop id
@@ -81,9 +86,9 @@ export const NewProspection = () => {
     updateToDoEmployees,
   } = useContext(NewProspectionContext);
 
-  // Input fields / states --------------------------------------------------------------------------------------------------------------------
 
-  // prospection fields
+  // INPUT FIELDS --------------------------------------------------------------------------------------------------------------------
+
   const [visitDate, setVisitDate] = useState<Date>(new Date());
   const [contactType, setContactType] = useState<number>(4);
   const [contactName, setContactName] = useState<string>("");
@@ -98,20 +103,15 @@ export const NewProspection = () => {
   const [trends, setTrends] = useState<string>("");
   const [feedback, setFeedback] = useState<string>("");
 
-  // contact info
+
+  // CONTACT INFO -----------------------------------------------------------------------------------------------------------
+
   const [contactInfo, setContactInfo] = useState<IContactInfo>();
 
-  // validation
+  // checkmark validation states
   const [nameChecked, setNameChecked] = useState<boolean>(true);
   const [emailChecked, setEmailChecked] = useState<boolean>(true);
   const [phoneChecked, setPhoneChecked] = useState<boolean>(true);
-
-  // Warning before leaving page that form data will be lost ------------------------------------------------------------------
-
-  const [preventLeaving, setPreventLeaving] = useState<boolean>(true);
-  useLeaveWarning(preventLeaving, "Niet-opgeslagen wijzigingen zullen verloren gaan. Toch verdergaan?")
-
-  // Contact info -----------------------------------------------------------------------------------------------------------
 
   async function loadContactInfoFromDb(shopId: number, contactTypeId: number) {
     const loadedContactInfo = await loadContactInfo(shopId, contactTypeId);
@@ -121,6 +121,8 @@ export const NewProspection = () => {
   useEffect(() => {
     let contactTypeCast: number = 0;
 
+    // 1) Set contact type
+    // 2) Automatic checkmark validation for salesperson/other
     switch (contactType) {
       case 1:
         contactTypeCast = 5; // Owner
@@ -140,41 +142,47 @@ export const NewProspection = () => {
         break;
     }
 
+    // Load specific contact info from db depending on selected contact type
     if (shopId && contactTypeCast != 0) {
       loadContactInfoFromDb(+shopId, contactTypeCast);
     }
   }, [contactType])
 
 
-  // Todos --------------------------------------------------------------------------------------------------------------------
+  // TODOS --------------------------------------------------------------------------------------------------------------------
 
-  // Contact info todos 
+  // CONTACT INFO TODOS 
+
   useEffect(() => {
+    const newContactName = `${contactName.length > 1 ? `Contact naam: ${contactName}` : ""}`
+    const newContactEmail = `${contactEmail.length > 1 ? `Contact email: ${contactEmail}` : ""}`
+    const newContactPhone = `${contactPhone.length > 1 ? `Contact telefoon: ${contactPhone}` : ""}`
+    const newContactInfo = `${newContactName.trim() != "" ? `${newContactName}\n` : ""}${newContactEmail.trim() != "" ? `${newContactEmail}\n` : ""}${newContactPhone.trim() != "" ? `${newContactPhone}` : ""}`;
+
+    // Create todo for each interest
+    let contactInfoToDo = {
+      id: uuidv4(), // generate temporary unique id
+      name: "Nieuwe contact info",
+      remarks: newContactInfo,
+      employees: [], // Initialize as empty until query assigns group of employees
+      toDoStatusId: 1, // HARDCODED = "Ongoing"
+      toDoTypeId: 1, // HARDCODED = "New contact info"
+    };
+
+    // Filter out contact info, as to only replace that todo item
+    const toDosWithoutContact = toDos.filter(x => x.toDoTypeId !== 1);
+
+    // Only add contact info, if there are new contact info values
+    let newToDos = [...toDosWithoutContact];
     if (contactName.trim() != "" || contactEmail.trim() != "" || contactPhone.trim() != "") {
-
-      const newContactName = `${contactName.length > 1 ? `Contact naam: ${contactName}` : ""}`
-      const newContactEmail = `${contactEmail.length > 1 ? `Contact email: ${contactEmail}` : ""}`
-      const newContactPhone = `${contactPhone.length > 1 ? `Contact telefoon: ${contactPhone}` : ""}`
-      const newContactInfo = `${newContactName.trim() != "" ? `${newContactName}\n` : ""}${newContactEmail.trim() != "" ? `${newContactEmail}\n` : ""}${newContactPhone.trim() != "" ? `${newContactPhone}` : ""}`;
-
-      // Create todo for each interest
-      let contactInfoToDo = {
-        id: uuidv4(), // generate temporary unique id
-        name: "Nieuwe contact info",
-        remarks: newContactInfo,
-        employees: [], // Initialize as empty until query assigns group of employees
-        toDoStatusId: 1, // HARDCODED = "Ongoing"
-        toDoTypeId: 1, // HARDCODED = "New contact info"
-      };
-
-      // Filter out contact info todo, as to only replace that one
-      const toDosWithoutContact = toDos.filter(x => x.toDoTypeId !== 1);
-      const newToDos = [...toDosWithoutContact, contactInfoToDo];
-      setToDos(newToDos);
+      newToDos = [...toDosWithoutContact, contactInfoToDo];
     }
+
+    setToDos(newToDos);
   }, [contactName, contactEmail, contactPhone, contactType])
 
-  // NewBrands todos 
+  // NEW BRANDS TODOS
+
   useEffect(() => {
     // Update newBrands toDo item
     let newBrandsToDo = {
@@ -185,13 +193,21 @@ export const NewProspection = () => {
       toDoStatusId: 1, // HARDCODED = "Ongoing"
       toDoTypeId: 2, // HARDCODED = "New brands"
     };
-    // Filter out newBrands todos, as to only replace that one
+
+    // Filter out newBrands, as to only replace that todo item
     const toDosWithoutNewBrands = toDos.filter(x => x.toDoTypeId !== 2);
-    const newToDos = [...toDosWithoutNewBrands, newBrandsToDo];
+
+    // Only add newBrandsToDo if newBrands is not empty
+    let newToDos = [...toDosWithoutNewBrands];
+    if (newBrands && newBrands.trim() != "") {
+      newToDos = [...toDosWithoutNewBrands, newBrandsToDo]
+    }
+
     setToDos(newToDos);
   }, [newBrands])
 
-  // Prospection brand interest todos 
+  // PROSPECTION BRAND INTEREST TODOS 
+
   useEffect(() => {
     let brandInterestsNames = prospectionBrandInterests.map(i => `Merk: ${i.brandName}${i.remark ? `\nOpmerking: ${i.remark}` : ""}\n`).join('\n');
 
@@ -205,14 +221,20 @@ export const NewProspection = () => {
       toDoTypeId: 3, // HARDCODED = "Brand interests"
     };
 
-    // Filter out FC70 brand interest todos, as to only replace those
+    // Filter out brand interests, as to only replace that todo item
     const toDosWithoutBrandInterests = toDos.filter(x => x.toDoTypeId !== 3);
-    const newToDos = [...toDosWithoutBrandInterests, brandInterestToDo];
+
+    // Only add brand interests, if there are any
+    let newToDos = [...toDosWithoutBrandInterests];
+    if (prospectionBrandInterests.length > 0) {
+      newToDos = [...toDosWithoutBrandInterests, brandInterestToDo];
+    }
+
     setToDos(newToDos);
   }, [prospectionBrandInterests])
 
 
-  // React-Select -------------------------------------------------------------------------------------------------------------------
+  // REACT-SELECT -------------------------------------------------------------------------------------------------------------------
 
   // Competitor brand options for react-select
 
@@ -251,8 +273,9 @@ export const NewProspection = () => {
   }, [allBrands])
 
 
-  // Default prospectionBrands --------------------------------------------------------------------------------------------------------------------
+  // PROSPECTION BRANDS --------------------------------------------------------------------------------------------------------------------
 
+  // ShopBrands are set as default prospection brands, before sellout/remark is added through the form
   useEffect(() => {
     console.log("Setting default prospection brands")
     const defaultProspectionBrands: IProspectionBrand[] = shopBrands.map(x => ({ brandId: x.id, brandName: x.name }));
@@ -261,7 +284,8 @@ export const NewProspection = () => {
     console.log(defaultProspectionBrands)
   }, [shopBrands])
 
-  // Form wizard validation ------------------------------------------------------------------------------------------------------------------------------------
+
+  // FORM WIZARD VALIDATION ------------------------------------------------------------------------------------------------------------------------------------
 
   const [contactErrorMsg, setContactErrorMsg] = useState<string>();
   const contactErrorRef = useRef<HTMLDivElement | null>(null);
@@ -269,9 +293,8 @@ export const NewProspection = () => {
   const showEmailBorder = contactErrorMsg && !emailChecked && contactEmail.trim().length < 1;
   const showPhoneBorder = contactErrorMsg && !phoneChecked && contactPhone.trim().length < 1;
   const validContact = (contactType === 3 || contactType === 4) ||
-  (nameChecked && emailChecked && phoneChecked);
+    (nameChecked && emailChecked && phoneChecked);
 
-  // Validate contact info tab
   const checkValidateContactTab = () => {
     if (!nameChecked || !emailChecked || !phoneChecked) {
       return false;
@@ -279,17 +302,17 @@ export const NewProspection = () => {
     return true;
   };
 
-  // Contact info tab error message
   const contactTabError = () => {
     setContactErrorMsg("Gelieve de nodige contact informatie af te vinken.");
   };
+
+  // Trends & feedback validation
 
   const [feedbackErrorMsg, setFeedbackErrorMsg] = useState<string>();
   const feedbackErrorRef = useRef<HTMLDivElement | null>(null);
   const showTrendsBorder = feedbackErrorMsg && trends.trim().length < 1;
   const showFeedbackBorder = feedbackErrorMsg && feedback.trim().length < 1;
 
-  // Validate trends & feedback tab
   const checkValidateFeedbackTab = () => {
     if (trends.trim() === "" || feedback.trim() === "") {
       return false;
@@ -297,13 +320,12 @@ export const NewProspection = () => {
     return true;
   };
 
-  // Trends & feedback tab error messages
   const feedbackError = () => {
     setFeedbackErrorMsg("Gelieve de verplichte velden in te vullen.");
   };
 
 
-  // Submit / add prospection to db ---------------------------------------------------------------------------------------------------------------------------------------
+  // SUBMIT / ADD PROSPECTION TO DB ------------------------------------------------------------------------------------------------------------------------------------
 
   const [loading, setLoading] = useState<boolean>(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -324,9 +346,13 @@ export const NewProspection = () => {
         throw Error("Geen geldige gebruiker. Probeer opnieuw in te loggen.");
       }
 
+      if (!shopId) {
+        throw Error;
+      }
+
       const newProspection: IProspectionDetail = {
         shopId: Number(shopId),
-        userId: Number(user.id),
+        userCreatedId: Number(user.id),
         employeeId: Number(employee.id),
         visitDate: visitDate,
         dateCreated: new Date(),
@@ -399,6 +425,9 @@ export const NewProspection = () => {
         await updateProspectionToDos(prospectionId, newProspectionToDos);
         console.log("Prospection todos updates completed successfully.");
 
+        // Reload shopProspections for newly added prospection
+        await loadShopProspections(Number(shopId));
+
         console.log("End newProspection handleComplete");
 
         navigate(`/shop/${shopId}`);
@@ -414,10 +443,6 @@ export const NewProspection = () => {
         if (error.message.includes("gebruiker")) message = error.message
       }
       setSubmitErrorMsg(message);
-      setTimeout(() => {
-        submitErrorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-      }, 0);
-
     } finally {
       setLoading(false);
       setIsButtonDisabled(false);

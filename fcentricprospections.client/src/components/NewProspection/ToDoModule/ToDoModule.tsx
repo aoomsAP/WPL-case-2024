@@ -3,7 +3,7 @@ import { IEmployee, IToDo, OptionType } from "../../../types";
 import styles from "./ToDoModule.module.css"
 import { UserContext } from "../../../contexts/UserContext";
 import Select, { createFilter, MultiValue } from 'react-select';
-import ToDoEditable from "./ToDoEditable";
+import ToDoEditable from "./ToDoEditable/ToDoEditable";
 import { v4 as uuidv4 } from 'uuid';
 import Option, { customTheme } from "../../ReactSelect/Option/Option";
 import MenuList from "../../ReactSelect/MenuList/MenuList";
@@ -28,7 +28,6 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
     const [isModalVisible, setModalVisible] = useState(false);
 
     const [errorMessage, setErrorMessage] = useState<string>();
-    const errorRef = useRef<HTMLDivElement | null>(null);
     const showError = errorMessage != undefined && (title.trim() == "" || description.trim() == "" || selectedEmployees.length < 1)
 
     const [successMsg, setSuccessMsg] = useState<string>();
@@ -71,13 +70,9 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
             console.log(newToDos);
             setToDos(newToDos);
 
-            setModalVisible(false);
-
             setSuccessMsg(`Nieuwe taak "${newToDo.name}" toegevoegd`);
-            setTimeout(() => {
-                successRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-            }, 0);
 
+            setModalVisible(false);
             resetToDo();
         }
 
@@ -88,14 +83,10 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
                 message = error.message;
             }
             setErrorMessage(message);
-            setTimeout(() => {
-                errorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-            }, 0);
         }
     }
 
-    // Create new list without the automatic todo's
-
+    // Only show todo's of type "other", which are manually added in this module
     const userAddedToDos: IToDo[] = toDos
         .filter(toDo => toDo.toDoTypeId === 4) ///HARDCODED = "Other"
 
@@ -106,6 +97,7 @@ const ToDoModule = ({ toDos, setToDos }: ToDoModuleProps) => {
 
         let employeesOptions: OptionType[] = employees
             .filter(isValidEmployee)
+            .sort((a, b) => a.name.localeCompare(b.name))
             .map((employee) => ({
                 value: employee.id.toString(),
                 label: employee.name

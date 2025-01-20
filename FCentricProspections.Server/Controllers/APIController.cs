@@ -622,6 +622,7 @@ namespace FCentricProspections.Server.Controllers
                 EmployeeId = viewModel.EmployeeId,
                 Employee = employee,
                 VisitDate = viewModel.VisitDate,
+                DateCreated = viewModel.DateCreated,
                 DateLastUpdated = viewModel.DateLastUpdated,
                 ContactType = this.data.GetContactPersonType(viewModel.ContactTypeId),
                 ContactTypeId = viewModel.ContactTypeId,

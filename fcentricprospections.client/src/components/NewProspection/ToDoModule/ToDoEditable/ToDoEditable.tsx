@@ -1,10 +1,10 @@
 import Select, { createFilter, MultiValue } from "react-select";
-import { IToDo, OptionType } from "../../../types";
+import { IToDo, OptionType } from "../../../../types";
 import styles from "./ToDoEditable.module.css"
-import EditableInput from "./EditableInput";
-import Option, { customTheme } from "../../ReactSelect/Option/Option";
-import MenuList from "../../ReactSelect/MenuList/MenuList";
-import CustomLoader from "../../LoaderSpinner/CustomLoader";
+import EditableInput from "../EditableInput/EditableInput";
+import Option, { customTheme } from "../../../ReactSelect/Option/Option";
+import MenuList from "../../../ReactSelect/MenuList/MenuList";
+import CustomLoader from "../../../LoaderSpinner/CustomLoader";
 
 interface ToDoEditableProps {
     index: number,

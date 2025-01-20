@@ -1,3 +1,4 @@
+// Custom option for React-Select for improved efficiency and styling
 // inspired by https://gist.github.com/lucassshanks/078d458b189dabbc2da8fb22167dc1e1
 
 import { useState } from "react";

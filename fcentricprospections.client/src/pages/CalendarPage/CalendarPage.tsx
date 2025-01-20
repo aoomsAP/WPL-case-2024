@@ -3,18 +3,18 @@ import { UserContext } from '../../contexts/UserContext';
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { EmployeeSelect } from './EmployeeSelect';
+import { EmployeeSelect } from '../../components/Calendar/EmployeeSelect/EmployeeSelect';
 import { EventInput } from '@fullcalendar/core';
 import styles from './CalenderPage.module.css';
 import listPlugin from '@fullcalendar/list';
 import nlLocale from '@fullcalendar/core/locales/nl';
 import CustomLoader from '../../components/LoaderSpinner/CustomLoader';
-import EventDetailsPopup from './EventDetailsPopUp';
+import EventDetailsPopup from '../../components/Calendar/EventDetailsPopup/EventDetailsPopUp';
 
 export const CalendarPage = () => {
     const { appointments, userCalendarLoading } = useContext(UserContext);
-    const [selectedEvent, setSelectedEvent] = useState(null);
 
+    const [selectedEvent, setSelectedEvent] = useState(null);
     const [events, setEvents] = useState<EventInput[]>([]);
     const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
 
@@ -30,6 +30,7 @@ export const CalendarPage = () => {
         );
     }
 
+    // Map user appointments to Event type for FullCalendar
     useEffect(() => {
         const userEvents = appointments.map((appointment) => ({
             title: appointment.name ? appointment.name : (appointment.remarks ? appointment.remarks : "Geen details"),
@@ -41,12 +42,14 @@ export const CalendarPage = () => {
         setEvents(userEvents);
     }, [appointments]);
 
-    const handleEventClick = (clickInfo) => {
-        setSelectedEvent(clickInfo.event); // Set the clicked event
+    // Set the clicked event
+    const handleEventClick = (clickInfo: any) => {
+        setSelectedEvent(clickInfo.event);
     };
 
+    // Clear the selected event
     const handleClosePopup = () => {
-        setSelectedEvent(null); // Clear the selected event
+        setSelectedEvent(null);
     };
 
     const handleWindowResize = (_: { view: { type: string } }) => {
@@ -64,10 +67,12 @@ export const CalendarPage = () => {
     else {
         return (
             <main className={styles.main}>
+                {/* Employee select container */}
                 <div className={styles.employeeSelect}>
                     <EmployeeSelect setEvents={setEvents} />
                 </div>
 
+                {/* Event calendar */}
                 <FullCalendar
                     ref={calendarRef}
                     plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
@@ -90,6 +95,7 @@ export const CalendarPage = () => {
                     windowResize={handleWindowResize} // Callback on resize
                     eventClick={handleEventClick} //Handle event clicks
                 />
+
                 {/* Event Detail Popup */}
                 {selectedEvent && (
                     <EventDetailsPopup
@@ -97,6 +103,7 @@ export const CalendarPage = () => {
                         onClose={handleClosePopup} // Handle popup close
                     />
                 )}
+
             </main>
         );
     }

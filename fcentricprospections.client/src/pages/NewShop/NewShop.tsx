@@ -11,27 +11,32 @@ import Select from "react-select";
 import Option, { customTheme } from "../../components/ReactSelect/Option/Option";
 import MenuList from "../../components/ReactSelect/MenuList/MenuListSingle";
 import CustomLoader from "../../components/LoaderSpinner/CustomLoader";
+import { ShopListContext } from "../../contexts/ShopListContext";
 import { useLeaveWarning } from "../../hooks/useLeaveWarning";
 
 export default function NewShop() {
 
     const { userId } = useContext(UserContext);
+    const { loadShops } = useContext(ShopListContext);
+
     const { addAddress, addContact, addShop, countries, loadCities } = useContext(NewShopContext);
 
     const navigate = useNavigate();
 
-    const [name, setName] = useState<string>();
-    const [street, setStreet] = useState<string>();
-    const [streetNumber, setStreetNumber] = useState<number>();
+    const [name, setName] = useState<string>("");
+    const [street, setStreet] = useState<string>("");
+    const [streetNumber, setStreetNumber] = useState<number>(0);
     const [postbox, setPostbox] = useState<string>("");
-    const [postalCode, setPostalCode] = useState<OptionType>();
-    const [city, setCity] = useState<OptionType>();
-    const [country, setCountry] = useState<OptionType>();
 
+    const [country, setCountry] = useState<OptionType>();
     const [countryOptions, setCountryOptions] = useState<OptionType[]>([]);
-    const [cityLoading, setCityLoading] = useState<boolean>(false);
+
+    const [city, setCity] = useState<OptionType>();
     const [cities, setCities] = useState<ICity[]>([]);
+    const [cityLoading, setCityLoading] = useState<boolean>(false);
     const [cityOptions, setCityOptions] = useState<OptionType[]>([]);
+
+    const [postalCode, setPostalCode] = useState<OptionType>();
     const [postalCodeOptions, setPostalCodeOptions] = useState<OptionType[]>([]);
 
     // Warning before leaving page that form data will be lost ------------------------------------------------------------------
@@ -131,7 +136,7 @@ export default function NewShop() {
             }
 
             const newAddress = {
-                street1: (`${street ?? ""} ${streetNumber ?? ""}${postbox ? ` / ${postbox}` : ""}`).toUpperCase(), // All caps like in db?
+                street1: (`${street ?? ""}${(streetNumber != 0) ? ` ${streetNumber}` : ""}${postbox ? ` / ${postbox}` : ""}`).toUpperCase(), // All caps like in db?
                 cityId: +city.value,
                 postalCode: postalCode?.label ?? undefined,
                 userCreatedId: userId,
@@ -172,6 +177,9 @@ export default function NewShop() {
                 throw Error("Error while adding shop");
             }
 
+            // Reload shops with newly added shop
+            await loadShops();
+
             navigate(`/shop/${addedShop.id}`)
 
         } catch (error) {
@@ -182,9 +190,6 @@ export default function NewShop() {
                 if (error.message.includes("Geen")) message = error.message
             }
             setErrorMessage(message);
-            setTimeout(() => {
-                errorRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-            }, 0);
 
         } finally {
             setLoading(false);
@@ -229,7 +234,7 @@ export default function NewShop() {
                             Geef naam van de winkel:&nbsp;
                             <span className={styles.required}> *</span>
                         </label>
-                        <input                           
+                        <input
                             type="text"
                             name="name"
                             value={name}
@@ -252,7 +257,7 @@ export default function NewShop() {
                                 classNamePrefix="select"
                                 value={country}
                                 isDisabled={countryOptions.length > 0 ? false : true}
-                                placeholder={countryOptions.length > 0 ? "Kies een land..." : <CustomLoader />}
+                                placeholder={countryOptions.length > 0 ? "Kies een land..." : <div className={styles.loading}>Landen laden... <CustomLoader /></div>}
                                 isSearchable={true}
                                 name="country"
                                 options={countryOptions}
@@ -270,9 +275,9 @@ export default function NewShop() {
                             />}
                         </div>
 
-                        {cityLoading && <p>
+                        {cityLoading && <div className={styles.container}>
                             <CustomLoader />
-                        </p>}
+                        </div>}
 
                         {/* Only show full address form when country is selected AND country has valid cities to add address */}
                         {country && (!cityLoading && cityOptions.length > 0) && <>
@@ -390,7 +395,7 @@ export default function NewShop() {
 
             </FormWizard >
 
-            {errorMessage && (!name || !city || !country) && 
+            {errorMessage && (!name || !city || !country) &&
                 <div
                     ref={errorRef}
                     className={styles.error}

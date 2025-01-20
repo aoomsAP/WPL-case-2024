@@ -9,7 +9,7 @@ interface BrandInterestInputProps {
     setSelected: (selected: OptionType[]) => void;
 }
 
-const BrandInterestInput = ({ brand, selected,setSelected }: BrandInterestInputProps) => {
+const BrandInterestInput = ({ brand, selected, setSelected }: BrandInterestInputProps) => {
 
     const { prospectionBrandInterests, setProspectionBrandInterests } = useContext(NewProspectionContext);
 
@@ -37,7 +37,7 @@ const BrandInterestInput = ({ brand, selected,setSelected }: BrandInterestInputP
         }
 
         // Only replace NEW brand interest in prospection brand interests array
-        const newProspectionBrandInterests = prospectionBrandInterests.map(p => {
+        const newProspectionBrandInterests = [...prospectionBrandInterests].map(p => {
             if (p.brandId === brand.brandId) {
                 return newProspectionBrandInterest;
             }
@@ -52,7 +52,9 @@ const BrandInterestInput = ({ brand, selected,setSelected }: BrandInterestInputP
             <button className={styles.close} onClick={handleClick}>X</button>
             <legend><strong>{brand.brandName}</strong></legend>
             <label>Opmerking:</label>
-            <textarea value={remark} placeholder={`Opmerking over interesse in ${brand.brandName}...`}
+            <textarea
+                value={remark}
+                placeholder={`Opmerking over interesse in ${brand.brandName}...`}
                 onChange={(e) => setRemark(e.target.value)} />
         </fieldset>
     )

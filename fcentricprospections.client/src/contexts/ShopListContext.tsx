@@ -3,9 +3,13 @@ import { IShop } from "../types";
 
 interface ShopListContext {
     shops: IShop[],
+    loadShops: () => Promise<void>,
 }
 
-export const ShopListContext = React.createContext<ShopListContext>({ shops: [] });
+export const ShopListContext = React.createContext<ShopListContext>({
+    shops: [],
+    loadShops: () => Promise.resolve(),
+});
 
 export const ShopListProvider = ({ children }: { children: React.ReactNode }) => {
 
@@ -28,7 +32,10 @@ export const ShopListProvider = ({ children }: { children: React.ReactNode }) =>
     }, []);
 
     return (
-        <ShopListContext.Provider value={{ shops: shops }}>
+        <ShopListContext.Provider value={{
+            shops: shops,
+            loadShops: loadShops
+        }}>
             {children}
         </ShopListContext.Provider>
     )

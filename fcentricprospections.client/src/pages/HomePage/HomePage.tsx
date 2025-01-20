@@ -7,9 +7,10 @@ import { createFilter } from "react-select";
 import styles from './HomePage.module.css'
 import Option, { customTheme } from "../../components/ReactSelect/Option/Option";
 import MenuList from "../../components/ReactSelect/MenuList/MenuListSingle";
-import { TfiPlus } from "react-icons/tfi";
+import { TfiPlus, TfiAlert } from "react-icons/tfi";
 import CustomLoader from "../../components/LoaderSpinner/CustomLoader";
 import { ShopListContext } from "../../contexts/ShopListContext";
+import { GoPerson } from "react-icons/go";
 
 export const Homepage = () => {
 
@@ -21,6 +22,7 @@ export const Homepage = () => {
     const [shopListOptions, setShopListOptions] = useState<OptionType[]>([]);
     const isDataLoaded = !userDataLoading;
 
+    // Map list of shops to shop options for react-select
     useEffect(() => {
         const isValidShopOption = (shopOption: IShop) =>
             !!shopOption && !!shopOption.id && !!shopOption.name;
@@ -31,13 +33,11 @@ export const Homepage = () => {
                 if (shopOption.name.includes(shopOption.city)) {
                     return ({
                         value: shopOption.id.toString(),
-
                         label: `${shopOption.name}`
                     })
                 }
                 return ({
                     value: shopOption.id.toString(),
-
                     label: `${shopOption.name} - ${shopOption.city}`
 
                 })
@@ -48,9 +48,23 @@ export const Homepage = () => {
     return (
         <main>
             <section>
-                {isDataLoaded
-                    ? <h2>Hallo, {employee ? employee?.firstName : user?.login}</h2>
-                    : <CustomLoader />}
+                {/* User greeting (if user has finished loading) */}
+                {isDataLoaded && (user
+                
+                        // Employee name or user name (if user is found)
+                        ? <div className={styles.logged_in}>
+                            <GoPerson />
+                            <h2>Hallo, {employee ? employee?.firstName : user?.login}</h2>
+                        </div>
+
+                        // Error (if user is not found)
+                        : <div className={styles.not_logged_in}>
+                            <TfiAlert />
+                            <p>Gebruiker niet gevonden. Probeer opnieuw aan te melden.</p>
+                        </div>
+                )}
+                {/* Loading indicator (if user is still loading) */}
+                {!isDataLoaded && <CustomLoader />}
             </section>
 
             {/* SELECTEER WINKEL */}
@@ -95,6 +109,6 @@ export const Homepage = () => {
                     <TfiPlus className={styles.add_button__icon} />
                 </button>
             </section>
-        </main>
+        </main >
     );
 };

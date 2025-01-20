@@ -1,3 +1,4 @@
+// Custom menu list for React-Select MULTI for improved efficiency and styling
 // inspired by https://gist.github.com/lucassshanks/078d458b189dabbc2da8fb22167dc1e1
 // react-window virtualizes lists and only renders the data visible in the viewport
 
