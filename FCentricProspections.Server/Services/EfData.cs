@@ -62,9 +62,6 @@ namespace FCentricProspections.Server.Services
         }
 
 
-
-
-
         public ShopDetailDto GetShopDetail(long id)
         {
             var shopDetail = (from s in this.context.Shops
@@ -110,6 +107,7 @@ namespace FCentricProspections.Server.Services
                 .Include(s => s.Prospections)
                 .FirstOrDefault(x => x.Id == id);
         }
+
         public void AddShop(Shop shop)
         {
             this.context.Shops.Add(shop);
@@ -513,12 +511,19 @@ namespace FCentricProspections.Server.Services
 
         public IEnumerable<BrandDto> GetBrands()
         {
-            var brandList = this.context.Brands
-                .Select(s => new BrandDto
-                {
-                    Id = s.Id,
-                    Name = s.Name,
-                }).ToList();
+            var brandList = (from sd in this.context.ShopDeliveries
+                             join pld in this.context.ProductLineDeliveries on sd.ProductLineDeliveryId equals pld.Id
+                             join pl in this.context.ProductLines on pld.ProductLineId equals pl.Id
+                             join b in this.context.Brands on pl.BrandId equals b.Id
+                             where sd.SalesPeriodId >= 64
+                             select new BrandDto
+                             {
+                                 Id = b.Id,
+                                 Name = b.Name,
+                             })
+                             .Distinct()
+                             .OrderBy(b => b.Name)
+                             .ToList();
 
             return brandList;
         }
