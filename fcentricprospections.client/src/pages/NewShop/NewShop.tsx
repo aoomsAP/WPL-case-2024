@@ -59,9 +59,9 @@ export default function NewShop() {
     // Load cities anew when country is selected
     useEffect(() => {
         if (country) {
-            setCity(undefined);
+            setCity(null);
             setErrorMessage(undefined);
-            setPostalCode(undefined);
+            setPostalCode(null);
             setCitiesFunc(+country.value);
         }
     }, [country]);
@@ -73,7 +73,7 @@ export default function NewShop() {
         let countryOptions: OptionType[] = countries
             .map((country) => ({
                 value: country.id.toString(),
-                label: country.name
+                label: country.name || "",
             }));
         setCountryOptions(countryOptions);
     }, [countries])
@@ -83,7 +83,7 @@ export default function NewShop() {
         let cityOptions: OptionType[] = cities
             .map((city) => ({
                 value: city.id.toString(),
-                label: city.name
+                label: city.name || "",
             }))
             .sort((a, b) => {
                 if (a.label < b.label) return -1;
@@ -97,15 +97,15 @@ export default function NewShop() {
     useEffect(() => {
         let postalCodeOptions: OptionType[] = cities
             .map((city) => ({
-                value: city.postalCode,
-                label: city.postalCode,
+                value: city.postalCode || "",
+                label: city.postalCode || "",
             }))
         setPostalCodeOptions(postalCodeOptions);
     }, [cities])
 
 
     // Submit / add new shop to db ----------------------------------------------------------------------------------------------
-  
+
     const [loading, setLoading] = useState<boolean>(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string>();
@@ -129,6 +129,12 @@ export default function NewShop() {
 
             if (!country) {
                 throw Error("Geen geldig land geselecteerd.");
+            }
+
+            // There currently is no approved way to add new cities to the database
+            // Therefore, if there are no available cities for a given country, an address cannot be added, nor can a shop
+            if (country && !cityLoading && cityOptions.length < 1) {
+                throw Error("Het is momenteel niet mogelijk om een winkel toe te voegen voor dit land. Contacteer IT.")
             }
 
             if (!city) {
@@ -226,6 +232,7 @@ export default function NewShop() {
 
                     <h3 className={styles.h3}>Winkel informatie</h3>
 
+                    {/* NAME CONTAINER */}
                     <fieldset className={(errorMessage && (!name || name.trim() === "")) ? styles.errorBorder : ""}>
                         <legend>
                             <strong>Naam</strong>
@@ -242,6 +249,7 @@ export default function NewShop() {
                             onChange={(e) => setName(e.target.value)} />
                     </fieldset>
 
+                    {/* ADDRESS CONTAINER */}
                     <fieldset className={`${styles.address} ${(errorMessage && !city) ? styles.errorBorder : ""}`}>
                         <legend><strong>Adres</strong></legend>
 
@@ -313,10 +321,10 @@ export default function NewShop() {
                                 </div>
                             </div>
 
-                            {/* Postal code & city */}
+                            {/* Postal code & city container */}
                             <div className={styles.cityContainer}>
 
-                                {/* PostalCode select */}
+                                {/* PostalCode */}
                                 <div className={styles.postalCode}>
                                     <label htmlFor="postalCode">Postcode:</label>
                                     {countryOptions && <Select
@@ -348,7 +356,7 @@ export default function NewShop() {
                                     />}
                                 </div>
 
-                                {/* City select */}
+                                {/* City */}
                                 <div className={styles.city}>
                                     <label htmlFor="city">Woonplaats:&nbsp;
                                         <span className={styles.required}> *</span></label>
@@ -386,7 +394,7 @@ export default function NewShop() {
                         </>}
 
                         {/* If cities have loaded and there are none, it's not possible to add an address to db without adding a city */}
-                        {/* Check with db admin to request permission to add cities & postal codes */}
+                        {/* Check with db admin to request permission to add new cities & postal codes */}
                         {(country && !cityLoading && cityOptions.length === 0) &&
                             <p>Het is momenteel niet mogelijk om een winkel toe te voegen voor dit land. Contacteer IT.</p>}
                     </fieldset>

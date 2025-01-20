@@ -25,7 +25,7 @@ export const ProspectionDetail = () => {
 
   const {
     setShopId,
-    shopDetail
+    shopDetail,
   } = useContext(ShopDetailContext);
 
   const {
@@ -33,7 +33,6 @@ export const ProspectionDetail = () => {
     prospectionDetail,
     contactType,
     visitType,
-    brands,
     prospectionBrands,
     prospectionCompetitorBrands,
     prospectionBrandInterests,
@@ -85,10 +84,9 @@ export const ProspectionDetail = () => {
           {prospectionBrands.length > 0 &&
             <section className={styles.sectionList}>
               {prospectionBrands.map((brand, index) => {
-                const matchingBrand = brands.find(b => b.id === brand.brandId);
                 return (
                   <article key={index}>
-                    {matchingBrand ? <BrandCard prospectionBrand={brand} brandName={matchingBrand?.name} /> : <p className={styles.brandNotFound}>Merk niet gevonden</p>}
+                    <BrandCard prospectionBrand={brand} brandName={brand.brandName} />
                   </article>
                 );
               })}

@@ -1,9 +1,10 @@
-import { Link, useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styles from "./Breadcrumbs.module.css";
 import { ShopListContext } from "../../contexts/ShopListContext";
 import { useContext } from "react";
 import { IProspection, IShop } from "../../types";
 import { ShopDetailContext } from "../../contexts/ShopDetailContext";
+import { useLeaveWarning } from "../../hooks/useLeaveWarning";
 
 const routeLabels: Record<string, string> = {
     shop: 'Winkel',
@@ -14,10 +15,27 @@ const routeLabels: Record<string, string> = {
 };
 
 export default function Breadcrumbs() {
+    const navigate = useNavigate();
     const location = useLocation();
     const { shopId, prospectionId } = useParams<{ shopId: string, prospectionId: string }>();
     const { shops } = useContext(ShopListContext);
     const { shopProspections } = useContext(ShopDetailContext);
+
+    // If we're on the NewProspection or NewShop page, trigger warning before navigating away
+    const blockNavigation = useLeaveWarning(
+        true && (location.pathname.includes('new')),
+        "Niet-opgeslagen wijzigingen zullen verloren gaan. Toch verdergaan?",
+    );
+
+    // Handler to navigate with block logic
+    const handleNavigation = (to: string, event?: React.MouseEvent<HTMLAnchorElement>) => {
+        if (event) event.preventDefault(); // Prevent default link behavior
+        if (location.pathname.includes('new')) {
+            blockNavigation({ pathname: to });
+        } else {
+            navigate(to); // Proceed with navigation
+        }
+    };
 
     function getShopNameById(id: string) {
         const shop = shops.find((shop: IShop) => shop.id.toString() === id);
@@ -62,13 +80,17 @@ export default function Breadcrumbs() {
                 </span>
             )
         }
-        // Otherwise, return segment as Link
+        // Otherwise, return segment as a link
         else {
             return (
                 <span key={path} className={`${styles.crumb} ${isActive ? styles.active : ''}`}>
-                    <Link to={path} className={isActive ? styles.active : ''}>
+                    <a
+                        href={path}
+                        onClick={(e) => handleNavigation(path, e)}
+                        className={isActive ? styles.active : ''}
+                    >
                         {label}
-                    </Link>
+                    </a>
                     {!isLast && <span className={styles.separator}> / </span>}
                 </span>
             );
@@ -80,9 +102,9 @@ export default function Breadcrumbs() {
             {/* Manually add index link (except on index page), because / is filtered out of path segments */}
             {location.pathname != "/" &&
                 <span className={`${styles.crumb} ${styles.home}`}>
-                    <Link to="/">
+                    <a href="/" onClick={(e) => handleNavigation("/", e)}>
                         Index
-                    </Link>
+                    </a>
                     {breadcrumbs.length > 0 && <span className={styles.separator}> / </span>}
                 </span>
             }
@@ -90,9 +112,9 @@ export default function Breadcrumbs() {
             {/* Do not add on "/home" to avoid duplicate, and do not add on index */}
             {(location.pathname != "/home" && location.pathname != "/") &&
                 <span className={`${styles.crumb} ${styles.home}`}>
-                    <Link to="/home">
+                    <a href="/home" onClick={(e) => handleNavigation("/home", e)}>
                         Home
-                    </Link>
+                    </a>
                     {breadcrumbs.length > 0 && <span className={styles.separator}> / </span>}
                 </span>
             }
