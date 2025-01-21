@@ -64,6 +64,7 @@ export default function Breadcrumbs() {
         // (BUG / TO DO: since shopProspections is not loaded yet, does not work)
         if (segment === prospectionId) {
             label = getProspectionNameById(segment);
+            label = "Detail"; // temporary fix
         }
 
         const isActive = location.pathname === path;
