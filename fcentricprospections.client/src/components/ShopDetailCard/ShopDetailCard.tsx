@@ -16,7 +16,7 @@ export const ShopDetailCard = ({ shop }: ShopDetailProps) => {
       .map((key) => obj[key as keyof IAddress])
 
       // Filter out the empty values
-      .filter((value) => value?.toString().trim() !== "")
+      .filter((value) => (value != null) && (value?.toString().trim() !== ""))
 
       // Join with comma and white space
       .join(", ");
